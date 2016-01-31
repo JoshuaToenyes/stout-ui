@@ -1,0 +1,29 @@
+// @requires bourbon
+
+@import "./../common/variables"
+@import "./../common/exports"
+@import "./../common/classes"
+@import "./../Button/style"
+
++exports('progress-button')
+
+  button.sc-progress-button
+
+    svg
+      position: absolute
+      display: block
+      height: 90%
+      width: 90%
+      left: 5%
+      top: 5%
+      overflow: visible
+
+    path
+      stroke-width: 10%
+      opacity: 0
+      stroke: $sc-color-interactive-bg
+      +transition(opacity $sc-transition-time-slow 0)
+
+    &.sc-show-path path
+      opacity: 1
+      +transition-delay($sc-transition-time-slow)

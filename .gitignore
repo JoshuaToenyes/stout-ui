@@ -1,0 +1,21 @@
+# Ignore annoying OS X files.
+.DS_Store
+
+# Ignore debug and log files.
+*.log
+
+# Ignore IDE directories.
+.idea
+
+# Ignore distribution directory.
+/dist
+
+# Ignore temporary directory.
+/tmp
+
+# Ignore lib directories.
+node_modules
+lib
+
+# Ignore generated documentation, but keep the Groc template.
+doc

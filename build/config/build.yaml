@@ -1,0 +1,130 @@
+serve:
+
+  port:
+
+    # The localhost port that target files should be served on.
+    target:      9000
+
+    # The localhost port to serve documentation on.
+    docs:        9090
+
+
+# Build paths. All paths should be relative to the project root.
+path:
+
+  build:
+    root:       build
+
+  # Source file directory.
+  src:
+    root:       src
+    coffee:     src/coffee
+    sass:       src/sass
+    templates:  src/template
+    jade:       src/jade
+
+  # Library directory for non-package-manager libraries.
+  lib:
+    root:       lib
+
+  # Tests directory.
+  test:
+    root:        test
+    unit:        test/unit
+    selenium:    test/selenium
+    integration: test/integration
+
+  # Output target directories.
+  target:       dist
+
+  # Assets directory.
+  assets:       assets
+
+  # Directory for temporary build-time use.
+  tmp:
+    root:       tmp
+    dist:       tmp/dist
+    unit:       tmp/test/unit
+
+  # Sourcemaps directory names. These should be relative to the respective
+  # target directories.
+  maps:
+    js:         maps
+    sass:       maps
+
+  # Generated documentation glob.
+  doc:          doc
+
+
+
+# Environment build options.
+env:
+
+  # The common options are set initially, then overridden by each environment
+  # as necessary.
+  default:
+
+    # Webpack options.
+    webpack:
+      entry:        bootstrap.coffee
+      output:
+        pathinfo:   true
+        publicPath: /
+
+    # Webpack UglifyJS plugin options.
+    # @see http://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
+    uglify:
+      compress:
+        warnings: false
+      sourceMap: false
+
+
+  # Production specific options.
+  production:
+
+    # Webpack options.
+    webpack:
+      output:
+        pathinfo:   false
+        publicPath: http://yourcdn.com/
+
+
+  # Integration testing build configuration. Used for integration testing.
+  integration:
+
+    # Webpack integration testing bootstrap script.
+    webpack:
+      entry:        integration-bootstrap.coffee
+
+    # Enable sourcemap output.
+    uglify:
+      sourceMap: true
+
+
+  # Integration testing build configuration. Used for integration testing.
+  selenium:
+
+    # Webpack integration testing bootstrap script.
+    webpack:
+      entry:        selenium-bootstrap.coffee
+
+    # Enable sourcemap output.
+    uglify:
+      sourceMap: true
+
+
+  # Test-build configuration. Used for unit-testing.
+  test:
+
+    # Webpack test build options. Entry point is resolved from
+    # `path.test.unit.coffee` build option.
+    webpack:
+      entry:        test-bootstrap.coffee
+
+
+  # Debug (development) options.
+  debug:
+
+    # Enable sourcemap output.
+    uglify:
+      sourceMap: true

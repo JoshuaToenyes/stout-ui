@@ -1,0 +1,92 @@
+
++exports('button')
+
+  $box-shadow-size: 0.3rem
+
+  #{$all-buttons}
+    @extend %fillable
+    -webkit-font-smoothing: antialiased
+    border: none
+    border-radius: $sc-button-radius
+    padding: $sc-button-padding
+    cursor: pointer
+    position: relative
+    overflow: hidden
+    +transition(box-shadow $sc-transition-time-fast)
+    +user-select(none)
+    box-shadow: inset 0 0 $box-shadow-size transparent
+
+    .sc-label
+      +transition(transform $sc-transition-time-fast)
+
+    &.sc-fill
+      color: $sc-button-fg
+
+      &::after
+        background-color: $sc-button-bg
+        +transition(background-color $sc-transition-time)
+
+      &[disabled]
+        cursor: default
+
+        &::after
+          background-color: $sc-button-disabled-bg !important
+
+
+  #{$all-buttons-focus}
+    &.sc-fill::after
+      background-color: $sc-button-focus-bg
+
+
+  #{$all-buttons-hover}
+    &.sc-fill::after
+      background-color: $sc-button-hover-bg
+
+
+  #{$all-buttons-active}
+    .sc-label
+      +transform(translateY(0.05rem))
+
+    &:not([disabled])
+      box-shadow: inset 0 0 $box-shadow-size $sc-button-active-shadow
+
+      &.sc-fill::after
+        background-color: $sc-button-active-bg
+
+  .sc-button
+
+    .sc-icon
+      width: 1em
+      height: 1em
+      position: relative
+
+      &.sc-icon-right, &.sc-icon-left
+        display: inline-block
+
+      &.sc-icon-right
+        padding-left: modular-scale(-2)
+
+      &.sc-icon-left
+        padding-right: modular-scale(-2)
+
+      &.sc-icon-top, &.sc-icon-bottom, &.sc-icon-center
+        display: block
+        text-align: center
+
+      &.sc-icon-top
+        padding-bottom: modular-scale(-2)
+
+      &.sc-icon-bottom
+        padding-top: modular-scale(-2)
+
+    .sc-svg-icon
+
+      &.sc-icon-top, &.sc-icon-bottom
+        margin: 0 auto 0
+
+      svg
+        width: 100%
+        height: 100%
+
+        path, line, circle, ellipse, polyline, polygon
+          stroke: $sc-button-fg

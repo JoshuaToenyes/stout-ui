@@ -1,0 +1,58 @@
+
+$sc-fontstack-monospaced:       "Andale Mono", Monaco, monospace
+
+$sc-transition-time:            300ms                         !default
+$sc-transition-time-fast:       $sc-transition-time / 2       !default
+$sc-transition-time-very-fast:  $sc-transition-time / 3       !default
+$sc-transition-time-slow:       2 * $sc-transition-time       !default
+$sc-transition-time-very-slow:  2 * $sc-transition-time-slow  !default
+
+$sc-color-fg:         #272F32 !default
+$sc-color-fg-disabled: #cccccc !default
+$sc-color-fg-subtle:  #AAAAAA !default
+$sc-color-bg:         #ECF0F1 !default
+$sc-color-bg-subtle:  #eaeaea !default
+
+$sc-color-drop-shadows:    fade-out($sc-color-fg, 0.9)  !default
+
+$sc-border-subtle:        #cccccc       !default
+
+$sc-color-interactive-fg: $sc-color-bg  !default
+$sc-color-interactive-bg: #2980B9       !default
+$sc-color-active-bg:      #3498DB       !default
+
+$sc-color-comp:    #DAEAEF                                        !default
+$sc-color-bad:     #C51313                                        !default
+$sc-color-ok:      #1EC545                                        !default
+$sc-color-warn:    #FF902E                                        !default
+
+
+
+$sc-radius:             4px                                       !default
+$sc-padding-top-bottom: modular-scale(-1)                         !default
+$sc-padding-sides:      1em                                       !default
+$sc-padding:            $sc-padding-top-bottom $sc-padding-sides  !default
+
+// Button Variables
+$sc-button-fg:                  $sc-color-interactive-fg          !default
+$sc-button-bg:                  $sc-color-interactive-bg          !default
+$sc-button-focus-bg:            green                             !default
+$sc-button-active-bg:           $sc-button-bg                     !default
+$sc-button-active-shadow:       darken($sc-color-active-bg, 30%)  !default
+$sc-button-hover-bg:            $sc-color-active-bg               !default
+$sc-button-disabled-bg:         black                             !default
+$sc-button-radius:              $sc-radius                        !default
+$sc-button-padding-top-bottom:  $sc-padding-top-bottom            !default
+$sc-button-padding-side:        $sc-padding-sides                 !default
+$sc-button-padding:             $sc-padding                       !default
+
+
+// Input Variables
+$sc-input-fg:                   $sc-color-interactive-fg          !default
+$sc-input-bg:                   $sc-color-interactive-bg          !default
+$sc-input-focus-bg:             green                             !default
+$sc-input-active-bg:            darken($sc-color-active-bg, 30%)  !default
+$sc-input-hover-bg:             $sc-color-active-bg               !default
+$sc-input-disabled-bg:          black                             !default
+$sc-input-radius:               $sc-radius                        !default
+$sc-input-padding:              modular-scale(-1)                 !default
