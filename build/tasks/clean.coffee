@@ -17,7 +17,8 @@ module.exports = (config) ->
 
   gulp.task 'clean', 'Cleans project paths.', ['clean:test'], ->
     del [
-      config.path.target
+      config.path.target.dist
+      config.path.target.example
       config.path.tmp.root
       config.path.doc
     ]

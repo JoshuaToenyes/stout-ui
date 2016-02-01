@@ -3,9 +3,9 @@
 #
 # @author Joshua Toenyes <josh@goatriot.com>
 
-dom         = require 'core/utilities/dom'
+dom         = require 'stout/core/utilities/dom'
 template    = require 'button/button.jade'
-Interactive = require 'ui/common/Interactive'
+Interactive = require 'stout/ui/common/Interactive'
 
 
 ##

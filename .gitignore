@@ -10,6 +10,9 @@
 # Ignore distribution directory.
 /dist
 
+# Ignore compiled examples.
+/example-compiled
+
 # Ignore temporary directory.
 /tmp
 

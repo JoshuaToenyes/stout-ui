@@ -24,9 +24,11 @@ module.exports = (config, task) ->
     [webpackConfig, entry] = webpackHelper(
       config, task.uglify, task.env, task.watch)
 
+    entry = task.entry or entry
+
     gulp.src entry
     .pipe webpack webpackConfig
-    .pipe gulp.dest config.path.target
+    .pipe gulp.dest task.target or config.path.target.dist
     .on 'error', gutil.log
   , {
     options: task.flags

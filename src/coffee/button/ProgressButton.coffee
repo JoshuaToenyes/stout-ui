@@ -1,4 +1,4 @@
-dom        = require 'core/utilities/dom'
+dom        = require 'stout/core/utilities/dom'
 template   = require 'button/progress-button.jade'
 Button     = require './Button'
 

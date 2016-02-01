@@ -3,9 +3,9 @@
 #
 # @fileoverview
 
-ClientView = require 'client/view/ClientView'
+ClientView = require 'stout/client/view/ClientView'
 Component  = require './Component'
-type       = require 'core/utilities/type'
+type       = require 'stout/core/utilities/type'
 
 
 ##

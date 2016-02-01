@@ -40,14 +40,4 @@ module.exports = (config, uglify, env, watch) ->
   if watch
     webpackConfig.watch = true
 
-  switch env
-    when 'test'
-      entryRoot = config.path.test.unit
-    when 'integration'
-      entryRoot = config.path.test.integration
-    else
-      entryRoot = config.path.src.coffee
-
-  entry = entryRoot + '/' + webpackConfig.entry
-
-  [webpackConfig, entry]
+  [webpackConfig, config.env[env].entry]

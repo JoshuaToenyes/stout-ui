@@ -12,4 +12,7 @@ gulp = require('gulp-help')(require 'gulp')
 module.exports = (config) ->
 
   gulp.task 'clean:target', 'Clean compiled files from target directory.', ->
-    del config.path.target
+    del [
+      config.path.target.dist
+      config.path.target.example
+    ]

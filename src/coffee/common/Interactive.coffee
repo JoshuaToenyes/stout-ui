@@ -1,4 +1,4 @@
-dom        = require 'core/utilities/dom'
+dom        = require 'stout/core/utilities/dom'
 Component  = require './Component'
 
 STATE =

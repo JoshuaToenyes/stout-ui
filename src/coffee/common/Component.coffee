@@ -1,6 +1,6 @@
-$          = require 'client/$'
-dom        = require 'core/utilities/dom'
-ClientView = require 'client/view/ClientView'
+$          = require 'stout/client/$'
+dom        = require 'stout/core/utilities/dom'
+ClientView = require 'stout/client/view/ClientView'
 
 
 ##

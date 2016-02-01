@@ -12,7 +12,7 @@ module.exports = (config, options) ->
 
   name = 'test:unit:node'
   description = 'Run unit tests in running NodeJS or io.js environment.'
-  src = config.path.target + '/**/*.js'
+  src = config.path.target.dist + '/**/*.js'
 
   gulp.task name, description, ['bundle:test'], ->
     if options.watch

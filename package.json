@@ -1,15 +1,16 @@
 {
-  "name": "stout-core",
-  "description": "Stout core files.",
+  "name": "stout-ui",
+  "description": "Stout UI - An advanced user interface library.",
   "author": "Joshua Toenyes <joshua.toenyes@me.com>",
   "version": "0.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JoshuaToenyes/stout-core"
+    "url": "https://github.com/JoshuaToenyes/stout-ui"
   },
   "license": "AGPL-3.0",
   "dependencies": {
     "stout-core": "JoshuaToenyes/stout-core",
+    "stout-client": "JoshuaToenyes/stout-client",
     "async": "0.9.x",
     "lodash": "^3.10",
     "underscore.string": "2.3.x",

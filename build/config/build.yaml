@@ -23,6 +23,9 @@ path:
     templates:  src/template
     jade:       src/jade
 
+  example:
+    root:       example
+
   # Library directory for non-package-manager libraries.
   lib:
     root:       lib
@@ -35,7 +38,9 @@ path:
     integration: test/integration
 
   # Output target directories.
-  target:       dist
+  target:
+    dist:       dist
+    example:    example-compiled
 
   # Assets directory.
   assets:       assets
@@ -66,7 +71,7 @@ env:
 
     # Webpack options.
     webpack:
-      entry:        bootstrap.coffee
+      #entry:        bootstrap.coffee
       output:
         pathinfo:   true
         publicPath: /
@@ -94,7 +99,7 @@ env:
 
     # Webpack integration testing bootstrap script.
     webpack:
-      entry:        integration-bootstrap.coffee
+      #entry:        integration-bootstrap.coffee
 
     # Enable sourcemap output.
     uglify:
@@ -106,7 +111,7 @@ env:
 
     # Webpack integration testing bootstrap script.
     webpack:
-      entry:        selenium-bootstrap.coffee
+      #entry:        selenium-bootstrap.coffee
 
     # Enable sourcemap output.
     uglify:
@@ -119,8 +124,17 @@ env:
     # Webpack test build options. Entry point is resolved from
     # `path.test.unit.coffee` build option.
     webpack:
-      entry:        test-bootstrap.coffee
+      entry:  test-bootstrap.coffee
 
+
+  example:
+    entry:
+      - example/button/example.coffee
+      - example/button-2/example.coffee
+
+    # Enable sourcemap output.
+    uglify:
+      sourceMap: true
 
   # Debug (development) options.
   debug:

@@ -1,6 +1,6 @@
-$           = require 'client/$'
-type        = require 'core/utilities/type'
-err         = require 'core/err'
+$           = require 'stout/client/$'
+type        = require 'stout/core/utilities/type'
+err         = require 'stout/core/err'
 Interactive = require './Interactive'
 
 

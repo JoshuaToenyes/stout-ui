@@ -30,6 +30,7 @@ module.exports =
   # @see https://webpack.github.io/docs/configuration.html#output
   output:
     sourceMapFilename: '[file].map'
+    filename: '[name].js'
 
 
   # Where to resolve our loaders.
@@ -49,10 +50,12 @@ module.exports =
       "#{__dirname}/../../#{config.path.test.unit}"
       "#{__dirname}/../../#{config.path.test.integration}"
       "#{__dirname}/../../#{config.path.test.selenium}"
-      "#{__dirname}/../../node_modules"
       "#{__dirname}/../../#{config.path.src.sass}"
       "#{__dirname}/../../#{config.path.src.templates}"
       "#{__dirname}/../../#{config.path.assets}"
+      "#{__dirname}/../../#{config.path.example}"
+      "#{__dirname}/../../node_modules"
+      "#{__dirname}/../../lib"
     ]
 
     # Extensions used to resolve modules.
@@ -63,9 +66,9 @@ module.exports =
     # location, as opposed to node_modules based modules.
     # @see https://webpack.github.io/docs/configuration.html#resolve-alias
     alias:
-      core:   'stout-core/src/coffee'
-      client: 'stout-client/src/coffee'
-      ui:     "#{__dirname}/../../#{config.path.src.coffee}"
+      'stout/core':   'stout-core/src/coffee'
+      'stout/client': 'stout-client/src/coffee'
+      'stout/ui':     "#{__dirname}/../../#{config.path.src.coffee}"
 
 
   # These are external modules that should not be bundled by Webpack.
@@ -141,7 +144,7 @@ module.exports =
 
     # Creates a simple index.html file which includes the entry-point bundles.
     # @see https://github.com/ampedandwired/html-webpack-plugin
-    new HtmlWebpackPlugin()
+    # new HtmlWebpackPlugin()
 
     # Use the rewire mocking plugin in Webpack plugins.
     # @see https://github.com/jhnns/rewire
@@ -155,4 +158,3 @@ module.exports =
     fs: 'empty',
     net: 'empty',
     tls: 'empty'
-

@@ -3,7 +3,7 @@
 # text-output component.
 
 template    = require 'console/console.jade'
-Output      = require 'ui/common/Output'
+Output      = require 'stout/ui/common/Output'
 
 
 

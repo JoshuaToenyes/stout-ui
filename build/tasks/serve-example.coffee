@@ -12,15 +12,15 @@ gulp        = require('gulp-help')(require 'gulp')
 
 module.exports = (config) ->
 
-  gulp.task 'serve', 'Serve files located in target directory.', (done) ->
+  gulp.task 'serve:example', 'Serve example files.', (done) ->
     browserSync
-      files: config.path.target.dist
+      files: config.path.target.example
       logLevel: 'silent'
       notify: false
       open: 'local'
       port: config.serve.port.target
       codeSync: false
       server:
-        baseDir: config.path.target.dist
+        baseDir: config.path.target.example
       ui: false
     , done
