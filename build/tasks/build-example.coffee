@@ -31,9 +31,16 @@ module.exports = (config, options, flags) ->
     name = 'build:example:' + example
     dependencies = ['bundle:example:' + example]
 
-    ((ex)->
-      gulp.task name, false, dependencies, ->
+    ((ex, n, d)->
+      fn = ->
         gulp.src config.path.example.root + '/' + ex + '/*.jade'
         .pipe jade()
         .pipe gulp.dest config.path.target.example + '/' + ex
-    )(example)
+
+      if options.watch
+        gulp.watch [
+          config.path.example.root + '/**/*.jade'
+        ], fn
+
+      gulp.task n, false, d, fn
+    )(example, name, dependencies)
