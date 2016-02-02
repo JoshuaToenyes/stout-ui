@@ -19,7 +19,7 @@ module.exports = (config) ->
       notify: false
       open: 'local'
       port: config.serve.port.target
-      codeSync: false
+      codeSync: true
       server:
         baseDir: config.path.target.example
       ui: false

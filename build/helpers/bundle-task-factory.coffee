@@ -20,7 +20,9 @@ webpackHelper = require './../helpers/webpack-config'
 ###
 module.exports = (config, task) ->
 
-  gulp.task task.name, task.description, ['clean:target'], ->
+  dependencies = ['clean:target'] unless task.noclean
+
+  gulp.task task.name, task.description, dependencies, ->
     [webpackConfig, entry] = webpackHelper(
       config, task.uglify, task.env, task.watch)
 

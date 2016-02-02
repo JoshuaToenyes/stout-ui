@@ -36,4 +36,5 @@ module.exports = (config, options, flags) ->
         env: 'example',
         target: config.path.target.example + '/' + example
         entry: config.path.example.root + '/' + example + '/example.coffee'
+        noclean: true
       })

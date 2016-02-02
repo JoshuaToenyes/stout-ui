@@ -6,6 +6,7 @@ bundleTaskFactory = require './../helpers/bundle-task-factory'
 fs                = require 'fs'
 gulp              = require('gulp-help')(require 'gulp')
 jade              = require 'gulp-jade'
+shell             = require 'gulp-shell'
 
 
 
@@ -37,10 +38,13 @@ module.exports = (config, options, flags) ->
         .pipe jade()
         .pipe gulp.dest config.path.target.example + '/' + ex
 
-      if options.watch
-        gulp.watch [
-          config.path.example.root + '/**/*.jade'
-        ], fn
+      gulp.task n, false, ->
+        if options.watch
+          gulp.watch [
+            config.path.example.root + '/**/*.jade'
+          ], fn
+        fn()
+        watch = ' --watch' unless not options.watch
+        shell.task(['gulp ' + d + watch + ' &'])()
 
-      gulp.task n, false, d, fn
     )(example, name, dependencies)
