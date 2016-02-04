@@ -6,7 +6,7 @@ demoEl = document.getElementById('demo')
 require 'button/button.sass'
 
 button = new Button
-  label: 'No Icon Button'
+  label: 'Make Reservation'
   parentEl: demoEl
 
 # btop = new Button
