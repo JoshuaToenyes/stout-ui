@@ -44,7 +44,7 @@ module.exports = (config, options, flags) ->
             config.path.example.root + '/**/*.jade'
           ], fn
         fn()
-        watch = ' --watch' unless not options.watch
+        watch = if options.watch then ' --watch' else ''
         shell.task(['gulp ' + d + watch + ' &'])()
 
     )(example, name, dependencies)

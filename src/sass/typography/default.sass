@@ -1,0 +1,71 @@
+@import "~bourbon/bourbon"
+@import "~colors/default.sass"
+
+// Large, bold display fonts.
+$sui-font-display-6:  normal normal bold 4em/120% sans-serif !default
+$sui-font-display-5:  normal normal bold 3.5em/120% sans-serif !default
+$sui-font-display-4:  normal normal normal 3em/120% sans-serif !default
+$sui-font-display-3:  normal normal normal 2.5em/120% sans-serif !default
+$sui-font-display-2:  normal normal normal 2em/120% sans-serif !default
+$sui-font-display-1:  normal normal bold 1.2em/120% sans-serif !default
+
+$sui-font-body-2:     normal normal bold 1em/135% sans-serif !default
+$sui-font-body-1:     normal normal normal 1em/135% sans-serif !default
+$sui-font-body-01:    normal normal normal 1em/135% sans-serif !default
+
+$sui-font-caption-1:  normal normal normal 0.8em/120% sans-serif !default
+
+%sui-typography-display-6,
+%sui-typography-display-5,
+%sui-typography-display-4,
+%sui-typography-display-3,
+%sui-typography-display-2,
+%sui-typography-display-1
+%sui-typography-body-2
+%sui-typography-body-1
+  +hyphens(auto)
+  +font-feature-settings("pnum", "kern", "liga")
+  color: $sui-color-fg
+
+%sui-typography-display-6,
+%sui-typography-display-5,
+%sui-typography-display-4,
+%sui-typography-display-3,
+%sui-typography-display-2,
+%sui-typography-display-1
+  margin: 1em 0 0.6em
+
+%sui-typography-display-6
+  font: $sui-font-display-6
+
+%sui-typography-display-5
+  font: $sui-font-display-5
+
+%sui-typography-display-4
+  font: $sui-font-display-4
+
+%sui-typography-display-3
+  font: $sui-font-display-3
+
+%sui-typography-display-2
+  font: $sui-font-display-2
+
+%sui-typography-display-1
+  font: $sui-font-display-1
+  text-transform: uppercase
+  margin-top: 1.5em
+
+%sui-typography-body-2
+  font: $sui-font-body-2
+
+%sui-typography-body-1
+  font: $sui-font-body-1
+
+%sui-typography-body-01
+  font: $sui-font-body-01
+  color: lighten($sui-color-fg, 20%)
+  font-weight: 300
+
+%sui-typography-caption-1
+  font: $sui-font-caption-1
+  color: lighten($sui-color-fg, 10%)
