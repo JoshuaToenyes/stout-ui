@@ -1,31 +1,126 @@
 @import "~bourbon/bourbon"
 @import "~colors/default.sass"
 
-// Large, bold display fonts.
-$sui-font-display-6:  normal normal bold 4em/120% sans-serif !default
-$sui-font-display-5:  normal normal bold 3.5em/120% sans-serif !default
-$sui-font-display-4:  normal normal normal 3em/120% sans-serif !default
-$sui-font-display-3:  normal normal normal 2.5em/120% sans-serif !default
-$sui-font-display-2:  normal normal normal 2em/120% sans-serif !default
-$sui-font-display-1:  normal normal bold 1.2em/120% sans-serif !default
+$standardFontStack: 'Helvetica Neue', Helvetica, Arial, sans-serif
+$monoFontStack: 'Andale Mono', AndaleMono, 'Lucida Console', 'Lucida Sans Typewriter', monospace
 
-$sui-font-body-2:     normal normal bold 1em/135% sans-serif !default
-$sui-font-body-1:     normal normal normal 1em/135% sans-serif !default
-$sui-font-body-01:    normal normal normal 1em/135% sans-serif !default
 
-$sui-font-caption-1:  normal normal normal 0.8em/120% sans-serif !default
+
+// Large, Bold Display Fonts
+
+$sui-font-display-6:   normal normal 700 4em/120% $standardFontStack !default
+$sui-font-display-5:   normal normal 700 3.5em/120% $standardFontStack !default
+$sui-font-display-4:   normal normal 400 3em/120% $standardFontStack !default
+$sui-font-display-3:   normal normal 400 2.5em/120% $standardFontStack !default
+$sui-font-display-2:   normal normal 400 2em/120% $standardFontStack !default
+$sui-font-display-1:   normal normal 700 1.2em/120% $standardFontStack !default
+
+
+// Lead Paragraph Fonts
+
+$sui-font-lead-2:      normal normal 700 1.5em/135% $standardFontStack !default
+$sui-font-lead-1:      normal normal 400 1.5em/135% $standardFontStack !default
+$sui-font-lead-01:     normal normal 300 1.5em/135% $standardFontStack !default
+$sui-font-lead-001:    normal normal 100 1.5em/135% $standardFontStack !default
+
+
+// Body Fonts
+
+$sui-font-body-2:      normal normal 700 1em/140% $standardFontStack !default
+$sui-font-body-1:      normal normal 400 1em/140% $standardFontStack !default
+$sui-font-body-01:     normal normal 300 1em/140% $standardFontStack !default
+$sui-font-body-001:    normal normal 100 1em/140% $standardFontStack !default
+
+
+// Preformatted Fonts
+
+$sui-font-pre-2:       normal normal 400 1.1em/145% $monoFontStack !default
+$sui-font-pre-1:       normal normal 400 1em/145% $monoFontStack !default
+$sui-font-pre-01:      normal normal 400 0.9em/145% $monoFontStack !default
+$sui-font-pre-001:     normal normal 400 0.8em/145% $monoFontStack !default
+
+
+// Caption Fonts
+
+$sui-font-caption-2:   normal normal 700 0.85em/120% $standardFontStack !default
+$sui-font-caption-1:   normal normal 400 0.85em/120% $standardFontStack !default
+$sui-font-caption-01:  normal normal 300 0.85em/120% $standardFontStack !default
+$sui-font-caption-001: normal normal 300 0.8em/120% $standardFontStack !default
+
+
+// Control Fonts
+
+$sui-font-control-4:   normal normal 700 1.2em/120% $standardFontStack !default
+$sui-font-control-3:   normal normal 700 1.1em/120% $standardFontStack !default
+$sui-font-control-2:   normal normal 700 1em/120% $standardFontStack !default
+$sui-font-control-1:   normal normal 500 0.9em/120% $standardFontStack !default
+$sui-font-control-01:  normal normal 400 0.8em/120% $standardFontStack !default
+$sui-font-control-001: normal normal 400 0.7em/120% $standardFontStack !default
+
+
+
+// Common Styles
 
 %sui-typography-display-6,
 %sui-typography-display-5,
 %sui-typography-display-4,
 %sui-typography-display-3,
 %sui-typography-display-2,
-%sui-typography-display-1
-%sui-typography-body-2
-%sui-typography-body-1
+%sui-typography-display-1,
+%sui-typography-lead-2,
+%sui-typography-lead-1,
+%sui-typography-lead-01,
+%sui-typography-lead-001,
+%sui-typography-body-2,
+%sui-typography-body-1,
+%sui-typography-body-01,
+%sui-typography-body-001,
+%sui-typography-pre-2,
+%sui-typography-pre-1,
+%sui-typography-pre-01,
+%sui-typography-pre-001,
+%sui-typography-caption-2,
+%sui-typography-caption-1,
+%sui-typography-caption-01,
+%sui-typography-caption-001,
+%sui-typography-control-4,
+%sui-typography-control-3,
+%sui-typography-control-2,
+%sui-typography-control-1,
+%sui-typography-control-01,
+%sui-typography-control-001
+  color: $sui-color-fg
+
+%sui-typography-display-6,
+%sui-typography-display-5,
+%sui-typography-display-4,
+%sui-typography-display-3,
+%sui-typography-display-2,
+%sui-typography-display-1,
+%sui-typography-lead-2,
+%sui-typography-lead-1,
+%sui-typography-lead-01,
+%sui-typography-lead-001,
+%sui-typography-body-2,
+%sui-typography-body-1,
+%sui-typography-body-01,
+%sui-typography-body-001,
+%sui-typography-caption-2,
+%sui-typography-caption-1,
+%sui-typography-caption-01,
+%sui-typography-caption-001,
+%sui-typography-control-4,
+%sui-typography-control-3,
+%sui-typography-control-2,
+%sui-typography-control-1,
+%sui-typography-control-01,
+%sui-typography-control-001
   +hyphens(auto)
   +font-feature-settings("pnum", "kern", "liga")
-  color: $sui-color-fg
+
+
+
+// Large Display
 
 %sui-typography-display-6,
 %sui-typography-display-5,
@@ -55,6 +150,40 @@ $sui-font-caption-1:  normal normal normal 0.8em/120% sans-serif !default
   text-transform: uppercase
   margin-top: 1.5em
 
+
+
+// Lead Paragraph
+
+%sui-typography-lead-2,
+%sui-typography-lead-1,
+%sui-typography-lead-01,
+%sui-typography-lead-001
+  margin: 1.3em 0
+
+%sui-typography-lead-2
+  font: $sui-font-lead-2
+
+%sui-typography-lead-1
+  font: $sui-font-lead-1
+
+%sui-typography-lead-01
+  font: $sui-font-lead-01
+  color: lighten($sui-color-fg, 10%)
+
+%sui-typography-lead-001
+  font: $sui-font-lead-001
+  color: lighten($sui-color-fg, 30%)
+
+
+
+// Body
+
+%sui-typography-body-2,
+%sui-typography-body-1,
+%sui-typography-body-01,
+%sui-typography-body-001
+  margin: 1em 0
+
 %sui-typography-body-2
   font: $sui-font-body-2
 
@@ -64,8 +193,95 @@ $sui-font-caption-1:  normal normal normal 0.8em/120% sans-serif !default
 %sui-typography-body-01
   font: $sui-font-body-01
   color: lighten($sui-color-fg, 20%)
-  font-weight: 300
+
+%sui-typography-body-001
+  font: $sui-font-body-001
+  color: lighten($sui-color-fg, 50%)
+
+%sui-typography-body-em
+  font-style: italic
+
+%sui-typography-body-2-b
+  font-weight: 900
+  text-transform: uppercase
+
+%sui-typography-body-1-b
+  font-weight: 700
+
+%sui-typography-body-01-b
+  font-weight: 500
+
+%sui-typography-body-001-b
+  font-weight: 400
+
+
+// Preformatted
+
+%sui-typography-pre-2,
+%sui-typography-pre-1,
+%sui-typography-pre-01,
+%sui-typography-pre-001
+  white-space: pre
+
+%sui-typography-pre-2
+  font: $sui-font-pre-2
+
+%sui-typography-pre-1
+  font: $sui-font-pre-1
+
+%sui-typography-pre-01
+  font: $sui-font-pre-01
+
+%sui-typography-pre-001
+  font: $sui-font-pre-001
+
+
+// Captions
+
+%sui-typography-caption-2
+  font: $sui-font-caption-2
+  color: lighten($sui-color-fg, 20%)
 
 %sui-typography-caption-1
   font: $sui-font-caption-1
+  color: lighten($sui-color-fg, 30%)
+
+%sui-typography-caption-01
+  font: $sui-font-caption-01
+  color: lighten($sui-color-fg, 40%)
+
+%sui-typography-caption-001
+  font: $sui-font-caption-001
+  color: lighten($sui-color-fg, 50%)
+
+
+
+// Controls
+
+%sui-typography-control-4,
+%sui-typography-control-3,
+%sui-typography-control-2,
+%sui-typography-control-1,
+%sui-typography-control-01,
+%sui-typography-control-001
+  text-transform: uppercase
   color: lighten($sui-color-fg, 10%)
+  letter-spacing: 1px
+
+%sui-typography-control-4
+  font: $sui-font-control-4
+
+%sui-typography-control-3
+  font: $sui-font-control-3
+
+%sui-typography-control-2
+  font: $sui-font-control-2
+
+%sui-typography-control-1
+  font: $sui-font-control-1
+
+%sui-typography-control-01
+  font: $sui-font-control-01
+
+%sui-typography-control-001
+  font: $sui-font-control-001
