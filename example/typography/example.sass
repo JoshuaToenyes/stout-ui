@@ -9,10 +9,39 @@ body
   text-align: left
   padding: 0 0.5em 2em
 
-.sep
-  margin: 2em 0
-  height: 1px
+h1.ex-title
+  @extend %sui-typography-display-5
+
+hr
+  display: none
   border: none
+  height: 1px
+  background: lighten($sui-color-fg, 70%)
+
+.ex
+  position: relative
+  border-left: 1px solid #ddd
+  padding-left: 1em
+
+  &.last
+    margin-bottom: 6em
+
+.ex-heading
+  @extend %sui-typography-display-1
+  color: lighten($sui-color-fg, 10%)
+
+.ex-label
+  @extend %sui-typography-caption-1
+  opacity: 0.5
+  position: absolute
+  width: 100%
+  height: 100%
+  text-align: right
+  left: -104%
+  top: 0
+  padding-right: 1em
+  line-height: 145%
+
 
 
 p.caption-2
@@ -26,6 +55,7 @@ p.caption-01
 
 p.caption-001
   @extend %sui-typography-caption-001
+
 
 
 p.body-2
@@ -47,6 +77,21 @@ p.body-001
     @extend %sui-typography-body-001-b
 
 
+
+p.emphasis-2
+  @extend %sui-typography-emphasis-2
+
+p.emphasis-1
+  @extend %sui-typography-emphasis-1
+
+p.emphasis-01
+  @extend %sui-typography-emphasis-01
+
+p.emphasis-001
+  @extend %sui-typography-emphasis-001
+
+
+
 p.pre-2
   @extend %sui-typography-pre-2
 
@@ -60,6 +105,7 @@ p.pre-001
   @extend %sui-typography-pre-001
 
 
+
 p.lead-2
   @extend %sui-typography-lead-2
 
@@ -71,6 +117,8 @@ p.lead-01
 
 p.lead-001
   @extend %sui-typography-lead-001
+
+
 
 p.control-4
   @extend %sui-typography-control-4
@@ -89,20 +137,3 @@ p.control-01
 
 p.control-001
   @extend %sui-typography-control-001
-
-.ex
-  position: relative
-  border-left: 1px solid #ddd
-  padding-left: 1em
-
-.ex-label
-  @extend %sui-typography-caption-1
-  opacity: 0.5
-  position: absolute
-  width: 100%
-  height: 100%
-  text-align: right
-  left: -104%
-  top: 0
-  padding-right: 1em
-  line-height: 145%

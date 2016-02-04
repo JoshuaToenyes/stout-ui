@@ -22,6 +22,16 @@ html(lang="en")
     - var control = "Make reservation"
     - var pre = "algorithm quicksort(A, lo, hi) is\n  if lo < hi then\n    p := partition(A, lo, hi)\n    quicksort(A, lo, p - 1)\n    quicksort(A, p + 1, hi)"
     
+    h1.ex-title Stout UI Typography
+    
+    .ex-heading Display Headings
+    p.body-01 Display typography is for large and important headings, like 
+      | content heading tags or marketing messages. The examples below
+      | illustrate these styles on a single line, how they appear when the 
+      | text wraps to multiple lines, and when followed immediately by body 
+      | text. The typographic style is completely separate from the semantic 
+      | markup and meaning.
+    
     .ex
       .ex-label display-6
       h1 #{shortHeading}
@@ -46,7 +56,7 @@ html(lang="en")
       .ex-label display-1
       h6 #{shortHeading}
     
-    .sep
+    
     
     .ex
       .ex-label display-6
@@ -72,7 +82,7 @@ html(lang="en")
       .ex-label display-1
       h6 #{longHeading}
     
-    .sep
+
     
     .ex
       .ex-label display-6<br/>body-1
@@ -99,12 +109,19 @@ html(lang="en")
       h5 #{shortHeading}
       p #{paragraph}
     
-    .ex
+    .ex.last
       .ex-label display-1<br/>body-1
       h6 #{shortHeading}
       p #{paragraph}
     
-    .sep
+
+    
+        
+    .ex-heading Lead Paragraphs
+    p.body-01 Paragraphs which start off a section of work, or deserve special 
+      | emphasis at the beginning of an article or page, are called <em>lead
+      | paragraphs.</em> The lead styles are illustrated below with follow-on
+      | body text to exhibit their likely usage.
     
     .ex
       .ex-label lead-2<br/>body-1
@@ -121,12 +138,20 @@ html(lang="en")
       p.lead-01 #{lead}
       p #{paragraph}
       
-    .ex
+    .ex.last
       .ex-label lead-001<br/>body-1
       p.lead-001 #{lead}
       p #{paragraph}
     
-    .sep
+    
+    
+    
+    .ex-heading Body
+    p.body-01 Body type style examples are below. These are the styles that 
+      | may be used in large blocks of text, such as articles, blog posts, 
+      | essays, etc. The first paragraph exhibits an unornamented block of text
+      | while the second contains <code>&lt;strong&gt;</code> tags (or 
+      | <code>&lt;b&gt;</code> tags) and <code>&lt;em&gt;</code> tags.
     
     .ex
       .ex-label body-2
@@ -143,12 +168,41 @@ html(lang="en")
       p.body-01 #{paragraph}
       p.body-01 !{paragraphOrnamental}
       
-    .ex
+    .ex.last
       .ex-label body-001
       p.body-001 #{paragraph}
       p.body-001 !{paragraphOrnamental}
     
-    .sep
+
+    
+    
+    .ex-heading Emphasis
+    p.body-01 Emphasis styles can be used for large blocks of text that should 
+      | have extra emphasis or are blockquotes. They provide a noticeable 
+      | contrast in aesthetic to pull out content.
+    
+    .ex
+      .ex-label emphasis-2
+      p.emphasis-2 #{paragraph}
+    
+    .ex
+      .ex-label emphasis-1
+      p.emphasis-1 #{paragraph}
+      
+    .ex
+      .ex-label emphasis-01
+      p.emphasis-01 #{paragraph}
+      
+    .ex.last
+      .ex-label emphasis-001
+      p.emphasis-001 #{paragraph}
+    
+
+    
+    
+    .ex-heading Preformatted
+    p.body-01 Code blocks, or other preformatted text can appear in the styles
+      | below.
     
     .ex
       .ex-label pre-2
@@ -162,12 +216,20 @@ html(lang="en")
       .ex-label pre-01
       p.pre-01 #{pre}
     
-    .ex
+    .ex.last
       .ex-label pre-001
       p.pre-001 #{pre}
     
-    .sep
+
     
+    
+    .ex-heading Captions
+    p.body-01 Caption styles can be used for descriptive text near controls or
+      | other elements, or as input labels. They're not meant to stand alone, 
+      | but instead augment of complement something else by describing it in
+      | greater detail. Notice the captions to the left of all styles on this 
+      | page, which describe the SASS placeholder selectors.
+
     .ex
       .ex-label caption-2
       p.caption-2 #{caption}
@@ -180,11 +242,16 @@ html(lang="en")
       .ex-label caption-01
       p.caption-01 #{caption}
       
-    .ex
+    .ex.last
       .ex-label caption-001
       p.caption-001 #{caption}
       
-    .sep
+    
+
+    
+    .ex-heading Controls
+    p.body-01 These are the various styles for controls with text labels 
+      | (i.e. buttons).
     
     .ex
       .ex-label control-4

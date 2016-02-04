@@ -3,6 +3,7 @@
 
 $standardFontStack: 'Helvetica Neue', Helvetica, Arial, sans-serif
 $monoFontStack: 'Andale Mono', AndaleMono, 'Lucida Console', 'Lucida Sans Typewriter', monospace
+$emphasisFontStack: Baskerville, 'Baskerville Old Face', 'Hoefler Text', Garamond, 'Times New Roman', serif
 
 
 
@@ -29,7 +30,15 @@ $sui-font-lead-001:    normal normal 100 1.5em/135% $standardFontStack !default
 $sui-font-body-2:      normal normal 700 1em/140% $standardFontStack !default
 $sui-font-body-1:      normal normal 400 1em/140% $standardFontStack !default
 $sui-font-body-01:     normal normal 300 1em/140% $standardFontStack !default
-$sui-font-body-001:    normal normal 100 1em/140% $standardFontStack !default
+$sui-font-body-001:    normal normal 300 0.9em/140% $standardFontStack !default
+
+
+// Emphasis Fonts
+
+$sui-font-emphasis-2:      italic normal 700 1.3em/125% $emphasisFontStack !default
+$sui-font-emphasis-1:      italic normal 400 1.2em/140% $emphasisFontStack !default
+$sui-font-emphasis-01:     italic normal 300 1.1em/140% $emphasisFontStack !default
+$sui-font-emphasis-001:    italic normal 300 1em/140% $emphasisFontStack !default
 
 
 // Preformatted Fonts
@@ -75,6 +84,10 @@ $sui-font-control-001: normal normal 400 0.7em/120% $standardFontStack !default
 %sui-typography-body-1,
 %sui-typography-body-01,
 %sui-typography-body-001,
+%sui-typography-emphasis-2,
+%sui-typography-emphasis-1,
+%sui-typography-emphasis-01,
+%sui-typography-emphasis-001,
 %sui-typography-pre-2,
 %sui-typography-pre-1,
 %sui-typography-pre-01,
@@ -196,7 +209,7 @@ $sui-font-control-001: normal normal 400 0.7em/120% $standardFontStack !default
 
 %sui-typography-body-001
   font: $sui-font-body-001
-  color: lighten($sui-color-fg, 50%)
+  color: lighten($sui-color-fg, 30%)
 
 %sui-typography-body-em
   font-style: italic
@@ -212,7 +225,31 @@ $sui-font-control-001: normal normal 400 0.7em/120% $standardFontStack !default
   font-weight: 500
 
 %sui-typography-body-001-b
+  color: lighten($sui-color-fg, 20%)
   font-weight: 400
+
+
+
+// Emphasis
+
+%sui-typography-emphasis-2,
+%sui-typography-emphasis-1,
+%sui-typography-emphasis-01,
+%sui-typography-emphasis-001
+  margin: 1em 0
+
+%sui-typography-emphasis-2
+  font: $sui-font-emphasis-2
+
+%sui-typography-emphasis-1
+  font: $sui-font-emphasis-1
+
+%sui-typography-emphasis-01
+  font: $sui-font-emphasis-01
+
+%sui-typography-emphasis-001
+  font: $sui-font-emphasis-001
+
 
 
 // Preformatted
@@ -234,6 +271,7 @@ $sui-font-control-001: normal normal 400 0.7em/120% $standardFontStack !default
 
 %sui-typography-pre-001
   font: $sui-font-pre-001
+
 
 
 // Captions
