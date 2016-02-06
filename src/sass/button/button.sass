@@ -2,6 +2,7 @@
 @import "~typography/default"
 @import "~placeholder/inline-component"
 @import "~ink/ink"
+@import "~indicator/indicator"
 @import "~vars/button"
 @import "~vars/common"
 
@@ -9,45 +10,56 @@
   @extend %inline-component
   +user-select(none)
 
-.#{$prefix}#{$button-postfix} button
-  @extend %sui-typography-control-1
-  outline: none
-  border: none
-  border-radius: $button-radius
-  padding: $button-padding
-  cursor: pointer
-  position: relative
-  overflow: hidden
-  color: white
-  background: none
-
-
   .#{$prefix}label
-    +transition(transform $transition-time)
+    +transition(color $button-label-transition-time)
+    color: transparent
     position: relative
-    z-index: 10
+    z-index: 20
 
-  &:focus
-    &.#{$prefix}fill::after
-      background-color: $focus-bg
+  .#{$prefix}ink-container
+    display: none
 
-  &:hover
-    &.#{$prefix}fill::after
-      background-color: lighten($hover-bg, 10%)
+  &.#{$visible} button
+    cursor: pointer
+    box-shadow: 1px 1px $button-shadow-size $button-shadow
 
+    &:focus .#{$prefix}indicator
+      background-color: $button-primary-focus
 
-  +transition(box-shadow 400ms)
-  box-shadow: 1px 1px 8px transparent
-  &:active:not([disabled])
-    box-shadow: 1px 1px 8px rgba(black, 0.45)
+    &:active:not([disabled])
+      box-shadow: 1px 1px $button-shadow-size $button-shadow-active
 
-  &:hover
-    box-shadow: 1px 1px 8px rgba(black, 0.2)
+    &:hover
+      box-shadow: 1px 1px $button-shadow-size $button-shadow-hover
 
+      .#{$prefix}indicator
+        background-color: $button-primary-hover
 
+    .#{$prefix}label
+      color: white
 
-  .#{$prefix}fill-container
-    +set-ink-gradient($button-primary-bg)
+    .#{$prefix}fill-container
+      +set-ink-color($button-primary-bg)
+
+    .#{$prefix}ink-container
+      display: block
+      +set-ink-color($button-primary-ink)
+
+  button
+    @extend %sui-typography-control-1
+    +transition(box-shadow 400ms)
+    outline: none
+    border: none
+    border-radius: $button-radius
+    padding: $button-padding
+    cursor: default
+    position: relative
+    overflow: hidden
+    background: none
+
+    .#{$prefix}indicator
+      +transition(background-color 400ms)
+      background-color: transparent
 
 /*.sc-button
 

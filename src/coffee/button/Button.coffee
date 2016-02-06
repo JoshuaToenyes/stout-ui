@@ -9,9 +9,13 @@ Interactive = require 'stout/ui/common/Interactive'
 use         = require 'stout/core/trait/use'
 ink         = require 'stout/ui/traits/ink'
 fill        = require 'stout/ui/traits/fill'
+commonSASS  = require '!!sass-variables!vars/common.sass'
+buttonSASS  = require '!!sass-variables!vars/button.sass'
 
-commonSASS = require '!!sass-variables!vars/common.sass'
-buttonSASS = require '!!sass-variables!vars/button.sass'
+require 'button/button.sass'
+require 'ink/ink.sass'
+require 'fill/fill.sass'
+require 'indicator/indicator.sass'
 
 prefix = commonSASS.prefix
 buttonClass = prefix + buttonSASS.buttonPostfix

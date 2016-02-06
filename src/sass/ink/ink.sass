@@ -17,13 +17,13 @@ $ink-fade-time: 800ms
     opacity: 1
     +transform(scale(1))
 
-=set-ink-gradient($ink-color)
+=set-ink-color($ink-color)
   .#{$prefix}ink div
     +radial-gradient(circle, $ink-color 0%, $ink-color 46%, transparent 50%)
 
 .#{$prefix}ink-container
   @extend %cover-parent
-  z-index: 5
+  z-index: 10
 
 .#{$prefix}ink
   +transform-style(preserve-3d)
@@ -46,4 +46,4 @@ $ink-fade-time: 800ms
   top: -50%
   z-index: -1
 
-+set-ink-gradient($sui-color-3)
++set-ink-color($sui-color-3)
