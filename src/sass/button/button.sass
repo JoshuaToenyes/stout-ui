@@ -1,105 +1,96 @@
 @import "~bourbon/bourbon"
-@import "~colors/default"
 @import "~ink/fillable"
-@import "~util/exports"
 @import "~typography/default"
+@import "./vars"
+@import "~common/vars"
+@import "~placeholder/inline-component"
 
-+exports('button')
+.#{$prefix}button button
+  @extend %inline-component
+  @extend %sui-typography-control-1
+  @extend %fillable
+  outline: none
+  border: none
+  border-radius: $radius
+  padding: $padding
+  cursor: pointer
+  position: relative
+  overflow: hidden
+  +user-select(none)
 
-  $box-shadow-size: 0.3rem
-  $fg: white
-  $disabled-bg: $sui-color-1
-  $bg: $sui-color-6
-  $active-bg: $sui-color-5
-  $focus-bg: $sui-color-7
-  $hover-bg: $sui-color-7
-  $radius: 0
-  $padding: 1em 1.3em
-  $transition-time: 300ms
-  $box-shadow-size: 1px
-
-  #{$all-buttons}
-    @extend %sui-typography-control-1
-    @extend %fillable
-    outline: none
-    border: none
-    border-radius: $radius
-    padding: $padding
-    cursor: pointer
+  .#{$prefix}label
+    +transition(transform $transition-time)
     position: relative
-    overflow: hidden
-    +transition(box-shadow $transition-time)
-    +user-select(none)
-    box-shadow: inset 0 0 $box-shadow-size transparent
+    z-index: 10
 
-    .sc-label
-      +transition(transform $transition-time)
+  color: transparent
 
-    &.sc-fill
-      color: $fg
+  &.#{$prefix}fill
+    color: $fg
+
+    &::after
+      background-color: $bg
+
+    &[disabled]
+      cursor: default
 
       &::after
-        background-color: $bg
-        +transition(background-color $transition-time)
-
-      &[disabled]
-        cursor: default
-
-        &::after
-          background-color: $disabled-bg !important
+        background-color: $disabled-bg !important
 
 
-  #{$all-buttons-focus}
-    &.sc-fill::after
+  &:focus
+    &.#{$prefix}fill::after
       background-color: $focus-bg
 
 
-  #{$all-buttons-hover}
-    &.sc-fill::after
-      background-color: $hover-bg
+  &:hover
+    &.#{$prefix}fill::after
+      background-color: lighten($hover-bg, 10%)
 
 
-  #{$all-buttons-active}
-    &:not([disabled])
-      box-shadow: inset 0 0 $box-shadow-size black
+  +transition(box-shadow 400ms)
+  box-shadow: 1px 1px 8px transparent
+  &:active:not([disabled])
+    box-shadow: 1px 1px 8px rgba(black, 0.45)
 
-      &.sc-fill::after
-        background-color: $active-bg
+  &:hover
+    box-shadow: 1px 1px 8px rgba(black, 0.2)
 
-  .sc-button
 
-    .sc-icon
-      width: 1em
-      height: 1em
-      position: relative
+/*.sc-button
 
-      &.sc-icon-right, &.sc-icon-left
-        display: inline-block
+  .sc-icon
+    width: 1em
+    height: 1em
+    position: relative
 
-      &.sc-icon-right
-        padding-left: modular-scale(-2)
+    &.sc-icon-right, &.sc-icon-left
+      display: inline-block
 
-      &.sc-icon-left
-        padding-right: modular-scale(-2)
+    &.sc-icon-right
+      padding-left: modular-scale(-2)
 
-      &.sc-icon-top, &.sc-icon-bottom, &.sc-icon-center
-        display: block
-        text-align: center
+    &.sc-icon-left
+      padding-right: modular-scale(-2)
 
-      &.sc-icon-top
-        padding-bottom: modular-scale(-2)
+    &.sc-icon-top, &.sc-icon-bottom, &.sc-icon-center
+      display: block
+      text-align: center
 
-      &.sc-icon-bottom
-        padding-top: modular-scale(-2)
+    &.sc-icon-top
+      padding-bottom: modular-scale(-2)
 
-    .sc-svg-icon
+    &.sc-icon-bottom
+      padding-top: modular-scale(-2)
 
-      &.sc-icon-top, &.sc-icon-bottom
-        margin: 0 auto 0
+  .sc-svg-icon
 
-      svg
-        width: 100%
-        height: 100%
+    &.sc-icon-top, &.sc-icon-bottom
+      margin: 0 auto 0
 
-        path, line, circle, ellipse, polyline, polygon
-          stroke: $fg
+    svg
+      width: 100%
+      height: 100%
+
+      path, line, circle, ellipse, polyline, polygon
+        stroke: $fg*/

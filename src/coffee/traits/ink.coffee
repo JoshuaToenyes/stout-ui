@@ -124,15 +124,18 @@ module.exports =
   # Initializes the passed element as an interactive ink element. Ink will
   # expand within the passed element on mousedown, then fade on mouseup.
   #
-  # @param {DOMElement} el - The ink container element, the element within-which
-  # the ink will expand.
+  # @param {DOMElement} target - The event target which mouse-event listeners
+  # should be attached to.
+  #
+  # @param {DOMElement} container - The ink container element, the element
+  # within-which the ink will expand.
 
-  initInkMouseEvents: (el) ->
-    el.addEventListener 'mousedown', (e) =>
-      r = el.getBoundingClientRect()
+  initInkMouseEvents: (target, container) ->
+    target.addEventListener 'mousedown', (e) =>
+      r = container.getBoundingClientRect()
       left = e.clientX - r.left
       top = e.clientY - r.top
-      ink = @expandInk(el, left, top, r.width, r.height)
+      ink = @expandInk(container, left, top, r.width, r.height)
 
       t = Date.now()
 

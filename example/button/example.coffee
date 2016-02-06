@@ -1,13 +1,28 @@
 Button = require 'stout/ui/button/Button'
+
+require './example.sass'
+require 'button/button.sass'
+
 # atomIcon = require './atom-icon.svg'
 demoEl = document.getElementById('demo')
-
-
-require 'button/button.sass'
 
 button = new Button
   label: 'Make Reservation'
   parentEl: demoEl
+
+show = document.querySelector '#show'
+hide = document.querySelector '#hide'
+
+show.onclick = ->
+  button.show()
+
+hide.onclick = ->
+  button.hide()
+
+
+
+
+
 
 # btop = new Button
 #   label: 'Top Label'

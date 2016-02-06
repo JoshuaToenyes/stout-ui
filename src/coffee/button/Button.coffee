@@ -6,7 +6,13 @@
 dom         = require 'stout/core/utilities/dom'
 template    = require 'button/button.jade'
 Interactive = require 'stout/ui/common/Interactive'
+use         = require 'stout/core/trait/use'
+ink         = require 'stout/ui/traits/ink'
 
+prefix = require('!!sass-variables!common/vars.sass').prefix
+vars = require '!!sass-variables!button/vars.sass'
+
+console.log prefix
 
 ##
 # Simple Button component class.
@@ -15,6 +21,16 @@ Interactive = require 'stout/ui/common/Interactive'
 # @public
 
 module.exports = class Button extends Interactive
+
+  # If this button should use the ink clicking trait.
+  #
+  # @property {boolean} ink
+  # @default true
+  # @public
+
+  @property 'ink',
+    default: true
+
 
   ##
   # The button label.
@@ -62,7 +78,9 @@ module.exports = class Button extends Interactive
     super template, null, {renderOnChange: false}, init
 
     # Add the `sc-button` class to the component container.
-    @classes.push 'sc-button'
+    @classes.add prefix + 'button'
+
+    if @ink then use(ink) @
 
     # Update the label in real-time if it changes.
     @on 'change:label', (e) =>
@@ -77,7 +95,7 @@ module.exports = class Button extends Interactive
   # @protected
 
   show: ->
-    if @rendered then dom.addClass @_getButton(), 'sc-fill'
+    if @rendered then dom.addClass @_getButton(), prefix + 'fill'
 
 
   ##
@@ -88,7 +106,7 @@ module.exports = class Button extends Interactive
   # @protected
 
   hide: ->
-    if @rendered then dom.removeClass @_getButton(), 'sc-fill'
+    if @rendered then dom.removeClass @_getButton(), prefix + 'fill'
 
 
   ##
@@ -99,7 +117,7 @@ module.exports = class Button extends Interactive
 
   isVisible: =>
     if @rendered
-      dom.hasClass @_getButton(), 'sc-fill'
+      dom.hasClass @_getButton(), prefix + 'fill'
     else
       false
 
@@ -108,6 +126,9 @@ module.exports = class Button extends Interactive
   render: ->
     if @label is '' then @iconPosition = 'center'
     super()
+    if @ink
+      inkContainer = @select ".#{prefix}ink-container"
+      @initInkMouseEvents @el, inkContainer
 
 
   ##

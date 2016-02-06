@@ -1,4 +1,5 @@
 @import "~bourbon/bourbon"
+@import "~placeholder/cover-parent"
 @import "~colors/default"
 
 $ink-color: $sui-color-3
@@ -14,6 +15,10 @@ $ink-fade-time: 800ms
   100%
     opacity: 1
     +transform(scale(1))
+
+.ui-ink-container
+  @extend %cover-parent
+  z-index: 0
 
 .sui-ink
   +transform-style(preserve-3d)

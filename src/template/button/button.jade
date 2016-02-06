@@ -1,8 +1,9 @@
-button.sc-fill  
-  .sc-label
+button(class="#{prefix}fill")
+  span(class="#{prefix}label")
     if iconPosition == 'right' || iconPosition == 'bottom'
       | #{label}
     if svgIcon
-      span.sc-icon.sc-svg-icon(class='sc-icon-#{iconPosition}')!= svgIcon 
+      span(class='#{prefix}icon #{prefix}svg-icon #{prefix}icon-#{iconPosition}')!= svgIcon 
     if iconPosition == 'left' || iconPosition == 'top'
       | #{label}
+  .ui-ink-container

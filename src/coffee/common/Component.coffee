@@ -1,7 +1,7 @@
 $          = require 'stout/client/$'
 dom        = require 'stout/core/utilities/dom'
 ClientView = require 'stout/client/view/ClientView'
-
+prefix     = require('!!sass-variables!common/vars.sass').prefix
 
 ##
 # Component class which represents a client-side component that exists in
@@ -10,6 +10,11 @@ ClientView = require 'stout/client/view/ClientView'
 # @class Component
 
 module.exports = class Component extends ClientView
+
+  @property 'prefix',
+    default: prefix,
+    const: true
+
 
   ##
   # This property is `true` if this component is currently hidden.
@@ -73,7 +78,7 @@ module.exports = class Component extends ClientView
     # Hide and show callback timer.
     @_timer = null
 
-    @classes.push 'sc-component'
+    @classes.add @prefix + 'component'
 
 
   ##
