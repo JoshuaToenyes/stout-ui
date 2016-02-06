@@ -1,47 +1,35 @@
 @import "~bourbon/bourbon"
-@import "~ink/fillable"
 @import "~typography/default"
-@import "./vars"
-@import "~common/vars"
 @import "~placeholder/inline-component"
+@import "~ink/ink"
+@import "~vars/button"
+@import "~vars/common"
 
-.#{$prefix}button button
+.#{$prefix}#{$button-postfix}
   @extend %inline-component
+  +user-select(none)
+
+.#{$prefix}#{$button-postfix} button
   @extend %sui-typography-control-1
-  @extend %fillable
   outline: none
   border: none
-  border-radius: $radius
-  padding: $padding
+  border-radius: $button-radius
+  padding: $button-padding
   cursor: pointer
   position: relative
   overflow: hidden
-  +user-select(none)
+  color: white
+  background: none
+
 
   .#{$prefix}label
     +transition(transform $transition-time)
     position: relative
     z-index: 10
 
-  color: transparent
-
-  &.#{$prefix}fill
-    color: $fg
-
-    &::after
-      background-color: $bg
-
-    &[disabled]
-      cursor: default
-
-      &::after
-        background-color: $disabled-bg !important
-
-
   &:focus
     &.#{$prefix}fill::after
       background-color: $focus-bg
-
 
   &:hover
     &.#{$prefix}fill::after
@@ -56,6 +44,10 @@
   &:hover
     box-shadow: 1px 1px 8px rgba(black, 0.2)
 
+
+
+  .#{$prefix}fill-container
+    +set-ink-gradient($button-primary-bg)
 
 /*.sc-button
 

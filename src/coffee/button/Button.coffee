@@ -8,11 +8,16 @@ template    = require 'button/button.jade'
 Interactive = require 'stout/ui/common/Interactive'
 use         = require 'stout/core/trait/use'
 ink         = require 'stout/ui/traits/ink'
+fill        = require 'stout/ui/traits/fill'
 
-prefix = require('!!sass-variables!common/vars.sass').prefix
-vars = require '!!sass-variables!button/vars.sass'
+commonSASS = require '!!sass-variables!vars/common.sass'
+buttonSASS = require '!!sass-variables!vars/button.sass'
 
-console.log prefix
+prefix = commonSASS.prefix
+buttonClass = prefix + buttonSASS.buttonPostfix
+fillClass = prefix + 'fill'
+inkContainerClass = prefix + 'ink-container'
+fillContainerClass = prefix + 'fill-container'
 
 ##
 # Simple Button component class.
@@ -78,9 +83,10 @@ module.exports = class Button extends Interactive
     super template, null, {renderOnChange: false}, init
 
     # Add the `sc-button` class to the component container.
-    @classes.add prefix + 'button'
+    @classes.add buttonClass
 
     if @ink then use(ink) @
+    use(fill) @
 
     # Update the label in real-time if it changes.
     @on 'change:label', (e) =>
@@ -95,7 +101,12 @@ module.exports = class Button extends Interactive
   # @protected
 
   show: ->
-    if @rendered then dom.addClass @_getButton(), prefix + 'fill'
+    if @rendered and not @filled @_getFillContainer()
+      @fill @_getFillContainer()
+      @classes.remove commonSASS.hidden
+      @classes.add commonSASS.visible
+
+
 
 
   ##
@@ -106,7 +117,11 @@ module.exports = class Button extends Interactive
   # @protected
 
   hide: ->
-    if @rendered then dom.removeClass @_getButton(), prefix + 'fill'
+    if @rendered and @filled @_getFillContainer()
+      @unfill @_getFillContainer()
+      @classes.remove commonSASS.visible
+      @classes.add commonSASS.hidden
+
 
 
   ##
@@ -115,11 +130,8 @@ module.exports = class Button extends Interactive
   # @method isVisible
   # @public
 
-  isVisible: =>
-    if @rendered
-      dom.hasClass @_getButton(), prefix + 'fill'
-    else
-      false
+  isVisible: ->
+    @rendered and @class.hasClass commonSASS.visible
 
 
 
@@ -127,9 +139,13 @@ module.exports = class Button extends Interactive
     if @label is '' then @iconPosition = 'center'
     super()
     if @ink
-      inkContainer = @select ".#{prefix}ink-container"
+      inkContainer = @select ".#{inkContainerClass}"
       @initInkMouseEvents @el, inkContainer
-
+    setTimeout =>
+      @fillNow @_getFillContainer(), =>
+        @classes.remove commonSASS.hidden
+        @classes.add commonSASS.visible
+    , 0
 
   ##
   # Returns the button element.
@@ -140,6 +156,16 @@ module.exports = class Button extends Interactive
   # @protected
 
   _getButton: -> @select 'button'
+
+
+  # Returns the ink fill container for showing/hiding the button.
+  #
+  # @returns {DOMElement} The fill container
+  #
+  # @method _getFillContainer
+  # @private
+
+  _getFillContainer: -> @select ".#{fillContainerClass}"
 
 
   ##

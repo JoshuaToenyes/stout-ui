@@ -1,6 +1,7 @@
 @import "~bourbon/bourbon"
 @import "~placeholder/cover-parent"
-@import "~colors/default"
+@import "~vars/common"
+@import "~vars/ink"
 
 $ink-color: $sui-color-3
 $ink-width: 3000px
@@ -8,7 +9,7 @@ $ink-height: 3000px
 $ink-expansion-time: 500ms
 $ink-fade-time: 800ms
 
-+keyframes(ink-run)
++keyframes(#{$prefix}ink-expand)
   0%
     opacity: 0
     +transform(scale(0.1))
@@ -16,26 +17,27 @@ $ink-fade-time: 800ms
     opacity: 1
     +transform(scale(1))
 
-.ui-ink-container
-  @extend %cover-parent
-  z-index: 0
+=set-ink-gradient($ink-color)
+  .#{$prefix}ink div
+    +radial-gradient(circle, $ink-color 0%, $ink-color 46%, transparent 50%)
 
-.sui-ink
+.#{$prefix}ink-container
+  @extend %cover-parent
+  z-index: 5
+
+.#{$prefix}ink
   +transform-style(preserve-3d)
-  position: absolute
-  width: $ink-width
-  height: $ink-height
   +transition(all $ink-fade-time)
+  position: absolute
   opacity: 1
 
-.sui-ink.fade-out
+.#{$prefix}ink.fade-out
   opacity: 0
 
-.sui-ink div
+.#{$prefix}ink div
   +transform-style(preserve-3d)
   +transition(all 1s)
-  +radial-gradient(circle, $ink-color 0%, $ink-color 46%, transparent 50%)
-  +animation(ink-run $ink-expansion-time ease-in)
+  +animation(#{$prefix}ink-expand $ink-expansion-time ease-in)
   opacity: 1
   position: absolute
   width: 100%
@@ -43,3 +45,5 @@ $ink-fade-time: 800ms
   left: -50%
   top: -50%
   z-index: -1
+
++set-ink-gradient($sui-color-3)

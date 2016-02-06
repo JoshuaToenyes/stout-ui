@@ -1,4 +1,4 @@
-button(class="#{prefix}fill")
+button
   span(class="#{prefix}label")
     if iconPosition == 'right' || iconPosition == 'bottom'
       | #{label}
@@ -6,4 +6,6 @@ button(class="#{prefix}fill")
       span(class='#{prefix}icon #{prefix}svg-icon #{prefix}icon-#{iconPosition}')!= svgIcon 
     if iconPosition == 'left' || iconPosition == 'top'
       | #{label}
-  .ui-ink-container
+  div(class="#{prefix}ink-container")
+  div(class="#{prefix}fill-container")
+  

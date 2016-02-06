@@ -1,5 +1,8 @@
 
 require 'ink/ink.sass'
+prefix = require('!!sass-variables!vars/common.sass').prefix
+inkVars = require '!!sass-variables!vars/ink.sass'
+
 
 module.exports =
 
@@ -8,7 +11,7 @@ module.exports =
   # @property {number} inkFadeTime
   # @public
 
-  inkFadeTime: 800
+  inkFadeTime: parseInt(inkVars.inkDefaultFadeTime)
 
 
   # Small time offset to ensure elements are removed/inserted before a CSS
@@ -18,6 +21,45 @@ module.exports =
   # @public
 
   inkDiffTime: 50
+
+
+  # Returns ink within the passed container, if it exists.
+  #
+  # @param {DOMElement} container - The container from which to get ink.
+  #
+  # @returns {DOMElement|null} Returnst the ink if present, or `null`.
+  #
+  # @method getInk
+  # @public
+
+  getInk: (container) ->
+    container.querySelectorAll ".#{prefix}ink"
+
+
+  # Checks to see if there is ink in the passed container.
+  #
+  # @param {DOMElement} container - The container to check if ink is present.
+  #
+  # @return {boolean} `true` if there is ink in the container.
+  #
+  # @method hasInk
+  # @public
+
+  hasInk: (container) ->
+    @getInk(container)?.length > 0
+
+
+  # Removes all ink from the passed container.
+  #
+  # @param {DOMElement} container - The container to remove ink from.
+  #
+  # @method removeInk
+  # @public
+
+  removeInk: (container) ->
+    ink = @getInk container
+    for i in ink
+      i.parentElement?.removeChild i
 
 
   # Calculates the size of the ink in pixels using the passed ink container
@@ -56,7 +98,6 @@ module.exports =
     Math.max(r / v, 500)
 
 
-
   # Creates a DOM element for the ink.
   #
   # @returns {DOMElement} The ink element.
@@ -68,7 +109,7 @@ module.exports =
     ink = document.createElement 'div'
     inkRun = document.createElement 'div'
     ink.appendChild inkRun
-    ink.classList.add 'sui-ink'
+    ink.classList.add prefix + 'ink'
     [ink, inkRun]
 
 
@@ -88,19 +129,24 @@ module.exports =
   #
   # @param {number} h - The height of the container element.
   #
+  # @param {function} cb - Optional callback function to call when the ink is
+  # expanded.
+  #
   # @returns {DOMElement} The ink element.
   #
   # @method expandInk
   # @public
 
-  expandInk: (el, x, y, w, h) ->
+  expandInk: (el, x, y, w, h, t, cb) ->
     [ink, inkRun] = @createInkElement()
-    inkRun.style.animationDuration = @inkExpansionTime(w, h) + 'ms'
+    fillTime = t or @inkExpansionTime(w, h)
+    inkRun.style.animationDuration = fillTime + 'ms'
     ink.style.transform = "translateX(#{x}px) translateY(#{y}px)"
     s = @calcInkRadius(w, h)
     ink.style.height = "#{s}px"
     ink.style.width = "#{s}px"
     el.appendChild ink
+    if cb then setTimeout cb, fillTime
     ink
 
 
@@ -111,13 +157,18 @@ module.exports =
   # @param {number} t - The number of milliseconds to wait before beginning
   # the fade-out.
   #
+  # @param {function} cb - Optional callback function to call when ink has
+  # been removed.
+  #
   # @method fadeInk
   # @public
 
-  fadeInk: (ink, t) ->
+  fadeInk: (ink, t, cb) ->
     ink.classList.add 'fade-out'
+    ink.style.transitionDuration = @inkFadeTime + 'ms'
     setTimeout ->
       ink.parentElement?.removeChild ink
+      cb?.call null
     , @inkFadeTime + Math.max(t, 0)
 
 
