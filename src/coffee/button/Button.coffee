@@ -31,6 +31,18 @@ fillContainerClass = prefix + 'fill-container'
 
 module.exports = class Button extends Interactive
 
+  @property 'size',
+    default: 'normal'
+    values: [
+      'tiny'
+      'small'
+      'normal'
+      'large'
+      'huge'
+      'massive'
+    ]
+
+
   # If this button should use the ink clicking trait.
   #
   # @property {boolean} ink
@@ -88,6 +100,7 @@ module.exports = class Button extends Interactive
 
     # Add the `sc-button` class to the component container.
     @classes.add buttonClass
+    @classes.add @size
 
     if @ink then use(ink) @
     use(fill) @
@@ -150,6 +163,7 @@ module.exports = class Button extends Interactive
         @classes.remove commonSASS.hidden
         @classes.add commonSASS.visible
     , 0
+    @
 
   ##
   # Returns the button element.

@@ -6,9 +6,41 @@ require 'button/button.sass'
 # atomIcon = require './atom-icon.svg'
 demoEl = document.getElementById('demo')
 
+new Button
+  label: 'Make Reservation'
+  parentEl: demoEl
+  size: 'tiny'
+.render()
+
+new Button
+  label: 'Make Reservation'
+  parentEl: demoEl
+  size: 'small'
+.render()
+
+new Button
+  label: 'Make Reservation'
+  parentEl: demoEl
+  size: 'normal'
+.render()
+
+new Button
+  label: 'Make Reservation'
+  parentEl: demoEl
+  size: 'large'
+.render()
+
+new Button
+  label: 'Make Reservation'
+  parentEl: demoEl
+  size: 'huge'
+.render()
+
 button = new Button
   label: 'Make Reservation'
   parentEl: demoEl
+  size: 'massive'
+.render()
 
 show = document.querySelector '#show'
 hide = document.querySelector '#hide'
@@ -18,11 +50,6 @@ show.onclick = ->
 
 hide.onclick = ->
   button.hide()
-
-
-
-
-
 
 # btop = new Button
 #   label: 'Top Label'
@@ -52,7 +79,7 @@ hide.onclick = ->
 #   parentEl: demoEl
 #   svgIcon: atomIcon
 
-button.render()
+
 # btop.render()
 # bbottom.render()
 # bleft.render()
