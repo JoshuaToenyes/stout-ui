@@ -74,6 +74,8 @@
       color: $button-fg
 
 
+  // ### Inverse Button Style
+
   &.#{$visible}.st-inverse button
     &:focus
       box-shadow: 1px 1px $button-shadow-size $button-inverse-shadow-focus
@@ -113,6 +115,50 @@
       +set-ink-color($button-primary-ink)
     .#{$prefix}label
       color: $button-primary-fg
+
+
+  // ### Warn Button Style
+
+  &.#{$visible}.st-warn button
+    box-shadow: 1px 1px $button-shadow-size $button-warn-shadow
+    &:focus
+      box-shadow: 1px 1px $button-shadow-size $button-warn-shadow-focus
+      .#{$prefix}indicator
+        background-color: $button-warn-focus
+    &:active:not([disabled])
+      box-shadow: 1px 1px $button-shadow-size $button-warn-shadow-active
+    &:hover
+      box-shadow: 1px 1px $button-shadow-size $button-warn-shadow-hover
+      .#{$prefix}indicator
+        background-color: $button-warn-hover
+    .#{$prefix}fill-container
+      +set-ink-color($button-warn-bg)
+    .#{$prefix}ink-container
+      +set-ink-color($button-warn-ink)
+    .#{$prefix}label
+      color: $button-warn-fg
+
+
+  // ### Danger Button Style
+
+  &.#{$visible}.st-danger button
+    box-shadow: 1px 1px $button-shadow-size $button-danger-shadow
+    &:focus
+      box-shadow: 1px 1px $button-shadow-size $button-danger-shadow-focus
+      .#{$prefix}indicator
+        background-color: $button-danger-focus
+    &:active:not([disabled])
+      box-shadow: 1px 1px $button-shadow-size $button-danger-shadow-active
+    &:hover
+      box-shadow: 1px 1px $button-shadow-size $button-danger-shadow-hover
+      .#{$prefix}indicator
+        background-color: $button-danger-hover
+    .#{$prefix}fill-container
+      +set-ink-color($button-danger-bg)
+    .#{$prefix}ink-container
+      +set-ink-color($button-danger-ink)
+    .#{$prefix}label
+      color: $button-danger-fg
 
 
   // ### Disabled Button Style

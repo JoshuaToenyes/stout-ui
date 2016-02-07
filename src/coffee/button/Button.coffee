@@ -63,6 +63,7 @@ module.exports = class Button extends Interactive
       'inverse'
       'primary'
       'warn'
+      'danger'
     ]
 
 

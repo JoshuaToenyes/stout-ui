@@ -32,6 +32,23 @@ new Button
 .render()
 
 
+
+# Warn button style example.
+new Button
+  label: 'Launch Missile'
+  parentEl: '.warn'
+  style: 'warn'
+.render()
+
+
+# Danger button style example.
+new Button
+  label: 'Delete Everything'
+  parentEl: '.danger'
+  style: 'danger'
+.render()
+
+
 # Disabled button example.
 for style in ['normal', 'primary', 'inverse']
 
