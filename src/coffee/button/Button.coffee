@@ -60,7 +60,9 @@ module.exports = class Button extends Interactive
     default: 'normal',
     values: [
       'normal'
+      'inverse'
       'primary'
+      'warn'
     ]
 
 
@@ -187,6 +189,15 @@ module.exports = class Button extends Interactive
     , 0
     @
 
+
+  enable: ->
+    super()
+    @fill? @_getFillContainer()
+
+
+  disable: ->
+    @unfill? @_getFillContainer()
+    super()
 
 
   ##

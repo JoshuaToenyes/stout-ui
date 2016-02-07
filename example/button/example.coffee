@@ -17,6 +17,15 @@ for size in ['tiny', 'small', 'normal', 'large', 'huge', 'massive']
 
 # Primary button style example.
 new Button
+  label: 'Confirm Order'
+  parentEl: '.inverse'
+  style: 'inverse'
+.render()
+
+
+
+# Primary button style example.
+new Button
   label: 'Place Order'
   parentEl: '.primary'
   style: 'primary'
@@ -24,7 +33,7 @@ new Button
 
 
 # Disabled button example.
-for style in ['normal', 'primary']
+for style in ['normal', 'primary', 'inverse']
 
   disabledButton = new Button
     label: 'Button Disabled'

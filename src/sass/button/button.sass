@@ -74,6 +74,25 @@
       color: $button-fg
 
 
+  &.#{$visible}.st-inverse button
+    &:focus
+      box-shadow: 1px 1px $button-shadow-size $button-inverse-shadow-focus
+      .#{$prefix}indicator
+        background-color: $button-inverse-focus
+    &:active:not([disabled])
+      box-shadow: 1px 1px $button-shadow-size $button-inverse-shadow-active
+    &:hover
+      box-shadow: 1px 1px $button-shadow-size $button-inverse-shadow-hover
+      .#{$prefix}indicator
+        background-color: $button-inverse-hover
+    .#{$prefix}fill-container
+      +set-ink-color($button-inverse-bg)
+    .#{$prefix}ink-container
+      +set-ink-color($button-inverse-ink)
+    .#{$prefix}label
+      color: $button-inverse-fg
+
+
   // ### Primary Button Style
 
   &.#{$visible}.st-primary button
@@ -96,6 +115,8 @@
       color: $button-primary-fg
 
 
+  // ### Disabled Button Style
+
   &.#{$visible} button[disabled]
     box-shadow: none
     cursor: not-allowed
@@ -107,6 +128,8 @@
       box-shadow: none
       .#{$prefix}indicator
         background-color: $button-disabled-bg
+    .#{$prefix}indicator
+      background-color: $button-disabled-bg
     .#{$prefix}fill-container
       +set-ink-color($button-disabled-bg)
     .#{$prefix}label
