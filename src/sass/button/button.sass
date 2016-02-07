@@ -25,9 +25,6 @@
 
     &:focus
       box-shadow: 1px 1px $button-shadow-size $button-shadow-focus
-      
-      .#{$prefix}indicator
-        background-color: $button-primary-focus
 
     &:active:not([disabled])
       box-shadow: 1px 1px $button-shadow-size $button-shadow-active
@@ -35,18 +32,9 @@
     &:hover
       box-shadow: 1px 1px $button-shadow-size $button-shadow-hover
 
-      .#{$prefix}indicator
-        background-color: $button-primary-hover
-
-    .#{$prefix}label
-      color: white
-
-    .#{$prefix}fill-container
-      +set-ink-color($button-primary-bg)
-
     .#{$prefix}ink-container
       display: block
-      +set-ink-color($button-primary-ink)
+      /*+set-ink-color($button-primary-ink)*/
 
   button
     +transition(box-shadow 400ms)
@@ -61,24 +49,89 @@
 
     .#{$prefix}indicator
       +transition(background-color 400ms)
-      background-color: transparent
 
-  &.tiny button
+
+  // ## Button Styles
+
+  // ### Normal Button Style
+
+  &.#{$visible} button
+    &:focus
+      box-shadow: 1px 1px $button-shadow-size $button-shadow-focus
+      .#{$prefix}indicator
+        background-color: $button-focus
+    &:active:not([disabled])
+      box-shadow: 1px 1px $button-shadow-size $button-shadow-active
+    &:hover
+      box-shadow: 1px 1px $button-shadow-size $button-shadow-hover
+      .#{$prefix}indicator
+        background-color: $button-hover
+    .#{$prefix}fill-container
+      +set-ink-color($button-bg)
+    .#{$prefix}ink-container
+      +set-ink-color($button-ink)
+    .#{$prefix}label
+      color: $button-fg
+
+
+  // ### Primary Button Style
+
+  &.#{$visible}.st-primary button
+    box-shadow: 1px 1px $button-shadow-size $button-primary-shadow
+    &:focus
+      box-shadow: 1px 1px $button-shadow-size $button-primary-shadow-focus
+      .#{$prefix}indicator
+        background-color: $button-primary-focus
+    &:active:not([disabled])
+      box-shadow: 1px 1px $button-shadow-size $button-primary-shadow-active
+    &:hover
+      box-shadow: 1px 1px $button-shadow-size $button-primary-shadow-hover
+      .#{$prefix}indicator
+        background-color: $button-primary-hover
+    .#{$prefix}fill-container
+      +set-ink-color($button-primary-bg)
+    .#{$prefix}ink-container
+      +set-ink-color($button-primary-ink)
+    .#{$prefix}label
+      color: $button-primary-fg
+
+
+  &.#{$visible} button[disabled]
+    box-shadow: none
+    cursor: not-allowed
+    &:focus
+      box-shadow: none
+      .#{$prefix}indicator
+        background-color: $button-disabled-bg
+    &:hover
+      box-shadow: none
+      .#{$prefix}indicator
+        background-color: $button-disabled-bg
+    .#{$prefix}fill-container
+      +set-ink-color($button-disabled-bg)
+    .#{$prefix}label
+      color: $button-disabled-fg
+      text-shadow: 1px 1px 1px darken(white, 4%)
+
+
+  // ## Button Sizes
+
+  &.sz-tiny button
     @extend %sui-typography-control-001
 
-  &.small button
+  &.sz-small button
     @extend %sui-typography-control-01
 
-  button, &.normal button
+  button
     @extend %sui-typography-control-1
 
-  &.large button
+  &.sz-large button
     @extend %sui-typography-control-2
 
-  &.huge button
+  &.sz-huge button
     @extend %sui-typography-control-3
 
-  &.massive button
+  &.sz-massive button
     @extend %sui-typography-control-4
 
 /*.sc-button

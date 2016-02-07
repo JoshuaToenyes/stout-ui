@@ -31,6 +31,14 @@ fillContainerClass = prefix + 'fill-container'
 
 module.exports = class Button extends Interactive
 
+  # The button's size property. Indicates the relative size that this button
+  # should be in the user interface. Actual size is determined by the
+  # configured control typography sizes in SASS.
+  #
+  # @property {string} size
+  # @default 'normal'
+  # @public
+
   @property 'size',
     default: 'normal'
     values: [
@@ -40,6 +48,19 @@ module.exports = class Button extends Interactive
       'large'
       'huge'
       'massive'
+    ]
+
+
+  # The button's style, which indicates how the button should be displayed in
+  # the interfaces, as well as it's colors.
+  #
+  # @property {string} styles
+
+  @property 'style',
+    default: 'normal',
+    values: [
+      'normal'
+      'primary'
     ]
 
 
@@ -100,7 +121,8 @@ module.exports = class Button extends Interactive
 
     # Add the `sc-button` class to the component container.
     @classes.add buttonClass
-    @classes.add @size
+    @classes.add 'sz-' + @size
+    @classes.add 'st-' + @style
 
     if @ink then use(ink) @
     use(fill) @
@@ -157,13 +179,15 @@ module.exports = class Button extends Interactive
     super()
     if @ink
       inkContainer = @select ".#{inkContainerClass}"
-      @initInkMouseEvents @el, inkContainer
+      @initInkMouseEvents @_getButton(), inkContainer
     setTimeout =>
       @fillNow @_getFillContainer(), =>
         @classes.remove commonSASS.hidden
         @classes.add commonSASS.visible
     , 0
     @
+
+
 
   ##
   # Returns the button element.

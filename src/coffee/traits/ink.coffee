@@ -183,6 +183,7 @@ module.exports =
 
   initInkMouseEvents: (target, container) ->
     target.addEventListener 'mousedown', (e) =>
+      if target.hasAttribute 'disabled' then return
       r = container.getBoundingClientRect()
       left = e.clientX - r.left
       top = e.clientY - r.top

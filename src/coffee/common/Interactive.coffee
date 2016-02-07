@@ -64,6 +64,17 @@ module.exports = class Interactive extends Component
     get: -> @isEnabled()
 
 
+  @property 'click',
+    serializable: false
+
+    set: (fn) ->
+      if not fn then return
+      setTimeout =>
+        @on 'click', fn
+      , 0
+
+
+
   ##
   # Interactive constructor creates a new Interactive component instance and
   # passes all arguments to the parent class.

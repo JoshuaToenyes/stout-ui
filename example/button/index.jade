@@ -2,35 +2,67 @@ extends ../_blueprint/master.jade
 
 block content
 
+  // Unless otherwise specified (see below) all buttons feature active, hover,
+  // | focus, and click events.
+
   h1.ex-title Stout Buttons
   
-  .ex-heading Primary Buttons
-  p Primary buttons are available in six sizes, <code>tiny</code>, 
+  .ex-heading Button Sizes
+  p Buttons are available in six sizes, <code>tiny</code>, 
     | <code>small</code>, <code>normal</code>, <code>large</code>,
-    | <code>huge</code>, and <code>massive</code>. The primary button's 
-    | colors are drawn from the primary colors of the configured color scheme.
-    | Unless otherwise specified (see below) all buttons feature active, hover,
-    | focus, and click events.
+    | <code>huge</code>, and <code>massive</code>. 
   
-  #demo
-  
-  .ex.primary-tiny
+  .ex.size-tiny
     .ex-label tiny
   
-  .ex.primary-small
+  .ex.size-small
     .ex-label small
       
-  .ex.primary-normal
+  .ex.size-normal
     .ex-label normal  
     
-  .ex.primary-large
+  .ex.size-large
     .ex-label large
 
-  .ex.primary-huge
+  .ex.size-huge
     .ex-label huge
 
-  .ex.primary-massive
+  .ex.size-massive.last
     .ex-label massive
 
-  button#show Show Button
-  button#hide Hide Button
+
+
+  .ex-heading Primary Button
+  p The primary button should be used to prominently feature the action which
+    | the button initiates. The colors are drawn from the primary colors of 
+    | the configured color scheme.
+
+  .ex.primary.last
+    .ex-label
+    
+    
+  .ex-heading Disabled
+  p All buttons share the same appearance when they are disabled.
+
+  .ex.disabled-normal
+    .ex-label disabled normal
+    .subject
+    .controls
+
+  .ex.disabled-primary.last
+    .ex-label disabled primary
+    .subject
+    .controls
+    
+  
+
+
+  
+  .ex-heading Show and Hide Behavior
+  p Buttons can be dynamically shown or hidden using the <code>show()</code>
+    | and <code>hide()</code> methods. Using the <code>fill</code> trait, 
+    | we cleanly animate button's revealing.
+
+  .ex.show-hide.last
+    .subject
+    .controls
