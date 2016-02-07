@@ -98,6 +98,19 @@ module.exports = class Button extends Interactive
   @property 'svgIcon'
 
 
+  # If set to `true`, this button will blur immediately after a click event.
+  # In other words, the button does not keep focus after it has been clicked.
+  # This should be set to false if the button is intended to be clicked
+  # multiple times, like in a game interfacer.
+  #
+  # @property {boolean} blurOnClick
+  # @default true
+  # @public
+
+  @property 'blurOnClick',
+    default: true
+
+
   ##
   # Where the icon should appear relative to the icon text.
   #
@@ -133,6 +146,8 @@ module.exports = class Button extends Interactive
     # Update the label in real-time if it changes.
     @on 'change:label', (e) =>
       @_getButton().textContent = e.data.value
+
+    if @blurOnClick then @on 'click', (e) => @_getButton().blur()
 
 
   ##
