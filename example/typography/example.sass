@@ -1,47 +1,5 @@
 @import "~typography/default.sass"
-
-html
-  text-align: center
-
-body
-  max-width: 42em
-  margin: 0 auto 0
-  text-align: left
-  padding: 0 0.5em 2em
-
-h1.ex-title
-  @extend %sui-typography-display-5
-
-hr
-  display: none
-  border: none
-  height: 1px
-  background: lighten($sui-color-fg, 70%)
-
-.ex
-  position: relative
-  border-left: 1px solid #ddd
-  padding-left: 1em
-
-  &.last
-    margin-bottom: 6em
-
-.ex-heading
-  @extend %sui-typography-display-1
-  color: lighten($sui-color-fg, 10%)
-
-.ex-label
-  @extend %sui-typography-caption-1
-  opacity: 0.5
-  position: absolute
-  width: 100%
-  height: 100%
-  text-align: right
-  left: -104%
-  top: 0
-  padding-right: 1em
-  line-height: 145%
-
+@import "../_blueprint/master.sass"
 
 
 p.caption-2

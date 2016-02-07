@@ -8,37 +8,37 @@ demoEl = document.getElementById('demo')
 
 new Button
   label: 'Make Reservation'
-  parentEl: demoEl
+  parentEl: document.querySelector '.primary-tiny'
   size: 'tiny'
 .render()
 
 new Button
   label: 'Make Reservation'
-  parentEl: demoEl
+  parentEl: document.querySelector '.primary-small'
   size: 'small'
 .render()
 
 new Button
   label: 'Make Reservation'
-  parentEl: demoEl
+  parentEl: document.querySelector '.primary-normal'
   size: 'normal'
 .render()
 
 new Button
   label: 'Make Reservation'
-  parentEl: demoEl
+  parentEl: document.querySelector '.primary-large'
   size: 'large'
 .render()
 
 new Button
   label: 'Make Reservation'
-  parentEl: demoEl
+  parentEl: document.querySelector '.primary-huge'
   size: 'huge'
 .render()
 
 button = new Button
   label: 'Make Reservation'
-  parentEl: demoEl
+  parentEl: document.querySelector '.primary-massive'
   size: 'massive'
 .render()
 
