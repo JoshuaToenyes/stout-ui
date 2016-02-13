@@ -1,3 +1,24 @@
+# Ignore transpiled source at project root.
+/button
+/colors
+/common
+/console
+/container
+/dropdown
+/fill
+/group
+/indicator
+/ink
+/input
+/modal
+/placeholder
+/progress
+/times
+/traits
+/typography
+/util
+/vars
+
 # Ignore annoying OS X files.
 .DS_Store
 
@@ -6,9 +27,6 @@
 
 # Ignore IDE directories.
 .idea
-
-# Ignore transpiled source.
-/dist
 
 # Ignore compiled examples.
 /example-compiled

@@ -16,9 +16,11 @@ sourcemaps = require 'gulp-sourcemaps'
 module.exports = (config) ->
 
   gulp.task 'coffee', 'Transpiles CoffeeScript to JavaScript.', ->
-    gulp.src config.path.src.coffee + '/**/*.coffee'
+    gulp.src config.path.src + '/**/*.coffee'
     .pipe sourcemaps.init()
     .pipe coffee()
-    .pipe sourcemaps.write config.path.maps.js
-    .pipe gulp.dest config.path.tmp.dist
+    .pipe sourcemaps.write './',
+      includeContent: true
+      sourceRoot: '../src/coffee'
+    .pipe gulp.dest config.path.target
     .on 'error', gutil.log

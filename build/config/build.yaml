@@ -16,12 +16,7 @@ path:
     root:       build
 
   # Source file directory.
-  src:
-    root:       src
-    coffee:     src/coffee
-    sass:       src/sass
-    templates:  src/template
-    jade:       src/jade
+  src:          src
 
   example:
     root:       example
@@ -38,9 +33,7 @@ path:
     integration: test/integration
 
   # Output target directories.
-  target:
-    dist:       .
-    example:    example-compiled
+  target:        .
 
   # Assets directory.
   assets:       assets
