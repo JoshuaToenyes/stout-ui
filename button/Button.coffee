@@ -3,10 +3,10 @@
 #
 # @author Joshua Toenyes <josh@goatriot.com>
 
-dom         = require 'stout/core/utilities/dom'
+dom         = require 'stout-core/utilities/dom'
 template    = require 'button/button.jade'
 Interactive = require 'stout/ui/common/Interactive'
-use         = require 'stout/core/trait/use'
+use         = require 'stout-core/trait/use'
 ink         = require 'stout/ui/traits/ink'
 fill        = require 'stout/ui/traits/fill'
 commonSASS  = require '!!sass-variables!vars/common.sass'

@@ -39,7 +39,7 @@ path:
 
   # Output target directories.
   target:
-    dist:       dist
+    dist:       .
     example:    example-compiled
 
   # Assets directory.

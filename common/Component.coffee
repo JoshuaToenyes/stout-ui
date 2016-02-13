@@ -1,5 +1,5 @@
-$          = require 'stout/client/$'
-dom        = require 'stout/core/utilities/dom'
+$          = require 'stout-client/$'
+dom        = require 'stout-core/utilities/dom'
 ClientView = require 'stout/client/view/ClientView'
 prefix     = require('!!sass-variables!vars/common.sass').prefix
 

@@ -7,7 +7,7 @@
 # Ignore IDE directories.
 .idea
 
-# Ignore distribution directory.
+# Ignore transpiled source.
 /dist
 
 # Ignore compiled examples.
