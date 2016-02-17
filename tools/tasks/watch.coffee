@@ -11,6 +11,6 @@ shell = require 'gulp-shell'
 
 module.exports = ->
 
-  gulp.task 'docs:dev', 'Serve and watch documentation.', shell.task [
-    '(gulp docs:serve &) && (gulp docs:watch)'
+  gulp.task 'watch', 'Serve and watch documentation.', [
+    'coffee', 'unit'
   ]

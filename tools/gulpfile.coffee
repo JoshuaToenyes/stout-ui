@@ -1,6 +1,6 @@
 # # gulpfile.coffee
 #
-# This gulpfile defines build and development tasks for the Stout Client
+# This gulpfile defines build and development tasks for the Stout Core
 # development, production, and test environments. It uses a combination of basic
 # gulp task names and command line flags. The command `gulp help` can be used
 # to display a list of commands intended to be used by the developer.
@@ -100,15 +100,15 @@
 # with development. Additionally, the build-system web server is used remotely
 # by Travis CI and Sauce Labs.
 
-
-
-_           = require 'lodash'
 fs          = require 'fs'
 gulp        = require('gulp-help')(require 'gulp')
 path        = require 'path'
 watch       = require 'gulp-watch'
 yaml        = require 'js-yaml'
 yargs       = require 'yargs'
+forEach     = require 'lodash/forEach'
+omit        = require 'lodash/omit'
+defaultsDeep = require 'lodash/defaultsDeep'
 
 
 #- Grab command line arguments.
@@ -120,15 +120,15 @@ config = yaml.safeLoad fs.readFileSync __dirname + '/config/build.yaml'
 
 
 #- Default all config options, then remove the `default` key.
-_.forEach config.env, (value, key) ->
+forEach config.env, (value, key) ->
   if key is 'default' then return
-  _.defaultsDeep config.env[key], config.env.default
-config.env = _.omit config.env, 'default'
+  defaultsDeep config.env[key], config.env.default
+config.env = omit config.env, 'default'
 
 
 #- Set the build environment based on command line flags (default to "debug").
 env = 'debug'
-_.forEach ['production', 'test'], (v) ->
+forEach ['production', 'test'], (v) ->
   if argv[v] then env = v
 
 
@@ -140,7 +140,7 @@ Object.freeze config
 flags =
 
   lint:
-    'fail-on-error': 'Causes a non-zero exit code when an error is encountered.'
+    'fail-on-error': 'Exit with non-zero code when an error is encountered.'
     'watch': 'Watch and re-lint on source or test file changes.'
 
   bundle:
@@ -157,12 +157,20 @@ options =
 
   failOnError: argv.failOnError
 
+  serve: argv.serve
+
+  private: argv.private
+
+
+if argv._[0] is 'watch' then options.watch = true
+
 
 ## Require all tasks in the `build/tasks` folder.
 try
   tasks = fs.readdirSync "#{__dirname}/tasks"
 
   for task in tasks
+    if path.extname(task) isnt '.coffee' then continue
     task = path.basename task, '.coffee'
     require("#{__dirname}/tasks/#{task}")(config, options, flags)
 

@@ -16,10 +16,9 @@ sassLint    = require 'gulp-sass-lint'
 module.exports = (config, options, flags) ->
 
   name = 'lint:sass'
+  src  = config.path.src + '/**/*.sass'
 
   gulp.task name, 'Lints SASS files.', ->
-
-    src = config.path.src.sass + '/**/*.sass'
 
     if options.watch then gulp.watch src, [name]
 
@@ -27,7 +26,3 @@ module.exports = (config, options, flags) ->
     .pipe sassLint()
     .pipe sassLint.format()
     .pipe gulpif(options.failOnError, sassLint.failOnError())
-
-  , {
-    options: flags.lint
-  }

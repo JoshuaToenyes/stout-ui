@@ -33,9 +33,11 @@ rules:
 
   clean-import-paths: 2
 
-  empty-line-between-blocks:
-    - 2
-    - include: true
+  # Awaiting fix for #447
+  # https://github.com/sasstools/sass-lint/issues/447
+  # empty-line-between-blocks:
+  #   - 2
+  #   - include: true
 
   extends-before-declarations: 2
 

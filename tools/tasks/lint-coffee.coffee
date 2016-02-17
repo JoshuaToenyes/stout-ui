@@ -15,15 +15,15 @@ gulpif     = require 'gulp-if'
 # @param {boolean} failOnError - `true` to fail and trigger non-zero exit code
 # on CoffeeScript lint error.
 
-module.exports = (config, options, flags) ->
+module.exports = (config, options) ->
 
   name = 'lint:coffee'
 
-  gulp.task name, 'Lints CoffeeScript files.', ->
+  gulp.task name, 'Lints source files.', ->
 
     src = [
-      config.path.src.coffee + '/**/*.coffee'
-      config.path.test.unit + '/**/*.coffee'
+      config.path.src + '/**/*.coffee'
+      config.path.test + '/**/*.coffee'
     ]
 
     if options.watch then gulp.watch src, [name]
@@ -35,5 +35,7 @@ module.exports = (config, options, flags) ->
     .pipe gulpif(options.failOnError, coffeelint.reporter('fail'))
 
   , {
-    options: flags.lint
+    options:
+      'fail-on-error': 'Exit with non-zero code when an error is encountered.'
+      'watch': 'Watch for changes and re-lint files.'
   }

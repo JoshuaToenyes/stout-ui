@@ -4,22 +4,24 @@
 # virtually identical except for the hierarchical difference, so a simple
 # function is used to generate all Gulp tasks.
 
-_    = require 'lodash'
 bump = require 'gulp-bump'
 git  = require 'gulp-git'
 gulp = require('gulp-help')(require 'gulp')
+forEach = require 'lodash/forEach'
+tag  = require 'gulp-tag-version'
 
 
 
 module.exports = ->
 
-  _.each {
+  forEach {
     patch: 'Bump, commit, and tag the package patch version.'
     minor: 'Bump, commit, and tag the package minor version.'
     major: 'Bump, commit, and tag the package major version.'
   }, (description, importance) ->
-    gulp.task 'bump:' + importance, description, ->
+    gulp.task importance, description, ->
       gulp.src ['./package.json']
       .pipe bump({type: importance})
       .pipe gulp.dest './'
       .pipe git.commit "Bump package #{importance} version."
+      .pipe tag()

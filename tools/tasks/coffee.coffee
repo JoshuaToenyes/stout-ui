@@ -1,7 +1,10 @@
-# # `coffee`
-#
-# Compiles all CoffeeScript files into a single concatenated JavaScript file.
+###
 
+coffee Gulp Task
+
+Transpiles all project CoffeeScript: source, unit tests, and e2e tests.
+
+###
 
 coffee     = require 'gulp-coffee'
 gulp       = require('gulp-help')(require 'gulp')
@@ -10,17 +13,12 @@ sourcemaps = require 'gulp-sourcemaps'
 
 
 
-
-# @param {Object} config - Build configuration object.
-
 module.exports = (config) ->
 
-  gulp.task 'coffee', 'Transpiles CoffeeScript to JavaScript.', ->
-    gulp.src config.path.src + '/**/*.coffee'
-    .pipe sourcemaps.init()
-    .pipe coffee()
-    .pipe sourcemaps.write './',
-      includeContent: true
-      sourceRoot: '../src/coffee'
-    .pipe gulp.dest config.path.target
-    .on 'error', gutil.log
+  gulp.task 'coffee', 'Transpiles all CoffeeScript to JavaScript.', [
+    'coffee:src'
+    'coffee:test'
+  ], null, {
+    options:
+      'watch': 'Watch for changes and re transpile CoffeeScript.'
+  }

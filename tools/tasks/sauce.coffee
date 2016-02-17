@@ -7,14 +7,12 @@ karma = require 'karma'
 
 
 
-# @param {boolean} watch - `true` to watch for changes and re-run.
+module.exports = (config) ->
 
-module.exports = (config, options) ->
+  name = 'sauce'
+  description = 'Run unit tests on SauceLabs.'
 
-  name = 'test:unit:sauce'
-  description = 'Run unit tests in locally installed browsers.'
-
-  gulp.task name, description, ['bundle:test'], (done) ->
+  gulp.task name, description, ['coffee'], (done) ->
 
     jobNum = process.env.TRAVIS_JOB_NUMBER
 
@@ -24,13 +22,8 @@ module.exports = (config, options) ->
     if jobNum? and jobNum[jobNum.length - 1] isnt '1'
       return done()
 
-    if options.watch
-      gulp.watch [
-        config.path.src.coffee + '/**/*.coffee'
-        config.path.test.unit + '/**/*.coffee'
-      ], [name]
     opts =
-      configFile: __dirname + '/../../test/config/karma-sauce.conf.coffee'
+      configFile: __dirname + '/../config/karma-sauce.conf.coffee'
       singleRun: true
 
     # Exit with error code if in the CI environment. We want to fail the build

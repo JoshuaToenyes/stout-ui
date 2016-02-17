@@ -1,9 +1,15 @@
 module.exports = (config) ->
 
   config.set
-    browsers: ['Chrome']
-    frameworks: ['mocha']
+    browsers: ['Chrome'] #, 'Safari', 'PhantomJS', 'Firefox']
+
+    frameworks: ['browserify', 'mocha']
+
     reporters: ['progress']
+
     files: [
-      './../../dist/*.js'
+      '../../test/unit/**/*.test.js'
     ]
+
+    preprocessors:
+      '../../test/unit/**/*.test.js': ['browserify']

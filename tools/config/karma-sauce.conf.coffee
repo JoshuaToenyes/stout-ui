@@ -30,7 +30,7 @@ module.exports = (config) ->
   config.set
 
     ## Increase timeout in case CI is slow.
-    captureTimeout: 4 * 60 * 1000
+    captureTimeout: 4 * 60 * 3000
 
     sauceLabs:
       testName: 'Stout Core Unit Tests'
@@ -47,10 +47,13 @@ module.exports = (config) ->
 
     browsers: Object.keys customLaunchers
 
-    frameworks: ['mocha']
+    frameworks: ['mocha', 'browserify']
 
     reporters: ['dots', 'saucelabs']
 
     files: [
-      './../../dist/*.js'
+      '../../test/unit/**/*.test.js'
     ]
+
+    preprocessors:
+      '../../test/unit/**/*.test.js': ['browserify']

@@ -1,16 +1,7 @@
-# # `lint`
-#
-# Lints all project files.
-
-gulp        = require('gulp-help')(require 'gulp')
-runsequence = require 'run-sequence'
+gulp       = require('gulp-help')(require 'gulp')
 
 
 
-module.exports = (config, options, flags) ->
+module.exports = (config) ->
 
-  gulp.task 'lint', 'Lint project source files.', ->
-    runsequence 'lint:sass', 'lint:coffee'
-  , {
-    options: flags.lint
-  }
+  gulp.task 'lint', 'Lint source files.', ['lint:coffee', 'lint:sass']

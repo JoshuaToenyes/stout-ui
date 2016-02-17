@@ -12,17 +12,21 @@ karma = require 'karma'
 
 module.exports = (config, options) ->
 
-  name = 'test:unit:browsers'
+  name = 'karma'
   description = 'Run unit tests in locally installed browsers.'
 
-  gulp.task name, description, ['bundle:test'], (done) ->
+  gulp.task name, description, ['coffee'], (done) ->
     if options.watch
       gulp.watch [
-        config.path.src.coffee + '/**/*.coffee'
+        config.path.src + '/**/*.coffee'
         config.path.test.unit + '/**/*.coffee'
       ], [name]
     options =
-      configFile: __dirname + '/../config/karma.conf.coffee'
+      configFile: __dirname + '../config/karma.conf.coffee'
       singleRun: true
     cb = -> done()
     new karma.Server(options, cb).start()
+  ,  {
+    options:
+      'watch': 'Watch for changes and re-run karma tests.'
+  }

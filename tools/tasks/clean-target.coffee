@@ -1,6 +1,12 @@
-# # `clean:target`
-#
-# Removes compiled files from the target directory.
+###
+
+clean:target Gulp Task
+
+Removes transpiled folders from project root, which removes all JavaScript
+source files and source maps. This is accomplished by scanning the src directory
+then removing matching files and folders from the project root.
+
+###
 
 del  = require 'del'
 gulp = require('gulp-help')(require 'gulp')
@@ -8,11 +14,10 @@ fs   = require 'fs'
 path = require 'path'
 
 
-# @param {Object} config - Build configuration object.
 
 module.exports = (config) ->
 
-  gulp.task 'clean:target', 'Clean compiled files from target directory.', ->
+  gulp.task 'clean:target', false, ->
     try
       source = fs.readdirSync config.path.src
       for item in source
@@ -21,5 +26,5 @@ module.exports = (config) ->
           item = path.basename(item, '.coffee') + '.js'
         del [config.path.target + '/' + item]
     catch e
-      console.error 'Problem reading source directory.'
+      console.error 'Can\'t reading source directory!'
       throw e

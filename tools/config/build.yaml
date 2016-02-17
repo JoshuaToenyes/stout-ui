@@ -12,46 +12,21 @@ serve:
 # Build paths. All paths should be relative to the project root.
 path:
 
-  build:
-    root:       build
+  coverage:     coverage
+
+  tools:        tools
 
   # Source file directory.
   src:          src
 
-  example:
-    root:       example
-
-  # Library directory for non-package-manager libraries.
-  lib:
-    root:       lib
-
   # Tests directory.
-  test:
-    root:        test
-    unit:        test/unit
-    selenium:    test/selenium
-    integration: test/integration
+  test:         test
 
   # Output target directories.
-  target:        .
-
-  # Assets directory.
-  assets:       assets
-
-  # Directory for temporary build-time use.
-  tmp:
-    root:       tmp
-    dist:       tmp/dist
-    unit:       tmp/test/unit
-
-  # Sourcemaps directory names. These should be relative to the respective
-  # target directories.
-  maps:
-    js:         maps
-    sass:       maps
+  target:       .
 
   # Generated documentation glob.
-  doc:          doc
+  doc:          docs
 
 
 
@@ -64,7 +39,7 @@ env:
 
     # Webpack options.
     webpack:
-      #entry:        bootstrap.coffee
+      entry:        bootstrap.coffee
       output:
         pathinfo:   true
         publicPath: /
@@ -87,47 +62,14 @@ env:
         publicPath: http://yourcdn.com/
 
 
-  # Integration testing build configuration. Used for integration testing.
-  integration:
-
-    # Webpack integration testing bootstrap script.
-    webpack:
-      #entry:        integration-bootstrap.coffee
-
-    # Enable sourcemap output.
-    uglify:
-      sourceMap: true
-
-
-  # Integration testing build configuration. Used for integration testing.
-  selenium:
-
-    # Webpack integration testing bootstrap script.
-    webpack:
-      #entry:        selenium-bootstrap.coffee
-
-    # Enable sourcemap output.
-    uglify:
-      sourceMap: true
-
-
   # Test-build configuration. Used for unit-testing.
   test:
 
     # Webpack test build options. Entry point is resolved from
     # `path.test.unit.coffee` build option.
     webpack:
-      entry:  test-bootstrap.coffee
+      entry:        test-bootstrap.coffee
 
-
-  example:
-    entry:
-      - example/button/example.coffee
-      - example/button-2/example.coffee
-
-    # Enable sourcemap output.
-    uglify:
-      sourceMap: true
 
   # Debug (development) options.
   debug:
