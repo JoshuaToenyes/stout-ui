@@ -6,4 +6,4 @@
  *
  */
 require('coffee-script/register');
-require('./build/gulpfile.coffee');
+require('./tools/gulpfile.coffee');
