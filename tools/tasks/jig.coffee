@@ -31,7 +31,7 @@ module.exports = (config, options, flags) ->
 
     ((jig, name)->
 
-      gulp.task name, false, ['coffee:jig', 'jade:jig'], ->
+      gulp.task name, false, ['coffee:jig', 'jade:jig', 'sass:jig', 'jade'], ->
         b = browserify
           entries: config.path.jig + '/' + jig + '/entry.js'
           debug: true

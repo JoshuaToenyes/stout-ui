@@ -1,7 +1,7 @@
-Button = require 'stout/ui/button/Button'
+Button = require '../../button/Button'
 
-require './example.sass'
-require 'button/button.sass'
+#require './example.sass'
+#require 'button/button.sass'
 
 # atomIcon = require './atom-icon.svg'
 

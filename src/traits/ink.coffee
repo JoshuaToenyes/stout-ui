@@ -1,7 +1,7 @@
 
-require 'ink/ink.sass'
-prefix = require('!!sass-variables!vars/common.sass').prefix
-inkVars = require '!!sass-variables!vars/ink.sass'
+#require 'ink/ink.sass'
+prefix = 'ui' #require('!!sass-variables!vars/common.sass').prefix
+#inkVars = require '!!sass-variables!vars/ink.sass'
 
 
 module.exports =
@@ -11,7 +11,7 @@ module.exports =
   # @property {number} inkFadeTime
   # @public
 
-  inkFadeTime: parseInt(inkVars.inkDefaultFadeTime)
+  inkFadeTime: 800 #parseInt(inkVars.inkDefaultFadeTime)
 
 
   # Small time offset to ensure elements are removed/inserted before a CSS

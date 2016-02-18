@@ -1,9 +1,9 @@
-require 'fill/fill.sass'
-commonSASS = require '!!sass-variables!vars/common.sass'
-fillSASS = require '!!sass-variables!vars/fill.sass'
+#require 'fill/fill.sass'
+#commonSASS = require '!!sass-variables!vars/common.sass'
+#fillSASS = require '!!sass-variables!vars/fill.sass'
 
-prefix = commonSASS.prefix
-filledClass = prefix + fillSASS.filledPostfix
+prefix = 'ui' #commonSASS.prefix
+filledClass = prefix + 'filled' # fillSASS.filledPostfix
 
 module.exports =
 
