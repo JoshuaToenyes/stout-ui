@@ -10,6 +10,8 @@ jade       = require 'gulp-jade'
 shell      = require 'gulp-shell'
 browserify = require 'browserify'
 sourcemaps = require 'gulp-sourcemaps'
+source     = require 'vinyl-source-stream'
+buffer     = require 'vinyl-buffer'
 
 
 
