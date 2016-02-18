@@ -1,6 +1,6 @@
 
 #require 'ink/ink.sass'
-prefix = 'ui' #require('!!sass-variables!vars/common.sass').prefix
+prefix = 'ui-' #require('!!sass-variables!vars/common.sass').prefix
 #inkVars = require '!!sass-variables!vars/ink.sass'
 
 

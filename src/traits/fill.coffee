@@ -2,7 +2,7 @@
 #commonSASS = require '!!sass-variables!vars/common.sass'
 #fillSASS = require '!!sass-variables!vars/fill.sass'
 
-prefix = 'ui' #commonSASS.prefix
+prefix = 'ui-' #commonSASS.prefix
 filledClass = prefix + 'filled' # fillSASS.filledPostfix
 
 module.exports =

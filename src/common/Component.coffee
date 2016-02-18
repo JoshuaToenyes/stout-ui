@@ -1,7 +1,7 @@
 $          = require 'stout-client/$'
 dom        = require 'stout-core/utilities/dom'
 ClientView = require 'stout-client/view/ClientView'
-prefix     = 'ui' #require('!!sass-variables!vars/common.sass').prefix
+prefix     = 'ui-' #require('!!sass-variables!vars/common.sass').prefix
 
 ##
 # Component class which represents a client-side component that exists in

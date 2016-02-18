@@ -26,6 +26,6 @@ module.exports = (config, options) ->
     gulp.src src
     .pipe sourcemaps.init()
     .pipe sass(opts).on('error', sass.logError)
-    .pipe sourcemaps.write config.path.jig
-    .pipe gulp.dest '.'
+    .pipe sourcemaps.write '.'
+    .pipe gulp.dest config.path.jig
     .on 'error', gutil.log

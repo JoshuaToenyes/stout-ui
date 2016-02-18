@@ -33,16 +33,17 @@ module.exports = (config, options, flags) ->
 
       gulp.task name, false, ['coffee:jig', 'jade:jig', 'sass:jig', 'jade'], ->
         b = browserify
-          entries: config.path.jig + '/' + jig + '/entry.js'
+          entries: config.path.jig + '/' + jig + '/bootstrap.js'
           debug: true
 
         b.bundle()
-        .pipe source 'app.js'
+        .pipe source 'jig.bundle.js'
         .pipe buffer()
-        .pipe sourcemaps.init
-          loadMaps: true
-        .pipe sourcemaps.write './'
-        .pipe gulp.dest config.path.jig
+        # .pipe sourcemaps.init
+        #   loadMaps: true
+        #   debug: true
+        # .pipe sourcemaps.write()
+        .pipe gulp.dest config.path.jig + '/' + jig
 
 
     )(jig, name)

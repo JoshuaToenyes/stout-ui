@@ -21,10 +21,10 @@ module.exports = (config, options) ->
   gulp.task name, false, ['coffee:src'], ->
     if options.watch then gulp.watch src, [name]
     gulp.src src
-    .pipe sourcemaps.init()
+    .pipe sourcemaps.init
+      loadMaps: true
+      debug: true
     .pipe coffee()
-    .pipe sourcemaps.write config.path.jig,
-      includeContent: true
-      sourceRoot: '../' + config.path.src
+    .pipe sourcemaps.write '.'
     .pipe gulp.dest config.path.jig
     .on 'error', gutil.log

@@ -17,7 +17,7 @@ fill        = require '../traits/fill'
 #require 'fill/fill.sass'
 #require 'indicator/indicator.sass'
 
-prefix = 'ui' #commonSASS.prefix
+prefix = 'ui-' #commonSASS.prefix
 buttonClass = prefix + 'button' #buttonSASS.buttonPostfix
 fillClass = prefix + 'fill'
 inkContainerClass = prefix + 'ink-container'
@@ -160,8 +160,8 @@ module.exports = class Button extends Interactive
   show: ->
     if @rendered and not @filled @_getFillContainer()
       @fill @_getFillContainer()
-      @classes.remove commonSASS.hidden
-      @classes.add commonSASS.visible
+      @classes.remove 'hidden'
+      @classes.add 'visible'
 
 
 
@@ -176,8 +176,8 @@ module.exports = class Button extends Interactive
   hide: ->
     if @rendered and @filled @_getFillContainer()
       @unfill @_getFillContainer()
-      @classes.remove commonSASS.visible
-      @classes.add commonSASS.hidden
+      @classes.remove 'visible'
+      @classes.add 'hidden'
 
 
 
@@ -188,7 +188,7 @@ module.exports = class Button extends Interactive
   # @public
 
   isVisible: ->
-    @rendered and @class.hasClass commonSASS.visible
+    @rendered and @class.hasClass 'visible'
 
 
 
@@ -200,8 +200,8 @@ module.exports = class Button extends Interactive
       @initInkMouseEvents @_getButton(), inkContainer
     setTimeout =>
       @fillNow @_getFillContainer(), =>
-        @classes.remove commonSASS.hidden
-        @classes.add commonSASS.visible
+        @classes.remove 'hidden'
+        @classes.add 'visible'
     , 0
     @
 

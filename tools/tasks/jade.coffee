@@ -6,9 +6,9 @@ Compiles Jade templates to JavaScript.
 
 ###
 
-jade       = require 'gulp-jade'
-gulp       = require('gulp-help')(require 'gulp')
-
+jade   = require 'gulp-jade'
+gulp   = require('gulp-help')(require 'gulp')
+insert = require 'gulp-insert'
 
 
 module.exports = (config, options) ->
@@ -21,4 +21,6 @@ module.exports = (config, options) ->
     gulp.src src
     .pipe jade
       client: true
+    .pipe insert.prepend 'jade = require(\'jade/runtime\');'
+    .pipe insert.append 'module.exports = template;'
     .pipe gulp.dest config.path.target

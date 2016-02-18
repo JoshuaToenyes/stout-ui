@@ -23,8 +23,6 @@ module.exports = (config, options) ->
     gulp.src src
     .pipe sourcemaps.init()
     .pipe coffee()
-    .pipe sourcemaps.write config.path.target,
-      includeContent: true
-      sourceRoot: '../' + config.path.src
+    .pipe sourcemaps.write()
     .pipe gulp.dest config.path.target
     .on 'error', gutil.log
