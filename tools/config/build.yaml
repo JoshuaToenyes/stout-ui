@@ -28,6 +28,7 @@ path:
   # Generated documentation glob.
   doc:          docs
 
+  jig:          jigs
 
 
 # Environment build options.
