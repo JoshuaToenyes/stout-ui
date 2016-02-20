@@ -1,7 +1,14 @@
 $          = require 'stout-client/$'
 dom        = require 'stout-core/utilities/dom'
 ClientView = require 'stout-client/view/ClientView'
-prefix     = 'ui-' #require('!!sass-variables!vars/common.sass').prefix
+vars       = require '../vars'
+
+# Load common variables.
+vars.default('common', require '../vars/common')
+PREFIX      = vars.read 'common/prefix'
+HIDDEN_CLS  = vars.read 'common/hidden'
+VISIBLE_CLS = vars.read 'common/visible'
+
 
 ##
 # Component class which represents a client-side component that exists in
@@ -10,11 +17,6 @@ prefix     = 'ui-' #require('!!sass-variables!vars/common.sass').prefix
 # @class Component
 
 module.exports = class Component extends ClientView
-
-  @property 'prefix',
-    default: prefix,
-    const: true
-
 
   ##
   # This property is `true` if this component is currently hidden.
@@ -61,7 +63,7 @@ module.exports = class Component extends ClientView
     #
     # @getter
 
-    get: -> @isVisible()
+    get: -> @prefixedClasses.contains VISIBLE_CLS
 
 
   ##
@@ -75,10 +77,12 @@ module.exports = class Component extends ClientView
   constructor: ->
     super arguments...
 
+    @prefix = PREFIX
+
     # Hide and show callback timer.
     @_timer = null
 
-    @classes.add @prefix + 'component'
+    @classes.add PREFIX + 'component'
 
 
   ##
@@ -94,15 +98,10 @@ module.exports = class Component extends ClientView
   # @method show
   # @public
 
-  show: (cb) =>
-    if @rendered and @hidden
-      $target = $ @_getHideTarget()
-      $target.removeClass 'sc-hidden'
-      if @_timer then clearTimeout @_timer
-      @_timer = setTimeout (-> cb?.call @),
-        $target.transitionDuration 'opacity'
-    else
-      cb?.call @
+  show: ->
+    if @rendered
+      @prefixedClasses.remove HIDDEN_CLS
+      @prefixedClasses.add VISIBLE_CLS
     @
 
 
@@ -119,33 +118,11 @@ module.exports = class Component extends ClientView
   # @method hide
   # @public
 
-  hide: (cb) =>
-    if @rendered and @visible
-      $target = $ @_getHideTarget()
-      $target.addClass 'sc-hidden'
-      if @_timer then clearTimeout @_timer
-      @_timer = setTimeout (-> cb?.call @),
-        $target.transitionDuration 'opacity'
-    else
-      cb?.call @
-    @
-
-
-  ##
-  # Returns `true` or `false` indicating if this component is currently visible.
-  # By default it just indicates if the element returned by `_getHideTarget()`
-  # has the class `sc-hidden`. This behavior may be overriden by extending
-  # classes for more complex functionality. This method will return `false` if
-  # the component is not rendered.
-  #
-  # @method isVisible
-  # @public
-
-  isVisible: =>
+  hide: (cb) ->
     if @rendered
-      not dom.hasClass @_getHideTarget(), 'sc-hidden'
-    else
-      false
+      @prefixedClasses.remove VISIBLE_CLS
+      @prefixedClasses.add HIDDEN_CLS
+    @
 
 
   ##
@@ -158,17 +135,4 @@ module.exports = class Component extends ClientView
   # @public
   render: ->
     super()
-    #dom.addClass @el, 'sc-component'
     @el
-
-
-  ##
-  # Returns the target element that should be "hidden" if this component is
-  # hidden from view. By default this method returns the root element (@el) of
-  # the component, but this behavior may be overridden by extending classes
-  # for more complex behavior.
-  #
-  # @method _getHideTarget
-  # @protected
-
-  _getHideTarget: -> @el

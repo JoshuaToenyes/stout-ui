@@ -18,9 +18,13 @@ variables = {}
 ###
 read = (varPath) ->
   parts = varPath.split '/'
-  reduce parts, (a, v) ->
-    if v isnt undefined then a[v]
+  v = reduce parts, (a, v) ->
+    if a isnt undefined then a[v]
   , variables
+  if v is undefined
+    throw new err.Err "UI variable \"#{varPath}\" is undefined."
+  else
+    v
 
 module.exports =
 
@@ -36,4 +40,4 @@ module.exports =
       throw new err.Err "UI variable defaults \"#{path}\" already defined."
     variables[path] = vars
 
-  get: read
+  read: read
