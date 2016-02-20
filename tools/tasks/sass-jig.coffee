@@ -21,7 +21,7 @@ module.exports = (config, options) ->
   opts =
     includePaths: ['src', 'lib']
 
-  gulp.task name, false, ->
+  gulp.task name, false, ['vars'], ->
     if options.watch then gulp.watch src, [name]
     gulp.src src
     .pipe sourcemaps.init()

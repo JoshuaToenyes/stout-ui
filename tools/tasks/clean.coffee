@@ -18,4 +18,5 @@ module.exports = (config) ->
     del [
       config.path.coverage
       config.path.doc
+      config.path.src + '/vars/**/*.sass'
     ]

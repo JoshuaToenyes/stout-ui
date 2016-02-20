@@ -17,7 +17,7 @@ module.exports = (config, options) ->
 
   src = config.path.src + '/**/*.coffee'
 
-  gulp.task 'coffee:src', false, ->
+  gulp.task 'coffee:src', false, ['vars'], ->
     if options.watch
       gulp.watch src, ['coffee:src']
     gulp.src src
