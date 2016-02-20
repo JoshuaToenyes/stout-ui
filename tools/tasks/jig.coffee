@@ -34,7 +34,7 @@ module.exports = (config, options, flags) ->
 
       gulp.task name, false, ['coffee:jig', 'jade:jig', 'sass:jig', 'jade'], ->
         b = browserify
-          entries: config.path.jig + '/' + jig + '/bootstrap.js'
+          entries: config.path.jig + '/' + jig + '/jig.js'
           debug: true
 
         b.transform bd
