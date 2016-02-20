@@ -58,6 +58,15 @@ module.exports = class Modal extends Container
 
 
   ###*
+  # Defines if the modal is closeable by clicking outside the modal on the
+  # backdrop. If `true`, then the modal can only be closed programmatically, if
+  # `false`, then the modal can be closed by clicking on the backdrop.
+  ###
+  @property 'static',
+    default: true
+
+
+  ###*
   # Set to `true` if the close "x" should be shown on the modal.
   #
   # @property showClose
@@ -95,11 +104,12 @@ module.exports = class Modal extends Container
   # @method open
   # @public
 
-  open: (cb) ->
+  open: (e) =>
     @render()
-    backdrop().static = true
+    backdrop().static = @static
     backdrop().transitionIn()
-    @transitionIn TRANS_IN_TIME, cb
+    if not @static then backdrop().on 'transition:out', @close, @
+    @transitionIn TRANS_IN_TIME
 
 
   close: (cb) ->

@@ -8,6 +8,7 @@ document.addEventListener 'DOMContentLoaded', ->
   window.modal = m = new Modal
     parentEl: document.body
     contents: 'hello world!'
+    static: false
 
   new Button
     label: 'Show Backdrop'
@@ -20,5 +21,5 @@ document.addEventListener 'DOMContentLoaded', ->
   new Button
     label: 'Show Modal Window'
     parentEl: '.ex.modal-window .controls'
-    click: -> m.open()
+    click: m.open
   .render()
