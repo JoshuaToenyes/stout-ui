@@ -41,3 +41,14 @@ module.exports =
     variables[path] = vars
 
   read: read
+
+
+  readTime: (varPath) ->
+    v = read varPath
+    t = parseInt v
+    if /\d+ms$/.test v
+      t
+    else if /\d+s$/.test v
+      t * 1000
+    else
+      throw new err.Err "UI variable \"#{varPath}\" is not in time units."

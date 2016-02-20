@@ -5,9 +5,26 @@ vars       = require '../vars'
 
 # Load common variables.
 vars.default('common', require '../vars/common')
-PREFIX      = vars.read 'common/prefix'
-HIDDEN_CLS  = vars.read 'common/hidden'
-VISIBLE_CLS = vars.read 'common/visible'
+PREFIX        = vars.read 'common/prefix'
+HIDDEN_CLS    = vars.read 'common/hidden'
+VISIBLE_CLS   = vars.read 'common/visible'
+TRANS_CLS     = vars.read 'common/transitioning'
+TRANS_IN_CLS  = vars.read 'common/transitioning-in'
+TRANS_OUT_CLS = vars.read 'common/transitioning-out'
+
+
+makeTransitionFunc = (func, transitionClass, test) ->
+  (t = 0, cb) ->
+    setTimeout =>
+      if @rendered and test.call @
+        @prefixedClasses.remove VISIBLE_CLS, HIDDEN_CLS
+        @prefixedClasses.add TRANS_CLS, transitionClass
+        clearTimeout @_transitionTimer
+        @_transitionTimer = setTimeout =>
+          @[func] cb
+        , t
+    , 0
+    @
 
 
 ##
@@ -79,10 +96,29 @@ module.exports = class Component extends ClientView
 
     @prefix = PREFIX
 
-    # Hide and show callback timer.
-    @_timer = null
+    ###*
+    # Internal reference to transition timers to prevent calling callbacks
+    # incorrectly...
+    # @private
+    ###
+    @_transitionTimer = null
 
     @classes.add PREFIX + 'component'
+
+
+  transitionIn: makeTransitionFunc 'show', TRANS_IN_CLS, -> @hidden
+
+
+  transitionOut: makeTransitionFunc 'hide', TRANS_OUT_CLS, -> @visible
+
+
+  _removeTransitionClasses: ->
+    @prefixedClasses.remove TRANS_CLS, TRANS_IN_CLS, TRANS_OUT_CLS
+
+
+  _stopTransition: ->
+    clearTimeout @_transitionTimer
+    @_removeTransitionClasses()
 
 
   ##
@@ -98,10 +134,14 @@ module.exports = class Component extends ClientView
   # @method show
   # @public
 
-  show: ->
-    if @rendered
-      @prefixedClasses.remove HIDDEN_CLS
-      @prefixedClasses.add VISIBLE_CLS
+  show: (cb) ->
+    setTimeout =>
+      if @rendered
+        @_stopTransition()
+        @prefixedClasses.remove HIDDEN_CLS
+        @prefixedClasses.add VISIBLE_CLS
+        cb?.call null
+    , 0
     @
 
 
@@ -119,9 +159,13 @@ module.exports = class Component extends ClientView
   # @public
 
   hide: (cb) ->
-    if @rendered
-      @prefixedClasses.remove VISIBLE_CLS
-      @prefixedClasses.add HIDDEN_CLS
+    setTimeout =>
+      if @rendered
+        @_stopTransition()
+        @prefixedClasses.remove VISIBLE_CLS
+        @prefixedClasses.add HIDDEN_CLS
+        cb?.call null
+    , 0
     @
 
 

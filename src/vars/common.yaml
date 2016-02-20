@@ -1,3 +1,6 @@
-prefix:   ui-
-visible:  visible !default
-hidden:   hidden !default
+prefix:            ui-
+visible:           visible !default
+hidden:            hidden !default
+transitioning:     transitioning !default
+transitioning-in:  transitioning-in !default
+transitioning-out: transitioning-out !default
