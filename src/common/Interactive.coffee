@@ -83,10 +83,12 @@ module.exports = class Interactive extends Component
   #
   # @constructor
 
-  constructor: ->
-    super arguments...
-
-    @registerEvents 'hover leave active focus'
+  constructor: (template, model, opts, init, events = []) ->
+    super template, model, opts, init, [
+      'hover'
+      'leave'
+      'active'
+      'focus'].concat events
     @_hoverTimer = null
     @_disabled = false
     @_state = STATE.DEFAULT
