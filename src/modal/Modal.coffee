@@ -1,28 +1,70 @@
-##
-# Defines the Console component class, which is a simple console-like
-# text-output component.
+###*
+# @overview Defines a basic modal window UI component.
+# @module stout-ui/modal/Modal
+###
 
-Container         = require 'ui/common/Container'
-FloatingContainer = require 'ui/container/FloatingContainer'
-template          = require 'modal/modal.jade'
+Container = require '../container/Container'
+template  = require './modal.template'
+backdrop  = require './backdrop'
+vars      = require '../vars'
 
 
+# Load modal variables.
+require '../vars/modal'
 
-##
-# Modal window.
-#
-# @class Modal
+
+###*
+# The class to add to the root modal container.
+# @const
+# @type string
+# @private
+###
+MODAL_CLS = vars.read 'modal/modal-class'
+
+
+###*
+# The modal transition-in time in milliseconds.
+# @const
+# @type number
+# @private
+###
+TRANS_IN_TIME = vars.readTime 'modal/modal-trans-in-time'
+
+
+###*
+# The modal transition-out time in milliseconds.
+# @const
+# @type number
+# @private
+###
+TRANS_OUT_TIME = vars.readTime 'modal/modal-trans-out-time'
+
+
 
 module.exports = class Modal extends Container
 
-  ##
+  ###*
+  # MaskedTextInput constructor.
+  #
+  # @param {Object} [init] - Initiation object.
+  #
+  # @exports stout-ui/modal/Modal
+  # @extends stout-ui/container/Container
+  # @constructor
+  ###
+  constructor: (init = {}) ->
+    super template, null, {renderOnChange: false}, init
+    @prefixedClasses.add MODAL_CLS
+
+
+  ###*
   # Set to `true` if the close "x" should be shown on the modal.
   #
   # @property showClose
   # @type boolean
   # @default true
   # @public
-
+  ###
   @property 'showClose',
     default: true
 
@@ -36,19 +78,6 @@ module.exports = class Modal extends Container
   # @public
 
   @property 'title'
-
-
-  ##
-  # MaskedTextInput constructor.
-  #
-  # @constructor
-
-  constructor: (init = {}) ->
-    super template, null, {renderOnChange: false}, init
-    @_fc = new FloatingContainer
-    @_fc.classes.push 'sc-modal'
-    @classes.push 'sc-hidden'
-    #@classes.push 'sc-modal'
 
 
   ##
@@ -66,13 +95,13 @@ module.exports = class Modal extends Container
   # @method open
   # @public
 
-  open: (title, contents) ->
-    if @visible then return
-    if title then @title = title
-    if contents then @contents = contents
+  open: (cb) ->
     @render()
-    setTimeout @show, 0
+    backdrop().static = true
+    backdrop().transitionIn()
+    @transitionIn TRANS_IN_TIME, cb
 
 
-  render: ->
-    @_fc.render(super())
+  close: (cb) ->
+    backdrop().transitionOut()
+    @transitionOut TRANS_OUT_TIME, => @destroy()

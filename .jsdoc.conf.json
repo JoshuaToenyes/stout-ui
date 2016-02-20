@@ -29,7 +29,7 @@
     "systemName": "Stout UI",
     "footer": "",
     "copyright": "DocStrap Copyright © 2012-2015 The contributors to the JSDoc3 and DocStrap projects.",
-    "navType": "vertical",
+    "navType": "inline",
     "theme": "lumen",
     "linenums": true,
     "collapseSymbols": false,
