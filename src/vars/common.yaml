@@ -1,2 +1,3 @@
-visible:  ui-visible !default
-hidden:   ui-hidden !default
+prefix:   ui-
+visible:  visible !default
+hidden:   hidden !default

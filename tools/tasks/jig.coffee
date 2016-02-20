@@ -12,6 +12,7 @@ browserify = require 'browserify'
 sourcemaps = require 'gulp-sourcemaps'
 source     = require 'vinyl-source-stream'
 buffer     = require 'vinyl-buffer'
+bd         = require 'browserify-data'
 
 
 
@@ -36,6 +37,7 @@ module.exports = (config, options, flags) ->
           entries: config.path.jig + '/' + jig + '/bootstrap.js'
           debug: true
 
+        b.transform bd
         b.bundle()
         .pipe source 'jig.bundle.js'
         .pipe buffer()
