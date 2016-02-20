@@ -15,7 +15,7 @@ TRANS_IN_CLS  = vars.read 'common/transitioning-in'
 TRANS_OUT_CLS = vars.read 'common/transitioning-out'
 
 
-makeTransitionFunc = (func, transitionClass, removeClass, test) ->
+makeTransitionFunc = (func, transitionClass, removeClass, event, test) ->
   (t = 0, cb) ->
     setTimeout =>
       if @rendered and test.call @
@@ -25,6 +25,7 @@ makeTransitionFunc = (func, transitionClass, removeClass, test) ->
         @_transitionTimer = setTimeout =>
           @[func] cb
         , t
+        @fire event
     , 0
     @
 
@@ -105,8 +106,9 @@ module.exports = class Component extends ClientView
   #
   # @constructor
 
-  constructor: ->
-    super arguments...
+  constructor: (template, model, opts, init, events = []) ->
+    super template, model, opts, init, events.concat [
+      'show', 'hide', 'transition:in', 'transition:out']
 
     @prefix = PREFIX
 
@@ -120,11 +122,13 @@ module.exports = class Component extends ClientView
     @classes.add PREFIX + 'component'
 
 
-  transitionIn: makeTransitionFunc 'show', TRANS_IN_CLS, TRANS_OUT_CLS, ->
+  transitionIn: makeTransitionFunc 'show', TRANS_IN_CLS, TRANS_OUT_CLS,
+  'transition:in', ->
     @hidden or @transitioningOut
 
 
-  transitionOut: makeTransitionFunc 'hide', TRANS_OUT_CLS, TRANS_IN_CLS, ->
+  transitionOut: makeTransitionFunc 'hide', TRANS_OUT_CLS, TRANS_IN_CLS,
+  'transition:out', ->
     @visible or @transitioningIn
 
 
@@ -156,6 +160,7 @@ module.exports = class Component extends ClientView
         @_stopTransition()
         @prefixedClasses.remove HIDDEN_CLS
         @prefixedClasses.add VISIBLE_CLS
+        @fire 'show'
         cb?.call null
     , 0
     @
@@ -180,6 +185,7 @@ module.exports = class Component extends ClientView
         @_stopTransition()
         @prefixedClasses.remove VISIBLE_CLS
         @prefixedClasses.add HIDDEN_CLS
+        @fire 'hide'
         cb?.call null
     , 0
     @
