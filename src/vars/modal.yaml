@@ -1,0 +1,3 @@
+backdrop-class:           backdrop
+backdrop-trans-in-time:   1s
+backdrop-trans-out-time:  500ms
