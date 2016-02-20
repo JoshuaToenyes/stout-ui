@@ -4,7 +4,9 @@ ClientView = require 'stout-client/view/ClientView'
 vars       = require '../vars'
 
 # Load common variables.
-vars.default('common', require '../vars/common')
+require '../vars/common'
+
+
 PREFIX        = vars.read 'common/prefix'
 HIDDEN_CLS    = vars.read 'common/hidden'
 VISIBLE_CLS   = vars.read 'common/visible'

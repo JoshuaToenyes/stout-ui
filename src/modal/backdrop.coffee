@@ -12,7 +12,8 @@ vars        = require '../vars'
 
 
 # Load modal variables.
-vars.default('modal', require '../vars/modal')
+require '../vars/modal'
+
 
 
 ###*

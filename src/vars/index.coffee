@@ -35,7 +35,9 @@ module.exports =
   #
   # @function default
   ###
-  default: (path, vars) ->
+  default: (filename, vars) ->
+    matches = /([\w\-_\.]+)\.js/.exec(filename)
+    path = matches[1]
     if variables[path]
       throw new err.Err "UI variable defaults \"#{path}\" already defined."
     variables[path] = vars
