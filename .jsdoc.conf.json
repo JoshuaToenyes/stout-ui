@@ -26,16 +26,16 @@
     "dateFormat": "ddd MMM Do YYYY",
     "outputSourceFiles": true,
     "outputSourcePath": true,
-    "systemName": "Stout Core",
+    "systemName": "Stout UI",
     "footer": "",
     "copyright": "DocStrap Copyright © 2012-2015 The contributors to the JSDoc3 and DocStrap projects.",
     "navType": "vertical",
     "theme": "lumen",
     "linenums": true,
     "collapseSymbols": false,
-    "inverseNav": true,
+    "inverseNav": false,
     "protocol": "html://",
-    "methodHeadingReturns": false
+    "methodHeadingReturns": true
   },
   "markdown": {
     "parser": "gfm",

@@ -9,5 +9,6 @@ window.onload = ->
     parentEl: '.ex.basic .controls'
     size: 'small'
     click: ->
+      backdrop().static = false
       backdrop().transitionIn()
   .render()

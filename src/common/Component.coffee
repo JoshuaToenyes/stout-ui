@@ -13,11 +13,11 @@ TRANS_IN_CLS  = vars.read 'common/transitioning-in'
 TRANS_OUT_CLS = vars.read 'common/transitioning-out'
 
 
-makeTransitionFunc = (func, transitionClass, test) ->
+makeTransitionFunc = (func, transitionClass, removeClass, test) ->
   (t = 0, cb) ->
     setTimeout =>
       if @rendered and test.call @
-        @prefixedClasses.remove VISIBLE_CLS, HIDDEN_CLS
+        @prefixedClasses.remove VISIBLE_CLS, HIDDEN_CLS, removeClass
         @prefixedClasses.add TRANS_CLS, transitionClass
         clearTimeout @_transitionTimer
         @_transitionTimer = setTimeout =>
@@ -83,6 +83,18 @@ module.exports = class Component extends ClientView
     get: -> @prefixedClasses.contains VISIBLE_CLS
 
 
+  @property 'transitioning',
+    get: -> @prefixedClasses.contains TRANS_CLS
+
+
+  @property 'transitioningIn',
+    get: -> @prefixedClasses.contains TRANS_IN_CLS
+
+
+  @property 'transitioningOut',
+    get: -> @prefixedClasses.contains TRANS_OUT_CLS
+
+
   ##
   # Component constructor creates a new component instance and passes all
   # arguments to the parent ClientView class.
@@ -106,10 +118,12 @@ module.exports = class Component extends ClientView
     @classes.add PREFIX + 'component'
 
 
-  transitionIn: makeTransitionFunc 'show', TRANS_IN_CLS, -> @hidden
+  transitionIn: makeTransitionFunc 'show', TRANS_IN_CLS, TRANS_OUT_CLS, ->
+    @hidden or @transitioningOut
 
 
-  transitionOut: makeTransitionFunc 'hide', TRANS_OUT_CLS, -> @visible
+  transitionOut: makeTransitionFunc 'hide', TRANS_OUT_CLS, TRANS_IN_CLS, ->
+    @visible or @transitioningIn
 
 
   _removeTransitionClasses: ->
