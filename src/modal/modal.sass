@@ -3,38 +3,55 @@
 @import "util/transitioning"
 @import "util/visibility"
 @import "vars/common"
+@import "vars/container"
 @import "vars/modal"
 
 +exports("modal/modal")
+
+  $cc: #{$prefix}#{$container-contents-class}
+
   %modal-expanded
-    position: fixed
-    width: 50%
-    height: 50%
-    left: 25%
-    top: 25%
     z-index: 15000
+    box-shadow: 0 0 20px rgba(black, 0.25)
+
+    &, .#{$cc}
+      position: fixed
+
+    .#{$cc}
+      z-index: 16000
+
 
   %modal-visible
-    opacity: 1
-    +transform(scale(1))
+    &, .#{$cc}
+      opacity: 1
 
-  %modal-hidden
-    opacity: 0
-    +transform(scale(0))
+    .#{$cc}
+      +transition-duration($modal-trans-in-time * 0.8)
+      +transition-delay($modal-trans-in-time * 0.6)
+
 
   .#{$prefix}#{$modal-class}
-    @extend %modal-hidden
-    background-color: orange
+    background-color: white
+
+    &, .#{$cc}
+      opacity: 0
+      overflow: scroll
+
+    .#{$cc}
+      +transition-property(opacity)
 
     +transitioning
       @extend %modal-expanded
+      +transition-property(opacity)
+      opacity: 0.4
 
     +transitioning-out
-      +transition(all $modal-trans-out-time)
+      +transition-duration($modal-trans-out-time)
+      opacity: 0.2
 
     +transitioning-in
-      +transition(all $modal-trans-in-time)
       @extend %modal-visible
+      +transition-duration($modal-trans-in-time)
 
     +visible
       @extend %modal-expanded

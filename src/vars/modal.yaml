@@ -1,7 +1,9 @@
 backdrop-class:           backdrop
-backdrop-trans-in-time:   600ms
-backdrop-trans-out-time:  300ms
+backdrop-trans-in-time:   300ms
+backdrop-trans-out-time:  200ms
+backdrop-opacity:         0.3
 
 modal-class:              modal
+modal-window-class:       modal-window
 modal-trans-in-time:      400ms
 modal-trans-out-time:     300ms
