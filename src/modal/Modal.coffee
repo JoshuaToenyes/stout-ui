@@ -222,6 +222,8 @@ module.exports = class Modal extends Container
   # @public
   ###
   open: (e) =>
+    openPromise = new Promise()
+
     @render()
 
     # Capture the activating component (button, etc.) if present.
@@ -243,10 +245,14 @@ module.exports = class Modal extends Container
 
     # If this modal isn't static, then attach an event listener so it's closed
     # when/if the user clicks on the backdrop.
-    if not @static then backdrop().once 'transition:out', @close, @
+    if not @static
+      backdrop().once 'transition:out', =>
+        @close()
+        Promise.reject openPromise
 
     # Initiate the modal transition.
-    @transitionIn TRANS_IN_TIME
+    @transitionIn TRANS_IN_TIME, ->
+      Promise.fulfill openPromise
 
     # When the window is resizes, reposition the modal and its contents.
     window.addEventListener 'resize', @_resizeHandler
@@ -255,6 +261,7 @@ module.exports = class Modal extends Container
     backdrop().static = @static
     backdrop().transitionIn()
 
+    openPromise
 
   ###*
   # Closes this modal window.
@@ -263,7 +270,9 @@ module.exports = class Modal extends Container
   # @memberof stout-ui/modal/Modal#
   # @public
   ###
-  close: (cb) ->
+  close: ->
+    closePromise = new Promise()
+
     backdrop().transitionOut()
 
     pos = @_calcActivatorBounds()
@@ -272,4 +281,6 @@ module.exports = class Modal extends Container
 
     window.removeEventListener 'resize', @_resizeHandler
 
-    @transitionOut TRANS_OUT_TIME, => @destroy()
+    @transitionOut TRANS_OUT_TIME, =>
+      Promise.resolve closePromise
+      @destroy()
