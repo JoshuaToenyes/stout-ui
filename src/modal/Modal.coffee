@@ -67,9 +67,12 @@ module.exports = class Modal extends Container
     @prefixedClasses.add MODAL_CLS
 
 
-  @property 'windowClassName',
-    const: true
-    get: -> @prefix + MODAL_WINDOW_CLS
+  @property 'width',
+    default: 500
+
+
+  @property 'height',
+    default: 400
 
 
   ###*
@@ -104,17 +107,65 @@ module.exports = class Modal extends Container
   @property 'title'
 
 
-  _getActivatorBounds: (e) ->
+  ###*
+  # Calculates the relative position (in percent) of the passed element.
+  #
+  # @param {HTMLElement} el - The element which should have it's relative
+  # bounds calculated.
+  ###
+  _calcActivatorBounds: () ->
     # Get button bounding rect.
-    bounds = e.source.el.getBoundingClientRect()
+    bounds = @_activator.getBoundingClientRect()
+
+    W = window.innerWidth
+    H = window.innerHeight
 
     # Calculate starts.
-    left = bounds.left / window.innerWidth * 100 + '%'
-    right = 100 - bounds.right / window.innerWidth * 100 + '%'
-    top = bounds.top / window.innerHeight * 100 + '%'
-    bottom = 100 - bounds.bottom / window.innerHeight * 100 + '%'
+    left = bounds.left / W * 100 + '%'
+    right = 100 - bounds.right / W * 100 + '%'
+    top = bounds.top / H * 100 + '%'
+    bottom = 100 - bounds.bottom / H * 100 + '%'
 
-    [top, right, bottom, left]
+    {top, right, bottom, left}
+
+
+  ###*
+  # Calculates a relative position (in percent) within the window, given the
+  # maximum window width and height.
+  #
+  # @returns {Object} Object with top, right, bottom, and left keys set with
+  # calculated percentages.
+  #
+  # @method _calcRelativePosition
+  # @memberof stout-ui/modal/Modal#
+  # @private
+  ###
+  _calcRelativePostion: ->
+    H = window.innerHeight
+    W = window.innerWidth
+    top = bottom = Math.min(100, (H - @height) / H / 2 * 100 ) + '%'
+    left = right = Math.min(100, (W - @width) / W / 2 * 100 ) + '%'
+    {top, right, bottom, left}
+
+
+  ###*
+  # Positions the content window immediately.
+  #
+  ###
+  _positionContents: ->
+    contents = @select('.ui-container-contents')
+    for p, v of @_calcRelativePostion()
+      contents.style[p] = v
+
+
+  ###*
+  # Positions the modal window for opening.
+  ###
+  _positionForOpen: ->
+    console.log @_calcActivatorBounds()
+    for p, v of @_calcActivatorBounds()
+      @el.style[p] = v
+
 
   ##
   # Opens the modal window. Optionally, a title and modal contents may be
@@ -130,39 +181,29 @@ module.exports = class Modal extends Container
   #
   # @method open
   # @public
-
   open: (e) =>
-
-    console.log @objectify()
-
     @render()
 
-    [top, right, bottom, left] = @_activatorBounds =  @_getActivatorBounds(e)
+    # Capture the activating component (button, etc.) if present.
+    @_activator = e?.source.el
 
-    @el.style.left = left
-    @el.style.right = right
-    @el.style.top = top
-    @el.style.bottom = bottom
+    # Position the modal for its opening animation.
+    @_positionForOpen()
 
-    animate @el, {top: '10%', right: '10%', bottom: '10%', left: '10%'}, TRANS_IN_TIME, require 'stout-client/easing/cubicInOut'
+    # Calculate the relative position of where the modal window animation
+    # should end. The calculated positin is in percent and measures from each
+    # edge of the screen (top, right, bottom, left).
+    pos = @_calcRelativePostion()
 
-    # --- animate scale contents ---
-    # start = bounds.right - bounds.left
-    # end = 0.8 * window.innerWidth
-    # scale = start / end
-    contents = @select('.ui-container-contents')
-    #contents.style.transform = "scale(#{scale})"
+    # Initiate the modal animation to it's ending position.
+    animate @el, pos, TRANS_IN_TIME, require 'stout-client/easing/cubicInOut'
 
-    contents.style.left = '10%'
-    contents.style.right = '10%'
-    contents.style.top = '10%'
-    contents.style.bottom = '10%'
-
-    # setTimeout ->
-    #   animate contents, {scale: 1}, TRANS_IN_TIME / 2, require 'stout-client/easing/cubicInOut'
-    # , TRANS_IN_TIME / 2
+    # Immediately position the modal contents.
+    @_positionContents()
 
     if not @static then backdrop().on 'transition:out', @close, @
+
+    # Initiate the modal transition.
     @transitionIn TRANS_IN_TIME
 
     backdrop().static = @static
@@ -172,8 +213,8 @@ module.exports = class Modal extends Container
   close: (cb) ->
     backdrop().transitionOut()
 
-    [top, right, bottom, left] = @_activatorBounds
+    pos = @_calcActivatorBounds()
 
-    animate @el, {top, right, bottom, left}, TRANS_OUT_TIME, require 'stout-client/easing/cubicInOut'
+    animate @el, pos, TRANS_OUT_TIME, require 'stout-client/easing/cubicInOut'
 
     @transitionOut TRANS_OUT_TIME, => @destroy()
