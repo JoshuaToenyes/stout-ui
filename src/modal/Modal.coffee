@@ -8,10 +8,20 @@ template  = require './modal.template'
 backdrop  = require './backdrop'
 vars      = require '../vars'
 animate   = require 'stout-client/animation/animate'
-
+cubicInOut = require 'stout-client/easing/cubicInOut'
+Promise    = require 'stout-core/promise/Promise'
 
 # Load modal variables.
 require '../vars/modal'
+
+
+###*
+# The common class name prefix
+# @const
+# @type string
+# @private
+###
+PREFIX = vars.read 'common/prefix'
 
 
 ###*
@@ -24,12 +34,12 @@ MODAL_CLS = vars.read 'modal/modal-class'
 
 
 ###*
-# The class to add to the modal window container.
+# The inner contents container class.
 # @const
 # @type string
 # @private
 ###
-MODAL_WINDOW_CLS = vars.read 'modal/modal-window-class'
+CONTENTS_CLS = PREFIX + vars.read 'container/container-contents-class'
 
 
 ###*
@@ -143,44 +153,74 @@ module.exports = class Modal extends Container
   _calcRelativePostion: ->
     H = window.innerHeight
     W = window.innerWidth
-    top = bottom = Math.min(100, (H - @height) / H / 2 * 100 ) + '%'
-    left = right = Math.min(100, (W - @width) / W / 2 * 100 ) + '%'
+    top = bottom = Math.max(0, (H - @height) / H / 2 * 100 ) + '%'
+    left = right = Math.max(0, (W - @width) / W / 2 * 100 ) + '%'
     {top, right, bottom, left}
 
 
   ###*
-  # Positions the content window immediately.
+  # Positions the contents container.
   #
+  # @method _positionContents
+  # @memberof stout-ui/modal/Modal#
+  # @protected
   ###
   _positionContents: ->
-    contents = @select('.ui-container-contents')
-    for p, v of @_calcRelativePostion()
-      contents.style[p] = v
+    @_positionModalElement @select('.' + CONTENTS_CLS)
 
 
   ###*
   # Positions the modal window for opening.
+  #
+  # @method _positionForOpen
+  # @memberof stout-ui/modal/Modal#
+  # @protected
   ###
   _positionForOpen: ->
-    console.log @_calcActivatorBounds()
     for p, v of @_calcActivatorBounds()
       @el.style[p] = v
 
 
-  ##
-  # Opens the modal window. Optionally, a title and modal contents may be
-  # passed to this method which will override the existing title and modal.
-  # This method is essentially equivalent to calling `#render()` followed by
-  # `#show()`.
+  ###*
+  # This method positions the modal window and/or it's contents.
+  #
+  # @param {HTMLElement} [el] - The element to position. If nothing is passed
+  # it will position the modal window and it's content container.
+  #
+  # @method _positionModalElement
+  # @memberof stout-ui/modal/Modal#
+  # @protected
+  ###
+  _positionModalElement: (el) ->
+    if not el
+      @_positionModalElement @el
+      @_positionModalElement @select('.' + CONTENTS_CLS)
+    else
+      for p, v of @_calcRelativePostion()
+        el.style[p] = v
+
+
+  ###*
+  # Window resize event handler. It simply repositions the modal window and
+  # its contents.
+  #
+  # @method _resizeHandler
+  # @memberof stout-ui/modal/Modal#
+  # @protected
+  ###
+  _resizeHandler: =>
+    @_positionModalElement()
+
+
+  ###*
+  # Opens the modal window.
   #
   # @param {string} [title] - The modal title.
   #
-  # @param {string|HTMLElement|ClientView} [contents] - The modal contents.
-  #
-  # @todo This should return a composed promise.
-  #
   # @method open
+  # @memberof stout-ui/modal/Modal#
   # @public
+  ###
   open: (e) =>
     @render()
 
@@ -196,25 +236,40 @@ module.exports = class Modal extends Container
     pos = @_calcRelativePostion()
 
     # Initiate the modal animation to it's ending position.
-    animate @el, pos, TRANS_IN_TIME, require 'stout-client/easing/cubicInOut'
+    animate @el, pos, TRANS_IN_TIME, cubicInOut
 
     # Immediately position the modal contents.
     @_positionContents()
 
-    if not @static then backdrop().on 'transition:out', @close, @
+    # If this modal isn't static, then attach an event listener so it's closed
+    # when/if the user clicks on the backdrop.
+    if not @static then backdrop().once 'transition:out', @close, @
 
     # Initiate the modal transition.
     @transitionIn TRANS_IN_TIME
 
+    # When the window is resizes, reposition the modal and its contents.
+    window.addEventListener 'resize', @_resizeHandler
+
+    # Show the backdrop, making it inherit the modal's "static" state.
     backdrop().static = @static
     backdrop().transitionIn()
 
 
+  ###*
+  # Closes this modal window.
+  #
+  #
+  # @memberof stout-ui/modal/Modal#
+  # @public
+  ###
   close: (cb) ->
     backdrop().transitionOut()
 
     pos = @_calcActivatorBounds()
 
-    animate @el, pos, TRANS_OUT_TIME, require 'stout-client/easing/cubicInOut'
+    animate @el, pos, TRANS_OUT_TIME, cubicInOut
+
+    window.removeEventListener 'resize', @_resizeHandler
 
     @transitionOut TRANS_OUT_TIME, => @destroy()
