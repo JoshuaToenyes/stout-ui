@@ -124,11 +124,15 @@ module.exports = class Modal extends Container
   # bounds calculated.
   ###
   _calcActivatorBounds: () ->
-    # Get button bounding rect.
-    bounds = @_activator.getBoundingClientRect()
-
     W = window.innerWidth
     H = window.innerHeight
+
+    # Get button bounding rectangle if an activator is registered, otherwise
+    # open the modal from the center of the window.
+    if @_activator
+      bounds = @_activator.getBoundingClientRect()
+    else
+      bounds = left: W / 2, right: W / 2, top: H / 2, bottom: H / 2
 
     # Calculate starts.
     left = bounds.left / W * 100 + '%'
@@ -215,7 +219,7 @@ module.exports = class Modal extends Container
   ###*
   # Opens the modal window.
   #
-  # @param {string} [title] - The modal title.
+  # @param {Event} [e] - Event that triggered the opening of this modal.
   #
   # @method open
   # @memberof stout-ui/modal/Modal#

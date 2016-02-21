@@ -29,7 +29,7 @@ document.addEventListener 'DOMContentLoaded', ->
     label: 'Show with Promise'
     parentEl: '.ex.modal-window .controls'
     click: (e) ->
-      m.open(e).then ->
+      m.open().then ->
         console.log 'it is open now!'
       , ->
         console.log 'open canceled!'
