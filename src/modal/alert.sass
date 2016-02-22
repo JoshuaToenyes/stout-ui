@@ -12,6 +12,9 @@
   $body: #{$prefix}#{$alert-body-class}
   $controls: #{$prefix}#{$alert-controls-class}
 
+  .#{$prefix}#{$modal-class}.#{$prefix}#{$alert-class} .#{$prefix}#{$container-contents-class}
+    +transition-delay($modal-trans-in-time * 0.4)
+
   .#{$prefix}#{$alert-contents-class}
     min-width: 350px
     max-width: 500px
