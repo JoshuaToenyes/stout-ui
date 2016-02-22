@@ -117,9 +117,7 @@ module.exports = class Alert extends Modal
 
   open: ->
     clickPromise = new Promise()
-    super(arguments...).then =>
-      setTimeout =>
-        @_contents.renderControls(clickPromise)
-      , 50
+    super(arguments...)
+    @_contents.renderControls(clickPromise)
     clickPromise.then => @close()
     clickPromise
