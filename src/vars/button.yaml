@@ -4,8 +4,8 @@ button-radius:                  1px !default
 button-shadow-size:             8px !default
 button-label-transition-time:   300ms !default
 
-button-bg:                      darken($sui-color-ifg, 1.5%) !default
-button-fg:                      lighten($sui-color-fg, 5%) !default
+button-bg:                      darken($color-ifg, 1.5%) !default
+button-fg:                      lighten($color-fg, 5%) !default
 button-hover:                   lighten($button-bg, 4%) !default
 button-focus:                   darken($button-bg, 4%) !default
 button-ink:                     darken($button-bg, 10%) !default
@@ -14,8 +14,8 @@ button-shadow-hover:            rgba(black, 0.2) !default
 button-shadow-active:           rgba(black, 0.3) !default
 button-shadow-focus:            rgba(black, 0.25) !default
 
-button-inverse-bg:              darken($sui-color-ibg, 1.5%) !default
-button-inverse-fg:              lighten($sui-color-ifg, 5%) !default
+button-inverse-bg:              darken($color-ibg, 1.5%) !default
+button-inverse-fg:              lighten($color-ifg, 5%) !default
 button-inverse-hover:           lighten($button-inverse-bg, 4%) !default
 button-inverse-focus:           darken($button-inverse-bg, 4%) !default
 button-inverse-ink:             darken($button-inverse-bg, 10%) !default
@@ -24,18 +24,18 @@ button-inverse-shadow-hover:    rgba(black, 0.2) !default
 button-inverse-shadow-active:   rgba(black, 0.3) !default
 button-inverse-shadow-focus:    rgba(black, 0.25) !default
 
-button-primary-bg:              $sui-color-5 !default
-button-primary-fg:              $sui-color-ifg !default
+button-primary-bg:              $color-5 !default
+button-primary-fg:              $color-ifg !default
 button-primary-hover:           lighten($button-primary-bg, 4%) !default
 button-primary-focus:           darken($button-primary-bg, 10%) !default
-button-primary-ink:             $sui-color-3 !default
+button-primary-ink:             $color-3 !default
 button-primary-shadow:          rgba(black, 0.23) !default
 button-primary-shadow-hover:    rgba(black, 0.2) !default
 button-primary-shadow-active:   rgba(black, 0.55) !default
 button-primary-shadow-focus:    rgba(black, 0.25) !default
 
-button-warn-bg:                 darken($sui-color-warn, 6%) !default
-button-warn-fg:                 $sui-color-ifg !default
+button-warn-bg:                 darken($color-warn, 6%) !default
+button-warn-fg:                 $color-ifg !default
 button-warn-hover:              lighten($button-warn-bg, 4%) !default
 button-warn-focus:              darken($button-warn-bg, 4%) !default
 button-warn-ink:                lighten($button-warn-bg, 12%) !default
@@ -44,8 +44,8 @@ button-warn-shadow-hover:       rgba(black, 0.2) !default
 button-warn-shadow-active:      rgba(black, 0.55) !default
 button-warn-shadow-focus:       rgba(black, 0.25) !default
 
-button-danger-bg:               darken($sui-color-danger, 6%) !default
-button-danger-fg:               $sui-color-ifg !default
+button-danger-bg:               darken($color-danger, 6%) !default
+button-danger-fg:               $color-ifg !default
 button-danger-hover:            lighten($button-danger-bg, 4%) !default
 button-danger-focus:            darken($button-danger-bg, 4%) !default
 button-danger-ink:              lighten($button-danger-bg, 12%) !default
@@ -54,5 +54,5 @@ button-danger-shadow-hover:     rgba(black, 0.2) !default
 button-danger-shadow-active:    rgba(black, 0.55) !default
 button-danger-shadow-focus:     rgba(black, 0.25) !default
 
-button-disabled-bg:             darken($sui-color-ifg, 5%) !default
-button-disabled-fg:             lighten($sui-color-fg, 55%) !default
+button-disabled-bg:             darken($color-ifg, 5%) !default
+button-disabled-fg:             lighten($color-fg, 55%) !default
