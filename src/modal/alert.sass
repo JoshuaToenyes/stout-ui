@@ -1,0 +1,29 @@
+@import "bourbon/bourbon"
+@import "util/exports"
+@import "util/transitioning"
+@import "util/visibility"
+@import "vars/common"
+@import "vars/modal"
+@import "typography/default"
+
++exports("modal/alert")
+
+  $title: #{$prefix}#{$alert-title-class}
+  $body: #{$prefix}#{$alert-body-class}
+  $controls: #{$prefix}#{$alert-controls-class}
+
+  .#{$prefix}#{$alert-contents-class}
+    min-width: 350px
+    padding: 1em
+
+  .#{$title}
+    @extend %typography-display-2
+    margin-top: 0.3em
+
+  .#{$body}
+    @extend %typography-body-1
+
+  .#{$controls}
+    text-align: right
+    height: 3em
+    margin-top: 1.6em

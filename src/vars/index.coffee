@@ -54,3 +54,7 @@ module.exports =
       t * 1000
     else
       throw new err.Err "UI variable \"#{varPath}\" is not in time units."
+
+
+  readPrefixed: (varPath) ->
+    read('common/prefix') + read(varPath)

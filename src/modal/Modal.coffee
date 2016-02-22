@@ -78,11 +78,11 @@ module.exports = class Modal extends Container
 
 
   @property 'width',
-    default: 500
+    default: 'auto'
 
 
   @property 'height',
-    default: 400
+    default: 'auto'
 
 
   ###*
@@ -157,8 +157,30 @@ module.exports = class Modal extends Container
   _calcRelativePostion: ->
     H = window.innerHeight
     W = window.innerWidth
-    top = bottom = Math.max(0, (H - @height) / H / 2 * 100 ) + '%'
-    left = right = Math.max(0, (W - @width) / W / 2 * 100 ) + '%'
+
+    h = @height
+    w = @width
+
+    # Captures the size of the content
+    content = @select('.' + CONTENTS_CLS)
+
+    content.style.position = 'absolute'
+    content.style.top = ''
+    content.style.right = ''
+    content.style.bottom = ''
+    content.style.left = ''
+
+    rect = content.getBoundingClientRect()
+    content.style.position = 'fixed'
+
+    if @height is 'auto'
+      h = rect.height
+
+    if @width is 'auto'
+      w = rect.width
+
+    top = bottom = Math.max(0, (H - h) / H / 2 * 100 ) + '%'
+    left = right = Math.max(0, (W - w) / W / 2 * 100 ) + '%'
     {top, right, bottom, left}
 
 
@@ -237,15 +259,15 @@ module.exports = class Modal extends Container
     @_positionForOpen()
 
     # Calculate the relative position of where the modal window animation
-    # should end. The calculated positin is in percent and measures from each
+    # should end. The calculated position is in percent and measures from each
     # edge of the screen (top, right, bottom, left).
     pos = @_calcRelativePostion()
 
-    # Initiate the modal animation to it's ending position.
-    animate @el, pos, TRANS_IN_TIME, cubicInOut
-
     # Immediately position the modal contents.
     @_positionContents()
+
+    # Initiate the modal animation to it's ending position.
+    animate @el, pos, TRANS_IN_TIME, cubicInOut
 
     # If this modal isn't static, then attach an event listener so it's closed
     # when/if the user clicks on the backdrop.
