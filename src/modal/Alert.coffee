@@ -65,7 +65,7 @@ ALERT_CONTROLS_CLS = vars.readPrefixed 'modal/alert-controls-class'
 # @type string
 # @private
 ###
-alertOpts = ['title', 'content', 'ok']
+alertOpts = ['title', 'content', 'ok', 'buttonStyle']
 
 
 
@@ -77,6 +77,9 @@ class AlertContent extends Component
 
   @property 'ok',
     default: 'ok'
+
+  @property 'buttonStyle',
+    default: 'normal-flat'
 
   @property 'titleClass',
     const: true
@@ -98,6 +101,7 @@ class AlertContent extends Component
     new Button
       label: @ok
       parentEl: @select '.' + ALERT_CONTROLS_CLS
+      style: @buttonStyle
       click: ->
         Promise.fulfill promise
     .render()
@@ -114,9 +118,7 @@ module.exports = class Alert extends Modal
   open: ->
     clickPromise = new Promise()
     super(arguments...).then =>
-      console.log 'are we rendering???'
       setTimeout =>
-        console.log 'are we rendering???'
         @_contents.renderControls(clickPromise)
       , 50
     clickPromise.then => @close()
