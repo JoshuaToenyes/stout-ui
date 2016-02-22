@@ -16,12 +16,22 @@ window.onload = ->
     .render()
 
 
-  # Primary button style example.
+  # Invers button style example.
   new Button
     label: 'Confirm Order'
     parentEl: '.inverse'
     style: 'inverse'
   .render()
+
+
+  # Flat button styles
+  for style in ['normal', 'primary', 'inverse', 'warn', 'danger']
+
+    new Button
+      label: style + ' flat button'
+      parentEl: ".#{style}-flat"
+      style: style + '-flat'
+    .render()
 
 
 

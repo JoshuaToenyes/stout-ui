@@ -183,6 +183,48 @@
       text-shadow: 1px 1px 1px darken(white, 4%)
 
 
+
+  // ### Flat button Styles
+
+  &.#{$visible}.st-normal-flat button,
+  &.#{$visible}.st-primary-flat button,
+  &.#{$visible}.st-inverse-flat button,
+  &.#{$visible}.st-warn-flat button,
+  &.#{$visible}.st-danger-flat button
+    box-shadow: none !important
+    &:focus
+      .#{$prefix}indicator
+        background-color: $button-focus
+    &:active:not([disabled])
+    &:hover
+      .#{$prefix}indicator
+        background-color: $button-bg
+    .#{$prefix}fill-container
+      +set-ink-color(transparent)
+    .#{$prefix}ink-container
+      +set-ink-color($button-ink)
+
+  &.#{$visible}.st-normal-flat button
+    .#{$prefix}label
+      color: $button-fg
+
+  &.#{$visible}.st-primary-flat button
+    .#{$prefix}label
+      color: $button-primary-bg
+
+  &.#{$visible}.st-inverse-flat button
+    .#{$prefix}label
+      color: $button-inverse-bg
+
+  &.#{$visible}.st-warn-flat button
+    .#{$prefix}label
+      color: $button-warn-bg
+
+  &.#{$visible}.st-danger-flat button
+    .#{$prefix}label
+      color: $button-danger-bg
+
+
   // ## Button Sizes
 
   &.sz-tiny button

@@ -64,6 +64,11 @@ module.exports = class Button extends Interactive
       'primary'
       'warn'
       'danger'
+      'normal-flat'
+      'inverse-flat'
+      'primary-flat'
+      'warn-flat'
+      'danger-flat'
     ]
 
 
