@@ -2,13 +2,18 @@
 @import "typography/default"
 @import "placeholder/inline-component"
 @import "ink/ink"
-@import "indicator/indicator"
+//@import "indicator/indicator"
+@import "placeholder/cover-parent"
 @import "vars/button"
 @import "vars/common"
 
 .#{$prefix}#{$button-postfix}
   @extend %inline-component
   +user-select(none)
+
+  .#{$prefix}indicator
+    @extend %cover-parent
+    z-index: 5
 
   .#{$prefix}label
     +transition(color $button-label-transition-time)

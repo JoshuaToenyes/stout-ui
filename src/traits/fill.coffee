@@ -5,6 +5,16 @@
 prefix = 'ui-' #commonSASS.prefix
 filledClass = prefix + 'filled' # fillSASS.filledPostfix
 
+require '../vars/fill'
+
+###*
+# The container classname which will hold the ink fill inside the radio button.
+# @type string
+# @const
+# @private
+###
+FILL_CLS = vars.readPrefixed 'fill/fill-container-class'
+
 module.exports =
 
   # Returns `true` if the container element is fully filled.
@@ -32,6 +42,7 @@ module.exports =
   # @public
 
   fill: (container, cb, t) ->
+    if not container then container = @_getFillContainer()
     if @hasInk(container) then return
     r = container.getBoundingClientRect()
     @expandInk container, r.width / 2, r.height / 2, r.width, r.height, t, ->
@@ -41,6 +52,16 @@ module.exports =
 
   fillNow: (container, cb) ->
     @fill container, cb, 1
+
+
+  # Returns the ink fill container for showing/hiding the button.
+  #
+  # @returns {DOMElement} The fill container
+  #
+  # @method _getFillContainer
+  # @private
+
+  _getFillContainer: -> @select ".#{FILL_CLS}"
 
 
   # Removes ink for the passed container element. If there is no ink in the

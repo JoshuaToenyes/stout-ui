@@ -1,0 +1,41 @@
+@import "bourbon/bourbon"
+@import "util/exports"
+@import "typography/default"
+@import "placeholder/cover-parent"
+@import "colors/default"
+@import "ink/ink"
+@import "vars/common"
+@import "vars/radio"
+@import "vars/fill"
+
++exports("radio/radio-button")
+
+  $ri: #{$prefix}#{$radio-indicator-class}
+  $rl: #{$prefix}#{$radio-label-class}
+
+  .#{$prefix}#{$radio-class}
+    +display(flex)
+    +align-items(center)
+
+    .#{$ri}
+      width: 12px
+      height: 12px
+      margin-right: 1em
+      border: 1px solid $color-6
+      border-radius: 2px
+      position: relative
+      padding: 2px
+
+      .#{$prefix}#{$radio-fill-bounds}
+        overflow: hidden
+        position: relative
+        height: 100%
+        width: 100%
+
+      .#{$prefix}#{$fill-container-class}
+        +set-ink-color($color-6)
+        @extend %cover-parent
+
+    .#{$rl}
+      @extend %typography-body-1
+      line-height: 5em

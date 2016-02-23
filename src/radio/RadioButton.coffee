@@ -8,10 +8,12 @@
 Container = require '../container/Container'
 vars      = require '../vars'
 template  = require './radio-button.template'
+use         = require 'stout-core/trait/use'
+fill      = require '../traits/fill'
+ink         = require '../traits/ink'
 
 
 # Require necessary shared variables.
-require '../vars/fill'
 require '../vars/radio'
 
 
@@ -53,6 +55,14 @@ LABEL_CLS = vars.readPrefixed 'radio/radio-label-class'
 FILL_CLS = vars.readPrefixed 'fill/fill-container-class'
 
 
+###*
+#
+# @type string
+# @const
+# @private
+###
+FILL_BOUNDS_CLS = vars.readPrefixed 'radio/radio-fill-bounds'
+
 
 module.exports = class RadioButton extends Container
 
@@ -69,6 +79,8 @@ module.exports = class RadioButton extends Container
   constructor: (init) ->
     super template, null, {renderOnChange: false}, init, ['select', 'unselect']
     @prefixedClasses.add RADIO_CLS
+    use(ink) @
+    use(fill) @
 
   ###*
   # The radio button indicator's class name. A member primarily for the
@@ -82,19 +94,6 @@ module.exports = class RadioButton extends Container
   @property 'indicatorClassName',
     const: true
     value: INDICATOR_CLS
-
-
-  ###*
-  # The fill container's class name, a member primarily for the template.
-  # @member fillClassName
-  # @memberof stout-ui/radio/RadioButton
-  # @type string
-  # @const
-  # @private
-  ###
-  @property 'fillClassName',
-    const: true
-    value: FILL_CLS
 
 
   ###*
@@ -129,3 +128,17 @@ module.exports = class RadioButton extends Container
     default: ''
     set: (l) ->
       @contents = "<span class=#{@labelClassName}>#{l}</span>"
+
+
+  @property 'fillClassName',
+    const: true
+    value: FILL_CLS
+
+
+  @property 'fillBoundsClassName',
+    const: true
+    value: FILL_BOUNDS_CLS
+
+  render: ->
+    super()
+    @fill()

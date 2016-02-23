@@ -1,3 +1,4 @@
 radio-class:            radio-button !default
+radio-fill-bounds:      radio-fill-bounds !default
 radio-indicator-class:  indicator !default
 radio-label-class:      label !default
