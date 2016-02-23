@@ -4,7 +4,7 @@ backdrop-trans-out-time:  200ms
 backdrop-opacity:         0.3
 
 modal-class:              modal
-modal-trans-in-time:      340ms
+modal-trans-in-time:      320ms
 modal-trans-out-time:     280ms
 
 alert-class:              alert

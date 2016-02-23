@@ -43,7 +43,8 @@
 
     +transitioning
       @extend %modal-expanded
-      +transition-property(opacity)
+      +transition-property(opacity, top, right, bottom, left)
+      +transition-timing-function($ease-in-out-cubic)
       opacity: 0.4
 
     +transitioning-out

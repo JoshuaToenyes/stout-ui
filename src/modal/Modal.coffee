@@ -255,19 +255,8 @@ module.exports = class Modal extends Container
     # Capture the activating component (button, etc.) if present.
     @_activator = e?.source.el
 
-    # Position the modal for its opening animation.
-    @_positionForOpen()
-
-    # Calculate the relative position of where the modal window animation
-    # should end. The calculated position is in percent and measures from each
-    # edge of the screen (top, right, bottom, left).
-    pos = @_calcRelativePostion()
-
-    # Immediately position the modal contents.
-    @_positionContents()
-
     # Initiate the modal animation to it's ending position.
-    animate @el, pos, TRANS_IN_TIME, cubicInOut
+    #animate @el, pos, TRANS_IN_TIME, cubicInOut
 
     # If this modal isn't static, then attach an event listener so it's closed
     # when/if the user clicks on the backdrop.
@@ -288,6 +277,29 @@ module.exports = class Modal extends Container
     backdrop().transitionIn()
 
     openPromise
+
+
+
+  transitionIn: (time, cb) ->
+    super(time, cb)
+
+    # Position the modal for its opening animation.
+    @_positionForOpen()
+
+    pos = @_calcRelativePostion()
+
+    @_positionContents()
+
+    @on 'transition:in', ->
+
+      # Calculate the relative position of where the modal window animation
+      # should end. The calculated position is in percent and measures from each
+      # edge of the screen (top, right, bottom, left).
+      @el.style.top = pos.top
+      @el.style.right = pos.right
+      @el.style.bottom = pos.bottom
+      @el.style.left = pos.left
+
 
   ###*
   # Closes this modal window.
