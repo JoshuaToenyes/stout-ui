@@ -8,7 +8,6 @@ dom         = require 'stout-core/utilities/dom'
 template    = require './button.template'
 Interactive = require '../common/Interactive'
 use         = require 'stout-core/trait/use'
-inkable     = require '../ink/inkable'
 fillable    = require '../fill/fillable'
 vars        = require '../vars'
 
@@ -49,12 +48,10 @@ module.exports = class Button extends Interactive
   constructor: (init = {}) ->
     super template, null, {renderOnChange: false}, init
 
-    # Add the `sc-button` class to the component container.
     @prefixedClasses.add BUTTON_CLS
     @prefixedClasses.add @size
     @prefixedClasses.add @style
 
-    if @ink then use(inkable) @
     use(fillable) @
 
     # Update the label in real-time if it changes.

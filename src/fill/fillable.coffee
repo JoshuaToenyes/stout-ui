@@ -4,6 +4,9 @@
 # @module stout-ui/fill/fillable
 ###
 
+inkable = require '../ink/inkable'
+use     = require 'stout-core/trait/use'
+
 # Require necessary shared variables.
 require '../vars/fill'
 
@@ -166,6 +169,7 @@ module.exports =
   # @memberof stout-ui/fill/fillable#
   ###
   init: ->
+    use(inkable)(@)
     @viewClasses.fillContainer = CONTAINER_CLS
 
 
