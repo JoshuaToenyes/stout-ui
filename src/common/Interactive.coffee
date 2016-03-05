@@ -16,54 +16,6 @@ STATE =
 
 module.exports = class Interactive extends Component
 
-  ##
-  # If the button is currently disabled.
-  #
-  # @property {boolean} disabled
-  # @public
-
-  @property 'disabled',
-    serializable: false
-
-    ##
-    # Disables or enables the component based on the set boolean value.
-    #
-    # @setter
-
-    set: (disabled) -> @enabled = not disabled
-
-    ##
-    # Returns `true` if this component is currently disabled.
-    #
-    # @getter
-
-    get: -> not @enabled
-
-
-  ##
-  # If the button is currently disabled (the inverse of disabled).
-  #
-  # @property {boolean} enabled
-  # @public
-
-  @property 'enabled',
-    serializable: false
-
-    ##
-    # Enables or disables the component based on the set boolean value.
-    #
-    # @setter
-
-    set: (enabled) -> if enabled then @enable() else @disable()
-
-    ##
-    # Returns `true` if this component is currently enabled.
-    #
-    # @getter
-
-    get: -> @isEnabled()
-
-
   @property 'click',
     serializable: false
 
@@ -72,8 +24,6 @@ module.exports = class Interactive extends Component
       setTimeout =>
         @on 'click', fn
       , 0
-
-
 
   ##
   # Interactive constructor creates a new Interactive component instance and
@@ -92,70 +42,6 @@ module.exports = class Interactive extends Component
     @_hoverTimer = null
     @_disabled = false
     @_state = STATE.DEFAULT
-
-
-  ##
-  # Enables this interactive component. By default it removes the `disabled`
-  # attribute from the element returned by `_getDisableTarget()`. This behavior
-  # may be overriden by extending classes for more complex behavior. If this
-  # component is not yet rendered, or is not disabled calling this method has
-  # no effect.
-  #
-  # @returns @
-  #
-  # @method enable
-  # @public
-
-  enable: ->
-    @_disabled = false
-    if @rendered then @_getDisableTarget().removeAttribute 'disabled'
-    @
-
-
-  ##
-  # Disabled this interactive component. By default it add the `disabled`
-  # attribute to the element returned by `_getDisableTarget()`. This behavior
-  # may be overriden by extending classes for more complex behavior. If this
-  # component is not yet rendered, or is already disabled calling this method
-  # has no effect.
-  #
-  # @returns @
-  #
-  # @method disable
-  # @public
-
-  disable: ->
-    @_disabled = true
-    if @rendered then @_getDisableTarget().setAttribute 'disabled', ''
-    @
-
-
-  ##
-  # Returns `true` or `false` indicating if this component is currently
-  # disabled. By default it just indicates if the element returned by
-  # `_getDisableTarget()` has the attribute `disabled`. This behavior may be
-  # overriden by extending classes for more complex functionality. This method
-  # will return `false` if the component is not rendered.
-  #
-  # @returns {boolean} `true` if enabled, otherwise false.
-  #
-  # @method isEnabled
-  # @public
-
-  isEnabled: -> not @_disabled
-
-
-  ##
-  # Returns the inverse of `isEnabled()`.
-  #
-  # @see #isEnabled()
-  #
-  # @returns {boolean} `true` if disabled, otherwise false.
-  #
-  # @method isDisabled
-  # @public
-
-  isDisabled: -> not @isEnabled()
 
 
   ##

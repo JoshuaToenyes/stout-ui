@@ -10,6 +10,7 @@ Interactive = require '../common/Interactive'
 use         = require 'stout-core/trait/use'
 fillable    = require '../fill/fillable'
 vars        = require '../vars'
+enableable  = require '../interactive/enableable'
 
 # Require necessary shared variables.
 require '../vars/button'
@@ -52,6 +53,10 @@ module.exports = class Button extends Interactive
     @prefixedClasses.add @size
     @prefixedClasses.add @style
 
+    use(enableable) @,
+      map:
+        enable: '_enable'
+        disable: '_disable'
     use(fillable) @
 
     # Update the label in real-time if it changes.
@@ -204,7 +209,7 @@ module.exports = class Button extends Interactive
   ###
   disable: ->
     if @rendered and @enabled then @unfill()
-    super()
+    @_disable()
 
 
   ###*
@@ -214,7 +219,7 @@ module.exports = class Button extends Interactive
   ###
   enable: ->
     if @rendered and @disabled
-      super()
+      @_enable()
       @emptyFill()
       @fill()
 
