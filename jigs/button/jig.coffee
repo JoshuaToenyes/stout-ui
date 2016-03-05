@@ -67,7 +67,8 @@ window.onload = ->
       label: 'Button Disabled'
       parent: ".disabled-#{style} .subject"
       style: style
-    .render().disable()
+    disabledButton.render()
+    disabledButton.disable()
 
     new Button
       label: 'Enable'

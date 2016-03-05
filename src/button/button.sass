@@ -3,12 +3,13 @@
 @import "typography/default"
 @import "placeholder/inline-component"
 @import "ink/ink"
-//@import "indicator/indicator"
 @import "placeholder/cover-parent"
 @import "vars/button"
 @import "vars/common"
 
 +exports("button/button")
+
+  $btn-visible: #{$prefix}#{$visible}
 
   .#{$prefix}#{$button-class}
     @extend %inline-component
@@ -27,7 +28,7 @@
     .#{$prefix}ink-container
       display: none
 
-    &.#{$visible} button
+    &.#{$btn-visible} button
       cursor: pointer
       box-shadow: 1px 1px $button-shadow-size $button-shadow
 
@@ -63,7 +64,7 @@
 
     // ### Normal Button Style
 
-    &.#{$visible} button
+    &.#{$btn-visible} button
       &:focus
         box-shadow: 1px 1px $button-shadow-size $button-shadow-focus
         .#{$prefix}indicator
@@ -84,7 +85,7 @@
 
     // ### Inverse Button Style
 
-    &.#{$visible}.#{$prefix}inverse button
+    &.#{$btn-visible}.#{$prefix}inverse button
       &:focus
         box-shadow: 1px 1px $button-shadow-size $button-inverse-shadow-focus
         .#{$prefix}indicator
@@ -105,7 +106,7 @@
 
     // ### Primary Button Style
 
-    &.#{$visible}.#{$prefix}primary button
+    &.#{$btn-visible}.#{$prefix}primary button
       box-shadow: 1px 1px $button-shadow-size $button-primary-shadow
       &:focus
         box-shadow: 1px 1px $button-shadow-size $button-primary-shadow-focus
@@ -127,7 +128,7 @@
 
     // ### Warn Button Style
 
-    &.#{$visible}.#{$prefix}warn button
+    &.#{$btn-visible}.#{$prefix}warn button
       box-shadow: 1px 1px $button-shadow-size $button-warn-shadow
       &:focus
         box-shadow: 1px 1px $button-shadow-size $button-warn-shadow-focus
@@ -149,7 +150,7 @@
 
     // ### Danger Button Style
 
-    &.#{$visible}.#{$prefix}danger button
+    &.#{$btn-visible}.#{$prefix}danger button
       box-shadow: 1px 1px $button-shadow-size $button-danger-shadow
       &:focus
         box-shadow: 1px 1px $button-shadow-size $button-danger-shadow-focus
@@ -171,7 +172,7 @@
 
     // ### Disabled Button Style
 
-    &.#{$visible} button[disabled]
+    &.#{$btn-visible} button[disabled]
       box-shadow: none
       cursor: not-allowed
       &:focus
@@ -194,11 +195,11 @@
 
     // ### Flat button Styles
 
-    &.#{$visible}.#{$prefix}normal-flat button,
-    &.#{$visible}.#{$prefix}primary-flat button,
-    &.#{$visible}.#{$prefix}inverse-flat button,
-    &.#{$visible}.#{$prefix}warn-flat button,
-    &.#{$visible}.#{$prefix}danger-flat button
+    &.#{$btn-visible}.#{$prefix}normal-flat button,
+    &.#{$btn-visible}.#{$prefix}primary-flat button,
+    &.#{$btn-visible}.#{$prefix}inverse-flat button,
+    &.#{$btn-visible}.#{$prefix}warn-flat button,
+    &.#{$btn-visible}.#{$prefix}danger-flat button
       box-shadow: none !important
       &:focus
         .#{$prefix}indicator
@@ -212,23 +213,23 @@
       .#{$prefix}ink-container
         +set-ink-color($button-ink)
 
-    &.#{$visible}.#{$prefix}normal-flat button
+    &.#{$btn-visible}.#{$prefix}normal-flat button
       .#{$prefix}label
         color: $button-fg
 
-    &.#{$visible}.#{$prefix}primary-flat button
+    &.#{$btn-visible}.#{$prefix}primary-flat button
       .#{$prefix}label
         color: $button-primary-bg
 
-    &.#{$visible}.#{$prefix}inverse-flat button
+    &.#{$btn-visible}.#{$prefix}inverse-flat button
       .#{$prefix}label
         color: $button-inverse-bg
 
-    &.#{$visible}.#{$prefix}warn-flat button
+    &.#{$btn-visible}.#{$prefix}warn-flat button
       .#{$prefix}label
         color: $button-warn-bg
 
-    &.#{$visible}.#{$prefix}danger-flat button
+    &.#{$btn-visible}.#{$prefix}danger-flat button
       .#{$prefix}label
         color: $button-danger-bg
 

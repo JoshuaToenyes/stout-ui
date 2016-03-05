@@ -51,16 +51,67 @@ module.exports =
   # dynamically calculated by the `inkable` trait, based on the size of the
   # container element.
   #
-  # @method fill
+  # @param {boolean} force - Force-fills the container, regardless of if there
+  # is ink already present.
+  #
+  # @method _fill
   # @memberof stout-ui/fill/fillable#
+  # @private
   ###
-  fill: (container, cb, t) ->
+  _fill: (container, cb, t, force = false) ->
     if not container then container = @getFillContainer()
-    if @hasInk(container) then return
+    if @hasInk(container) and not force then return
     r = container.getBoundingClientRect()
     @expandInk container, r.width / 2, r.height / 2, r.width, r.height, t, ->
       container.classList.add FILLED_CLS
       cb?.call null
+
+
+  ###*
+  # Immediately removes all ink from the fill container.
+  #
+  # @param {DOMElement} [container] - The container to fill. If one is not
+  # specified, then the container with the default fill container class is used.
+  #
+  # @method emptyFill
+  # @memberof stout-ui/fill/fillable
+  ###
+  emptyFill: (container) ->
+    @removeInk container or @getFillContainer()
+
+
+  ###*
+  # Fills the container with ink. If there is already ink in the passed
+  # container this method does nothing.
+  #
+  # @param {DOMElement} [container] - The container to fill. If one is not
+  # specified, then the container with the default fill container class is used.
+  #
+  # @param {function} [cb] - Optional callback function to call when the
+  # container is filled.
+  #
+  # @method fill
+  # @memberof stout-ui/fill/fillable#
+  ###
+  fill: (container, cb) ->
+    @_fill container, cb, null, false
+
+
+  ###*
+  # Fills the container with ink, regardless of whether or not it already
+  # contains ink.
+  #
+  # @param {DOMElement} [container] - The container to fill. If one is not
+  # specified, then the container with the default fill container class is used.
+  #
+  # @param {function} [cb] - Optional callback function to call when the
+  # container is filled.
+  #
+  # @method fill
+  # @memberof stout-ui/fill/fillable#
+  ###
+  forceFill: (container, cb) ->
+    @_fill container, cb, null, true
 
 
   ###*
@@ -93,7 +144,7 @@ module.exports =
   # @memberof stout-ui/fill/fillable#
   ###
   fillNow: (container, cb) ->
-    @fill container, cb, 1
+    @_fill container, cb, 0, false
 
 
   ###*
@@ -134,7 +185,7 @@ module.exports =
     if not container then container = @getFillContainer()
     ink = @getInk container
     if ink.length > 0
-      @fadeInk ink[0], 0, ->
+      @fadeInk ink, 0, ->
         container.classList.remove FILLED_CLS
         cb?.call null
     else

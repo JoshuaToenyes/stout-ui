@@ -4,6 +4,8 @@
 # @module stout-ui/ink/inkable
 ###
 
+isArray = require 'lodash/isArray'
+
 # Require necessary shared variables.
 require '../vars/ink'
 
@@ -129,7 +131,8 @@ module.exports =
   ###*
   # Fades-out the passed ink element
   #
-  # @param {DOMElement} ink - The ink element to fade-out.
+  # @param {DOMElement|Array.<DOMElement>} ink - An ink element or an array of
+  # ink elements to fade-out.
   #
   # @param {number} t - The number of milliseconds to wait before beginning
   # the fade-out.
@@ -141,6 +144,10 @@ module.exports =
   # @memberof stout-ui/ink/inkable#
   ###
   fadeInk: (ink, t, cb) ->
+    if ink.length
+      for i in [0...ink.length - 2]
+        @fadeInk ink[0], t
+      ink = ink[0]
     ink.classList.add 'fade-out'
     ink.style.transitionDuration = @inkFadeTime + 'ms'
     setTimeout ->

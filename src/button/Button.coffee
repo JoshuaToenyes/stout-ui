@@ -34,6 +34,7 @@ BUTTON_CLS = vars.read 'button/button-class'
 INK_CONTAINER_CLS = vars.readPrefixed 'ink/ink-container-class'
 
 
+
 module.exports = class Button extends Interactive
 
   ###*
@@ -205,7 +206,7 @@ module.exports = class Button extends Interactive
   #
   ###
   disable: ->
-    if @rendered then @unfill()
+    if @rendered and @enabled then @unfill()
     super()
 
 
@@ -215,8 +216,10 @@ module.exports = class Button extends Interactive
   #
   ###
   enable: ->
-    super()
-    if @rendered then @fill()
+    if @rendered and @disabled
+      super()
+      @emptyFill()
+      @fill()
 
 
   ###*
@@ -229,8 +232,7 @@ module.exports = class Button extends Interactive
   hide: ->
     if @rendered and @filled()
       @unfill()
-      @classes.remove 'visible'
-      @classes.add 'hidden'
+      super()
 
 
   ###*
@@ -262,8 +264,7 @@ module.exports = class Button extends Interactive
   show: ->
     if @rendered and not @filled()
       @fill()
-      @classes.remove 'hidden'
-      @classes.add 'visible'
+      super()
 
 
   ###*
@@ -273,9 +274,5 @@ module.exports = class Button extends Interactive
     if @label is '' then @iconPosition = 'center'
     super()
     if @ink then @initInkMouseEvents @_getButton()
-    setTimeout =>
-      @fillNow null, =>
-        @classes.remove 'hidden'
-        @classes.add 'visible'
-    , 0
-    @
+    @show()
+    @root
