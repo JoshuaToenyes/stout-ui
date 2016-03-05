@@ -4,6 +4,6 @@ window.onload = ->
 
   window.rb = new RadioButton
     label: 'Select this test item.'
-    parentEl: '.simple'
+    parent: '.simple'
 
   window.rb.render()

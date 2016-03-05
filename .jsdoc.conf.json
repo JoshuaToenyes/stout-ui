@@ -9,11 +9,12 @@
       "console",
       "container",
       "dropdown",
+      "fill",
       "group",
+      "ink",
       "input",
       "modal",
       "progress",
-      "traits",
       "vars",
 
       "node_modules/stout-client/animation",

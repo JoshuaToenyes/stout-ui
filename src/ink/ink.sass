@@ -8,42 +8,45 @@ $ink-width: 3000px
 $ink-height: 3000px
 $ink-expansion-time: 500ms
 $ink-fade-time: 800ms
-
-+keyframes(#{$prefix}ink-expand)
-  0%
-    opacity: 0
-    +transform(scale(0.1))
-  100%
-    opacity: 1
-    +transform(scale(1))
+$ic: #{$prefix}#{$ink-class}
 
 =set-ink-color($ink-color)
-  .#{$prefix}ink div
+  .#{$ic} div
     +radial-gradient(circle, $ink-color 0%, $ink-color 46%, transparent 50%)
 
-.#{$prefix}ink-container
-  @extend %cover-parent
-  z-index: 10
++exports("ink/ink")
 
-.#{$prefix}ink
-  +transform-style(preserve-3d)
-  +transition(all $ink-fade-time)
-  position: absolute
-  opacity: 1
+  +keyframes(#{$prefix}ink-expand)
+    0%
+      opacity: 0
+      +transform(scale(0.1))
+    100%
+      opacity: 1
+      +transform(scale(1))
 
-.#{$prefix}ink.fade-out
-  opacity: 0
+  .#{$prefix}#{$ink-container-class}
+    @extend %cover-parent
+    z-index: 10
 
-.#{$prefix}ink div
-  +transform-style(preserve-3d)
-  +transition(all 1s)
-  +animation(#{$prefix}ink-expand $ink-expansion-time ease-in)
-  opacity: 1
-  position: absolute
-  width: 100%
-  height: 100%
-  left: -50%
-  top: -50%
-  z-index: -1
+  .#{$ic}
+    +transform-style(preserve-3d)
+    +transition(all $ink-fade-time)
+    position: absolute
+    opacity: 1
 
-+set-ink-color($color-3)
+  .#{$ic}.fade-out
+    opacity: 0
+
+  .#{$ic} div
+    +transform-style(preserve-3d)
+    +transition(all 1s)
+    +animation(#{$prefix}ink-expand $ink-expansion-time ease-in)
+    opacity: 1
+    position: absolute
+    width: 100%
+    height: 100%
+    left: -50%
+    top: -50%
+    z-index: -1
+
+  +set-ink-color($color-3)
