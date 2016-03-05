@@ -14,9 +14,17 @@
       "modal",
       "progress",
       "traits",
-      "vars"
-    ],
-    "exclude": ["node_modules", "build", "src", "test"]
+      "vars",
+
+      "node_modules/stout-client/animation",
+      "node_modules/stout-client/easing",
+      "node_modules/stout-client/keys",
+      "node_modules/stout-client/view",
+
+      "node_modules/stout-core/base",
+      "node_modules/stout-core/event",
+      "node_modules/stout-core/view"
+    ]
   },
   "plugins": ["plugins/markdown"],
   "templates": {

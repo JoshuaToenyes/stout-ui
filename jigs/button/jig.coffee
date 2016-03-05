@@ -11,7 +11,7 @@ window.onload = ->
   for size in ['tiny', 'small', 'normal', 'large', 'huge', 'massive']
     new Button
       label: 'Make Reservation'
-      parentEl: '.size-' + size
+      parent: '.size-' + size
       size: size
     .render()
 
@@ -19,7 +19,7 @@ window.onload = ->
   # Invers button style example.
   new Button
     label: 'Confirm Order'
-    parentEl: '.inverse'
+    parent: '.inverse'
     style: 'inverse'
   .render()
 
@@ -29,7 +29,7 @@ window.onload = ->
 
     new Button
       label: style + ' flat button'
-      parentEl: ".#{style}-flat"
+      parent: ".#{style}-flat"
       style: style + '-flat'
     .render()
 
@@ -38,7 +38,7 @@ window.onload = ->
   # Primary button style example.
   new Button
     label: 'Place Order'
-    parentEl: '.primary'
+    parent: '.primary'
     style: 'primary'
   .render()
 
@@ -47,7 +47,7 @@ window.onload = ->
   # Warn button style example.
   new Button
     label: 'Launch Missile'
-    parentEl: '.warn'
+    parent: '.warn'
     style: 'warn'
   .render()
 
@@ -55,7 +55,7 @@ window.onload = ->
   # Danger button style example.
   new Button
     label: 'Delete Everything'
-    parentEl: '.danger'
+    parent: '.danger'
     style: 'danger'
   .render()
 
@@ -65,14 +65,14 @@ window.onload = ->
 
     disabledButton = new Button
       label: 'Button Disabled'
-      parentEl: ".disabled-#{style} .subject"
+      parent: ".disabled-#{style} .subject"
       style: style
     .render().disable()
 
     new Button
       label: 'Enable'
       size: 'tiny'
-      parentEl: ".disabled-#{style} .controls"
+      parent: ".disabled-#{style} .controls"
       click: ((db) ->
         -> db.enable()
       )(disabledButton)
@@ -81,7 +81,7 @@ window.onload = ->
     new Button
       label: 'Disable'
       size: 'tiny'
-      parentEl: ".disabled-#{style} .controls"
+      parent: ".disabled-#{style} .controls"
       click: ((db) ->
         -> db.disable()
       )(disabledButton)
@@ -92,7 +92,7 @@ window.onload = ->
   # Show-hide example buttons.
   showButtonEx = new Button
     label: 'Reveal Example'
-    parentEl: '.show-hide .subject'
+    parent: '.show-hide .subject'
     style: 'primary'
     classes: 'show-hide-subject'
   .render()
@@ -100,7 +100,7 @@ window.onload = ->
   new Button
     label: 'Show'
     size: 'tiny'
-    parentEl: '.show-hide .controls'
+    parent: '.show-hide .controls'
     classes: 'show-button'
     click: ->
       showButtonEx.show()
@@ -109,7 +109,7 @@ window.onload = ->
   new Button
     label: 'Hide'
     size: 'tiny'
-    parentEl: '.show-hide .controls'
+    parent: '.show-hide .controls'
     classes: 'hide-button'
     click: ->
       showButtonEx.hide()
@@ -117,30 +117,30 @@ window.onload = ->
 
 # btop = new Button
 #   label: 'Top Label'
-#   parentEl: demoEl
+#   parent: demoEl
 #   svgIcon: atomIcon
 #   iconPosition: 'top'
 #
 # bbottom = new Button
 #   label: 'Bottom Label'
-#   parentEl: demoEl
+#   parent: demoEl
 #   svgIcon: atomIcon
 #   iconPosition: 'bottom'
 #
 # bleft   = new Button
 #   label: 'Left Label'
-#   parentEl: demoEl
+#   parent: demoEl
 #   svgIcon: atomIcon
 #   iconPosition: 'left'
 #
 # bright  = new Button
 #   label: 'Right Label'
-#   parentEl: demoEl
+#   parent: demoEl
 #   svgIcon: atomIcon
 #   iconPosition: 'right'
 #
 # bnolabel  = new Button
-#   parentEl: demoEl
+#   parent: demoEl
 #   svgIcon: atomIcon
 
 

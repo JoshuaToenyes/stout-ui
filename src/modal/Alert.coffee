@@ -100,7 +100,7 @@ class AlertContent extends Component
   renderControls: (promise) ->
     new Button
       label: @ok
-      parentEl: @select '.' + ALERT_CONTROLS_CLS
+      parent: @select '.' + ALERT_CONTROLS_CLS
       style: @buttonStyle
       click: ->
         Promise.fulfill promise

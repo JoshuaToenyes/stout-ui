@@ -3,7 +3,7 @@
 # @module stout-ui/container/Container
 ###
 
-ClientView = require 'stout-client/view/ClientView'
+ClientViewModel = require 'stout-client/view/ClientViewModel'
 Component  = require '../common/Component'
 type       = require 'stout-core/utilities/type'
 vars       = require '../vars'
@@ -35,7 +35,7 @@ module.exports = class Container extends Component
 
   ###*
   # A generic container view which may contain an inner-view (or subview) which
-  # may be another ClientView, an HTMLElement, or a string (HTML or text).
+  # may be another ClientViewModel, an HTMLElement, or a string (HTML or text).
   #
   #  module:stout-ui/common/Component
   #
@@ -52,12 +52,12 @@ module.exports = class Container extends Component
   #
   # @member contents
   # @memberof stout-ui/container/Container#
-  # @type string|HTMLElement|stout-client/view/ClientView
+  # @type string|HTMLElement|stout-client/view/ClientViewModel
   ###
   @property 'contents',
     serializable: false
     get: (c) ->
-      if c instanceof ClientView
+      if c instanceof ClientViewModel
         c.render()
       else
         c
@@ -79,7 +79,7 @@ module.exports = class Container extends Component
   ###*
   # Renders the container.
   #
-  # @param {string|HTMLElement|ClientView} [contents] - Optional content. If
+  # @param {string|HTMLElement|ClientViewModel} [contents] - Optional content. If
   # defined, then the `contents` property is set to the passed value before
   # the view is rendered.
   #
@@ -97,4 +97,4 @@ module.exports = class Container extends Component
       cc.appendChild @contents
     else
       cc.innerHTML = @contents
-    @el
+    @root

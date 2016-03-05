@@ -178,7 +178,7 @@ module.exports = class Interactive extends Component
       @_getDisableTarget()?.setAttribute 'disabled', ''
     else
       @_getDisableTarget()?.removeAttribute 'disabled'
-    @el
+    @root
 
 
   ##
@@ -280,4 +280,4 @@ module.exports = class Interactive extends Component
   # @method _getHoverTarget
   # @protected
 
-  _getHoverTarget: -> @el
+  _getHoverTarget: -> @root

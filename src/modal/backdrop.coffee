@@ -65,8 +65,8 @@ module.exports.Backdrop = class Backdrop extends Interactive
   ###
   constructor: ->
     super (-> ''), null, {renderOnChange: false}
-    @prefixedClasses.add BACKDROP_CLASS
-    @parentEl = document.body
+    @prefixedClasses.add BACKDROP_CLASS, 'hidden'
+    @parent = document.body
     @render()
     @static = true
 

@@ -2,7 +2,8 @@ RadioButton = require '../../radio/RadioButton'
 
 window.onload = ->
 
-  new RadioButton
+  window.rb = new RadioButton
     label: 'Select this test item.'
     parentEl: '.simple'
-  .render()
+
+  window.rb.render()

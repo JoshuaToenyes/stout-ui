@@ -204,7 +204,7 @@ module.exports = class Modal extends Container
   ###
   _positionForOpen: ->
     for p, v of @_calcActivatorBounds()
-      @el.style[p] = v
+      @root.style[p] = v
 
 
   ###*
@@ -219,7 +219,7 @@ module.exports = class Modal extends Container
   ###
   _positionModalElement: (el) ->
     if not el
-      @_positionModalElement @el
+      @_positionModalElement @root
       @_positionModalElement @select('.' + CONTENTS_CLS)
     else
       for p, v of @_calcRelativePostion()
@@ -253,10 +253,10 @@ module.exports = class Modal extends Container
     @render()
 
     # Capture the activating component (button, etc.) if present.
-    @_activator = e?.source.el
+    @_activator = e?.source.root
 
     # Initiate the modal animation to it's ending position.
-    #animate @el, pos, TRANS_IN_TIME, cubicInOut
+    #animate @root, pos, TRANS_IN_TIME, cubicInOut
 
     # If this modal isn't static, then attach an event listener so it's closed
     # when/if the user clicks on the backdrop.
@@ -295,10 +295,10 @@ module.exports = class Modal extends Container
       # Calculate the relative position of where the modal window animation
       # should end. The calculated position is in percent and measures from each
       # edge of the screen (top, right, bottom, left).
-      @el.style.top = pos.top
-      @el.style.right = pos.right
-      @el.style.bottom = pos.bottom
-      @el.style.left = pos.left
+      @root.style.top = pos.top
+      @root.style.right = pos.right
+      @root.style.bottom = pos.bottom
+      @root.style.left = pos.left
 
 
   ###*
@@ -315,10 +315,15 @@ module.exports = class Modal extends Container
 
     pos = @_calcActivatorBounds()
 
-    animate @el, pos, TRANS_OUT_TIME, cubicInOut
+    @root.style.top = pos.top
+    @root.style.right = pos.right
+    @root.style.bottom = pos.bottom
+    @root.style.left = pos.left
+
+    #animate @root, pos, TRANS_OUT_TIME, cubicInOut
 
     window.removeEventListener 'resize', @_resizeHandler
 
     @transitionOut TRANS_OUT_TIME, =>
       Promise.resolve closePromise
-      @destroy()
+      #@destroy()
