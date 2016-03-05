@@ -3,6 +3,7 @@
 # @module stout-ui/container/Container
 ###
 
+assign    = require 'lodash/assign'
 ClientViewModel = require 'stout-client/view/ClientViewModel'
 Component  = require '../common/Component'
 type       = require 'stout-core/utilities/type'
@@ -27,7 +28,7 @@ PREFIX = vars.read 'common/prefix'
 # @type string
 # @private
 ###
-CONTAINER_CLS = vars.read 'container/container-contents-class'
+CONTAINER_CLS = vars.readPrefixed 'container/container-contents-class'
 
 
 
@@ -46,6 +47,9 @@ module.exports = class Container extends Component
   constructor: ->
     super arguments...
 
+    assign @viewClasses,
+      contents: CONTAINER_CLS
+
 
   ###*
   # The contents to be rendered within the container.
@@ -61,19 +65,6 @@ module.exports = class Container extends Component
         c.render()
       else
         c
-
-  ###*
-  # This property holds the name of the container contents class, which can
-  # be used in the container's template to specify which element should hold
-  # the contents.
-  #
-  # @member contentsClassName
-  # @memberof stout-ui/container/Container#
-  # @type string
-  ###
-  @property 'contentsClassName',
-    value: PREFIX + CONTAINER_CLS
-    const: true
 
 
   ###*
@@ -91,7 +82,7 @@ module.exports = class Container extends Component
   render: (contents) ->
     super()
     if contents then @contents = contents
-    cc = @select ".#{@contentsClassName}"
+    cc = @select ".#{CONTAINER_CLS}"
     if type(@contents).isHTMLElement()
       cc.innerHTML = ''
       cc.appendChild @contents

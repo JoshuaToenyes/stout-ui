@@ -5,13 +5,12 @@
 # @module stout-ui/radio/RadioButton
 ###
 
+assign    = require 'lodash/assign'
 Container = require '../container/Container'
 vars      = require '../vars'
 template  = require './radio-button.template'
-use         = require 'stout-core/trait/use'
-fill      = require '../traits/fill'
-ink         = require '../traits/ink'
-
+use       = require 'stout-core/trait/use'
+fillable  = require '../fill/fillable'
 
 # Require necessary shared variables.
 require '../vars/radio'
@@ -79,34 +78,12 @@ module.exports = class RadioButton extends Container
   constructor: (init) ->
     super template, null, {renderOnChange: false}, init, ['select', 'unselect']
     @prefixedClasses.add RADIO_CLS
-    use(ink) @
-    use(fill) @
+    use(fillable) @
 
-  ###*
-  # The radio button indicator's class name. A member primarily for the
-  # template.
-  # @member indicatorClassName
-  # @memberof stout-ui/radio/RadioButton
-  # @type string
-  # @const
-  # @private
-  ###
-  @property 'indicatorClassName',
-    const: true
-    value: INDICATOR_CLS
-
-
-  ###*
-  # The class name of the radio button label, if using the "label" property.
-  # @member labelClassName
-  # @memberof stout-ui/radio/RadioButton
-  # @type string
-  # @const
-  # @private
-  ###
-  @property 'labelClassName',
-    const: true
-    value: LABEL_CLS
+    assign @viewClasses,
+      indicator: INDICATOR_CLS
+      label: LABEL_CLS
+      fillBounds: FILL_BOUNDS_CLS
 
 
   ###*
@@ -127,17 +104,8 @@ module.exports = class RadioButton extends Container
   @property 'label',
     default: ''
     set: (l) ->
-      @contents = "<span class=#{@labelClassName}>#{l}</span>"
+      @contents = "<span class=#{LABEL_CLS}>#{l}</span>"
 
-
-  @property 'fillClassName',
-    const: true
-    value: FILL_CLS
-
-
-  @property 'fillBoundsClassName',
-    const: true
-    value: FILL_BOUNDS_CLS
 
   render: ->
     super()
