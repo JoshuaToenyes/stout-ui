@@ -16,3 +16,10 @@ window.onload = ->
     label: 'Lastly, another one.'
     parent: '.simple'
   .render()
+
+  for size in ['tiny', 'small', 'normal', 'large', 'huge', 'massive']
+    new Checkbox
+      label: "This is a <code>#{size}</code> checkbox."
+      parent: ".size-#{size}"
+      size: size
+    .render()

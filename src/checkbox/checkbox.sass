@@ -18,11 +18,35 @@
 
   .#{$cc} .#{$prefix}#{$select-box-indicator-class}
     padding: 0
-    width: 16px
-    height: 16px
+    width: $select-box-normal-size + $select-box-padding
+    height: $select-box-normal-size + $select-box-padding
 
   .#{$cc}.#{$prefix}#{$select-box-selected-class} svg
     display: block
 
     path
       fill: $checkbox-check-color
+
+
+
+  .#{$cc}
+
+    &.#{$prefix}tiny .#{$prefix}#{$select-box-indicator-class}
+      width: $select-box-tiny-size + $select-box-padding
+      height: $select-box-tiny-size + $select-box-padding
+
+    &.#{$prefix}small .#{$prefix}#{$select-box-indicator-class}
+      width: $select-box-small-size + $select-box-padding
+      height: $select-box-small-size + $select-box-padding
+
+    &.#{$prefix}large .#{$prefix}#{$select-box-indicator-class}
+      width: $select-box-large-size + $select-box-padding
+      height: $select-box-large-size + $select-box-padding
+
+    &.#{$prefix}huge .#{$prefix}#{$select-box-indicator-class}
+      width: $select-box-huge-size + $select-box-padding
+      height: $select-box-huge-size + $select-box-padding
+
+    &.#{$prefix}massive .#{$prefix}#{$select-box-indicator-class}
+      width: $select-box-massive-size + $select-box-padding
+      height: $select-box-massive-size + $select-box-padding

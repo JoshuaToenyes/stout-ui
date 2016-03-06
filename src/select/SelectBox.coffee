@@ -97,7 +97,10 @@ module.exports = class SelectBox extends Container
   ###
   constructor: (template, init) ->
     super template, null, {renderOnChange: false}, init, ['select', 'unselect']
+
     @prefixedClasses.add SELECT_BOX_CLS
+    @prefixedClasses.add @size
+    @prefixedClasses.add @style
 
     use(enableable) @
     use(fillable) @
@@ -166,6 +169,44 @@ module.exports = class SelectBox extends Container
   ###
   @property 'selected',
     get: -> @_selected
+
+
+  ###*
+  # The button's size property. Indicates the relative size that this button
+  # should be in the user interface. Actual size is determined by the
+  # configured control typography sizes in SASS.
+  #
+  # @property {string} size
+  # @default 'normal'
+  # @public
+  ###
+  @property 'size',
+    default: 'normal'
+    values: [
+      'tiny'
+      'small'
+      'normal'
+      'large'
+      'huge'
+      'massive'
+    ]
+
+
+  ###*
+  # The button's style, which indicates how the button should be displayed in
+  # the interfaces, as well as it's colors.
+  #
+  # @property {string} styles
+  ###
+  @property 'style',
+    default: 'default',
+    values: [
+      'default'
+      'inverse'
+      'primary'
+      'warn'
+      'danger'
+    ]
 
 
   ###*
