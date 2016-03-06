@@ -1,4 +1,11 @@
 radio-class:            radio-button !default
+radio-selected-class:   selected !default
 radio-fill-bounds:      radio-fill-bounds !default
 radio-indicator-class:  indicator !default
 radio-label-class:      label !default
+
+radio-bg-color:         darken($color-bg, 2%) !default
+radio-selected-color:   $color-6 !default
+
+radio-border:           1px solid lighten($color-fg, 58%) !default
+radio-selected-border:  1px solid $radio-selected-color !default

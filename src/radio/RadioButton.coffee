@@ -11,6 +11,7 @@ vars      = require '../vars'
 template  = require './radio-button.template'
 use       = require 'stout-core/trait/use'
 fillable  = require '../fill/fillable'
+enableable = require '../interactive/enableable'
 
 # Require necessary shared variables.
 require '../vars/radio'
@@ -63,6 +64,15 @@ FILL_CLS = vars.readPrefixed 'fill/fill-container-class'
 FILL_BOUNDS_CLS = vars.readPrefixed 'radio/radio-fill-bounds'
 
 
+###*
+# Class applied to root element indicating this radio button is selected.
+# @type string
+# @const
+# @private
+###
+SELECTED_CLS = vars.readPrefixed 'radio/radio-selected-class'
+
+
 module.exports = class RadioButton extends Container
 
   ###*
@@ -78,7 +88,13 @@ module.exports = class RadioButton extends Container
   constructor: (init) ->
     super template, null, {renderOnChange: false}, init, ['select', 'unselect']
     @prefixedClasses.add RADIO_CLS
+
+    use(enableable) @
     use(fillable) @
+
+    @_selected = false
+
+    @on 'change:contents', => @_label = undefined
 
     assign @viewClasses,
       indicator: INDICATOR_CLS
@@ -87,26 +103,145 @@ module.exports = class RadioButton extends Container
 
 
   ###*
-  # The ID of the group this radio button belongs to.
+  # Plain label text.
+  #
+  # @member _label
+  # @memberof stout-ui/radio/RadioButton#
+  # @type {stout-ui/radio/RadioGroup}
+  # @private
+  ###
+
+
+  ###*
+  # Reference to the radio button group this radio button belongs to.
+  #
+  # @member _group
+  # @memberof stout-ui/radio/RadioButton#
+  # @type {stout-ui/radio/RadioGroup}
+  # @private
+  ###
+
+
+  ###*
+  # The radio button group this radio button belongs to.
+  #
   # @member group
-  # @memberof stout-ui/radio/RadioButton
+  # @memberof stout-ui/radio/RadioButton#
   # @type string|number
   ###
-  @property 'group'
+  @property 'group',
+    get: -> @_group
+    set: (group) ->
+      if group
+        if @_group then @_group.remove @
+        group.add @
+        @_group = group
 
 
   ###*
   # The label for this radio button.
   # @member label
-  # @memberof stout-ui/radio/RadioButton
+  # @memberof stout-ui/radio/RadioButton#
   # @type string
   ###
   @property 'label',
     default: ''
+    get: -> @_label
     set: (l) ->
       @contents = "<span class=#{LABEL_CLS}>#{l}</span>"
+      @_label = l
 
 
+  ###*
+  # Private internal property indicating if this radio button is selected.
+  #
+  # @member _selected
+  # @memberof stout-ui/radio/RadioButton#
+  # @type boolean
+  # @private
+  ###
+
+
+  ###*
+  # Property indicating if this radio button is selected.
+  #
+  # @member selected
+  # @memberof stout-ui/radio/RadioButton#
+  # @type boolean
+  ###
+  @property 'selected',
+    get: -> @_selected
+
+
+  ###*
+  # Attaches selection listeners to this radio button.
+  #
+  # @method _attachRadioListeners
+  # @memberof stout-ui/radio/RadioButton#
+  # @private
+  ###
+  _attachRadioListeners: ->
+    @root.addEventListener 'click', @onSelect
+    @root.addEventListener 'touchstart', @onSelect
+
+
+  ###*
+  # Marks this radio button as selected and fills the indicator.
+  #
+  # @method _unselect
+  # @memberof stout-ui/radio/RadioButton#
+  # @private
+  ###
+  _select: ->
+    @_selected = true
+    @classes.add SELECTED_CLS
+    @forceFill()
+
+
+  ###*
+  # Unselects this radio button and unfills the indicator.
+  #
+  # @method _unselect
+  # @memberof stout-ui/radio/RadioButton#
+  # @private
+  ###
+  _unselect: ->
+    @_selected = false
+    @classes.remove SELECTED_CLS
+    @unfill()
+
+
+  ###*
+  # Renders the radio button and adds necessary click listeners.
+  #
+  # @method render
+  # @memberof stout-ui/radio/RadioButton#
+  ###
   render: ->
     super()
-    @fill()
+    @show()
+    @_attachRadioListeners()
+
+
+  ###*
+  # Marks this radio button as selected, if it is enabled.
+  #
+  # @method select
+  # @memberof stout-ui/radio/RadioButton#
+  ###
+  onSelect: =>
+    if @enabled and not @selected
+      @fire 'select'
+      @_select()
+
+
+  ###*
+  # Unselects this radio button, if it is enabled.
+  #
+  # @method unselect
+  # @memberof stout-ui/radio/RadioButton#
+  ###
+  onUnselect: ->
+    if @enabled
+      @fire 'unselect'
+      @_unselect()

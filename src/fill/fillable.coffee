@@ -54,16 +54,13 @@ module.exports =
   # dynamically calculated by the `inkable` trait, based on the size of the
   # container element.
   #
-  # @param {boolean} force - Force-fills the container, regardless of if there
-  # is ink already present.
-  #
   # @method _fill
   # @memberof stout-ui/fill/fillable#
   # @private
   ###
-  _fill: (container, cb, t, force = false) ->
+  _fill: (container, cb, t) ->
     if not container then container = @getFillContainer()
-    if @hasInk(container) and not force then return
+    if @hasInk(container) then return
     r = container.getBoundingClientRect()
     @expandInk container, r.width / 2, r.height / 2, r.width, r.height, t, ->
       container.classList.add FILLED_CLS
@@ -114,6 +111,7 @@ module.exports =
   # @memberof stout-ui/fill/fillable#
   ###
   forceFill: (container, cb) ->
+    @emptyFill container
     @_fill container, cb, null, true
 
 
