@@ -6,6 +6,7 @@
 @import "ink/ink"
 @import "vars/common"
 @import "vars/radio"
+@import "vars/ink"
 @import "vars/fill"
 
 +exports("radio/radio-button")
@@ -41,6 +42,15 @@
       .#{$prefix}#{$fill-container-class}
         +set-ink-color($radio-selected-color)
         @extend %cover-parent
+
+      .#{$prefix}#{$ink-container-class}
+        +set-ink-color($radio-ink-color)
+        position: absolute
+        left: -($radio-ink-size - 100%) / 2
+        top: -($radio-ink-size - 100%) / 2
+        height: $radio-ink-size
+        width: $radio-ink-size
+        z-index: -1
 
     .#{$rl}
       @extend %typography-body-1

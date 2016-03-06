@@ -139,6 +139,17 @@ module.exports = class RadioButton extends Container
 
 
   ###*
+  # If this radio button should show an ink "cloud" when clicked.
+  #
+  # @property {boolean} ink
+  # @default true
+  # @public
+  ###
+  @property 'ink',
+    default: true
+
+
+  ###*
   # The label for this radio button.
   # @member label
   # @memberof stout-ui/radio/RadioButton#
@@ -221,6 +232,7 @@ module.exports = class RadioButton extends Container
     super()
     @show()
     @_attachRadioListeners()
+    if @ink then @initInkMouseEvents @select ".#{@viewClasses.indicator}"
 
 
   ###*
