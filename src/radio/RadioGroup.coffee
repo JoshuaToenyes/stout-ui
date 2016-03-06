@@ -49,7 +49,7 @@ module.exports = class RadioGroup extends Foundation
     forEach @_members, (m) =>
       if m isnt e.source
         if m is @_selection
-          m.onUnselect()
+          m.unselectBox()
         else
           m._unselect()
     edata =

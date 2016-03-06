@@ -1,0 +1,28 @@
+@import "bourbon/bourbon"
+@import "util/exports"
+@import "select/select-box"
+@import "vars/select-box"
+@import "vars/checkbox"
+
++exports("checkbox/checkbox")
+
+  $cc: #{$prefix}#{$checkbox-class}
+
+  .#{$cc} svg
+    position: absolute
+    width: 140%
+    left: -20%
+    top: -19%
+    display: none
+    z-index: 100
+
+  .#{$cc} .#{$prefix}#{$select-box-indicator-class}
+    padding: 0
+    width: 16px
+    height: 16px
+
+  .#{$cc}.#{$prefix}#{$select-box-selected-class} svg
+    display: block
+
+    path
+      fill: $checkbox-check-color

@@ -64,3 +64,14 @@ module.exports = class RadioButton extends SelectBox
         if @_group then @_group.remove @
         group.add @
         @_group = group
+
+
+  ###*
+  # Handles a click on this checkbox.
+  #
+  # @method onSelectBoxClick
+  # @memberof stout-ui/checkbox/Checkbox#
+  # @protected
+  ###
+  onSelectBoxClick: =>
+    @selectBox()

@@ -176,12 +176,23 @@ module.exports = class SelectBox extends Container
   # @private
   ###
   _attachSelectBoxListeners: ->
-    @root.addEventListener 'click', @onSelect
-    @root.addEventListener 'touchstart', @onSelect
+    @root.addEventListener 'click', @onSelectBoxClick
+    @root.addEventListener 'touchstart', @onSelectBoxClick
 
     indicator = @select(".#{@viewClasses.indicator}")
     indicator.addEventListener 'click', @_rippleSelectionInk
     indicator.addEventListener 'touchstart', @_rippleSelectionInk
+
+
+  ###*
+  # Abstract method which must be defined by extending classes to handle the
+  # activation event of this select box.
+  #
+  # @method onSelectBoxClick
+  # @memberof stout-ui/select/SelectBox#
+  # @protected
+  # @abstract
+  ###
 
 
   ###*
@@ -192,11 +203,10 @@ module.exports = class SelectBox extends Container
   # @private
   ###
   _rippleSelectionInk: =>
-    console.log 'got click'
     inkContainer = @select(".#{@viewClasses.inkContainer}")
     h = inkContainer.getBoundingClientRect().height
     inkSize = h * INK_SIZE / 100
-    if @ink
+    if @ink and not @selected
       @rippleInk @select(".#{@viewClasses.inkContainer}"), inkSize
 
 
@@ -244,7 +254,7 @@ module.exports = class SelectBox extends Container
   # @method select
   # @memberof stout-ui/select/SelectBox#
   ###
-  onSelect: =>
+  selectBox: =>
     if @enabled and not @selected
       @fire 'select'
       @_select()
@@ -256,7 +266,7 @@ module.exports = class SelectBox extends Container
   # @method unselect
   # @memberof stout-ui/select/SelectBox#
   ###
-  onUnselect: ->
+  unselectBox: ->
     if @enabled
       @fire 'unselect'
       @_unselect()
