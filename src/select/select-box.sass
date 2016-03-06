@@ -1,0 +1,52 @@
+@import "bourbon/bourbon"
+@import "util/exports"
+@import "typography/default"
+@import "placeholder/cover-parent"
+@import "colors/default"
+@import "ink/ink"
+@import "vars/common"
+@import "vars/select-box"
+@import "vars/ink"
+@import "vars/fill"
+
++exports("select-box/select-box-button")
+
+  $ri: #{$prefix}#{$select-box-indicator-class}
+  $rl: #{$prefix}#{$select-box-label-class}
+
+  .#{$prefix}#{$select-box-class}
+    +display(flex)
+    +align-items(center)
+    cursor: pointer
+
+    &.#{$prefix}#{$select-box-selected-class} .#{$ri}
+      border: $select-box-selected-border
+
+    .#{$ri}
+      width: 12px
+      height: 12px
+      margin-right: 1em
+      border-radius: 2px
+      position: relative
+      padding: 2px
+      border: $select-box-border
+      background-color: $select-box-bg-color
+      +transition(border 1s)
+
+      .#{$prefix}#{$select-box-fill-bounds}
+        overflow: hidden
+        position: relative
+        height: 100%
+        width: 100%
+
+      .#{$prefix}#{$fill-container-class}
+        +set-ink-color($select-box-selected-color)
+        @extend %cover-parent
+
+      .#{$prefix}#{$ink-container-class}
+        +set-ink-color($select-box-ink-color)
+        @extend%cover-parent
+        z-index: -1
+
+    .#{$rl}
+      @extend %typography-body-1

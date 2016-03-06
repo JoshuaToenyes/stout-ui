@@ -1,5 +1,6 @@
 # Ignore transpiled source at project root.
 /button
+/checkbox
 /colors
 /common
 /console
@@ -15,6 +16,7 @@
 /placeholder
 /progress
 /radio
+/select
 /times
 /traits
 /typography

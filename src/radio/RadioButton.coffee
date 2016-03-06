@@ -5,13 +5,10 @@
 # @module stout-ui/radio/RadioButton
 ###
 
-assign    = require 'lodash/assign'
-Container = require '../container/Container'
+SelectBox = require '../select/SelectBox'
+template   = require './radio-button.template'
 vars      = require '../vars'
-template  = require './radio-button.template'
-use       = require 'stout-core/trait/use'
-fillable  = require '../fill/fillable'
-enableable = require '../interactive/enableable'
+
 
 # Require necessary shared variables.
 require '../vars/radio'
@@ -26,64 +23,7 @@ require '../vars/radio'
 RADIO_CLS = vars.read 'radio/radio-class'
 
 
-###*
-# The classname of the element which will act as the displayed radio button,
-# or the "indicator."
-# @type string
-# @const
-# @private
-###
-INDICATOR_CLS = vars.readPrefixed 'radio/radio-indicator-class'
-
-
-###*
-# The class name of the radio button label, applied if using the radio buttons
-# `label` property.
-# @type string
-# @const
-# @private
-###
-LABEL_CLS = vars.readPrefixed 'radio/radio-label-class'
-
-
-###*
-# The container classname which will hold the ink fill inside the radio button.
-# @type string
-# @const
-# @private
-###
-FILL_CLS = vars.readPrefixed 'fill/fill-container-class'
-
-
-###*
-#
-# @type string
-# @const
-# @private
-###
-FILL_BOUNDS_CLS = vars.readPrefixed 'radio/radio-fill-bounds'
-
-
-###*
-# Class applied to root element indicating this radio button is selected.
-# @type string
-# @const
-# @private
-###
-SELECTED_CLS = vars.readPrefixed 'radio/radio-selected-class'
-
-
-###*
-# The size of the ink ripple, relative to the size of the check box (in
-# percent).
-# @type number
-# @const
-# @private
-###
-INK_SIZE = vars.readNumber 'radio/radio-ink-size'
-
-
-module.exports = class RadioButton extends Container
+module.exports = class RadioButton extends SelectBox
 
   ###*
   # The RadioButton class represents a single radio button which may be linked
@@ -96,30 +36,8 @@ module.exports = class RadioButton extends Container
   # @constructor
   ###
   constructor: (init) ->
-    super template, null, {renderOnChange: false}, init, ['select', 'unselect']
+    super template, init
     @prefixedClasses.add RADIO_CLS
-
-    use(enableable) @
-    use(fillable) @
-
-    @_selected = false
-
-    @on 'change:contents', => @_label = undefined
-
-    assign @viewClasses,
-      indicator: INDICATOR_CLS
-      label: LABEL_CLS
-      fillBounds: FILL_BOUNDS_CLS
-
-
-  ###*
-  # Plain label text.
-  #
-  # @member _label
-  # @memberof stout-ui/radio/RadioButton#
-  # @type {stout-ui/radio/RadioGroup}
-  # @private
-  ###
 
 
   ###*
@@ -146,143 +64,3 @@ module.exports = class RadioButton extends Container
         if @_group then @_group.remove @
         group.add @
         @_group = group
-
-
-  ###*
-  # If this radio button should show an ink "cloud" when clicked.
-  #
-  # @property {boolean} ink
-  # @default true
-  # @public
-  ###
-  @property 'ink',
-    default: true
-
-
-  ###*
-  # The label for this radio button.
-  # @member label
-  # @memberof stout-ui/radio/RadioButton#
-  # @type string
-  ###
-  @property 'label',
-    default: ''
-    get: -> @_label
-    set: (l) ->
-      @contents = "<span class=#{LABEL_CLS}>#{l}</span>"
-      @_label = l
-
-
-  ###*
-  # Private internal property indicating if this radio button is selected.
-  #
-  # @member _selected
-  # @memberof stout-ui/radio/RadioButton#
-  # @type boolean
-  # @private
-  ###
-
-
-  ###*
-  # Property indicating if this radio button is selected.
-  #
-  # @member selected
-  # @memberof stout-ui/radio/RadioButton#
-  # @type boolean
-  ###
-  @property 'selected',
-    get: -> @_selected
-
-
-  ###*
-  # Attaches selection listeners to this radio button.
-  #
-  # @method _attachRadioListeners
-  # @memberof stout-ui/radio/RadioButton#
-  # @private
-  ###
-  _attachRadioListeners: ->
-    @root.addEventListener 'click', @onSelect
-    @root.addEventListener 'touchstart', @onSelect
-
-    indicator = @select(".#{@viewClasses.indicator}")
-    indicator.addEventListener 'click', @_rippleSelectionInk
-    indicator.addEventListener 'touchstart', @_rippleSelectionInk
-
-
-  ###*
-  # Shows ink ripple effect emanating from center of radio button.
-  #
-  # @method _rippleSelectionInk
-  # @memberof stout-ui/radio/RadioButton#
-  # @private
-  ###
-  _rippleSelectionInk: =>
-    console.log 'got click'
-    inkContainer = @select(".#{@viewClasses.inkContainer}")
-    h = inkContainer.getBoundingClientRect().height
-    inkSize = h * INK_SIZE / 100
-    if @ink
-      @rippleInk @select(".#{@viewClasses.inkContainer}"), inkSize
-
-
-  ###*
-  # Marks this radio button as selected and fills the indicator.
-  #
-  # @method _unselect
-  # @memberof stout-ui/radio/RadioButton#
-  # @private
-  ###
-  _select: ->
-    @_selected = true
-    @classes.add SELECTED_CLS
-    @forceFill()
-
-
-  ###*
-  # Unselects this radio button and unfills the indicator.
-  #
-  # @method _unselect
-  # @memberof stout-ui/radio/RadioButton#
-  # @private
-  ###
-  _unselect: ->
-    @_selected = false
-    @classes.remove SELECTED_CLS
-    @unfill()
-
-
-  ###*
-  # Renders the radio button and adds necessary click listeners.
-  #
-  # @method render
-  # @memberof stout-ui/radio/RadioButton#
-  ###
-  render: ->
-    super()
-    @show()
-    @_attachRadioListeners()
-
-
-  ###*
-  # Marks this radio button as selected, if it is enabled.
-  #
-  # @method select
-  # @memberof stout-ui/radio/RadioButton#
-  ###
-  onSelect: =>
-    if @enabled and not @selected
-      @fire 'select'
-      @_select()
-
-
-  ###*
-  # Unselects this radio button, if it is enabled.
-  #
-  # @method unselect
-  # @memberof stout-ui/radio/RadioButton#
-  ###
-  onUnselect: ->
-    if @enabled
-      @fire 'unselect'
-      @_unselect()
