@@ -14,27 +14,26 @@
   $ri: #{$prefix}#{$select-box-indicator-class}
   $rl: #{$prefix}#{$select-box-label-class}
 
+  $fill: #{$prefix}#{$fill-container-class}
+  $ink: #{$prefix}#{$ink-container-class}
+  $selected: #{$prefix}#{$select-box-selected-class}
+
   .#{$prefix}#{$select-box-class}
     +display(flex)
     +align-items(center)
     cursor: pointer
 
-    &.#{$prefix}#{$select-box-selected-class} .#{$ri}
-      border: $select-box-selected-border
-
     .#{$rl}
       @extend %typography-body-1
 
     .#{$ri}
+      +transition(border 1s)
       width: $select-box-normal-size
       height: $select-box-normal-size
       margin-right: 1em
       border-radius: 2px
       position: relative
       padding: $select-box-padding
-      border: $select-box-border
-      background-color: $select-box-bg-color
-      +transition(border 1s)
 
       .#{$prefix}#{$select-box-fill-bounds}
         overflow: hidden
@@ -42,31 +41,111 @@
         height: 100%
         width: 100%
 
-      .#{$prefix}#{$fill-container-class}
-        +set-ink-color($select-box-selected-color)
+      .#{$fill}
         @extend %cover-parent
 
-      .#{$prefix}#{$ink-container-class}
-        +set-ink-color($select-box-ink-color)
+      .#{$ink}
         @extend%cover-parent
         z-index: -1
 
-      &.#{$prefix}tiny
-        width: $select-box-tiny-size
-        height: $select-box-tiny-size
 
-      &.#{$prefix}small
-        width: $select-box-small-size
-        height: $select-box-small-size
+    // Select Box Colors
 
-      &.#{$prefix}large
-        width: $select-box-large-size
-        height: $select-box-large-size
+    &, &.#{$prefix}default
 
-      &.#{$prefix}huge
-        width: $select-box-huge-size
-        height: $select-box-huge-size
+      .#{$ri}
+        border: $select-box-default-border
+        background: $select-box-default-bg
 
-      &.#{$prefix}massive
-        width: $select-box-massive-size
-        height: $select-box-massive-size
+      &.#{$selected} .#{$ri}
+        border: $select-box-default-sel-border
+
+      .#{$fill}
+        +set-ink-color($select-box-default-bg)
+
+      .#{$ink}
+        +set-ink-color($select-box-default-ink)
+
+    &.#{$prefix}inverse
+
+      .#{$ri}
+        border: $select-box-inverse-border
+        background: $select-box-default-bg
+
+      &.#{$selected} .#{$ri}
+        border: $select-box-inverse-sel-border
+
+      .#{$fill}
+        +set-ink-color($select-box-inverse-bg)
+
+      .#{$ink}
+        +set-ink-color($select-box-inverse-ink)
+
+    &.#{$prefix}primary
+
+      .#{$ri}
+        border: $select-box-primary-border
+        background: lighten($select-box-primary-bg, 45%)
+
+      &.#{$selected} .#{$ri}
+        border: $select-box-primary-sel-border
+
+      .#{$fill}
+        +set-ink-color($select-box-primary-bg)
+
+      .#{$ink}
+        +set-ink-color($select-box-primary-ink)
+
+    &.#{$prefix}warn
+
+      .#{$ri}
+        border: $select-box-warn-border
+        background: lighten($select-box-warn-bg, 45%)
+
+      &.#{$selected} .#{$ri}
+        border: $select-box-warn-sel-border
+
+      .#{$fill}
+        +set-ink-color($select-box-warn-bg)
+
+      .#{$ink}
+        +set-ink-color($select-box-warn-ink)
+
+    &.#{$prefix}danger
+
+      .#{$ri}
+        border: $select-box-danger-border
+        background: lighten($select-box-danger-bg, 62%)
+
+      &.#{$selected} .#{$ri}
+        border: $select-box-danger-sel-border
+
+      .#{$fill}
+        +set-ink-color($select-box-danger-bg)
+
+      .#{$ink}
+        +set-ink-color($select-box-danger-ink)
+
+
+
+    // Select Box Sizes
+
+    &.#{$prefix}tiny .#{$ri}
+      width: $select-box-tiny-size
+      height: $select-box-tiny-size
+
+    &.#{$prefix}small .#{$ri}
+      width: $select-box-small-size
+      height: $select-box-small-size
+
+    &.#{$prefix}large .#{$ri}
+      width: $select-box-large-size
+      height: $select-box-large-size
+
+    &.#{$prefix}huge .#{$ri}
+      width: $select-box-huge-size
+      height: $select-box-huge-size
+
+    &.#{$prefix}massive .#{$ri}
+      width: $select-box-massive-size
+      height: $select-box-massive-size

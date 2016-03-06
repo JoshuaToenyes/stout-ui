@@ -23,3 +23,11 @@ window.onload = ->
       parent: ".size-#{size}"
       size: size
     .render()
+
+
+  for style in ['default', 'inverse', 'primary', 'danger', 'warn']
+    new Checkbox
+      label: "This is a <code>#{style}</code> checkbox."
+      parent: ".style-#{style}"
+      style: style
+    .render()

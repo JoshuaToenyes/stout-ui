@@ -13,21 +13,27 @@
     width: 140%
     left: -20%
     top: -19%
-    display: none
+    opacity: 0
     z-index: 100
+    +transition(opacity 330ms)
 
   .#{$cc} .#{$prefix}#{$select-box-indicator-class}
     padding: 0
     width: $select-box-normal-size + $select-box-padding
     height: $select-box-normal-size + $select-box-padding
 
-  .#{$cc}.#{$prefix}#{$select-box-selected-class} svg
-    display: block
+  .#{$cc}.#{$prefix}#{$select-box-selected-class}
 
-    path
-      fill: $checkbox-check-color
+    svg
+      opacity: 1
+      path
+        fill: $select-box-inverse-fg
 
+    &.#{$prefix}default
+      svg path
+        fill: $select-box-default-fg
 
+  // Size Adjustments
 
   .#{$cc}
 
