@@ -73,6 +73,16 @@ FILL_BOUNDS_CLS = vars.readPrefixed 'radio/radio-fill-bounds'
 SELECTED_CLS = vars.readPrefixed 'radio/radio-selected-class'
 
 
+###*
+# The size of the ink ripple, relative to the size of the check box (in
+# percent).
+# @type number
+# @const
+# @private
+###
+INK_SIZE = vars.readNumber 'radio/radio-ink-size'
+
+
 module.exports = class RadioButton extends Container
 
   ###*
@@ -195,6 +205,26 @@ module.exports = class RadioButton extends Container
     @root.addEventListener 'click', @onSelect
     @root.addEventListener 'touchstart', @onSelect
 
+    indicator = @select(".#{@viewClasses.indicator}")
+    indicator.addEventListener 'click', @_rippleSelectionInk
+    indicator.addEventListener 'touchstart', @_rippleSelectionInk
+
+
+  ###*
+  # Shows ink ripple effect emanating from center of radio button.
+  #
+  # @method _rippleSelectionInk
+  # @memberof stout-ui/radio/RadioButton#
+  # @private
+  ###
+  _rippleSelectionInk: =>
+    console.log 'got click'
+    inkContainer = @select(".#{@viewClasses.inkContainer}")
+    h = inkContainer.getBoundingClientRect().height
+    inkSize = h * INK_SIZE / 100
+    if @ink
+      @rippleInk @select(".#{@viewClasses.inkContainer}"), inkSize
+
 
   ###*
   # Marks this radio button as selected and fills the indicator.
@@ -232,7 +262,6 @@ module.exports = class RadioButton extends Container
     super()
     @show()
     @_attachRadioListeners()
-    if @ink then @initInkMouseEvents @select ".#{@viewClasses.indicator}"
 
 
   ###*

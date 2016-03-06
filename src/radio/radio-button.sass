@@ -45,11 +45,7 @@
 
       .#{$prefix}#{$ink-container-class}
         +set-ink-color($radio-ink-color)
-        position: absolute
-        left: -($radio-ink-size - 100%) / 2
-        top: -($radio-ink-size - 100%) / 2
-        height: $radio-ink-size
-        width: $radio-ink-size
+        @extend%cover-parent
         z-index: -1
 
     .#{$rl}

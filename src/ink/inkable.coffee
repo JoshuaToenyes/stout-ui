@@ -284,3 +284,32 @@ module.exports =
     ink = @getInk container
     for i in ink
       i.parentElement?.removeChild i
+
+
+  ###*
+  # Creates an ink ripple, emanating from the center of the passed container.
+  #
+  ###
+  rippleInk: (container, size) ->
+    r = container.getBoundingClientRect()
+    left = r.width / 2
+    top = r.height / 2
+    ink = @expandInk(container, left, top, size, size)
+
+    t = Date.now()
+
+    expandsionTime = @inkExpansionTime(size, size)
+    tOffset = expandsionTime + T_OFFSET - (Date.now() - t)
+
+    setTimeout =>
+      @fadeInk(ink, tOffset)
+    , 0
+
+    # Add an event listener for the mouseup event anywhere, then remove the
+    # listener once the event has occurred.
+    # fn = (e) =>
+    #   expandsionTime = @inkExpansionTime(size, size)
+    #   tOffset = expandsionTime + T_OFFSET - (Date.now() - t)
+    #   @fadeInk(ink, tOffset)
+    #   document.removeEventListener 'mouseup', fn
+    # document.addEventListener 'mouseup', fn

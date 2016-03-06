@@ -11,4 +11,4 @@ radio-border:           1px solid lighten($color-fg, 58%) !default
 radio-selected-border:  1px solid $radio-selected-color !default
 
 radio-ink-size:         130%
-radio-ink-color:        rgba($radio-selected-color, 0.23)
+radio-ink-color:        rgba($radio-selected-color, 0.5)

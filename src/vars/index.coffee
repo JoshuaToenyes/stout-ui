@@ -56,5 +56,11 @@ module.exports =
       throw new err.Err "UI variable \"#{varPath}\" is not in time units."
 
 
+
+  readNumber: (varPath) ->
+    v = read varPath
+    parseFloat v
+
+
   readPrefixed: (varPath) ->
     read('common/prefix') + read(varPath)
