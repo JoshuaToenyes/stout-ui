@@ -96,7 +96,7 @@ window.onload = ->
     parent: '.show-hide .subject'
     style: 'primary'
     classes: 'show-hide-subject'
-  .render()
+  showButtonEx.render()
 
   new Button
     label: 'Show'
