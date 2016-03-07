@@ -217,12 +217,9 @@ module.exports = class SelectBox extends Container
   # @private
   ###
   _attachSelectBoxListeners: ->
-    @root.addEventListener 'click', @onSelectBoxClick
-    @root.addEventListener 'touchstart', @onSelectBoxClick
-
     indicator = @select(".#{@viewClasses.indicator}")
-    indicator.addEventListener 'click', @_rippleSelectionInk
-    indicator.addEventListener 'touchstart', @_rippleSelectionInk
+    @addEventListener 'clickish', @onSelectBoxClick
+    @addEventListenerTo indicator, 'clickish', @_rippleSelectionInk
 
 
   ###*

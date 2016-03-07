@@ -15,23 +15,21 @@
     top: -19%
     opacity: 0
     z-index: 100
-    +transition(opacity 330ms)
+    +transition(opacity 400ms $ease-in-out-expo)
+
+    path
+      fill: $select-box-inverse-fg
+
+  .#{$cc}.#{$prefix}default svg path
+    fill: $select-box-default-fg
 
   .#{$cc} .#{$prefix}#{$select-box-indicator-class}
     padding: 0
     width: $select-box-normal-size + $select-box-padding
     height: $select-box-normal-size + $select-box-padding
 
-  .#{$cc}.#{$prefix}#{$select-box-selected-class}
-
-    svg
-      opacity: 1
-      path
-        fill: $select-box-inverse-fg
-
-    &.#{$prefix}default
-      svg path
-        fill: $select-box-default-fg
+  .#{$cc}.#{$prefix}#{$select-box-selected-class} svg
+    opacity: 1
 
   // Size Adjustments
 
