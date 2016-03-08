@@ -11,7 +11,7 @@ vars      = require '../vars'
 
 
 # Require necessary shared variables.
-require '../vars/radio'
+require '../vars/radio-button'
 
 
 ###*
@@ -20,7 +20,7 @@ require '../vars/radio'
 # @const
 # @private
 ###
-RADIO_CLS = vars.read 'radio/radio-class'
+RADIO_CLS = vars.read 'radio-button/radio-button-class'
 
 
 module.exports = class RadioButton extends SelectBox

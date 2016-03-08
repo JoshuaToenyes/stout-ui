@@ -1,14 +1,30 @@
 ###*
 # @overview Defines a radio button group, in-which only a single radio button
 # may be selected at a time.
+#
 # @module stout-ui/radio/RadioGroup
 ###
 
-Foundation = require 'stout-core/base/Foundation'
-forEach    = require 'lodash/forEach'
+assign          = require 'lodash/assign'
+forEach         = require 'lodash/forEach'
+Component = require '../common/Component'
+RadioButton     = require './RadioButton'
+
+# Require necessary shared variables.
+require '../vars/radio-group'
 
 
-module.exports = class RadioGroup extends Foundation
+###*
+# The class applied to the root radio group element.
+# @type string
+# @const
+# @private
+###
+RADIO_GROUP_CLS = vars.read 'radio-group/radio-group-class'
+
+
+
+module.exports = class RadioGroup extends Component
 
   ###*
   # A mutually exclusive set of radio buttons.
@@ -17,8 +33,10 @@ module.exports = class RadioGroup extends Foundation
   # @extends stout-core/base/Foundation
   # @constructor
   ###
-  constructor: ->
-    super(null, 'selection')
+  constructor: (init) ->
+    super null, null, {renderOnChange: false}, init, ['selection']
+    @tagName = 'ul'
+    @prefixedClasses.add RADIO_GROUP_CLS
     @_members = []
 
 
@@ -80,6 +98,26 @@ module.exports = class RadioGroup extends Foundation
 
 
   ###*
+  # Creates and adds a new radio button to this radio button group.
+  #
+  # @param {Object} init - Initiation parameters for the radio button.
+  #
+  # @returns {stout-ui/radio/RadioButton} The created radio button.
+  #
+  # @method addButton
+  # @memberof stout-ui/radio/RadioGroup#
+  ###
+  addButton: (init) ->
+    assign init,
+      group: @
+      parent: @root
+      tagName: 'li'
+    b = new RadioButton init
+    @add b
+    b
+
+
+  ###*
   # Returns `true` or `false` to indicate if the passed radio button is a
   # member of this radio group.
   #
@@ -113,3 +151,18 @@ module.exports = class RadioGroup extends Foundation
       button.off 'select', @_onSelection
       @_members.splice @_members.indexOf(button), 1
       true
+
+
+  ###*
+  # Renders this radio button group and all contained radio buttons.
+  #
+  # @returns {HTMLElement} The root HTML element for this radio button group.
+  #
+  # @method render
+  # @memberof stout-ui/radio/RadioGroup#
+  ###
+  render: ->
+    r = super()
+    for button in @_members
+      button.render()
+    r

@@ -11,28 +11,34 @@ window.onload = ->
 
 
 
-  window.group = group = new RadioGroup()
+  window.group = group = new RadioGroup parent: '.group'
 
-  group.on 'selection:change', (e) ->
-    console.log 'selection change!', e
+  group.addButton label: 'Selection X'
+  group.addButton label: 'Selection Y'
+  group.addButton label: 'Selection Z'
 
-  btna = new RadioButton
-    label: 'Selection A'
-    parent: '.group'
-    group: group
+  group.render()
 
-  btna.render()
-  btna.on 'select', -> console.log 'You have selected A!'
-  btna.on 'unselect', -> console.log 'You have unselected A...'
-
-  new RadioButton
-    label: 'Selection B'
-    parent: '.group'
-    group: group
-  .render()
-
-  new RadioButton
-    label: 'Selection C'
-    parent: '.group'
-    group: group
-  .render()
+  # group.on 'selection:change', (e) ->
+  #   console.log 'selection change!', e
+  #
+  # btna = new RadioButton
+  #   label: 'Selection A'
+  #   parent: '.group'
+  #   group: group
+  #
+  # btna.render()
+  # btna.on 'select', -> console.log 'You have selected A!'
+  # btna.on 'unselect', -> console.log 'You have unselected A...'
+  #
+  # new RadioButton
+  #   label: 'Selection B'
+  #   parent: '.group'
+  #   group: group
+  # .render()
+  #
+  # new RadioButton
+  #   label: 'Selection C'
+  #   parent: '.group'
+  #   group: group
+  # .render()
