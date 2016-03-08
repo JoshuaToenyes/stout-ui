@@ -3,42 +3,40 @@ RadioGroup = require '../../radio/RadioGroup'
 
 window.onload = ->
 
-  window.rb = new RadioButton
+  new RadioButton
     label: 'Select this test item.'
     parent: '.simple'
+  .render()
 
-  window.rb.render()
+  g = new RadioGroup parent: '.group'
+  g.addButton label: 'Selection X'
+  g.addButton label: 'Selection Y'
+  g.addButton label: 'Selection Z'
+  g.render()
 
 
+  for size in ['tiny', 'small', 'normal', 'large', 'huge', 'massive']
+    g = new RadioGroup parent: ".size-#{size}"
+    g.addButton
+      label: "Selection A of size #{size}."
+      size: size
+    g.addButton
+      label: "Selection B of size #{size}."
+      size: size
+    g.addButton
+      label: "Selection C of size #{size}."
+      size: size
+    g.render()
 
-  window.group = group = new RadioGroup parent: '.group'
-
-  group.addButton label: 'Selection X'
-  group.addButton label: 'Selection Y'
-  group.addButton label: 'Selection Z'
-
-  group.render()
-
-  # group.on 'selection:change', (e) ->
-  #   console.log 'selection change!', e
-  #
-  # btna = new RadioButton
-  #   label: 'Selection A'
-  #   parent: '.group'
-  #   group: group
-  #
-  # btna.render()
-  # btna.on 'select', -> console.log 'You have selected A!'
-  # btna.on 'unselect', -> console.log 'You have unselected A...'
-  #
-  # new RadioButton
-  #   label: 'Selection B'
-  #   parent: '.group'
-  #   group: group
-  # .render()
-  #
-  # new RadioButton
-  #   label: 'Selection C'
-  #   parent: '.group'
-  #   group: group
-  # .render()
+  for style in ['default', 'inverse', 'primary', 'danger', 'warn']
+    g = new RadioGroup parent: ".style-#{style}"
+    g.addButton
+      label: "Selection A of style #{style}."
+      style: style
+    g.addButton
+      label: "Selection B of style #{style}."
+      style: style
+    g.addButton
+      label: "Selection C of style #{style}."
+      style: style
+    g.render()
