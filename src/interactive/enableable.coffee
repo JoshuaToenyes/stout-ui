@@ -1,6 +1,7 @@
 ###*
 # @overview Defines the `enableable` trait, which adds enable/disable methods
 # and properties to the using class.
+#
 # @module stout-ui/interactive/enableable
 ###
 
@@ -14,11 +15,7 @@
 module.exports =
 
   ###*
-  # Disabled this interactive component. By default it add the `disabled`
-  # attribute to the element returned by `_getDisableTarget()`. This behavior
-  # may be overriden by extending classes for more complex behavior. If this
-  # component is not yet rendered, or is already disabled calling this method
-  # has no effect.
+  # Disabled this interactive component.
   #
   # @returns @
   #
@@ -27,16 +24,12 @@ module.exports =
   ###
   disable: ->
     @_disabled = true
-    if @rendered then @_getDisableTarget().setAttribute 'disabled', ''
+    if @rendered then @prefixedClasses.add 'disabled'
     @
 
 
   ###*
-  # Enables this interactive component. By default it removes the `disabled`
-  # attribute from the element returned by `_getDisableTarget()`. This behavior
-  # may be overriden by extending classes for more complex behavior. If this
-  # component is not yet rendered, or is not disabled calling this method has
-  # no effect.
+  # Enables this interactive component.
   #
   # @returns @
   #
@@ -45,7 +38,7 @@ module.exports =
   ###
   enable: ->
     @_disabled = false
-    if @rendered then @_getDisableTarget().removeAttribute 'disabled'
+    if @rendered then @prefixedClasses.remove 'disabled'
     @
 
 
@@ -66,7 +59,7 @@ module.exports =
 
 
   ###*
-  # Returns the inverse of `isEnabled()`.
+  # Returns `true` if this component is disabled.
   #
   # @see #isEnabled()
   #
@@ -80,10 +73,7 @@ module.exports =
 
   ###*
   # Returns `true` or `false` indicating if this component is currently
-  # disabled. By default it just indicates if the element returned by
-  # `_getDisableTarget()` has the attribute `disabled`. This behavior may be
-  # overriden by extending classes for more complex functionality. This method
-  # will return `false` if the component is not rendered.
+  # enabled.
   #
   # @returns {boolean} `true` if enabled, otherwise false.
   #

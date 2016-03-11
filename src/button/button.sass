@@ -9,54 +9,55 @@
 
 +exports("button/button")
 
-  $btn-visible: #{$prefix}#{$visible}
+  $btn-visible:     #{$prefix}#{$visible}
+  $btn-focus:       #{$prefix}focus
+  $btn-active:      #{$prefix}active
+  $btn-hover:       #{$prefix}hover
+  $indicator:       #{$prefix}indicator
+  $label:           #{$prefix}label
+  $ink-container:   #{$prefix}ink-container
+  $fill-container:  #{$prefix}fill-container
 
   .#{$prefix}#{$button-class}
     @extend %inline-component
     +user-select(none)
+    +transition(box-shadow 400ms)
 
-    .#{$prefix}indicator
+    button:hover
+      cursor: pointer
+
+    .#{$indicator}
       @extend %cover-parent
       z-index: 5
 
-    .#{$prefix}label
+    .#{$label}
       +transition(color $button-label-transition-time)
       color: transparent
       position: relative
       z-index: 20
 
-    .#{$prefix}ink-container
-      display: none
-
-    &.#{$btn-visible} button
-      cursor: pointer
+    &.#{$btn-visible}
       box-shadow: 1px 1px $button-shadow-size $button-shadow
 
-      &:focus
-        box-shadow: 1px 1px $button-shadow-size $button-shadow-focus
+    &.#{$btn-focus}
+      box-shadow: 1px 1px $button-shadow-size $button-shadow-focus
 
-      &:active:not([disabled])
-        box-shadow: 1px 1px $button-shadow-size $button-shadow-active
+    &.#{$btn-active}
+      box-shadow: 1px 1px $button-shadow-size $button-shadow-active
 
-      &:hover
-        box-shadow: 1px 1px $button-shadow-size $button-shadow-hover
-
-      .#{$prefix}ink-container
-        display: block
-        /*+set-ink-color($button-primary-ink)*/
+    &.#{$btn-hover}
+      box-shadow: 1px 1px $button-shadow-size $button-shadow-hover
 
     button
-      +transition(box-shadow 400ms)
       outline: none
       border: none
       border-radius: $button-radius
       padding: $button-padding
-      cursor: default
       position: relative
       overflow: hidden
       background: none
 
-      .#{$prefix}indicator
+      .#{$indicator}
         +transition(background-color 400ms)
 
 
@@ -64,174 +65,175 @@
 
     // ### Normal Button Style
 
-    &.#{$btn-visible} button
-      &:focus
+    &.#{$btn-visible}
+      &.#{$btn-focus}
         box-shadow: 1px 1px $button-shadow-size $button-shadow-focus
-        .#{$prefix}indicator
+        .#{$indicator}
           background-color: $button-focus
-      &:active:not([disabled])
+      &.#{$btn-active}
         box-shadow: 1px 1px $button-shadow-size $button-shadow-active
-      &:hover
+      &.#{$btn-hover}
         box-shadow: 1px 1px $button-shadow-size $button-shadow-hover
-        .#{$prefix}indicator
+        .#{$indicator}
           background-color: $button-hover
-      .#{$prefix}fill-container
+      .#{$fill-container}
         +set-ink-color($button-bg)
-      .#{$prefix}ink-container
+      .#{$ink-container}
         +set-ink-color($button-ink)
-      .#{$prefix}label
+      .#{$label}
         color: $button-fg
 
 
     // ### Inverse Button Style
 
-    &.#{$btn-visible}.#{$prefix}inverse button
-      &:focus
+    &.#{$btn-visible}.#{$prefix}inverse
+      &.#{$btn-focus}
         box-shadow: 1px 1px $button-shadow-size $button-inverse-shadow-focus
-        .#{$prefix}indicator
+        .#{$indicator}
           background-color: $button-inverse-focus
-      &:active:not([disabled])
+      &.#{$btn-active}
         box-shadow: 1px 1px $button-shadow-size $button-inverse-shadow-active
-      &:hover
+      &.#{$btn-hover}
         box-shadow: 1px 1px $button-shadow-size $button-inverse-shadow-hover
-        .#{$prefix}indicator
+        .#{$indicator}
           background-color: $button-inverse-hover
-      .#{$prefix}fill-container
+      .#{$fill-container}
         +set-ink-color($button-inverse-bg)
-      .#{$prefix}ink-container
+      .#{$ink-container}
         +set-ink-color($button-inverse-ink)
-      .#{$prefix}label
+      .#{$label}
         color: $button-inverse-fg
 
 
     // ### Primary Button Style
 
-    &.#{$btn-visible}.#{$prefix}primary button
+    &.#{$btn-visible}.#{$prefix}primary
       box-shadow: 1px 1px $button-shadow-size $button-primary-shadow
-      &:focus
+      &.#{$btn-focus}
         box-shadow: 1px 1px $button-shadow-size $button-primary-shadow-focus
-        .#{$prefix}indicator
+        .#{$indicator}
           background-color: $button-primary-focus
-      &:active:not([disabled])
+      &.#{$btn-active}
         box-shadow: 1px 1px $button-shadow-size $button-primary-shadow-active
-      &:hover
+      &.#{$btn-hover}
         box-shadow: 1px 1px $button-shadow-size $button-primary-shadow-hover
-        .#{$prefix}indicator
+        .#{$indicator}
           background-color: $button-primary-hover
-      .#{$prefix}fill-container
+      .#{$fill-container}
         +set-ink-color($button-primary-bg)
-      .#{$prefix}ink-container
+      .#{$ink-container}
         +set-ink-color($button-primary-ink)
-      .#{$prefix}label
+      .#{$label}
         color: $button-primary-fg
 
 
     // ### Warn Button Style
 
-    &.#{$btn-visible}.#{$prefix}warn button
+    &.#{$btn-visible}.#{$prefix}warn
       box-shadow: 1px 1px $button-shadow-size $button-warn-shadow
-      &:focus
+      &.#{$btn-focus}
         box-shadow: 1px 1px $button-shadow-size $button-warn-shadow-focus
-        .#{$prefix}indicator
+        .#{$indicator}
           background-color: $button-warn-focus
-      &:active:not([disabled])
+      &.#{$btn-active}
         box-shadow: 1px 1px $button-shadow-size $button-warn-shadow-active
-      &:hover
+      &.#{$btn-hover}
         box-shadow: 1px 1px $button-shadow-size $button-warn-shadow-hover
-        .#{$prefix}indicator
+        .#{$indicator}
           background-color: $button-warn-hover
-      .#{$prefix}fill-container
+      .#{$fill-container}
         +set-ink-color($button-warn-bg)
-      .#{$prefix}ink-container
+      .#{$ink-container}
         +set-ink-color($button-warn-ink)
-      .#{$prefix}label
+      .#{$label}
         color: $button-warn-fg
 
 
     // ### Danger Button Style
 
-    &.#{$btn-visible}.#{$prefix}danger button
+    &.#{$btn-visible}.#{$prefix}danger
       box-shadow: 1px 1px $button-shadow-size $button-danger-shadow
-      &:focus
+      &.#{$btn-focus}
         box-shadow: 1px 1px $button-shadow-size $button-danger-shadow-focus
-        .#{$prefix}indicator
+        .#{$indicator}
           background-color: $button-danger-focus
-      &:active:not([disabled])
+      &.#{$btn-active}
         box-shadow: 1px 1px $button-shadow-size $button-danger-shadow-active
-      &:hover
+      &.#{$btn-hover}
         box-shadow: 1px 1px $button-shadow-size $button-danger-shadow-hover
-        .#{$prefix}indicator
+        .#{$indicator}
           background-color: $button-danger-hover
-      .#{$prefix}fill-container
+      .#{$fill-container}
         +set-ink-color($button-danger-bg)
-      .#{$prefix}ink-container
+      .#{$ink-container}
         +set-ink-color($button-danger-ink)
-      .#{$prefix}label
+      .#{$label}
         color: $button-danger-fg
-
-
-    // ### Disabled Button Style
-
-    &.#{$btn-visible} button[disabled]
-      box-shadow: none
-      cursor: not-allowed
-      &:focus
-        box-shadow: none
-        .#{$prefix}indicator
-          background-color: $button-disabled-bg
-      &:hover
-        box-shadow: none
-        .#{$prefix}indicator
-          background-color: $button-disabled-bg
-      .#{$prefix}indicator
-        background-color: $button-disabled-bg
-      .#{$prefix}fill-container
-        +set-ink-color($button-disabled-bg)
-      .#{$prefix}label
-        color: $button-disabled-fg
-        text-shadow: 1px 1px 1px darken(white, 4%)
-
 
 
     // ### Flat button Styles
 
-    &.#{$btn-visible}.#{$prefix}normal-flat button,
-    &.#{$btn-visible}.#{$prefix}primary-flat button,
-    &.#{$btn-visible}.#{$prefix}inverse-flat button,
-    &.#{$btn-visible}.#{$prefix}warn-flat button,
-    &.#{$btn-visible}.#{$prefix}danger-flat button
+    &.#{$btn-visible}.#{$prefix}normal-flat,
+    &.#{$btn-visible}.#{$prefix}primary-flat,
+    &.#{$btn-visible}.#{$prefix}inverse-flat,
+    &.#{$btn-visible}.#{$prefix}warn-flat,
+    &.#{$btn-visible}.#{$prefix}danger-flat
       box-shadow: none !important
-      &:focus
-        .#{$prefix}indicator
+
+      &.#{$btn-focus}
+        .#{$indicator}
           background-color: $button-focus
-      &:active:not([disabled])
-      &:hover
-        .#{$prefix}indicator
+
+      &.#{$btn-active},
+      &.#{$btn-hover}
+        .#{$indicator}
           background-color: $button-bg
-      .#{$prefix}fill-container
+
+      .#{$fill-container}
         +set-ink-color(transparent)
-      .#{$prefix}ink-container
+
+      .#{$ink-container}
         +set-ink-color($button-ink)
 
-    &.#{$btn-visible}.#{$prefix}normal-flat button
-      .#{$prefix}label
-        color: $button-fg
+    &.#{$btn-visible}.#{$prefix}normal-flat .#{$label}
+      color: $button-fg
 
-    &.#{$btn-visible}.#{$prefix}primary-flat button
-      .#{$prefix}label
-        color: $button-primary-bg
+    &.#{$btn-visible}.#{$prefix}primary-flat .#{$label}
+      color: $button-primary-bg
 
-    &.#{$btn-visible}.#{$prefix}inverse-flat button
-      .#{$prefix}label
-        color: $button-inverse-bg
+    &.#{$btn-visible}.#{$prefix}inverse-flat .#{$label}
+      color: $button-inverse-bg
 
-    &.#{$btn-visible}.#{$prefix}warn-flat button
-      .#{$prefix}label
-        color: $button-warn-bg
+    &.#{$btn-visible}.#{$prefix}warn-flat .#{$label}
+      color: $button-warn-bg
 
-    &.#{$btn-visible}.#{$prefix}danger-flat button
-      .#{$prefix}label
-        color: $button-danger-bg
+    &.#{$btn-visible}.#{$prefix}danger-flat .#{$label}
+      color: $button-danger-bg
+
+    // ### Disabled Button Style
+
+    &.#{$btn-visible}.#{$prefix}disabled
+      box-shadow: none
+
+      button:hover
+        cursor: not-allowed
+
+      .#{$ink-container}
+        display: none
+
+      &.#{$btn-focus},
+      &.#{$btn-hover},
+        box-shadow: none
+        .#{$indicator}
+          background-color: $button-disabled-bg
+
+      .#{$indicator}
+        background-color: $button-disabled-bg
+      .#{$fill-container}
+        +set-ink-color($button-disabled-bg)
+      .#{$label}
+        color: $button-disabled-fg
+        text-shadow: 1px 1px 1px darken(white, 4%)
 
 
     // ## Button Sizes

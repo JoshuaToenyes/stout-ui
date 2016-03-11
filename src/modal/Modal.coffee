@@ -281,17 +281,8 @@ module.exports = class Modal extends Container
 
 
   transitionIn: (time, cb) ->
-    super(time, cb)
-
-    # Position the modal for its opening animation.
-    @_positionForOpen()
-
     pos = @_calcRelativePostion()
-
-    @_positionContents()
-
-    @on 'transition:in', ->
-
+    @once 'transition:in', ->
       # Calculate the relative position of where the modal window animation
       # should end. The calculated position is in percent and measures from each
       # edge of the screen (top, right, bottom, left).
@@ -299,6 +290,12 @@ module.exports = class Modal extends Container
       @root.style.right = pos.right
       @root.style.bottom = pos.bottom
       @root.style.left = pos.left
+
+    super(time, cb)
+
+    # Position the modal for its opening animation.
+    @_positionForOpen()
+    @_positionContents()
 
 
   ###*
@@ -311,16 +308,16 @@ module.exports = class Modal extends Container
   close: ->
     closePromise = new Promise()
 
-    backdrop().transitionOut()
-
     pos = @_calcActivatorBounds()
 
-    @root.style.top = pos.top
-    @root.style.right = pos.right
-    @root.style.bottom = pos.bottom
-    @root.style.left = pos.left
+    backdrop().transitionOut()
 
-    #animate @root, pos, TRANS_OUT_TIME, cubicInOut
+    setTimeout =>
+      @root.style.top = pos.top
+      @root.style.right = pos.right
+      @root.style.bottom = pos.bottom
+      @root.style.left = pos.left
+    , 0
 
     window.removeEventListener 'resize', @_resizeHandler
 

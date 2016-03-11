@@ -191,18 +191,6 @@ module.exports = class Button extends Interactive
 
 
   ###*
-  # Returns the element that should trigger a hover event (the button element).
-  #
-  # @returns {HTMLElement} The button DOM node.
-  #
-  # @method _getHoverTarget
-  # @override
-  # @protected
-  ###
-  _getHoverTarget: @.prototype._getButton
-
-
-  ###*
   # Disables the button.
   #
   #
@@ -222,6 +210,31 @@ module.exports = class Button extends Interactive
       @_enable()
       @emptyFill()
       @fill()
+
+
+  ###*
+  # Returns the element that should trigger a hover event (the button element).
+  #
+  # @returns {HTMLElement} The button DOM node.
+  #
+  # @method getHoverTarget
+  # @override
+  # @protected
+  ###
+  getHoverTarget: @.prototype._getButton
+
+
+  ###*
+  # Returns the element that should trigger focus and blur events (the button
+  # element).
+  #
+  # @returns {HTMLElement} The button DOM node.
+  #
+  # @method getFocusTarget
+  # @override
+  # @protected
+  ###
+  getFocusTarget: @.prototype._getButton
 
 
   ###*
