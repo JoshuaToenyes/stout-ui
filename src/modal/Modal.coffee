@@ -239,6 +239,25 @@ module.exports = class Modal extends Container
 
 
   ###*
+  # Closes this modal window.
+  #
+  #
+  # @memberof stout-ui/modal/Modal#
+  # @public
+  ###
+  close: ->
+    closePromise = new Promise()
+
+    backdrop().transitionOut()
+
+    window.removeEventListener 'resize', @_resizeHandler
+
+    @transitionOut TRANS_OUT_TIME, =>
+      Promise.resolve closePromise
+      @unrender()
+
+
+  ###*
   # Opens the modal window.
   #
   # @param {Event} [e] - Event that triggered the opening of this modal.
@@ -291,36 +310,20 @@ module.exports = class Modal extends Container
       @root.style.bottom = pos.bottom
       @root.style.left = pos.left
 
-    super(time, cb)
-
     # Position the modal for its opening animation.
     @_positionForOpen()
     @_positionContents()
 
+    super(time, cb)
 
-  ###*
-  # Closes this modal window.
-  #
-  #
-  # @memberof stout-ui/modal/Modal#
-  # @public
-  ###
-  close: ->
-    closePromise = new Promise()
 
+
+  transitionOut: (time, cb) ->
     pos = @_calcActivatorBounds()
-
-    backdrop().transitionOut()
-
-    setTimeout =>
+    @once 'transition:out', ->
       @root.style.top = pos.top
       @root.style.right = pos.right
       @root.style.bottom = pos.bottom
       @root.style.left = pos.left
-    , 0
 
-    window.removeEventListener 'resize', @_resizeHandler
-
-    @transitionOut TRANS_OUT_TIME, =>
-      Promise.resolve closePromise
-      #@destroy()
+    super(time, cb)

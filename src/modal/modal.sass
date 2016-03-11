@@ -26,7 +26,8 @@
       opacity: 1
 
     .#{$cc}
-      +transition-duration($modal-trans-in-time * 0.8)
+      +transition-duration($modal-trans-in-time * 2)
+      +transition-delay($modal-trans-in-time * 0.8)
 
 
   .#{$prefix}#{$modal-class}
