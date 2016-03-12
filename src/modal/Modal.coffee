@@ -235,7 +235,7 @@ module.exports = class Modal extends Container
   # @protected
   ###
   _resizeHandler: =>
-    @_positionModalElement()
+    @setFinalSize()
 
 
   ###*
@@ -299,31 +299,117 @@ module.exports = class Modal extends Container
 
 
 
-  transitionIn: (time, cb) ->
-    pos = @_calcRelativePostion()
-    @once 'transition:in', ->
-      # Calculate the relative position of where the modal window animation
-      # should end. The calculated position is in percent and measures from each
-      # edge of the screen (top, right, bottom, left).
-      @root.style.top = pos.top
-      @root.style.right = pos.right
-      @root.style.bottom = pos.bottom
-      @root.style.left = pos.left
+  calculateInitialSize: ->
+    # Get button bounding rectangle if an activator is registered, otherwise
+    # open the modal from the center of the window.
+    if @_activator
+      b = @_activator.getBoundingClientRect()
+    else
+      b = width: 30, height: 30
 
-    # Position the modal for its opening animation.
-    @_positionForOpen()
-    @_positionContents()
+    [b.width, b.height]
+
+
+
+  calculateFinalSize: ->
+    h = @height
+    w = @width
+
+    content = @select('.' + CONTENTS_CLS)
+
+    flash = @hidden and not @transitioning
+
+    if flash then @show()
+    rect = content.getBoundingClientRect()
+    if flash then @hide()
+
+    if @height is 'auto' then h = rect.height
+    if @width is 'auto' then w = rect.width
+
+    [w, h]
+
+
+  calculateInitialCenter: ->
+    H = window.innerHeight
+    W = window.innerWidth
+
+    # Get button bounding rectangle if an activator is registered, otherwise
+    # open the modal from the center of the window.
+    if @_activator
+      b = @_activator.getBoundingClientRect()
+    else
+      b = left: W / 2, width: 0, top: H / 2, height: 0
+
+    [b.left + 0.5 * b.width, b.top + 0.5 * b.height]
+
+
+  calculateFinalCenter: ->
+    H = window.innerHeight
+    W = window.innerWidth
+    [W / 2, H / 2]
+
+
+  # Calculates the matrix transform parameters for the closed (or initial)
+  # state of the modal window.
+  calculateInitialTransformParams: ->
+    iz = @calculateInitialSize()
+    fz = @calculateFinalSize()
+
+    ic = @calculateInitialCenter()
+    fc = @calculateFinalCenter()
+
+    sx = iz[0] / fz[0]
+    sy = iz[1] / fz[1]
+    tx = fc[0] - ic[0]
+    ty = fc[1] - ic[1]
+
+    [sx, 0, 0, 0, 0, sy, 0, 0, 0, 0, 1, 0, -tx, -ty, 0, 1]
+
+
+  calculateFinalTransformParams: ->
+    [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+
+
+
+  setPosition: (params) ->
+    @root.style.transform = "matrix3d(#{params.join(',')}) translate3d(-50%, -50%, 0)"
+
+
+  setFinalSize: ->
+    [w, h] = @calculateFinalSize()
+    @root.style.width = "#{w}px"
+    @root.style.height = "#{h}px"
+
+
+  setInitialTransform: ->
+    @setPosition @calculateInitialTransformParams()
+
+
+
+  setFinalTransform: ->
+    @setPosition @calculateFinalTransformParams()
+
+
+
+  resetPosition: ->
+    @root.style.width = "auto"
+    @root.style.height = "auto"
+    @root.style.transform = "none"
+
+
+  transitionIn: (time, cb) ->
+    @resetPosition()
+    @setFinalSize()
+    @setInitialTransform()
+
+    @once 'transition:in', ->
+      @setFinalTransform()
 
     super(time, cb)
 
 
-
   transitionOut: (time, cb) ->
-    pos = @_calcActivatorBounds()
     @once 'transition:out', ->
-      @root.style.top = pos.top
-      @root.style.right = pos.right
-      @root.style.bottom = pos.bottom
-      @root.style.left = pos.left
+      @setInitialTransform()
 
     super(time, cb)
