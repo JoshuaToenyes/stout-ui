@@ -51,9 +51,7 @@ makeTransitionFunc = (func, transitionClass, removeClass, event, test) ->
         @_transitionTimer = setTimeout =>
           @[func] cb
         , t
-        # Important! We have to ask for the `offsetHeight` to trigger a browser
-        # repaint. 
-        x = @root.offsetHeight
+        @repaint()
         @fire event
     @
 
@@ -265,6 +263,22 @@ module.exports = class Component extends ClientViewModel
       @fire 'hide'
       cb?.call null
     @
+
+
+  ###*
+  # Triggers a browser repaint. This is required if applying multiple sets of
+  # CSS modifications. Browsers attempt to batch CSS changes, so in-order to
+  # ensure that changes are made incrementally (for CSS transitions for example)
+  # and not batched, this method can be called between the changes to ensure
+  # a repaint is executed by the browser.
+  #
+  # @method repaint
+  # @memberof stout-ui/common/Component#
+  # @public
+  ###
+  repaint: ->
+    _ = @root.offsetHeight
+    null
 
 
   ###*
