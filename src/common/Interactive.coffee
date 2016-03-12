@@ -87,17 +87,6 @@ module.exports = class Interactive extends Component
 
 
   ###*
-  # Called when a native click event is detected on the hover target element.
-  # If this Interactive is enabled, a corresponding `click` event is fired.
-  #
-  # @method _onClick
-  # @private
-  ###
-  _onClick: (e) =>
-    if @fireInteractiveEvent('click', e) then @fire 'click', e
-
-
-  ###*
   # Called when a native focus event is detected on the hover target element.
   # If this Interactive is enabled, a corresponding `focus` event is fired.
   #
@@ -171,6 +160,8 @@ module.exports = class Interactive extends Component
   ###
   _onMouseUp: (e) =>
     @prefixedClasses.remove 'active'
+    if @getHoverTarget().contains e.target
+      @fire 'click'
 
 
   ###*
@@ -186,7 +177,6 @@ module.exports = class Interactive extends Component
     a.removeEventListener 'mouseup', @_onMouseUp
 
     b = @getHoverTarget()
-    b.removeEventListener 'click', @_onClick
     b.removeEventListener 'mouseenter', @_onMouseEnter
     b.removeEventListener 'mouseleave', @_onMouseLeave
 
@@ -233,7 +223,6 @@ module.exports = class Interactive extends Component
     a.addEventListener 'mouseup', @_onMouseUp
 
     b = @getHoverTarget()
-    b.addEventListener 'click', @_onClick
     b.addEventListener 'mouseenter', @_onMouseEnter
     b.addEventListener 'mouseleave', @_onMouseLeave
 

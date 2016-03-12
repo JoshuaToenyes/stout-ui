@@ -51,7 +51,7 @@ makeTransitionFunc = (func, transitionClass, removeClass, event, test) ->
           @[func] cb
         , t
         @fire event
-    , 0
+    , 10
     @
 
 

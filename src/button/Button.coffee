@@ -221,7 +221,7 @@ module.exports = class Button extends Interactive
   # @override
   # @protected
   ###
-  getHoverTarget: @.prototype._getButton
+  #getHoverTarget: @.prototype._getButton
 
 
   ###*

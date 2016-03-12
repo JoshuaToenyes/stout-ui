@@ -118,115 +118,6 @@ module.exports = class Modal extends Container
 
 
   ###*
-  # Calculates the relative position (in percent) of the passed element.
-  #
-  # @param {HTMLElement} el - The element which should have it's relative
-  # bounds calculated.
-  ###
-  _calcActivatorBounds: () ->
-    W = window.innerWidth
-    H = window.innerHeight
-
-    # Get button bounding rectangle if an activator is registered, otherwise
-    # open the modal from the center of the window.
-    if @_activator
-      bounds = @_activator.getBoundingClientRect()
-    else
-      bounds = left: W / 2, right: W / 2, top: H / 2, bottom: H / 2
-
-    # Calculate starts.
-    left = bounds.left / W * 100 + '%'
-    right = 100 - bounds.right / W * 100 + '%'
-    top = bounds.top / H * 100 + '%'
-    bottom = 100 - bounds.bottom / H * 100 + '%'
-
-    {top, right, bottom, left}
-
-
-  ###*
-  # Calculates a relative position (in percent) within the window, given the
-  # maximum window width and height.
-  #
-  # @returns {Object} Object with top, right, bottom, and left keys set with
-  # calculated percentages.
-  #
-  # @method _calcRelativePosition
-  # @memberof stout-ui/modal/Modal#
-  # @private
-  ###
-  _calcRelativePostion: ->
-    H = window.innerHeight
-    W = window.innerWidth
-
-    h = @height
-    w = @width
-
-    # Captures the size of the content
-    content = @select('.' + CONTENTS_CLS)
-
-    content.style.position = 'absolute'
-    content.style.top = ''
-    content.style.right = ''
-    content.style.bottom = ''
-    content.style.left = ''
-
-    rect = content.getBoundingClientRect()
-    content.style.position = 'fixed'
-
-    if @height is 'auto'
-      h = rect.height
-
-    if @width is 'auto'
-      w = rect.width
-
-    top = bottom = Math.max(0, (H - h) / H / 2 * 100 ) + '%'
-    left = right = Math.max(0, (W - w) / W / 2 * 100 ) + '%'
-    {top, right, bottom, left}
-
-
-  ###*
-  # Positions the contents container.
-  #
-  # @method _positionContents
-  # @memberof stout-ui/modal/Modal#
-  # @protected
-  ###
-  _positionContents: ->
-    @_positionModalElement @select('.' + CONTENTS_CLS)
-
-
-  ###*
-  # Positions the modal window for opening.
-  #
-  # @method _positionForOpen
-  # @memberof stout-ui/modal/Modal#
-  # @protected
-  ###
-  _positionForOpen: ->
-    for p, v of @_calcActivatorBounds()
-      @root.style[p] = v
-
-
-  ###*
-  # This method positions the modal window and/or it's contents.
-  #
-  # @param {HTMLElement} [el] - The element to position. If nothing is passed
-  # it will position the modal window and it's content container.
-  #
-  # @method _positionModalElement
-  # @memberof stout-ui/modal/Modal#
-  # @protected
-  ###
-  _positionModalElement: (el) ->
-    if not el
-      @_positionModalElement @root
-      @_positionModalElement @select('.' + CONTENTS_CLS)
-    else
-      for p, v of @_calcRelativePostion()
-        el.style[p] = v
-
-
-  ###*
   # Window resize event handler. It simply repositions the modal window and
   # its contents.
   #
@@ -258,6 +149,132 @@ module.exports = class Modal extends Container
 
 
   ###*
+  # Calculates the final sizes of the modal window.
+  #
+  # @returns {Array<number>} Array in the form of `[width, height]`.
+  #
+  # @method calculateFinalSize
+  # @memberof stout-ui/modal/Modal#
+  # @public
+  ###
+  calculateFinalSize: ->
+    h = @height
+    w = @width
+
+    content = @select('.' + CONTENTS_CLS)
+
+    flash = @hidden and not @transitioning
+
+    if flash then @show()
+    rect = content.getBoundingClientRect()
+    if flash then @hide()
+
+    if @height is 'auto' then h = rect.height
+    if @width is 'auto' then w = rect.width
+
+    [w, h]
+
+
+  ###*
+  # Calculates the initial sizes of the modal window.
+  #
+  # @returns {Array<number>} Array in the form of `[width, height]`.
+  #
+  # @method calculateInitialSize
+  # @memberof stout-ui/modal/Modal#
+  # @public
+  ###
+  calculateInitialSize: ->
+    # Get button bounding rectangle if an activator is registered, otherwise
+    # open the modal from the center of the window.
+    if @_activator
+      b = @_activator.getBoundingClientRect()
+    else
+      b = width: 30, height: 30
+
+    [b.width, b.height]
+
+
+  ###*
+  # Calculates the final center of the modal window, in pixels, relative to the
+  # viewport.
+  #
+  # @returns {Array<number>} Array in the form of `[x, y]` coordinates.
+  #
+  # @method calculateFinalCenter
+  # @memberof stout-ui/modal/Modal#
+  # @public
+  ###
+  calculateFinalCenter: ->
+    H = window.innerHeight
+    W = window.innerWidth
+    [W / 2, H / 2]
+
+
+  ###*
+  # Calculates the initial center of the modal window, in pixels, relative to
+  # the viewport.
+  #
+  # @returns {Array<number>} Array in the form of `[x, y]` coordinates.
+  #
+  # @method calculateInitialCenter
+  # @memberof stout-ui/modal/Modal#
+  # @public
+  ###
+  calculateInitialCenter: ->
+    H = window.innerHeight
+    W = window.innerWidth
+
+    # Get button bounding rectangle if an activator is registered, otherwise
+    # open the modal from the center of the window.
+    if @_activator
+      b = @_activator.getBoundingClientRect()
+    else
+      b = left: W / 2, width: 0, top: H / 2, height: 0
+
+    [b.left + 0.5 * b.width, b.top + 0.5 * b.height]
+
+
+  ###*
+  # Calculates and returns final transformation parameters for when the modal
+  # window should be fully open.
+  #
+  # @returns {Array<number>} Array of `matrix3d` CSS transformation parameters.
+  #
+  # @method calculateFinalTransformParams
+  # @memberof stout-ui/modal/Modal#
+  # @public
+  ###
+  calculateFinalTransformParams: ->
+    [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+
+
+  ###*
+  # Calculates and returns initial transformation parameters for when the modal
+  # window should start opening.
+  #
+  # @returns {Array<number>} Array of `matrix3d` CSS transformation parameters.
+  #
+  # @method calculateInitialTransformParams
+  # @memberof stout-ui/modal/Modal#
+  # @public
+  ###
+  calculateInitialTransformParams: ->
+    iz = @calculateInitialSize()
+    fz = @calculateFinalSize()
+
+    ic = @calculateInitialCenter()
+    fc = @calculateFinalCenter()
+
+    sx = iz[0] / fz[0]
+    sy = iz[1] / fz[1]
+    tx = fc[0] - ic[0]
+    ty = fc[1] - ic[1]
+
+    [sx, 0, 0, 0, 0, sy, 0, 0, 0, 0, 1, 0, -tx, -ty, 0, 1]
+
+
+  ###*
   # Opens the modal window.
   #
   # @param {Event} [e] - Event that triggered the opening of this modal.
@@ -273,9 +290,6 @@ module.exports = class Modal extends Container
 
     # Capture the activating component (button, etc.) if present.
     @_activator = e?.source.root
-
-    # Initiate the modal animation to it's ending position.
-    #animate @root, pos, TRANS_IN_TIME, cubicInOut
 
     # If this modal isn't static, then attach an event listener so it's closed
     # when/if the user clicks on the backdrop.
@@ -298,118 +312,92 @@ module.exports = class Modal extends Container
     openPromise
 
 
-
-  calculateInitialSize: ->
-    # Get button bounding rectangle if an activator is registered, otherwise
-    # open the modal from the center of the window.
-    if @_activator
-      b = @_activator.getBoundingClientRect()
-    else
-      b = width: 30, height: 30
-
-    [b.width, b.height]
-
-
-
-  calculateFinalSize: ->
-    h = @height
-    w = @width
-
-    content = @select('.' + CONTENTS_CLS)
-
-    flash = @hidden and not @transitioning
-
-    if flash then @show()
-    rect = content.getBoundingClientRect()
-    if flash then @hide()
-
-    if @height is 'auto' then h = rect.height
-    if @width is 'auto' then w = rect.width
-
-    [w, h]
+  ###*
+  # Resets the modal window's size and position.
+  #
+  # @method resetSizeAndPosition
+  # @memberof stout-ui/modal/Modal#
+  # @public
+  ###
+  resetSizeAndPosition: ->
+    @root.style.width = "auto"
+    @root.style.height = "auto"
+    @root.style.transform = "none"
 
 
-  calculateInitialCenter: ->
-    H = window.innerHeight
-    W = window.innerWidth
-
-    # Get button bounding rectangle if an activator is registered, otherwise
-    # open the modal from the center of the window.
-    if @_activator
-      b = @_activator.getBoundingClientRect()
-    else
-      b = left: W / 2, width: 0, top: H / 2, height: 0
-
-    [b.left + 0.5 * b.width, b.top + 0.5 * b.height]
+  ###*
+  # Sets the initial transformation parameters of the modal window.
+  #
+  # @method setInitialTransform
+  # @memberof stout-ui/modal/Modal#
+  # @public
+  ###
+  setInitialTransform: ->
+    @setTransform @calculateInitialTransformParams()
 
 
-  calculateFinalCenter: ->
-    H = window.innerHeight
-    W = window.innerWidth
-    [W / 2, H / 2]
-
-
-  # Calculates the matrix transform parameters for the closed (or initial)
-  # state of the modal window.
-  calculateInitialTransformParams: ->
-    iz = @calculateInitialSize()
-    fz = @calculateFinalSize()
-
-    ic = @calculateInitialCenter()
-    fc = @calculateFinalCenter()
-
-    sx = iz[0] / fz[0]
-    sy = iz[1] / fz[1]
-    tx = fc[0] - ic[0]
-    ty = fc[1] - ic[1]
-
-    [sx, 0, 0, 0, 0, sy, 0, 0, 0, 0, 1, 0, -tx, -ty, 0, 1]
-
-
-  calculateFinalTransformParams: ->
-    [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
-
-
-
-  setPosition: (params) ->
-    @root.style.transform = "matrix3d(#{params.join(',')}) translate3d(-50%, -50%, 0)"
-
-
+  ###*
+  # Sets the final-size of the modal window.
+  #
+  # @method setFinalSize
+  # @memberof stout-ui/modal/Modal#
+  # @public
+  ###
   setFinalSize: ->
     [w, h] = @calculateFinalSize()
     @root.style.width = "#{w}px"
     @root.style.height = "#{h}px"
 
 
-  setInitialTransform: ->
-    @setPosition @calculateInitialTransformParams()
-
-
-
+  ###*
+  # Sets the final transformation parameters of the modal window.
+  #
+  # @method setFinalTransform
+  # @memberof stout-ui/modal/Modal#
+  # @public
+  ###
   setFinalTransform: ->
-    @setPosition @calculateFinalTransformParams()
+    @setTransform @calculateFinalTransformParams()
 
 
+  ###*
+  # Sets modal window transformation parameters.
+  #
+  # @param {Array<number>} params Array of `matrix3d` CSS transformation
+  # parameters.
+  #
+  # @method setTransform
+  # @memberof stout-ui/modal/Modal#
+  # @public
+  ###
+  setTransform: (params) ->
+    @root.style.transform = "matrix3d(#{params.join(',')}) translate3d(-50%, -50%, 0)"
 
-  resetPosition: ->
-    @root.style.width = "auto"
-    @root.style.height = "auto"
-    @root.style.transform = "none"
 
-
+  ###*
+  # Transitions-in this modal window.
+  #
+  # @method transitionIn
+  # @memberof stout-ui/modal/Modal#
+  # @public
+  ###
   transitionIn: (time, cb) ->
-    @resetPosition()
+    @resetSizeAndPosition()
     @setFinalSize()
     @setInitialTransform()
-
     @once 'transition:in', ->
       @setFinalTransform()
-
     super(time, cb)
 
 
+  ###*
+  # Transitions-out this modal window.
+  #
+  # @method transitionOut
+  # @memberof stout-ui/modal/Modal#
+  # @public
+  ###
   transitionOut: (time, cb) ->
     @once 'transition:out', ->
       @setInitialTransform()
-
     super(time, cb)
