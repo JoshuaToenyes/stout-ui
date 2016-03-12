@@ -191,7 +191,7 @@ module.exports = class Pane extends Container
 
 
   calculateOverlayStartSize: ->
-    [window.innerWidth, window.innerHeight]
+    @calculateDisplaySize()
 
 
   ###*
@@ -290,14 +290,13 @@ module.exports = class Pane extends Container
   # @public
   ###
   calculateOverlayStartCenter: ->
-    W = window.innerWidth
-    H = window.innerHeight
+    [w, h] = @calculateDisplaySize()
     switch @start
       when null then @calculateZoomStartCenter()
-      when 'top' then [W / 2, -H / 2]
-      when 'right' then [1.5 * W, H / 2]
-      when 'bottom' then [W / 2, 1.5 * H]
-      when 'left' then [-W / 2, H / 2]
+      when 'top' then [w / 2, -h / 2]
+      when 'right' then [1.5 * w, h / 2]
+      when 'bottom' then [w / 2, 1.5 * h]
+      when 'left' then [-w / 2, h / 2]
 
 
   ###*

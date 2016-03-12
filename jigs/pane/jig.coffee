@@ -15,7 +15,10 @@ document.addEventListener 'DOMContentLoaded', ->
   pane.render()
   pane.hide()
 
-  closeButton.click = -> pane.transitionOut()
+  closeButton.click = ->
+    pane.transitionOut null, ->
+      pane.width = 'full'
+      pane.height = 'full'
 
   new Button
     label: 'Show Pane'
@@ -55,3 +58,30 @@ document.addEventListener 'DOMContentLoaded', ->
             pane.transitionIn()
         )(start)
     .render()
+
+
+  # --- Sizing ---
+
+  new Button
+    label: 'Auto Size Width'
+    size: 'small'
+    style: 'inverse'
+    parent: '.ex.sizing .controls'
+    click: ->
+      pane.width = 'auto'
+      pane.transition = 'overlay'
+      pane.start = 'left'
+      pane.transitionIn()
+  .render()
+
+  new Button
+    label: '200px Height'
+    size: 'small'
+    style: 'inverse'
+    parent: '.ex.sizing .controls'
+    click: ->
+      pane.height = 200
+      pane.transition = 'overlay'
+      pane.start = 'top'
+      pane.transitionIn()
+  .render()
