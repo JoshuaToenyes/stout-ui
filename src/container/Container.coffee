@@ -62,6 +62,7 @@ module.exports = class Container extends Component
     serializable: false
     get: (c) ->
       if c instanceof ClientViewModel
+        c.parent = @root
         c.render()
       else
         c
