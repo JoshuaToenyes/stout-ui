@@ -4,7 +4,6 @@
 ###
 
 Pane      = require '../pane/Pane'
-template  = require './modal.template'
 backdrop  = require './backdrop'
 vars      = require '../vars'
 Promise    = require 'stout-core/promise/Promise'
