@@ -39,7 +39,7 @@ module.exports = class Pane extends Container
   #
   # @param {Object} [init] - Initiation object.
   #
-  # @exports stout-ui/modal/Modal
+  # @exports stout-ui/pane/Pane
   # @extends stout-ui/container/Container
   # @constructor
   ###
