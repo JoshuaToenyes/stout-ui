@@ -291,12 +291,13 @@ module.exports = class Pane extends Container
   ###
   calculateOverlayStartCenter: ->
     [w, h] = @calculateDisplaySize()
+    [x, y] = @calculateDisplayCenter()
     switch @start
       when null then @calculateZoomStartCenter()
-      when 'top' then [w / 2, -h / 2]
-      when 'right' then [1.5 * w, h / 2]
-      when 'bottom' then [w / 2, 1.5 * h]
-      when 'left' then [-w / 2, h / 2]
+      when 'top' then [w / 2, y - h]
+      when 'right' then [x + w, h / 2]
+      when 'bottom' then [w / 2, y + h]
+      when 'left' then [x - w, h / 2]
 
 
   ###*

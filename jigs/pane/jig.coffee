@@ -7,18 +7,24 @@ document.addEventListener 'DOMContentLoaded', ->
   closeButton = new Button
     label: 'Close Pane'
     classes: 'btn-close-pane'
+    style: 'primary'
 
   pane = new Pane
     parent: document.body
     id: 'basic-pane'
     contents: closeButton
-  pane.render()
-  pane.hide()
 
   closeButton.click = ->
     pane.transitionOut null, ->
       pane.width = 'full'
       pane.height = 'full'
+      pane.root.style.top = ''
+      pane.root.style.right = ''
+      pane.root.style.bottom = ''
+      pane.root.style.left = ''
+
+  pane.hide()
+  pane.render()
 
   new Button
     label: 'Show Pane'
@@ -68,9 +74,11 @@ document.addEventListener 'DOMContentLoaded', ->
     style: 'inverse'
     parent: '.ex.sizing .controls'
     click: ->
+      pane.root.style.left = 'auto'
+      pane.root.style.right = '0'
       pane.width = 'auto'
       pane.transition = 'overlay'
-      pane.start = 'left'
+      pane.start = 'right'
       pane.transitionIn()
   .render()
 
