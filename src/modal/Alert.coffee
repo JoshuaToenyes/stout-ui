@@ -96,15 +96,17 @@ class AlertContent extends Component
   constructor: (init) ->
     super template, null, {renderOnChange: false}, init
     @prefixedClasses.add ALERT_CONTENTS_CLS
-
-  renderControls: (promise) ->
-    new Button
+    @button = new Button
       label: @ok
-      parent: @select '.' + ALERT_CONTROLS_CLS
       style: @buttonStyle
-      click: ->
-        Promise.fulfill promise
-    .render()
+
+  render: ->
+    renderContents = not @rendered
+    super()
+    if renderContents
+      @button.parent = @select '.' + ALERT_CONTROLS_CLS
+      @button.render()
+    @root
 
 
 module.exports = class Alert extends Modal
@@ -117,7 +119,11 @@ module.exports = class Alert extends Modal
 
   open: ->
     clickPromise = new Promise()
+
     super(arguments...)
-    @_contents.renderControls(clickPromise)
+
+    @_contents.button.once 'click', ->
+      Promise.fulfill clickPromise
+
     clickPromise.then => @close()
     clickPromise

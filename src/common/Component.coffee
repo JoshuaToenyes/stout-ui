@@ -46,12 +46,13 @@ makeTransitionFunc = (func, transitionClass, removeClass, event, test) ->
     nextTick =>
       if @rendered and test.call @
         @prefixedClasses.remove VISIBLE_CLS, HIDDEN_CLS, removeClass
+        if func is 'show' then @repaint()
         @prefixedClasses.add TRANS_CLS, transitionClass
         clearTimeout @_transitionTimer
         @_transitionTimer = setTimeout =>
           @[func] cb
         , t
-        @repaint()
+        if func is 'hide' then @repaint()
         @fire event
     @
 

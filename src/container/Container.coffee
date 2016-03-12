@@ -80,12 +80,14 @@ module.exports = class Container extends Component
   # @memberof stout-ui/container/Container#
   ###
   render: (contents) ->
+    renderContents = not @rendered
     super()
-    if contents then @contents = contents
-    cc = @select ".#{CONTAINER_CLS}"
-    if type(@contents).isHTMLElement()
-      cc.innerHTML = ''
-      cc.appendChild @contents
-    else
-      cc.innerHTML = @contents
+    if renderContents
+      if contents then @contents = contents
+      cc = @select ".#{CONTAINER_CLS}"
+      if type(@contents).isHTMLElement()
+        cc.innerHTML = ''
+        cc.appendChild @contents
+      else
+        cc.innerHTML = @contents
     @root

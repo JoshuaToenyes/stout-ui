@@ -1,0 +1,52 @@
+@import "bourbon/bourbon"
+@import "util/exports"
+@import "util/transitioning"
+@import "util/visibility"
+@import "vars/common"
+@import "vars/container"
+@import "vars/pane"
+
++exports("pane/pane")
+
+  $contents:  #{$prefix}#{$container-contents-class}
+  $overlay:   #{$prefix}overlay
+  $pane:      #{$prefix}#{$pane-class}
+  $zoom:      #{$prefix}zoom
+
+  .#{$pane}
+    overflow: scroll
+    max-width: 100%
+
+    &, .#{$contents}
+      opacity: 0
+
+    +hidden
+      display: none
+
+    +visible
+      z-index: $pane-z-index
+      &, .#{$contents}
+        opacity: 1
+
+    +transitioning
+      z-index: $pane-z-index
+      &, .#{$contents}
+        +transition-property(opacity, transform) // good
+        +transition-timing-function($ease-in-out-cubic)
+
+    +transitioning-out
+      &, .#{$contents}
+        +transition-duration($pane-trans-out-time)
+        opacity: 0
+
+    +transitioning-in
+      &, .#{$contents}
+        +transition-duration($pane-trans-in-time)
+        opacity: 1
+
+
+  .#{$pane}.#{$zoom}
+    +transform-origin(top left 0)
+    position: fixed
+    left: 50%
+    top: 50%

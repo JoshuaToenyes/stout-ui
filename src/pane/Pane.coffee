@@ -72,8 +72,8 @@ module.exports = class Pane extends Container
   # @public
   ###
   @property 'origin',
-    default: 'right'
     values: [
+      null
       'top'
       'right'
       'bottom'
@@ -90,8 +90,8 @@ module.exports = class Pane extends Container
   # @public
   ###
   @property 'destination',
-    default: 'right'
     values: [
+      null
       'top'
       'right'
       'bottom'
@@ -223,6 +223,14 @@ module.exports = class Pane extends Container
     ty = fc[1] - ic[1]
 
     [sx, 0, 0, 0, 0, sy, 0, 0, 0, 0, 1, 0, -tx, -ty, 0, 1]
+
+
+  render: ->
+    r = super()
+    @prefixedClasses.add @transition
+    if @origin then @prefixedClasses.add 'origin-' + @origin
+    if @destination then @prefixedClasses.add 'destination-' + @destination
+    r
 
 
   ###*

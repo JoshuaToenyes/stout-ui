@@ -54,6 +54,7 @@ module.exports = class Modal extends Pane
   ###
   constructor: ->
     super arguments...
+    @transition = 'zoom'
     @prefixedClasses.add MODAL_CLS
 
 
@@ -125,7 +126,6 @@ module.exports = class Modal extends Pane
 
     @transitionOut TRANS_OUT_TIME, =>
       Promise.resolve closePromise
-      @unrender()
 
 
   ###*
