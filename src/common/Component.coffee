@@ -5,6 +5,7 @@
 ###
 
 ClientViewModel = require 'stout-client/view/ClientViewModel'
+nextTick = require 'stout-client/util/nextTick'
 vars       = require '../vars'
 
 
@@ -42,7 +43,7 @@ TRANS_OUT_CLS = vars.read 'common/transitioning-out'
 ###
 makeTransitionFunc = (func, transitionClass, removeClass, event, test) ->
   (t = 0, cb) ->
-    setTimeout =>
+    nextTick =>
       if @rendered and test.call @
         @prefixedClasses.remove VISIBLE_CLS, HIDDEN_CLS, removeClass
         @prefixedClasses.add TRANS_CLS, transitionClass
@@ -50,8 +51,10 @@ makeTransitionFunc = (func, transitionClass, removeClass, event, test) ->
         @_transitionTimer = setTimeout =>
           @[func] cb
         , t
+        # Important! We have to ask for the `offsetHeight` to trigger a browser
+        # repaint. 
+        x = @root.offsetHeight
         @fire event
-    , 10
     @
 
 
@@ -234,14 +237,12 @@ module.exports = class Component extends ClientViewModel
   # @public
   ###
   show: (cb) ->
-    setTimeout =>
-      if @rendered
-        @_stopTransition()
-        @prefixedClasses.remove HIDDEN_CLS
-        @prefixedClasses.add VISIBLE_CLS
-        @fire 'show'
-        cb?.call null
-    , 0
+    if @rendered
+      @_stopTransition()
+      @prefixedClasses.remove HIDDEN_CLS
+      @prefixedClasses.add VISIBLE_CLS
+      @fire 'show'
+      cb?.call null
     @
 
 
@@ -257,14 +258,12 @@ module.exports = class Component extends ClientViewModel
   # @public
   ###
   hide: (cb) ->
-    setTimeout =>
-      if @rendered
-        @_stopTransition()
-        @prefixedClasses.remove VISIBLE_CLS
-        @prefixedClasses.add HIDDEN_CLS
-        @fire 'hide'
-        cb?.call null
-    , 0
+    if @rendered
+      @_stopTransition()
+      @prefixedClasses.remove VISIBLE_CLS
+      @prefixedClasses.add HIDDEN_CLS
+      @fire 'hide'
+      cb?.call null
     @
 
 
