@@ -55,15 +55,9 @@ module.exports = class Modal extends Pane
   constructor: ->
     super arguments...
     @transition = 'zoom'
+    @height = 'auto'
+    @width = 'auto'
     @prefixedClasses.add MODAL_CLS
-
-
-  @property 'width',
-    default: 'auto'
-
-
-  @property 'height',
-    default: 'auto'
 
 
   ###*
@@ -99,18 +93,6 @@ module.exports = class Modal extends Pane
 
 
   ###*
-  # Window resize event handler. It simply repositions the modal window and
-  # its contents.
-  #
-  # @method _resizeHandler
-  # @memberof stout-ui/modal/Modal#
-  # @protected
-  ###
-  _resizeHandler: =>
-    @setFinalSize()
-
-
-  ###*
   # Closes this modal window.
   #
   #
@@ -121,8 +103,6 @@ module.exports = class Modal extends Pane
     closePromise = new Promise()
 
     backdrop().transitionOut()
-
-    window.removeEventListener 'resize', @_resizeHandler
 
     @transitionOut TRANS_OUT_TIME, =>
       Promise.resolve closePromise
@@ -143,7 +123,7 @@ module.exports = class Modal extends Pane
     @render()
 
     # Capture the activating component (button, etc.) if present.
-    @_activator = e?.source.root
+    @activator = e?.source.root
 
     # If this modal isn't static, then attach an event listener so it's closed
     # when/if the user clicks on the backdrop.
@@ -155,9 +135,6 @@ module.exports = class Modal extends Pane
     # Initiate the modal transition.
     @transitionIn TRANS_IN_TIME, ->
       Promise.fulfill openPromise
-
-    # When the window is resizes, reposition the modal and its contents.
-    window.addEventListener 'resize', @_resizeHandler
 
     # Show the backdrop, making it inherit the modal's "static" state.
     backdrop().static = @static

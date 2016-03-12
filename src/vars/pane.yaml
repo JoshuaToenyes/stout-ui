@@ -1,4 +1,4 @@
 pane-class:           pane !default
-pane-trans-in-time:   1s !default
-pane-trans-out-time:  1s !default
+pane-trans-in-time:   500ms !default
+pane-trans-out-time:  500ms !default
 pane-z-index:         15000

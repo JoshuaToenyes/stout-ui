@@ -12,13 +12,24 @@
   $overlay:   #{$prefix}overlay
   $pane:      #{$prefix}#{$pane-class}
   $zoom:      #{$prefix}zoom
+  $fade:      #{$prefix}fade
+
+  $start-opacity:   0.1
+  $display-opacity: 1
+  $end-opacity:     0.1
 
   .#{$pane}
     overflow: scroll
     max-width: 100%
+    background-color: white
+    position: fixed
+    left: 0
+    top: 0
+    box-shadow: 0 0 20px rgba(black, 0.25)
+    +transform-origin(top left 0)
 
     &, .#{$contents}
-      opacity: 0
+      opacity: $start-opacity
 
     +hidden
       display: none
@@ -26,7 +37,7 @@
     +visible
       z-index: $pane-z-index
       &, .#{$contents}
-        opacity: 1
+        opacity: $display-opacity
 
     +transitioning
       z-index: $pane-z-index
@@ -37,16 +48,28 @@
     +transitioning-out
       &, .#{$contents}
         +transition-duration($pane-trans-out-time)
-        opacity: 0
+        opacity: $end-opacity
 
     +transitioning-in
       &, .#{$contents}
         +transition-duration($pane-trans-in-time)
-        opacity: 1
+        opacity: $display-opacity
 
 
   .#{$pane}.#{$zoom}
-    +transform-origin(top left 0)
-    position: fixed
     left: 50%
     top: 50%
+
+  .#{$pane}.#{$overlay}
+    opacity: 0.5
+    +visible
+      opacity: $display-opacity
+    +transitioning-out
+      opacity: 0.5
+
+  .#{$pane}.#{$fade}
+    opacity: 0
+    +visible
+      opacity: $display-opacity
+    +transitioning-out
+      opacity: 0

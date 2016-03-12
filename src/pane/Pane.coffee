@@ -30,6 +30,24 @@ CONTENTS_CLS = vars.readPrefixed 'container/container-contents-class'
 PANE_CLS = vars.read 'pane/pane-class'
 
 
+###*
+# Default pane transition-in time.
+# @const
+# @type number
+# @private
+###
+TRANS_IN_TIME = vars.readTime 'pane/pane-trans-in-time'
+
+
+###*
+# Default pane transition-out time.
+# @const
+# @type number
+# @private
+###
+TRANS_OUT_TIME = vars.readTime 'pane/pane-trans-out-time'
+
+
 
 module.exports = class Pane extends Container
 
@@ -56,22 +74,23 @@ module.exports = class Pane extends Container
   # @public
   ###
   @property 'transition',
-    default: 'overlay'
+    default: 'fade'
     values: [
+      'fade'
       'zoom'
       'overlay'
     ]
 
 
   ###*
-  # Transition origin, e.g. where the pane originates-from when it
+  # Transition start, e.g. where the pane starts-from when it
   # transitions-in. Only valid for `overlay` transition type.
   #
-  # @member origin
+  # @member start
   # @memberof stout-ui/pane/Pane#
   # @public
   ###
-  @property 'origin',
+  @property 'start',
     values: [
       null
       'top'
@@ -82,14 +101,14 @@ module.exports = class Pane extends Container
 
 
   ###*
-  # Transition destination, e.g. where the pane animates-to when it
+  # Transition end, e.g. where the pane animates-to when it
   # transitions-out. Only valid for `overlay` transition type.
   #
-  # @member destination
+  # @member end
   # @memberof stout-ui/pane/Pane#
   # @public
   ###
-  @property 'destination',
+  @property 'end',
     values: [
       null
       'top'
@@ -97,6 +116,36 @@ module.exports = class Pane extends Container
       'bottom'
       'left'
     ]
+
+
+  ###*
+  # The preferred width of the pane in pixels. May also be set to "auto" to
+  # attempt to automatically determine the size of the pane or "full" to fill
+  # the viewport.
+  ###
+  @property 'width',
+    default: 'full'
+
+
+  ###*
+  # The preferred height of the pane in pixels. May also be set to "auto" to
+  # attempt to automatically determine the size of the pane or "full" to fill
+  # the viewport.
+  ###
+  @property 'height',
+    default: 'full'
+
+
+  ###*
+  # Window resize event handler. It simply repositions the modal window and
+  # its contents.
+  #
+  # @method _resizeHandler
+  # @memberof stout-ui/modal/Modal#
+  # @protected
+  ###
+  _resizeHandler: =>
+    @setDisplaySize()
 
 
   ###*
@@ -104,11 +153,11 @@ module.exports = class Pane extends Container
   #
   # @returns {Array<number>} Array in the form of `[width, height]`.
   #
-  # @method calculateFinalSize
+  # @method calculateDisplaySize
   # @memberof stout-ui/modal/Modal#
   # @public
   ###
-  calculateFinalSize: ->
+  calculateDisplaySize: ->
     h = @height
     w = @width
 
@@ -123,27 +172,42 @@ module.exports = class Pane extends Container
     if @height is 'auto' then h = rect.height
     if @width is 'auto' then w = rect.width
 
+    if @height is 'full' then h = window.innerHeight
+    if @width is 'full' then w = window.innerWidth
+
     [w, h]
 
 
-  ###*
-  # Calculates the initial sizes of the pane.
-  #
-  # @returns {Array<number>} Array in the form of `[width, height]`.
-  #
-  # @method calculateInitialSize
-  # @memberof stout-ui/modal/Modal#
-  # @public
-  ###
-  calculateInitialSize: ->
+
+  calculateZoomStartSize: ->
     # Get button bounding rectangle if an activator is registered, otherwise
     # open the modal from the center of the window.
-    if @_activator
-      b = @_activator.getBoundingClientRect()
+    if @activator
+      b = @activator.getBoundingClientRect()
     else
       b = width: 30, height: 30
 
     [b.width, b.height]
+
+
+  calculateOverlayStartSize: ->
+    [window.innerWidth, window.innerHeight]
+
+
+  ###*
+  # Calculates the start size of the pane.
+  #
+  # @returns {Array<number>} Array in the form of `[width, height]`.
+  #
+  # @method calculateStartSize
+  # @memberof stout-ui/modal/Modal#
+  # @public
+  ###
+  calculateStartSize: ->
+    if @transition is 'zoom'
+      @calculateZoomStartSize()
+    else if @transition is 'overlay' or @transition is 'fade'
+      @calculateOverlayStartSize()
 
 
   ###*
@@ -152,14 +216,12 @@ module.exports = class Pane extends Container
   #
   # @returns {Array<number>} Array in the form of `[x, y]` coordinates.
   #
-  # @method calculateFinalCenter
+  # @method calculateDisplayCenter
   # @memberof stout-ui/pane/Pane#
   # @public
   ###
-  calculateFinalCenter: ->
-    H = window.innerHeight
-    W = window.innerWidth
-    [W / 2, H / 2]
+  calculateDisplayCenter: ->
+    [window.innerWidth / 2, window.innerHeight / 2]
 
 
   ###*
@@ -173,17 +235,12 @@ module.exports = class Pane extends Container
   # @public
   ###
   calculateInitialCenter: ->
-    H = window.innerHeight
-    W = window.innerWidth
-
-    # Get button bounding rectangle if an activator is registered, otherwise
-    # open the modal from the center of the window.
-    if @_activator
-      b = @_activator.getBoundingClientRect()
-    else
-      b = left: W / 2, width: 0, top: H / 2, height: 0
-
-    [b.left + 0.5 * b.width, b.top + 0.5 * b.height]
+    if @transition is 'fade'
+      @calculateFadeStartCenter()
+    else if @transition is 'zoom'
+      @calculateZoomStartCenter()
+    else if @transition is 'overlay'
+      @calculateOverlayStartCenter()
 
 
   ###*
@@ -192,11 +249,11 @@ module.exports = class Pane extends Container
   #
   # @returns {Array<number>} Array of `matrix3d` CSS transformation parameters.
   #
-  # @method calculateFinalTransformParams
+  # @method calculateDisplayTransformParams
   # @memberof stout-ui/pane/Pane#
   # @public
   ###
-  calculateFinalTransformParams: ->
+  calculateDisplayTransformParams: ->
     [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
 
 
@@ -211,11 +268,11 @@ module.exports = class Pane extends Container
   # @public
   ###
   calculateInitialTransformParams: ->
-    iz = @calculateInitialSize()
-    fz = @calculateFinalSize()
+    iz = @calculateStartSize()
+    fz = @calculateDisplaySize()
 
     ic = @calculateInitialCenter()
-    fc = @calculateFinalCenter()
+    fc = @calculateDisplayCenter()
 
     sx = iz[0] / fz[0]
     sy = iz[1] / fz[1]
@@ -225,12 +282,47 @@ module.exports = class Pane extends Container
     [sx, 0, 0, 0, 0, sy, 0, 0, 0, 0, 1, 0, -tx, -ty, 0, 1]
 
 
-  render: ->
-    r = super()
-    @prefixedClasses.add @transition
-    if @origin then @prefixedClasses.add 'origin-' + @origin
-    if @destination then @prefixedClasses.add 'destination-' + @destination
-    r
+  ###*
+  # Calculates the "overlay" transition start center.
+  #
+  # @method calculateOverlayStartCenter
+  # @memberof stout-ui/pane/Pane#
+  # @public
+  ###
+  calculateOverlayStartCenter: ->
+    W = window.innerWidth
+    H = window.innerHeight
+    switch @start
+      when null then @calculateZoomStartCenter()
+      when 'top' then [W / 2, -H / 2]
+      when 'right' then [1.5 * W, H / 2]
+      when 'bottom' then [W / 2, 1.5 * H]
+      when 'left' then [-W / 2, H / 2]
+
+
+  ###*
+  # Calculates the "zoom" transition start center.
+  #
+  #
+  # @method calculateZoomStartCenter
+  # @memberof stout-ui/pane/Pane#
+  # @public
+  ###
+  calculateZoomStartCenter: ->
+    # Get button bounding rectangle if an activator is registered, otherwise
+    # open the modal from the center of the window.
+    if @activator
+      b = @activator.getBoundingClientRect()
+      [b.left + 0.5 * b.width, b.top + 0.5 * b.height]
+    else
+      @calculateFadeStartCenter()
+
+
+
+
+  calculateFadeStartCenter: ->
+    [window.innerWidth / 2, window.innerHeight / 2]
+
 
 
   ###*
@@ -260,12 +352,12 @@ module.exports = class Pane extends Container
   ###*
   # Sets the final-size of the pane.
   #
-  # @method setFinalSize
+  # @method setDisplaySize
   # @memberof stout-ui/pane/Pane#
   # @public
   ###
-  setFinalSize: ->
-    [w, h] = @calculateFinalSize()
+  setDisplaySize: ->
+    [w, h] = @calculateDisplaySize()
     @root.style.width = "#{w}px"
     @root.style.height = "#{h}px"
 
@@ -273,12 +365,12 @@ module.exports = class Pane extends Container
   ###*
   # Sets the final transformation parameters of this pane.
   #
-  # @method setFinalTransform
+  # @method setDisplayTransform
   # @memberof stout-ui/pane/Pane#
   # @public
   ###
-  setFinalTransform: ->
-    @setTransform @calculateFinalTransformParams()
+  setDisplayTransform: ->
+    @setTransform @calculateDisplayTransformParams()
 
 
   ###*
@@ -292,7 +384,9 @@ module.exports = class Pane extends Container
   # @public
   ###
   setTransform: (params) ->
-    @root.style.transform = "matrix3d(#{params.join(',')}) translate3d(-50%, -50%, 0)"
+    @root.style.transform = "matrix3d(#{params.join(',')})"
+    if @transition is 'zoom'
+      @root.style.transform += " translate3d(-50%, -50%, 0)"
 
 
   ###*
@@ -302,13 +396,16 @@ module.exports = class Pane extends Container
   # @memberof stout-ui/pane/Pane#
   # @public
   ###
-  transitionIn: (time, cb) ->
+  transitionIn: (time = TRANS_IN_TIME, cb) ->
+    @setPaneTransitionClasses()
     @resetSizeAndPosition()
-    @setFinalSize()
+    @setDisplaySize()
     @setInitialTransform()
     @once 'transition:in', ->
-      @setFinalTransform()
+      @setDisplayTransform()
     super(time, cb)
+    # When the window is resizes, reposition the modal and its contents.
+    window.addEventListener 'resize', @_resizeHandler
 
 
   ###*
@@ -318,7 +415,18 @@ module.exports = class Pane extends Container
   # @memberof stout-ui/pane/Pane#
   # @public
   ###
-  transitionOut: (time, cb) ->
+  transitionOut: (time = TRANS_OUT_TIME, cb) ->
+    @setPaneTransitionClasses()
     @once 'transition:out', ->
       @setInitialTransform()
     super(time, cb)
+    window.removeEventListener 'resize', @_resizeHandler
+
+
+  setPaneTransitionClasses: ->
+    @prefixedClasses.remove 'zoom overlay'
+    @prefixedClasses.add @transition
+    @prefixedClasses.remove 'start-top start-right start-bottom start-left'
+    @prefixedClasses.remove 'end-top end-right end-bottom end-left'
+    if @start then @prefixedClasses.add 'start-' + @start
+    if @end then @prefixedClasses.add 'end-' + @end
