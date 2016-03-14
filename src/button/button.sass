@@ -19,6 +19,14 @@
   $ink-container:   #{$prefix}ink-container
   $fill-container:  #{$prefix}fill-container
 
+  +keyframes(button-outline)
+    0%
+      opacity: 0
+      outline-offset: 10px
+    100%
+      outline-offset: 1px
+      opacity: 1
+
   #{$prefix}#{$button-tag}
     display: none
     &[rendered]
@@ -28,6 +36,7 @@
     @extend %inline-component
     +user-select(none)
     +transition(box-shadow 400ms)
+    position: relative
 
     button
       margin: 0
@@ -45,11 +54,23 @@
       position: relative
       z-index: 20
 
+    &::before
+      @extend %cover-parent-pseudo
+      +transition(opacity 300ms, outline-color 300ms)
+      outline-width: 2px
+      outline-style: solid
+      outline-offset: 1px
+      opacity: 0
+
     &.#{$btn-visible}
       box-shadow: 1px 1px $button-shadow-size $button-shadow
 
     &.#{$btn-focus}
       box-shadow: 1px 1px $button-shadow-size $button-shadow-focus
+
+    &.#{$btn-focus}:not(.#{$btn-active})::before
+      +animation(button-outline 300ms $ease-in-out-cubic)
+      opacity: 1
 
     &.#{$btn-active}
       box-shadow: 1px 1px $button-shadow-size $button-shadow-active
@@ -75,6 +96,8 @@
     // ### Normal Button Style
 
     &.#{$btn-visible}
+      &::before
+        outline-color: $button-focus
       &.#{$btn-focus}
         box-shadow: 1px 1px $button-shadow-size $button-shadow-focus
         .#{$indicator}
@@ -85,6 +108,8 @@
         box-shadow: 1px 1px $button-shadow-size $button-shadow-hover
         .#{$indicator}
           background-color: $button-hover
+        &::before
+          outline-color: $button-hover
       .#{$fill-container}
         +set-ink-color($button-bg)
       .#{$ink-container}
@@ -96,6 +121,8 @@
     // ### Inverse Button Style
 
     &.#{$btn-visible}.#{$prefix}inverse
+      &::before
+        outline-color: $button-inverse-focus
       &.#{$btn-focus}
         box-shadow: 1px 1px $button-shadow-size $button-inverse-shadow-focus
         .#{$indicator}
@@ -106,6 +133,8 @@
         box-shadow: 1px 1px $button-shadow-size $button-inverse-shadow-hover
         .#{$indicator}
           background-color: $button-inverse-hover
+        &::before
+          outline-color: $button-inverse-hover
       .#{$fill-container}
         +set-ink-color($button-inverse-bg)
       .#{$ink-container}
@@ -118,6 +147,8 @@
 
     &.#{$btn-visible}.#{$prefix}primary
       box-shadow: 1px 1px $button-shadow-size $button-primary-shadow
+      &::before
+        outline-color: $button-primary-focus
       &.#{$btn-focus}
         box-shadow: 1px 1px $button-shadow-size $button-primary-shadow-focus
         .#{$indicator}
@@ -128,6 +159,8 @@
         box-shadow: 1px 1px $button-shadow-size $button-primary-shadow-hover
         .#{$indicator}
           background-color: $button-primary-hover
+        &::before
+          outline-color: $button-primary-hover
       .#{$fill-container}
         +set-ink-color($button-primary-bg)
       .#{$ink-container}
@@ -140,6 +173,8 @@
 
     &.#{$btn-visible}.#{$prefix}warn
       box-shadow: 1px 1px $button-shadow-size $button-warn-shadow
+      &::before
+        outline-color: $button-warn-focus
       &.#{$btn-focus}
         box-shadow: 1px 1px $button-shadow-size $button-warn-shadow-focus
         .#{$indicator}
@@ -150,6 +185,8 @@
         box-shadow: 1px 1px $button-shadow-size $button-warn-shadow-hover
         .#{$indicator}
           background-color: $button-warn-hover
+        &::before
+          outline-color: $button-warn-hover
       .#{$fill-container}
         +set-ink-color($button-warn-bg)
       .#{$ink-container}
@@ -162,6 +199,8 @@
 
     &.#{$btn-visible}.#{$prefix}danger
       box-shadow: 1px 1px $button-shadow-size $button-danger-shadow
+      &::before
+        outline-color: $button-danger-focus
       &.#{$btn-focus}
         box-shadow: 1px 1px $button-shadow-size $button-danger-shadow-focus
         .#{$indicator}
@@ -172,6 +211,8 @@
         box-shadow: 1px 1px $button-shadow-size $button-danger-shadow-hover
         .#{$indicator}
           background-color: $button-danger-hover
+        &::before
+          outline-color: $button-danger-hover
       .#{$fill-container}
         +set-ink-color($button-danger-bg)
       .#{$ink-container}
