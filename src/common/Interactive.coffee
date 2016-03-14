@@ -6,6 +6,7 @@
 ###
 
 Component  = require './Component'
+nextTick = require 'stout-client/util/nextTick'
 
 
 ###*
@@ -67,12 +68,12 @@ module.exports = class Interactive extends Component
   ###
   @property 'click',
     serializable: false
-    set: (fn) ->
-      if not fn then return
-      setTimeout =>
-        @on 'click', fn
-      , 0
-
+    set: (handler) ->
+      switch typeof handler
+        when 'string'
+          nextTick => @on 'click', @scope.$member[handler] or @scope[handler]
+        when 'function'
+          nextTick => @on 'click', handler
 
   ###*
   # Called when a native blur event is detected on the hover target element.

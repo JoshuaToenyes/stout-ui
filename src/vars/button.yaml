@@ -1,3 +1,4 @@
+button-tag:                     button
 button-class:                   button !default
 button-padding:                 1em 1.3em !default
 button-radius:                  1px !default

@@ -1,0 +1,16 @@
+extends ../_blueprint/master.jade
+
+block content
+
+  h1.ex-title Stout Tags
+  
+  .ex-heading Buttons
+  p Stout buttons can be added using the <code>ui-button</code> tag. The 
+    | <code>primary</code> styled button also has a scoped click handler 
+    | attached.
+
+  .ex.buttons
+    .ex-label buttons
+    ui-button(id='test1', style='primary', click='handleClick') Primary Button
+    ui-button(id='test1', style='warn') Warning Button
+    ui-button(id='test2', style='inverse') Inverse Button

@@ -19,6 +19,11 @@
   $ink-container:   #{$prefix}ink-container
   $fill-container:  #{$prefix}fill-container
 
+  #{$prefix}#{$button-tag}
+    display: none
+    &[rendered]
+      display: inline-block
+
   .#{$prefix}#{$button-class}
     @extend %inline-component
     +user-select(none)

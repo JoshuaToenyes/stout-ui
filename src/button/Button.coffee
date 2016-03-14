@@ -11,6 +11,7 @@ use         = require 'stout-core/trait/use'
 fillable    = require '../fill/fillable'
 vars        = require '../vars'
 enableable  = require '../interactive/enableable'
+parser      = require 'stout-client/parser'
 
 # Require necessary shared variables.
 require '../vars/button'
@@ -34,6 +35,9 @@ BUTTON_CLS = vars.read 'button/button-class'
 INK_CONTAINER_CLS = vars.readPrefixed 'ink/ink-container-class'
 
 
+TAG_NAME = vars.readPrefixed 'button/button-tag'
+
+
 
 module.exports = class Button extends Interactive
 
@@ -47,6 +51,7 @@ module.exports = class Button extends Interactive
   # @constructor
   ###
   constructor: (init = {}) ->
+    init.tagName = TAG_NAME
     super template, null, {renderOnChange: false}, init
 
     @prefixedClasses.add BUTTON_CLS
@@ -58,10 +63,6 @@ module.exports = class Button extends Interactive
         enable: '_enable'
         disable: '_disable'
     use(fillable) @
-
-    # Update the label in real-time if it changes.
-    @on 'change:label', (e) =>
-      @_getButton().textContent = e.data.value
 
     if @blurOnClick then @on 'click', (e) => @_getButton().blur()
 
@@ -112,6 +113,7 @@ module.exports = class Button extends Interactive
   ###
   @property 'label',
     default: ''
+    alias: 'contents'
 
 
   ###*
@@ -286,8 +288,10 @@ module.exports = class Button extends Interactive
   # Renders the button to the DOM.
   ###
   render: ->
-    if @label is '' then @iconPosition = 'center'
     super()
     if @ink then @initInkMouseEvents @_getButton()
     @show()
     @root
+
+
+parser.register TAG_NAME, Button
