@@ -13,10 +13,9 @@ document.addEventListener 'DOMContentLoaded', ->
 
   alert = new Alert
     parent: document.body
-    title: 'Something great is happening!'
-    content: 'You just won the lottery! I hope you\'re happy!'
-    ok: 'Yes, I am!'
-    buttonStyle: 'danger-flat'
+    title: 'Hello there!'
+    content: 'This is a sample alert box.'
+    ok: 'Thanks'
 
   new Button
     label: 'Show Backdrop'
