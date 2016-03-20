@@ -98,7 +98,7 @@ VISIBLE_CLS = vars.read 'component/visible'
 # @inner
 ###
 makeTransitionFunc = (func, transitionClass, removeClass, state, test) ->
-  (promise) ->
+  (promise, time) ->
     nextTick =>
       promise = promise or new Promise()
 
@@ -124,7 +124,7 @@ makeTransitionFunc = (func, transitionClass, removeClass, state, test) ->
         # Set the new transition timer.
         @_transitionTimer = setTimeout =>
           @[func] promise
-        , (e.data.time or 0)
+        , (time or 0)
 
         if func is 'hide' then @repaint()
 
@@ -169,7 +169,7 @@ module.exports = class ComponentView extends View
 
     for event, handler of contextEvents
       @context.on event, (e) =>
-        handler.call @, e.data.promise
+        handler.call @, e.data.promise, e.data.time
       , @
 
     @_transitionTimer = null
