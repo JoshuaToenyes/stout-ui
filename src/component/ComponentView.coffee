@@ -10,7 +10,7 @@ Promise            = require 'stout-core/promise/Promise'
 TransitionCanceled = require('stout-client/exc').TransitionCanceled
 vars               = require '../vars'
 View               = require 'stout-client/view/View'
-ViewNotRendered    = require('stout-client/err').ViewNotRendered
+ViewNotRenderedErr = require('stout-client/err').ViewNotRenderedErr
 
 # Load component variables.
 require '../vars/component'
@@ -168,10 +168,13 @@ module.exports = class ComponentView extends View
       'transition:out': @transitionOut
 
     for event, handler of contextEvents
-      @context.on event, (e) =>
-        handlerPromise = handler.call @, e.data.time
-        if e.data.promise then Promise.resolve e.data.promise, handlerPromise
-      , @
+      self = @
+      fn = ((h) ->
+        (e) ->
+          handlerPromise = h.call self, e.data.time
+          if e.data.promise then Promise.resolve e.data.promise, handlerPromise
+      )(handler)
+      @context.on event, fn, @
 
     @_transitionTimer = null
 
@@ -310,14 +313,15 @@ module.exports = class ComponentView extends View
     promise = new Promise()
     nextTick =>
       if @rendered
-        @_stopTransition('Transition canceled by hide event.')
-        @prefixedClasses.remove VISIBLE_CLS
-        @prefixedClasses.add HIDDEN_CLS
-        @context.visibility = 'hidden'
+        if @visible
+          @_stopTransition('Transition canceled by hide event.')
+          @prefixedClasses.remove VISIBLE_CLS
+          @prefixedClasses.add HIDDEN_CLS
+          @context.visibility = 'hidden'
+          @fire 'hide'
         Promise.fulfill(promise)
-        @fire 'hide'
       else
-        reason = new ViewNotRendered 'Can\'t hide unrendered view.'
+        reason = new ViewNotRenderedErr 'Can\'t hide unrendered view.'
         Promise.reject(promise, reason)
     promise
 
@@ -349,14 +353,15 @@ module.exports = class ComponentView extends View
     promise = new Promise()
     nextTick =>
       if @rendered
-        @_stopTransition('Transition canceled by show event.')
-        @prefixedClasses.remove(HIDDEN_CLS)
-        @prefixedClasses.add(VISIBLE_CLS)
-        @context.visibility = 'visible'
+        if @hidden
+          @_stopTransition('Transition canceled by show event.')
+          @prefixedClasses.remove(HIDDEN_CLS)
+          @prefixedClasses.add(VISIBLE_CLS)
+          @context.visibility = 'visible'
+          @fire 'show'
         Promise.fulfill promise
-        @fire 'show'
       else
-        reason = new ViewNotRendered 'Can\'t show unrendered view.'
+        reason = new ViewNotRenderedErr 'Can\'t show unrendered view.'
         Promise.reject promise, reason
     promise
 
