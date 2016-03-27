@@ -1,5 +1,6 @@
+select-selected-class:       selected !default
+
 select-box-class:            select-box !default
-select-box-selected-class:   selected !default
 select-box-fill-bounds:      radio-fill-bounds !default
 select-box-indicator-class:  indicator !default
 select-box-label-class:      label !default
