@@ -63,4 +63,4 @@ module.exports =
 
 
   readPrefixed: (varPath) ->
-    read('common/prefix') + read(varPath)
+    read('component/prefix') + read(varPath)
