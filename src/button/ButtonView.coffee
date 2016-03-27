@@ -4,10 +4,10 @@
 #
 # @module stout-ui/button/ButtonView
 ###
-
 defaults            = require 'lodash/defaults'
 EnableableViewTrait = require '../interactive/EnableableViewTrait'
 FillableViewTrait   = require '../fill/FillableViewTrait'
+HasLabelViewTrait   = require '../component/HasLabelViewTrait'
 InteractiveView     = require '../interactive/InteractiveView'
 template            = require './button.template'
 
@@ -39,12 +39,13 @@ TAG_NAME = vars.readPrefixed 'button/button-tag'
 #
 # @param {object} [init={}] - Initial property values.
 #
-# @exports stout-ui/button/Button
-# @extends stout-ui/common/Interactive
+# @exports stout-ui/button/ButtonView
+# @extends stout-ui/interactive/InteractiveView
 # @constructor
 ###
 module.exports = class ButtonView extends InteractiveView
 
+  @useTrait HasLabelViewTrait
   @useTrait EnableableViewTrait
   @useTrait FillableViewTrait
 
