@@ -1,24 +1,24 @@
-Checkbox = require '../../checkbox/Checkbox'
+checkboxFactory = require '../../checkbox'
 
 window.onload = ->
 
-  window.check = new Checkbox
+  checkboxFactory
     label: 'Select this test item.'
     parent: '.simple'
-  check.render()
+  .render()
 
-  new Checkbox
+  checkboxFactory
     label: 'Select this other test item.'
     parent: '.simple'
   .render()
 
-  new Checkbox
+  checkboxFactory
     label: 'Lastly, another one.'
     parent: '.simple'
   .render()
 
   for size in ['tiny', 'small', 'normal', 'large', 'huge', 'massive']
-    new Checkbox
+    checkboxFactory
       label: "This is a <code>#{size}</code> checkbox."
       parent: ".size-#{size}"
       size: size
@@ -26,8 +26,9 @@ window.onload = ->
 
 
   for style in ['default', 'inverse', 'primary', 'danger', 'warn']
-    new Checkbox
+    checkboxFactory
       label: "This is a <code>#{style}</code> checkbox."
       parent: ".style-#{style}"
-      style: style
+      type: style
+      selected: true
     .render()
