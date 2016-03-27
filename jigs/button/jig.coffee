@@ -1,77 +1,85 @@
-Button = require '../../button/Button'
+Interactive = require '../../interactive/Interactive'
+ButtonView  = require '../../button/ButtonView'
 
-#require './example.sass'
-#require 'button/button.sass'
-
-# atomIcon = require './atom-icon.svg'
 
 window.onload = ->
 
   # Size examples.
   for size in ['tiny', 'small', 'normal', 'large', 'huge', 'massive']
-    new Button
-      label: 'Make Reservation'
+    new ButtonView
+      context: new Interactive
+      contents: 'Make Reservation'
       parent: '.size-' + size
       size: size
-    .render()
+    .render().then (v) ->
+      console.log 'rendered!'
+    .error (e) ->
+      console.error 'Failed to render button: ', e
 
 
   # Invers button style example.
-  new Button
-    label: 'Confirm Order'
+  new ButtonView
+    context: new Interactive
+    contents: 'Confirm Order'
     parent: '.inverse'
-    style: 'inverse'
+    type: 'inverse'
   .render()
 
 
   # Flat button styles
   for style in ['normal', 'primary', 'inverse', 'warn', 'danger']
 
-    new Button
-      label: style + ' flat button'
+    new ButtonView
+      context: new Interactive
+      contents: style + ' flat button'
       parent: ".#{style}-flat"
-      style: style + '-flat'
+      type: style + '-flat'
     .render()
 
 
 
   # Primary button style example.
-  new Button
-    label: 'Place Order'
+  new ButtonView
+    context: new Interactive
+    contents: 'Place Order'
     parent: '.primary'
-    style: 'primary'
+    type: 'primary'
   .render()
 
 
 
   # Warn button style example.
-  new Button
-    label: 'Launch Missile'
+  new ButtonView
+    context: new Interactive
+    contents: 'Launch Missile'
     parent: '.warn'
-    style: 'warn'
+    type: 'warn'
   .render()
 
 
   # Danger button style example.
-  new Button
-    label: 'Delete Everything'
+  new ButtonView
+    context: new Interactive
+    contents: 'Delete Everything'
     parent: '.danger'
-    style: 'danger'
+    type: 'danger'
   .render()
 
 
   # Disabled button example.
   for style in ['normal', 'primary', 'inverse']
 
-    disabledButton = new Button
-      label: 'Button Disabled'
+    disabledButton = new ButtonView
+      context: new Interactive
+      contents: 'Button Disabled'
       parent: ".disabled-#{style} .subject"
-      style: style
-    disabledButton.render()
-    disabledButton.disable()
+      type: style
+    disabledButton.disable().render()
 
-    new Button
-      label: 'Enable'
+
+    new ButtonView
+      context: new Interactive
+      contents: 'Enable'
       size: 'tiny'
       parent: ".disabled-#{style} .controls"
       click: ((db) ->
@@ -79,10 +87,12 @@ window.onload = ->
       )(disabledButton)
     .render()
 
-    new Button
-      label: 'Disable'
+    new ButtonView
+      context: new Interactive
+      contents: 'Disable'
       size: 'tiny'
       parent: ".disabled-#{style} .controls"
+      tap: -> console.log 'tapped!'
       click: ((db) ->
         -> db.disable()
       )(disabledButton)
@@ -91,15 +101,17 @@ window.onload = ->
 
 
   # Show-hide example buttons.
-  showButtonEx = new Button
-    label: 'Reveal Example'
+  showButtonEx = new ButtonView
+    context: new Interactive
+    contents: 'Reveal Example'
     parent: '.show-hide .subject'
-    style: 'primary'
+    type: 'primary'
     classes: 'show-hide-subject'
   showButtonEx.render()
 
-  new Button
-    label: 'Show'
+  new ButtonView
+    context: new Interactive
+    contents: 'Show'
     size: 'tiny'
     parent: '.show-hide .controls'
     classes: 'show-button'
@@ -107,46 +119,12 @@ window.onload = ->
       showButtonEx.show()
   .render()
 
-  new Button
-    label: 'Hide'
+  new ButtonView
+    context: new Interactive
+    contents: 'Hide'
     size: 'tiny'
     parent: '.show-hide .controls'
     classes: 'hide-button'
     click: ->
       showButtonEx.hide()
   .render()
-
-# btop = new Button
-#   label: 'Top Label'
-#   parent: demoEl
-#   svgIcon: atomIcon
-#   iconPosition: 'top'
-#
-# bbottom = new Button
-#   label: 'Bottom Label'
-#   parent: demoEl
-#   svgIcon: atomIcon
-#   iconPosition: 'bottom'
-#
-# bleft   = new Button
-#   label: 'Left Label'
-#   parent: demoEl
-#   svgIcon: atomIcon
-#   iconPosition: 'left'
-#
-# bright  = new Button
-#   label: 'Right Label'
-#   parent: demoEl
-#   svgIcon: atomIcon
-#   iconPosition: 'right'
-#
-# bnolabel  = new Button
-#   parent: demoEl
-#   svgIcon: atomIcon
-
-
-# btop.render()
-# bbottom.render()
-# bleft.render()
-# bright.render()
-# bnolabel.render()

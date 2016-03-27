@@ -1,11 +1,5 @@
 button
-  span(class="#{prefix}label")
-    if iconPosition == 'right' || iconPosition == 'bottom'
-      | #{label}
-    if svgIcon
-      span(class='#{prefix}icon #{prefix}svg-icon #{prefix}icon-#{iconPosition}')!= svgIcon 
-    if iconPosition == 'left' || iconPosition == 'top'
-      | #{label}
+  span(class="#{prefix}label") #{contents}
   div(class="#{prefix}indicator")
   div(class="#{viewClasses.inkContainer}")
   div(class="#{viewClasses.fillContainer}")
