@@ -1,14 +1,13 @@
-Interactive = require '../../interactive/Interactive'
-ButtonView  = require '../../button/ButtonView'
+#Interactive = require '../../interactive/Interactive'
+buttonFactory = require '../../button'
 
 
 window.onload = ->
 
   # Size examples.
   for size in ['tiny', 'small', 'normal', 'large', 'huge', 'massive']
-    new ButtonView
-      context: new Interactive
-      contents: 'Make Reservation'
+    buttonFactory
+      label: 'Make Reservation'
       parent: '.size-' + size
       size: size
     .render().then (v) ->
@@ -17,10 +16,9 @@ window.onload = ->
       console.error 'Failed to render button: ', e
 
 
-  # Invers button style example.
-  new ButtonView
-    context: new Interactive
-    contents: 'Confirm Order'
+  # Inverse button style example.
+  buttonFactory
+    label: 'Confirm Order'
     parent: '.inverse'
     type: 'inverse'
   .render()
@@ -29,9 +27,8 @@ window.onload = ->
   # Flat button styles
   for style in ['normal', 'primary', 'inverse', 'warn', 'danger']
 
-    new ButtonView
-      context: new Interactive
-      contents: style + ' flat button'
+    buttonFactory
+      label: style + ' flat button'
       parent: ".#{style}-flat"
       type: style + '-flat'
     .render()
@@ -39,9 +36,8 @@ window.onload = ->
 
 
   # Primary button style example.
-  new ButtonView
-    context: new Interactive
-    contents: 'Place Order'
+  buttonFactory
+    label: 'Place Order'
     parent: '.primary'
     type: 'primary'
   .render()
@@ -49,18 +45,16 @@ window.onload = ->
 
 
   # Warn button style example.
-  new ButtonView
-    context: new Interactive
-    contents: 'Launch Missile'
+  buttonFactory
+    label: 'Launch Missile'
     parent: '.warn'
     type: 'warn'
   .render()
 
 
   # Danger button style example.
-  new ButtonView
-    context: new Interactive
-    contents: 'Delete Everything'
+  buttonFactory
+    label: 'Delete Everything'
     parent: '.danger'
     type: 'danger'
   .render()
@@ -69,17 +63,14 @@ window.onload = ->
   # Disabled button example.
   for style in ['normal', 'primary', 'inverse']
 
-    disabledButton = new ButtonView
-      context: new Interactive
-      contents: 'Button Disabled'
+    disabledButton = buttonFactory
+      label: 'Button Disabled'
       parent: ".disabled-#{style} .subject"
       type: style
     disabledButton.disable().render()
 
-
-    new ButtonView
-      context: new Interactive
-      contents: 'Enable'
+    buttonFactory
+      label: 'Enable'
       size: 'tiny'
       parent: ".disabled-#{style} .controls"
       click: ((db) ->
@@ -87,9 +78,8 @@ window.onload = ->
       )(disabledButton)
     .render()
 
-    new ButtonView
-      context: new Interactive
-      contents: 'Disable'
+    buttonFactory
+      label: 'Disable'
       size: 'tiny'
       parent: ".disabled-#{style} .controls"
       tap: -> console.log 'tapped!'
@@ -101,17 +91,15 @@ window.onload = ->
 
 
   # Show-hide example buttons.
-  showButtonEx = new ButtonView
-    context: new Interactive
-    contents: 'Reveal Example'
+  showButtonEx = buttonFactory
+    label: 'Reveal Example'
     parent: '.show-hide .subject'
     type: 'primary'
     classes: 'show-hide-subject'
   showButtonEx.render()
 
-  new ButtonView
-    context: new Interactive
-    contents: 'Show'
+  buttonFactory
+    label: 'Show'
     size: 'tiny'
     parent: '.show-hide .controls'
     classes: 'show-button'
@@ -119,9 +107,8 @@ window.onload = ->
       showButtonEx.show()
   .render()
 
-  new ButtonView
-    context: new Interactive
-    contents: 'Hide'
+  buttonFactory
+    label: 'Hide'
     size: 'tiny'
     parent: '.show-hide .controls'
     classes: 'hide-button'
