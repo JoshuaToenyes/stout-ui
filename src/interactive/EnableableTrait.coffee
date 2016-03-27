@@ -23,15 +23,47 @@ module.exports = class EnableableTrait extends Foundation
   # The `disabled` property sets or gets if this component is disabled.
   #
   # @member disabled
-  # @memberof stout-ui/interactive/EnableableViewTrait#
+  # @memberof stout-ui/interactive/EnableableTrait#
   ###
-  @property 'disabled'
+  @property 'disabled',
+    default: false
+    type: 'boolean'
+    get: -> not @enabled
+    set: (disable) -> @enabled = not disable
 
 
   ###*
   # The `enabled` property sets or gets if this component is enabled.
   #
-  # @member disabled
-  # @memberof stout-ui/interactive/EnableableViewTrait#
+  # @member enabled
+  # @memberof stout-ui/interactive/EnableableTrait#
   ###
-  @property 'enabled'
+  @property 'enabled',
+    default: true
+    type: 'boolean'
+
+
+  ###*
+  # Disable this view or component.
+  #
+  # @returns {this}
+  #
+  # @method disabled
+  # @memberof stout-ui/interactive/EnableableTrait#
+  ###
+  disable: ->
+    @disabled = true
+    @
+
+
+  ###*
+  # Enables this view or component.
+  #
+  # @returns {this}
+  #
+  # @method enable
+  # @memberof stout-ui/interactive/EnableableTrait#
+  ###
+  enable: ->
+    @enabled = true
+    @

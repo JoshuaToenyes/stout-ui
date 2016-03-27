@@ -38,8 +38,6 @@ module.exports = class EnableableViewTrait extends Foundation
   # @memberof stout-ui/interactive/EnableableViewTrait#
   ###
   @property 'enabled',
-    default: true
-    type: 'boolean'
     get: -> not @prefixedClasses.contains 'disabled'
     set: (s) ->
       if s and @disabled
@@ -48,17 +46,7 @@ module.exports = class EnableableViewTrait extends Foundation
       else if not s and @enabled
         @prefixedClasses.add 'disabled'
         if @eventRegistered('disable') then @fire 'disable'
-
-
-
-  disable: ->
-    @disabled = true
-    @
-
-
-  enable: ->
-    @enabled = true
-    @
+      s
 
 
   ###*
@@ -70,6 +58,5 @@ module.exports = class EnableableViewTrait extends Foundation
   # @private
   ###
   initTrait: ->
-    @syncProperty @context, 'enabled', {inherit: false}
-    @syncProperty @context, 'disabled'
+    @syncProperty @context, 'enabled'
     @registerEvents ['enable', 'disable']
