@@ -4,3 +4,5 @@ hidden:            hidden !default
 transitioning:     transitioning !default
 transitioning-in:  transitioning-in !default
 transitioning-out: transitioning-out !default
+
+label-class:       label !default

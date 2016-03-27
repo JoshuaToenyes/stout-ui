@@ -4,7 +4,6 @@
 # support for extension.
 # @module vars/default
 ###
-
 err    = require 'stout-core/err'
 reduce = require 'lodash/reduce'
 

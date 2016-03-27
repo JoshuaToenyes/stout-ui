@@ -4,10 +4,8 @@
 #
 # @module stout-ui/component/Component
 ###
-
-ComponentView = require './ComponentView'
-Promise       = require 'stout-core/promise/Promise'
-ViewModel     = require 'stout-client/view/ViewModel'
+Promise   = require 'stout-core/promise/Promise'
+ViewModel = require 'stout-client/view/ViewModel'
 
 
 

@@ -1,3 +1,4 @@
+checkbox-tag:         checkbox
 checkbox-class:       checkbox !default
 
 checkbox-check-color: white
