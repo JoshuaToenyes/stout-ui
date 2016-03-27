@@ -7,6 +7,7 @@
 defaults            = require 'lodash/defaults'
 EnableableViewTrait = require '../interactive/EnableableViewTrait'
 FillableViewTrait   = require '../fill/FillableViewTrait'
+FocusableViewTrait  = require '../interactive/FocusableViewTrait'
 HasLabelViewTrait   = require '../component/HasLabelViewTrait'
 InteractiveView     = require '../interactive/InteractiveView'
 template            = require './button.template'
@@ -48,6 +49,7 @@ module.exports = class ButtonView extends InteractiveView
   @useTrait HasLabelViewTrait
   @useTrait EnableableViewTrait
   @useTrait FillableViewTrait
+  @useTrait FocusableViewTrait
 
   constructor: (init, events) ->
     defaults init, {template, tagName: TAG_NAME}

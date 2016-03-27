@@ -19,12 +19,14 @@
   $ink-container:   #{$prefix}ink-container
   $fill-container:  #{$prefix}fill-container
 
+  $final-outline-offset: 3px
+
   +keyframes(button-outline)
     0%
       opacity: 0
       outline-offset: 10px
     100%
-      outline-offset: 1px
+      outline-offset: $final-outline-offset
       opacity: 1
 
   #{$prefix}#{$button-tag}
@@ -37,6 +39,9 @@
     +user-select(none)
     +transition(box-shadow 400ms)
     position: relative
+
+    &, button
+      outline: none
 
     button
       margin: 0
@@ -57,9 +62,9 @@
     &::before
       @extend %cover-parent-pseudo
       +transition(opacity 300ms, outline-color 300ms)
-      outline-width: 2px
+      outline-width: 3px
       outline-style: solid
-      outline-offset: 1px
+      outline-offset: $final-outline-offset
       opacity: 0
 
     &.#{$btn-visible}
@@ -79,7 +84,6 @@
       box-shadow: 1px 1px $button-shadow-size $button-shadow-hover
 
     button
-      outline: none
       border: none
       border-radius: $button-radius
       padding: $button-padding

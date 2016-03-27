@@ -13,7 +13,7 @@ button-ink:                     darken($button-bg, 10%) !default
 button-shadow:                  rgba(black, 0.13) !default
 button-shadow-hover:            rgba(black, 0.2) !default
 button-shadow-active:           rgba(black, 0.3) !default
-button-shadow-focus:            rgba(black, 0.25) !default
+button-shadow-focus:            rgba(black, 0.05) !default
 
 button-inverse-bg:              darken($color-ibg, 1.5%) !default
 button-inverse-fg:              lighten($color-ifg, 5%) !default
