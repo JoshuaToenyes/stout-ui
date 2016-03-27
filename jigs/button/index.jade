@@ -119,3 +119,21 @@ block content
   .ex.show-hide.last
     .subject
     .controls
+
+
+
+  .ex-heading Custom HTML Tag
+  p These buttons are added to the DOM and parsed using the Stout Client parser
+    | and the custom HTML tag <code>&lt;ui-button/&gt;</code>
+  
+  .ex
+    .ex-label tag
+    ui-button Test Button
+  
+  .ex
+    .ex-label tag inverse
+    ui-button(type="inverse") Inverse Button
+    
+  .ex
+    .ex-label tag massive
+    ui-button(type="primary", size="massive") Massive Button

@@ -1,8 +1,10 @@
-#Interactive = require '../../interactive/Interactive'
 buttonFactory = require '../../button'
+parser = require 'stout-client/parser'
 
 
 window.onload = ->
+
+  parser.parse()
 
   # Size examples.
   for size in ['tiny', 'small', 'normal', 'large', 'huge', 'massive']

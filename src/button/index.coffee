@@ -12,7 +12,7 @@ parser     = require 'stout-client/parser'
 TAG_NAME = vars.readPrefixed 'button/button-tag'
 
 # Register the button tag.
-parser.register TAG_NAME, ButtonView, Button
+parser.register TAG_NAME, ButtonView, Button, {contentsMember: 'label'}
 
 module.exports = (init) ->
   defaults init, {context: new Button}
