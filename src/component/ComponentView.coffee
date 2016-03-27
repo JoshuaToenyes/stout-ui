@@ -98,9 +98,9 @@ VISIBLE_CLS = vars.read 'component/visible'
 # @inner
 ###
 makeTransitionFunc = (func, transitionClass, removeClass, state, test) ->
-  (promise, time) ->
+  (time) ->
     nextTick =>
-      promise = promise or new Promise()
+      promise = new Promise()
 
       # Start the transition if the view is rendered and the test function
       # return true.
@@ -123,7 +123,7 @@ makeTransitionFunc = (func, transitionClass, removeClass, state, test) ->
 
         # Set the new transition timer.
         @_transitionTimer = setTimeout =>
-          @[func] promise
+          @[func].call @
         , (time or 0)
 
         if func is 'hide' then @repaint()
@@ -156,8 +156,8 @@ makeTransitionFunc = (func, transitionClass, removeClass, state, test) ->
 ###
 module.exports = class ComponentView extends View
 
-  constructor: ->
-    super arguments...
+  constructor: (init, events = []) ->
+    super init, events.concat ['show', 'hide', 'transition']
 
     @prefix = PREFIX
 
@@ -169,7 +169,8 @@ module.exports = class ComponentView extends View
 
     for event, handler of contextEvents
       @context.on event, (e) =>
-        handler.call @, e.data.promise, e.data.time
+        handlerPromise = handler.call @, e.data.time
+        if e.data.promise then Promise.resolve e.data.promise, handlerPromise
       , @
 
     @_transitionTimer = null
@@ -300,16 +301,13 @@ module.exports = class ComponentView extends View
   # Stops any in-progress transition and hides this component. If this
   # component is not rendered, calling this method has no effect.
   #
-  # @param {module:stout-core/event/Event} e - Hide event fired from associated
-  # view model.
-  #
   # @returns {module:stout-core/promise/Promise} Show promise.
   #
   # @method hide
   # @memberof stout-ui/component/ComponentView#
   ###
-  hide: (promise) ->
-    promise = promise or new Promise()
+  hide: ->
+    promise = new Promise()
     nextTick =>
       if @rendered
         @_stopTransition('Transition canceled by hide event.')
@@ -317,6 +315,7 @@ module.exports = class ComponentView extends View
         @prefixedClasses.add HIDDEN_CLS
         @context.visibility = 'hidden'
         Promise.fulfill(promise)
+        @fire 'hide'
       else
         reason = new ViewNotRendered 'Can\'t hide unrendered view.'
         Promise.reject(promise, reason)
@@ -327,16 +326,13 @@ module.exports = class ComponentView extends View
   # Renders this `ComponentView`. If `options.showOnRender` is set, the view
   # is also "shown."
   #
-  # @param {stout-core/promise/Promose} [promise] - Optional promise to resolve
-  # rendering to.
-  #
   # @returns {module:stout-core/promise/Promise} Render promise.
   #
   # @method show
   # @memberof stout-ui/component/ComponentView#
   ###
-  render: (promise) ->
-    super(promise).then =>
+  render: ->
+    super().then =>
       if @options.showOnRender then @show()
 
 
@@ -344,26 +340,24 @@ module.exports = class ComponentView extends View
   # Stops any in-progress transition and makes this component visible. If this
   # component is not rendered calling this method has no effect.
   #
-  # @param {module:stout-core/event/Event} e - Show event fired from associated
-  # view model.
-  #
   # @returns {module:stout-core/promise/Promise} Show promise.
   #
   # @method show
   # @memberof stout-ui/component/ComponentView#
   ###
-  show: (e) ->
-    promise = promise or new Promise()
+  show: ->
+    promise = new Promise()
     nextTick =>
       if @rendered
         @_stopTransition('Transition canceled by show event.')
         @prefixedClasses.remove(HIDDEN_CLS)
         @prefixedClasses.add(VISIBLE_CLS)
         @context.visibility = 'visible'
-        Promise.fulfill(e.promise)
+        Promise.fulfill promise
+        @fire 'show'
       else
         reason = new ViewNotRendered 'Can\'t show unrendered view.'
-        Promise.reject(promise, reason)
+        Promise.reject promise, reason
     promise
 
 

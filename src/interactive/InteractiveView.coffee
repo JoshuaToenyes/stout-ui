@@ -1,26 +1,58 @@
-
+###*
+# @overview Defines the InteractiveView class which can be extended to create
+# interactive UI components which automatically handle mouse, hover, focus,
+# blur and other common interactive states and behaviors.
+#
+# @module stout-ui/interactive/InteractiveView
+###
 
 ComponentView = require '../component/ComponentView'
+nextTick      = require 'stout-client/util/nextTick'
 
 
+###*
+# State definitions for hover state.
+#
+# @type {Object.<string, number>}
+# @const
+###
+STATE =
+  DEFAULT: 1  # Normal static state.
+  HOVER:   2  # Mouse is over the button.
+  ACTIVE:  3  # Mouse is down over button.
+  FOCUS:   4  # Button is focused.
+
+
+EVENTS = ['blur', 'focus', 'active', 'hover', 'click', 'tap', 'leave']
+
+
+###*
+# The InteractiveView class defines the view of a UI component with support for
+# common UI component states and behaviors such as blur, focus, mouseenter,
+# mouseleave, etc.
+#
+# @exports stout-ui/interactive/InteractiveView
+# @extends stout-ui/component/ComponentView
+# @constructor
+###
 module.exports = class InteractiveView extends ComponentView
 
-
-  constructor: ->
-    super arguments...
-
-    contextEvents =
-      'show': @show
-      'hide': @hide
-      'transition:in': @transitionIn
-      'transition:out': @transitionOut
-
-    for event, handler of contextEvents
-      @context.on event, (e) =>
-        handler.call @, e.data.promise, e.data.time
-      , @
-
+  constructor: (init, events = []) ->
+    super init, events.concat EVENTS
+    @_state = STATE.DEFAULT
     @_interactiveEventListeners = []
+
+
+  # Add event properties for each.
+  EVENTS.forEach (eventName) =>
+    @property eventName,
+      serializable: false
+      set: (handler) ->
+        switch typeof handler
+          when 'string'
+            nextTick => @on eventName, @context[handler]
+          when 'function'
+            nextTick => @on eventName, handler
 
 
   ###*
@@ -41,12 +73,13 @@ module.exports = class InteractiveView extends ComponentView
   _addInteractiveEventListeners: ->
     [at, ht, ft] = [@getActiveTarget(), @getHoverTarget(), @getFocusTarget()]
     fn = => @_interactiveEventListeners.push @addEventListenerTo arguments...
-    fn at, 'mousedown', @mousedown
-    fn at, 'mouseup', @mouseup
-    fn ht, 'mouseenter', @mouseenter
-    fn ht, 'mouseleave', @mouseleave
-    fn ft, 'focus', @focus
-    fn ft, 'blur', @blur
+    fn at, 'mousedown', @_mousedown
+    fn at, 'mouseup', @_mouseup
+    fn ht, 'mouseenter', @_mouseenter
+    fn ht, 'mouseleave', @_mouseleave
+    fn ft, 'focus', @_focus
+    fn ft, 'blur', @_blur
+    fn ft, 'tap', @_tap
 
 
   ###*
@@ -64,10 +97,10 @@ module.exports = class InteractiveView extends ComponentView
   ###*
   # Called when a native blur event is detected on the hover target element.
   #
-  # @method blur
+  # @method _blur
   # @memberof stout-ui/interactive/InteractiveView#
   ###
-  blur: (e) =>
+  _blur: (e) =>
     if @fireInteractiveEvent('blur', e)
       @prefixedClasses.remove 'focus'
       @fire 'blur', e
@@ -77,10 +110,10 @@ module.exports = class InteractiveView extends ComponentView
   # Called when a native focus event is detected on the hover target element.
   # If this Interactive is enabled, a corresponding `focus` event is fired.
   #
-  # @method focus
+  # @method _focus
   # @memberof stout-ui/interactive/InteractiveView#
   ###
-  focus: (e) =>
+  _focus: (e) =>
     if @fireInteractiveEvent('focus', e)
       @prefixedClasses.add 'focus'
       @fire 'focus', e
@@ -91,10 +124,10 @@ module.exports = class InteractiveView extends ComponentView
   # element. If this Interactive is enabled, a corresponding `active` event
   # is fired.
   #
-  # @method mousedown
+  # @method _mousedown
   # @memberof stout-ui/interactive/InteractiveView#
   ###
-  mousedown: (e) =>
+  _mousedown: (e) =>
     if @fireInteractiveEvent('active', e)
       @prefixedClasses.add 'active'
 
@@ -110,13 +143,14 @@ module.exports = class InteractiveView extends ComponentView
   # Private method called when a native mouse enter event is detected. This
   # enter event is used to trigger a corresponding `hover` event.
   #
-  # @method mouseenter
+  # @method _mouseenter
   # @memberof stout-ui/interactive/InteractiveView#
   ###
-  mouseenter: (e) =>
+  _mouseenter: (e) =>
     clearTimeout @_hoverTimer
     if @_state is STATE.HOVER then return
     @_state = STATE.HOVER
+    @_hoverTimer = null
     @prefixedClasses.add 'hover'
     if @fireInteractiveEvent('hover', e) then @fire 'hover', e
 
@@ -126,15 +160,14 @@ module.exports = class InteractiveView extends ComponentView
   # enter event is used to trigger a corresponding `leave` event, signalling
   # the end of a hover.
   #
-  # @method mouseleave
+  # @method _mouseleave
   # @memberof stout-ui/interactive/InteractiveView#
   ###
-  mouseleave: (e) =>
-    self = @
+  _mouseleave: (e) =>
     @_hoverTimer = setTimeout =>
-      self._state = STATE.DEFAULT
+      @._state = STATE.DEFAULT
       @prefixedClasses.remove 'hover'
-      if @fireInteractiveEvent('leave', e) then self.fire 'leave', e
+      if @fireInteractiveEvent('leave', e) then @fire 'leave', e
     , 10
 
 
@@ -142,13 +175,23 @@ module.exports = class InteractiveView extends ComponentView
   # Called when a native mouse up event is detected on the active target
   # element.
   #
-  # @method mouseup
+  # @method _mouseup
   # @memberof stout-ui/interactive/InteractiveView#
   ###
-  mouseup: (e) =>
+  _mouseup: (e) =>
     @prefixedClasses.remove 'active'
     if @getHoverTarget().contains e.target
       @fire 'click'
+
+
+  ###*
+  # Called when a "tap" event it triggered.
+  #
+  # @method _tap
+  # @memberof stout-ui/interactive/InteractiveView#
+  ###
+  _tap: (e) =>
+    if @fireInteractiveEvent('tap', e) then @fire 'tap', e
 
 
   ###*
@@ -224,5 +267,5 @@ module.exports = class InteractiveView extends ComponentView
   # @method render
   # @memberof stout-ui/interactive/InteractiveView#
   ###
-  render: (promise) ->
-    super(promise).then => @_addInteractiveEventListeners()
+  render: ->
+    super().then => @_addInteractiveEventListeners()

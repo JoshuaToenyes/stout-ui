@@ -5,21 +5,11 @@
 # @module stout-ui/interactive/Interactive
 ###
 
-Component  = require './Component'
+Component  = require '../component/Component'
 nextTick = require 'stout-client/util/nextTick'
 
 
-###*
-# State definitions for hover state.
-#
-# @type {Object.<string, number>}
-# @const
-###
-STATE =
-  DEFAULT: 1  # Normal static state.
-  HOVER:   2  # Mouse is over the button.
-  ACTIVE:  3  # Mouse is down over button.
-  FOCUS:   4  # Button is focused.
+
 
 
 
@@ -50,27 +40,6 @@ module.exports = class Interactive extends Component
   # @exports stout-ui/interactive/Interactive
   # @constructor
   ###
-  constructor: (template, model, opts, init, events = []) ->
-    super template, model, opts, init, [
-      'blur'
-      'hover'
-      'leave'
-      'active'
-      'focus'].concat events
-    @_hoverTimer = null
-    @_disabled = false
-    @_state = STATE.DEFAULT
-
-
-  ###*
-  # Alias method to easily add a click handler to this Interactive element.
-  #
-  ###
-  @property 'click',
-    serializable: false
-    set: (handler) ->
-      switch typeof handler
-        when 'string'
-          nextTick => @on 'click', @scope.$member[handler] or @scope[handler]
-        when 'function'
-          nextTick => @on 'click', handler
+  constructor: (init, events = []) ->
+    super init, events.concat [
+      'blur', 'focus', 'active', 'hover', 'click', 'leave']
