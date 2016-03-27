@@ -8,6 +8,7 @@ Foundation = require 'stout-core/base/Foundation'
 isArray    = require 'lodash/isArray'
 
 # Require necessary shared variables.
+require '../vars/component'
 require '../vars/ink'
 
 
