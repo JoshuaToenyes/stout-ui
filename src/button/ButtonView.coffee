@@ -67,6 +67,8 @@ module.exports = class ButtonView extends InteractiveView
 
     @on 'ready', => @initInkMouseEvents()
 
+    @on 'active:keydown', => @rippleInk(null, null, 300)
+
 
   ###*
   # If set to `true`, this button will blur immediately after a click event.

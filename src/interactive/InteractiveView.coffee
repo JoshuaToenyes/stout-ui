@@ -8,6 +8,7 @@
 
 ComponentView = require '../component/ComponentView'
 nextTick      = require 'stout-client/util/nextTick'
+keys          = require 'stout-client/keys'
 
 
 ###*
@@ -41,6 +42,7 @@ module.exports = class InteractiveView extends ComponentView
     super init, events.concat EVENTS
     @_state = STATE.DEFAULT
     @_interactiveEventListeners = []
+    @_focusEventListeners = []
 
 
   # Add event properties for each.
@@ -53,6 +55,14 @@ module.exports = class InteractiveView extends ComponentView
             nextTick => @on eventName, @context[handler]
           when 'function'
             nextTick => @on eventName, handler
+
+
+  ###*
+  # Set of focus-specific event listeners.
+  #
+  # @member {timer} _focusEventListeners
+  # @memberof stout-ui/interactive/InteractiveView#
+  ###
 
 
   ###*
@@ -72,7 +82,9 @@ module.exports = class InteractiveView extends ComponentView
   ###
   _addInteractiveEventListeners: ->
     [at, ht, ft] = [@getActiveTarget(), @getHoverTarget(), @getFocusTarget()]
-    fn = => @_interactiveEventListeners.push @addEventListenerTo arguments...
+    fn = (target, event, handler) =>
+      listeners = @addEventListenerTo arguments...
+      @_interactiveEventListeners.push [target, event, listeners]
     fn at, 'mousedown', @_mousedown
     fn at, 'mouseup', @_mouseup
     fn ht, 'mouseenter', @_mouseenter
@@ -80,6 +92,36 @@ module.exports = class InteractiveView extends ComponentView
     fn ft, 'focus', @_focus
     fn ft, 'blur', @_blur
     fn ft, 'tap', @_tap
+
+
+  ###*
+  # Adds focus-related event listeners.
+  #
+  # @method _addFocusEventListeners
+  # @memberof stout-ui/interactive/InteractiveView#
+  ###
+  _addFocusEventListeners: ->
+    ft = @getFocusTarget()
+    
+    downListeners = @addEventListenerTo ft, 'keydown', (e) =>
+      keycode = e.which
+      if keycode is keys.SPACE or keycode is keys.RETURN
+        e.preventDefault()
+        if @fireInteractiveEvent('active', e) and
+        not @prefixedClasses.contains 'active'
+          @prefixedClasses.add 'active'
+          @fire 'active:keydown'
+          @fire 'tap'
+          @fire 'click'
+    @_focusEventListeners.push [ft, 'keydown', downListeners]
+
+    upListeners = @addEventListenerTo ft, 'keyup', (e) =>
+      keycode = e.which
+      if keycode is keys.SPACE or keycode is keys.RETURN
+        if @fireInteractiveEvent('active', e)
+          @prefixedClasses.remove 'active'
+          @fire('active:keyup')
+    @_focusEventListeners.push [ft, 'keyup', downListeners]
 
 
   ###*
@@ -95,6 +137,18 @@ module.exports = class InteractiveView extends ComponentView
 
 
   ###*
+  # Removes focus-related event listeners.
+  #
+  # @method _removeFocusEventListeners
+  # @memberof stout-ui/interactive/InteractiveView#
+  ###
+  _removeFocusEventListeners: ->
+    for entry in @_focusEventListeners
+      @removeEventListenerFrom entry...
+    @_focusEventListeners = []
+
+
+  ###*
   # Called when a native blur event is detected on the hover target element.
   #
   # @method _blur
@@ -102,7 +156,9 @@ module.exports = class InteractiveView extends ComponentView
   ###
   _blur: (e) =>
     if @fireInteractiveEvent('blur', e)
+      @prefixedClasses.remove 'active'
       @prefixedClasses.remove 'focus'
+      @_removeFocusEventListeners()
       @fire 'blur', e
 
 
@@ -116,6 +172,7 @@ module.exports = class InteractiveView extends ComponentView
   _focus: (e) =>
     if @fireInteractiveEvent('focus', e)
       @prefixedClasses.add 'focus'
+      @_addFocusEventListeners()
       @fire 'focus', e
 
 

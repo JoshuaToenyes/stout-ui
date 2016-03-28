@@ -292,8 +292,10 @@ module.exports = class InkableViewTrait extends Foundation
   # Creates an ink ripple, emanating from the center of the passed container.
   #
   ###
-  rippleInk: (container, size) ->
+  rippleInk: (container, size, delay = 10) ->
+    container ?= @getInkContainer()
     r = container.getBoundingClientRect()
+    size ?= 0.2 * @calcInkRadius(r.width, r.height)
     left = r.width / 2
     top = r.height / 2
     ink = @expandInk(container, left, top, size, size)
@@ -305,7 +307,7 @@ module.exports = class InkableViewTrait extends Foundation
 
     setTimeout =>
       @fadeInk(ink, tOffset)
-    , 0
+    , delay
 
     # Add an event listener for the mouseup event anywhere, then remove the
     # listener once the event has occurred.
