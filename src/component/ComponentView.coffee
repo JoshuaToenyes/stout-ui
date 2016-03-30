@@ -97,11 +97,10 @@ VISIBLE_CLS = vars.read 'component/visible'
 # @function stout-ui/component/ComponentView~makeTransitionFunc
 # @inner
 ###
-makeTransitionFunc = (func, transitionClass, removeClass, state, test) ->
+makeTransitionFunc = (func, transitionClass, removeClass, state, evt, test) ->
   (time) ->
+    promise = new Promise()
     nextTick =>
-      promise = new Promise()
-
       # Start the transition if the view is rendered and the test function
       # return true.
       if @rendered and test.call(@)
@@ -123,12 +122,14 @@ makeTransitionFunc = (func, transitionClass, removeClass, state, test) ->
 
         # Set the new transition timer.
         @_transitionTimer = setTimeout =>
-          @[func].call @
+          Promise.resolve promise, @[func].call(@)
         , (time or 0)
 
         if func is 'hide' then @repaint()
 
         @context.visibility = state
+
+        @fire evt
 
       # If the view is not rendered, then reject the transition promise.
       else
@@ -136,7 +137,43 @@ makeTransitionFunc = (func, transitionClass, removeClass, state, test) ->
         view is not yet rendered."
         reason = new TransitionCanceled(msg)
         Promise.reject promise, reason
-    @
+    promise
+
+
+###*
+# Generates and returns a visibility function, i.e. `show()` and `hide()`.
+#
+# @param {string} addClass - The class to add to the root element.
+#
+# @param {string} removeClass - The class to remove from the root element.
+#
+# @param {string} visibility - The final visibility state to set on the context.
+#
+# @param {string} evt - The event to fire.
+#
+# @param {function} test - The function to call to determine if the visibility
+# change should occur.
+#
+# @function makeVisibilityFunc
+# @inner
+###
+makeVisibilityFunc = (addClass, removeClass, visibility, evt, test) ->
+  ->
+    promise = new Promise()
+    nextTick =>
+      if @rendered
+        if test.call @
+          if @transitioningIn
+            @_stopTransition("Transition canceled by #{evt} event.")
+          @prefixedClasses.remove removeClass
+          @prefixedClasses.add addClass
+          @context.visibility = visibility
+          @fire evt
+        Promise.fulfill(promise)
+      else
+        reason = new ViewNotRenderedErr "Can't #{evt} unrendered view."
+        Promise.reject(promise, reason)
+    promise
 
 
 
@@ -309,21 +346,13 @@ module.exports = class ComponentView extends View
   # @method hide
   # @memberof stout-ui/component/ComponentView#
   ###
-  hide: ->
-    promise = new Promise()
-    nextTick =>
-      if @rendered
-        if @visible
-          @_stopTransition('Transition canceled by hide event.')
-          @prefixedClasses.remove VISIBLE_CLS
-          @prefixedClasses.add HIDDEN_CLS
-          @context.visibility = 'hidden'
-          @fire 'hide'
-        Promise.fulfill(promise)
-      else
-        reason = new ViewNotRenderedErr 'Can\'t hide unrendered view.'
-        Promise.reject(promise, reason)
-    promise
+  hide: makeVisibilityFunc(
+    HIDDEN_CLS,
+    VISIBLE_CLS,
+    'hidden',
+    'hide',
+    -> @visible or @transitioning
+  )
 
 
   ###*
@@ -337,7 +366,10 @@ module.exports = class ComponentView extends View
   ###
   render: ->
     super().then =>
-      if @options.showOnRender then @show()
+      if @options.showOnRender
+        @show()
+      else
+        @hide()
 
 
   ###*
@@ -349,21 +381,13 @@ module.exports = class ComponentView extends View
   # @method show
   # @memberof stout-ui/component/ComponentView#
   ###
-  show: ->
-    promise = new Promise()
-    nextTick =>
-      if @rendered
-        if @hidden
-          @_stopTransition('Transition canceled by show event.')
-          @prefixedClasses.remove(HIDDEN_CLS)
-          @prefixedClasses.add(VISIBLE_CLS)
-          @context.visibility = 'visible'
-          @fire 'show'
-        Promise.fulfill promise
-      else
-        reason = new ViewNotRenderedErr 'Can\'t show unrendered view.'
-        Promise.reject promise, reason
-    promise
+  show: makeVisibilityFunc(
+    VISIBLE_CLS,
+    HIDDEN_CLS,
+    'visible',
+    'show',
+    -> @hidden or @transitioning
+  )
 
 
   ###*
@@ -380,9 +404,13 @@ module.exports = class ComponentView extends View
   # @method transitionIn
   # @memberof stout-ui/component/ComponentView#
   ###
-  transitionIn: makeTransitionFunc 'show', TRANS_IN_CLS, TRANS_OUT_CLS,
-  'transitioning:in', ->
-    @hidden or @transitioningOut
+  transitionIn: makeTransitionFunc(
+    'show',
+    TRANS_IN_CLS,
+    TRANS_OUT_CLS,
+    'transitioning:in',
+    'transition:in', -> @hidden or @transitioningOut
+  )
 
 
   ###*
@@ -399,6 +427,10 @@ module.exports = class ComponentView extends View
   # @method transitionOut
   # @memberof stout-ui/component/ComponentView#
   ###
-  transitionOut: makeTransitionFunc 'hide', TRANS_OUT_CLS, TRANS_IN_CLS,
-  'transitioning:out', ->
-    @visible or @transitioningIn
+  transitionOut: makeTransitionFunc(
+    'hide',
+    TRANS_OUT_CLS,
+    TRANS_IN_CLS,
+    'transitioning:out',
+    'transition:out', -> @visible or @transitioningIn
+  )
