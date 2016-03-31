@@ -110,11 +110,18 @@ makeTransitionFunc = (func, transitionClass, removeClass, state, evt, test) ->
 
         @prefixedClasses.add TRANS_CLS, transitionClass
 
-        updateTransitionPromise(@, promise)
+        #updateTransitionPromise(@, promise)
+        clearTimeout @_transitionTimer
+
+        if @_transitionPromise
+          Promise.reject @_transitionPromise, new TransitionCanceled "Transition
+          canceled by another transition event."
+
+        @_transitionPromise = promise
 
         # Set the new transition timer.
         @_transitionTimer = setTimeout =>
-          @prefixedClasses.remove TRANS_CLS, transitionClass
+          @_removeTransitionClasses()
           Promise.resolve promise, @[func].call(@)
         , (time or 0)
 
@@ -136,10 +143,6 @@ makeTransitionFunc = (func, transitionClass, removeClass, state, evt, test) ->
 ###*
 # Generates and returns a visibility function, i.e. `show()` and `hide()`.
 #
-# @param {string} addClass - The class to add to the root element.
-#
-# @param {string} removeClass - The class to remove from the root element.
-#
 # @param {string} visibility - The final visibility state to set on the context.
 #
 # @param {string} evt - The event to fire.
@@ -147,22 +150,27 @@ makeTransitionFunc = (func, transitionClass, removeClass, state, evt, test) ->
 # @param {function} test - The function to call to determine if the visibility
 # change should occur.
 #
+# @param {string} testRejectionMsg - The message to reject promise with if
+# test function returns false.
+#
 # @function makeVisibilityFunc
 # @inner
 ###
-makeVisibilityFunc = (addClass, removeClass, visibility, evt, test) ->
+makeVisibilityFunc = (visibility, evt, test, testRejectionMsg) ->
   ->
     promise = new Promise()
     nextTick =>
       if @rendered
         if test.call @
-          if @transitioningIn
+          if @transitioning
             @_stopTransition("Transition canceled by #{evt} event.")
-          @prefixedClasses.remove removeClass
-          @prefixedClasses.add addClass
+          @['_' + evt]()
           @context.visibility = visibility
           @fire evt
-        Promise.fulfill(promise)
+          Promise.fulfill(promise)
+        else
+          reason = new Error testRejectionMsg
+          Promise.reject(promise, reason)
       else
         reason = new ViewNotRenderedErr "Can't #{evt} unrendered view."
         Promise.reject(promise, reason)
@@ -264,7 +272,7 @@ module.exports = class ComponentView extends View
   ###
   @property 'hidden',
     set: (hidden) -> @visible = not hidden
-    get: -> not @visible
+    get: -> @prefixedClasses.contains HIDDEN_CLS
 
 
   ###*
@@ -319,6 +327,19 @@ module.exports = class ComponentView extends View
 
 
   ###*
+  # Immediately hides this `ComponentView`.
+  #
+  # @method _hide
+  # @memberof stout-ui/component/ComponentView#
+  # @private
+  ###
+  _hide: ->
+    @prefixedClasses.remove VISIBLE_CLS
+    @prefixedClasses.add HIDDEN_CLS
+    @repaint()
+
+
+  ###*
   # Removes all transition-related classes.
   #
   # @method _removeTransitionClasses
@@ -328,6 +349,19 @@ module.exports = class ComponentView extends View
   _removeTransitionClasses: ->
     @prefixedClasses.remove TRANS_CLS, TRANS_IN_CLS, TRANS_OUT_CLS
     return
+
+
+  ###*
+  # Immediately shows this `ComponentView`.
+  #
+  # @method _show
+  # @memberof stout-ui/component/ComponentView#
+  # @private
+  ###
+  _show: ->
+    @prefixedClasses.remove HIDDEN_CLS
+    @prefixedClasses.add VISIBLE_CLS
+    @repaint()
 
 
   ###*
@@ -350,6 +384,49 @@ module.exports = class ComponentView extends View
 
 
   ###*
+  # Calculates and returns the rendered dimensions of this `ComponentView`'s
+  # root HTMLElement.
+  #
+  # @method getRenderedDimensions
+  # @memberof stout-ui/component/ComponentView#
+  ###
+  getRenderedDimensions: ->
+    promise = new Promise
+
+    calcPositionOffScreen = =>
+      style = @root.style
+      pos = style.position
+      left = style.left
+      style.position = 'fixed'
+      style.left = '-10000px'
+      @_show()
+      {width, height} = @root.getBoundingClientRect()
+      @_hide()
+      style.position = pos
+      style.left = left
+      Promise.resolve promise, {width, height}
+
+    resolvePosition = =>
+      r = @root.getBoundingClientRect()
+      Promise.resolve promise, {width: r.width, height: r.height}
+
+    if @visible
+      resolvePosition()
+    else if @rendered
+      calcPositionOffScreen()
+    else
+      p = @parent
+      sor = @options.showOnRender
+      if not p then @parent = document.body
+      @render().then =>
+        calcPositionOffScreen()
+        @parent = p
+        @options.showOnRender = sor
+
+    promise
+
+
+  ###*
   # Stops any in-progress transition and hides this component. If this
   # component is not rendered, calling this method has no effect.
   #
@@ -359,11 +436,10 @@ module.exports = class ComponentView extends View
   # @memberof stout-ui/component/ComponentView#
   ###
   hide: makeVisibilityFunc(
-    HIDDEN_CLS,
-    VISIBLE_CLS,
     'hidden',
     'hide',
-    -> @visible or @transitioning
+    (-> not @hidden),
+    'Can\'t hide view that is already hidden.'
   )
 
 
@@ -378,6 +454,8 @@ module.exports = class ComponentView extends View
   ###
   render: ->
     super().then =>
+      @_removeTransitionClasses()
+      @prefixedClasses.remove VISIBLE_CLS, HIDDEN_CLS
       if @options.showOnRender
         @show()
       else
@@ -394,11 +472,10 @@ module.exports = class ComponentView extends View
   # @memberof stout-ui/component/ComponentView#
   ###
   show: makeVisibilityFunc(
-    VISIBLE_CLS,
-    HIDDEN_CLS,
     'visible',
     'show',
-    -> @hidden or @transitioning
+    (-> not @visible),
+    'Can\'t show view that is already visible.'
   )
 
 
@@ -421,7 +498,8 @@ module.exports = class ComponentView extends View
     TRANS_IN_CLS,
     TRANS_OUT_CLS,
     'transitioning:in',
-    'transition:in', -> @hidden or @transitioningOut
+    'transition:in',
+    -> @hidden or @transitioningOut
   )
 
 
@@ -444,5 +522,6 @@ module.exports = class ComponentView extends View
     TRANS_OUT_CLS,
     TRANS_IN_CLS,
     'transitioning:out',
-    'transition:out', -> @visible or @transitioningIn
+    'transition:out',
+    -> @visible or @transitioningIn
   )
