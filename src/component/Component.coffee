@@ -96,8 +96,7 @@ makeVisibilityFunction = (event) ->
 module.exports = class Component extends ViewModel
 
   constructor: (init, events = []) ->
-    super init, events.concat [
-      'show', 'hide', 'transition:in', 'transition:out']
+    super init, events.concat ['show', 'hide', 'transition']
 
 
   ###*
@@ -157,7 +156,7 @@ module.exports = class Component extends ViewModel
   # @method transitionIn
   # @memberof stout-ui/component/Component
   ###
-  transitionIn:  makeTransitionFunction('transition:in')
+  transitionIn: makeTransitionFunction('transition:in')
 
 
   ###*

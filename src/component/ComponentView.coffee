@@ -110,18 +110,11 @@ makeTransitionFunc = (func, transitionClass, removeClass, state, evt, test) ->
 
         @prefixedClasses.add TRANS_CLS, transitionClass
 
-        # Cancel the existing transition timer.
-        clearTimeout @_transitionTimer
-
-        # Reject any existing transition promise.
-        if @_transitionPromise
-          msg = 'Transition canceled by another transition event.'
-          reason = new TransitionCanceled(msg)
-          Promise.reject @_transitionPromise, reason
-        @_transitionPromise = promise
+        updateTransitionPromise(@, promise)
 
         # Set the new transition timer.
         @_transitionTimer = setTimeout =>
+          @prefixedClasses.remove TRANS_CLS, transitionClass
           Promise.resolve promise, @[func].call(@)
         , (time or 0)
 
@@ -175,6 +168,25 @@ makeVisibilityFunc = (addClass, removeClass, visibility, evt, test) ->
         Promise.reject(promise, reason)
     promise
 
+
+###*
+# Updates an existing transition promise on the target object.
+#
+# @param {ComponentView} target - The target object.
+#
+# @param {module:stout-core/promise/Promise} promise - The new promise.
+#
+# @function
+# @inner
+###
+updateTransitionPromise = (target, promise) ->
+  clearTimeout target._transitionTimer
+
+  if target._transitionPromise
+    Promise.reject target._transitionPromise, new TransitionCanceled "Transition
+    canceled by another transition event."
+
+  target._transitionPromise = promise
 
 
 ###*
