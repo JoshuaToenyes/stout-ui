@@ -1,3 +1,4 @@
+pane-tag:             pane !default
 pane-class:           pane !default
 pane-trans-in-time:   500ms !default
 pane-trans-out-time:  500ms !default
