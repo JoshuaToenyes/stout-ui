@@ -57,6 +57,8 @@
     "jade-runtime": "^2.0.0",
     "js-yaml": "~3.4",
     "karma": "^0.13.19",
+    "karma-browserify": "^5.0.3",
+    "karma-chai-sinon": "^0.1.5",
     "karma-chrome-launcher": "^0.2.2",
     "karma-firefox-launcher": "^0.1.7",
     "karma-mocha": "^0.2.1",
@@ -74,9 +76,11 @@
     "sauce-connect": "^0.1.1",
     "sauce-connect-launcher": "^0.14.0",
     "selenium-standalone": "^4.8.0",
-    "sinon": "git+https://github.com/sinonjs/sinon.git",
+    "sinon": "^1.17.3",
+    "sinon-chai": "^2.8.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.7.0",
     "yargs": "^3.31.0"
   },
   "scripts": {
