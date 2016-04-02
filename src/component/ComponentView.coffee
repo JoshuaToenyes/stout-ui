@@ -5,12 +5,12 @@
 # @module stout-ui/component/ComponentView
 ###
 
-nextTick           = require 'stout-client/util/nextTick'
-Promise            = require 'stout-core/promise/Promise'
-TransitionCanceled = require('stout-client/exc').TransitionCanceled
-vars               = require '../vars'
-View               = require 'stout-client/view/View'
-ViewNotRenderedErr = require('stout-client/err').ViewNotRenderedErr
+nextTick              = require 'stout-client/util/nextTick'
+Promise               = require 'stout-core/promise/Promise'
+TransitionCanceledExc = require('stout-client/exc').TransitionCanceledExc
+vars                  = require '../vars'
+View                  = require 'stout-client/view/View'
+ViewNotRenderedErr    = require('stout-client/err').ViewNotRenderedErr
 
 # Load component variables.
 require '../vars/component'
@@ -114,8 +114,8 @@ makeTransitionFunc = (func, transitionClass, removeClass, state, evt, test) ->
         clearTimeout @_transitionTimer
 
         if @_transitionPromise
-          Promise.reject @_transitionPromise, new TransitionCanceled "Transition
-          canceled by another transition event."
+          Promise.reject @_transitionPromise, new TransitionCanceledExc "
+          Transition canceled by another transition event."
 
         @_transitionPromise = promise
 
@@ -135,7 +135,7 @@ makeTransitionFunc = (func, transitionClass, removeClass, state, evt, test) ->
       else
         msg = "Transition canceled because test function returned false or the
         view is not yet rendered."
-        reason = new TransitionCanceled(msg)
+        reason = new TransitionCanceledExc(msg)
         Promise.reject promise, reason
     promise
 
@@ -192,8 +192,8 @@ updateTransitionPromise = (target, promise) ->
   clearTimeout target._transitionTimer
 
   if target._transitionPromise
-    Promise.reject target._transitionPromise, new TransitionCanceled "Transition
-    canceled by another transition event."
+    Promise.reject target._transitionPromise, new TransitionCanceledExc "
+    Transition canceled by another transition event."
 
   target._transitionPromise = promise
 
@@ -380,7 +380,7 @@ module.exports = class ComponentView extends View
     clearTimeout @_transitionTimer
     @_removeTransitionClasses()
     if @_transitionPromise
-      Promise.reject @_transitionPromise, new TransitionCanceled(reason)
+      Promise.reject @_transitionPromise, new TransitionCanceledExc(reason)
     return
 
 
@@ -412,10 +412,12 @@ module.exports = class ComponentView extends View
       # is hidden we can still calculate the size of this object.
       document.body.appendChild @root
 
+      pv = @visible
+
       # Calculate the dimensions.
       @_show()
       {width, height} = @root.getBoundingClientRect()
-      @_hide()
+      if not pv then @_hide()
 
       # Restore the original style and DOM position.
       style.position = pos
@@ -424,12 +426,11 @@ module.exports = class ComponentView extends View
 
       Promise.resolve promise, {width, height}
 
-    resolvePosition = =>
-      r = @root.getBoundingClientRect()
-      Promise.resolve promise, {width: r.width, height: r.height}
+    # Get the current bounding rect.
+    r = @root.getBoundingClientRect()
 
-    if @visible
-      resolvePosition()
+    if r.width > 0 and r.height > 0
+      Promise.resolve promise, {width: r.width, height: r.height}
     else if @rendered
       calcPositionOffScreen()
     else
