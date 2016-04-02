@@ -1,7 +1,7 @@
 @import "bourbon/bourbon"
 @import "util/exports"
 @import "select/select-box"
-@import "vars/select-box"
+@import "vars/select"
 @import "vars/checkbox"
 
 +exports("checkbox/checkbox")
@@ -28,7 +28,7 @@
     width: $select-box-normal-size + $select-box-padding
     height: $select-box-normal-size + $select-box-padding
 
-  .#{$cc}.#{$prefix}#{$select-box-selected-class} svg
+  .#{$cc}.#{$prefix}#{$select-selected-class} svg
     opacity: 1
 
   // Size Adjustments
