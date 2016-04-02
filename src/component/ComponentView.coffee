@@ -100,7 +100,7 @@ VISIBLE_CLS = vars.read 'component/visible'
 makeTransitionFunc = (func, transitionClass, removeClass, state, evt, test) ->
   (time) ->
     promise = new Promise()
-    requestAnimationFrame =>
+    nextTick =>
       # Start the transition if the view is rendered and the test function
       # return true.
       if @rendered and test.call(@)
@@ -159,7 +159,7 @@ makeTransitionFunc = (func, transitionClass, removeClass, state, evt, test) ->
 makeVisibilityFunc = (visibility, evt, test, testRejectionMsg) ->
   ->
     promise = new Promise()
-    requestAnimationFrame =>
+    nextTick =>
       if @rendered
         if test.call @
           @_removeTransitionClasses()
