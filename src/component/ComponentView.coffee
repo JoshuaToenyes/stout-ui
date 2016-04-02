@@ -396,15 +396,32 @@ module.exports = class ComponentView extends View
 
     calcPositionOffScreen = =>
       style = @root.style
+
+      # Save reference to parent and next sibling for later re-insertion at
+      # current position.
+      parent = @parent
+      nextSibling = @root.nextSibling
       pos = style.position
       left = style.left
+
+      # Position off-screen.
       style.position = 'fixed'
       style.left = '-10000px'
+
+      # Move this component to directly under the body, so even if the parent
+      # is hidden we can still calculate the size of this object.
+      document.body.appendChild @root
+
+      # Calculate the dimensions.
       @_show()
       {width, height} = @root.getBoundingClientRect()
       @_hide()
+
+      # Restore the original style and DOM position.
       style.position = pos
       style.left = left
+      parent.insertBefore @root, nextSibling
+
       Promise.resolve promise, {width, height}
 
     resolvePosition = =>
