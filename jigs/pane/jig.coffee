@@ -1,33 +1,40 @@
-Button = require '../../button/Button'
-Pane = require '../../pane/Pane'
+buttonFactory = require '../../button'
+Button        = require '../../button/Button'
+ButtonView    = require '../../button/ButtonView'
+Pane          = require '../../pane/Pane'
+PaneView      = require '../../pane/PaneView'
 
 
 document.addEventListener 'DOMContentLoaded', ->
 
-  closeButton = new Button
-    label: 'Close Pane'
+  closeBtn = new ButtonView
+    context: new Button
+    label: 'Close PaneView'
     classes: 'btn-close-pane'
-    style: 'primary'
+    type: 'primary'
+    click: 'closePaneView'
 
-  pane = new Pane
+  pane = new PaneView
+    context: new Pane
     parent: document.body
     id: 'basic-pane'
-    contents: closeButton
+    contents: closeBtn
 
-  closeButton.click = ->
-    pane.transitionOut null, ->
+  closeBtn.context.closePaneView = ->
+    pane.transitionOut().then ->
       pane.width = 'full'
       pane.height = 'full'
       pane.root.style.top = ''
       pane.root.style.right = ''
       pane.root.style.bottom = ''
       pane.root.style.left = ''
+    , (e) ->
+      console.log 'got error', e
 
-  pane.hide()
-  pane.render()
+  pane.render().then -> pane.hide()
 
-  new Button
-    label: 'Show Pane'
+  buttonFactory
+    label: 'Show PaneView'
     parent: '.ex.basic .controls'
     click: ->
       pane.transition = 'fade'
@@ -36,10 +43,10 @@ document.addEventListener 'DOMContentLoaded', ->
 
 
   for transition in ['fade', 'zoom', 'overlay']
-    new Button
+    buttonFactory
       label: transition
       size: 'small'
-      style: 'inverse'
+      type: 'inverse'
       parent: '.ex.transitions .controls'
       click: ((t)->
           (e) ->
@@ -52,10 +59,10 @@ document.addEventListener 'DOMContentLoaded', ->
 
 
   for start in ['top', 'right', 'bottom', 'left']
-    new Button
+    buttonFactory
       label: start
       size: 'small'
-      style: 'inverse'
+      type: 'inverse'
       parent: '.ex.overlay-starts .controls'
       click: ((st)->
           ->
@@ -68,10 +75,10 @@ document.addEventListener 'DOMContentLoaded', ->
 
   # --- Sizing ---
 
-  new Button
+  buttonFactory
     label: 'Auto Size Width'
     size: 'small'
-    style: 'inverse'
+    type: 'inverse'
     parent: '.ex.sizing .controls'
     click: ->
       pane.root.style.left = 'auto'
@@ -82,10 +89,10 @@ document.addEventListener 'DOMContentLoaded', ->
       pane.transitionIn()
   .render()
 
-  new Button
+  buttonFactory
     label: '200px Height'
     size: 'small'
-    style: 'inverse'
+    type: 'inverse'
     parent: '.ex.sizing .controls'
     click: ->
       pane.height = 200
