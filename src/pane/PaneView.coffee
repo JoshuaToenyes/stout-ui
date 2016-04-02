@@ -5,20 +5,15 @@
 # @module stout-ui/pane/Pane
 ###
 
-Container = require '../container/Container'
-template  = require './pane.template'
-vars      = require '../vars'
+ComponentView = require '../component/ComponentView'
+defaults      = require 'lodash/defaults'
+Pane          = require './Pane'
+template      = require './pane.template'
+vars          = require '../vars'
+View          =
 
 # Load shared variables.
 require '../vars/pane'
-
-###*
-# The inner contents container class.
-# @const
-# @type string
-# @private
-###
-CONTENTS_CLS = vars.readPrefixed 'container/container-contents-class'
 
 
 ###*
@@ -48,92 +43,43 @@ TRANS_IN_TIME = vars.readTime 'pane/pane-trans-in-time'
 TRANS_OUT_TIME = vars.readTime 'pane/pane-trans-out-time'
 
 
+###*
+# The pane custom tag name.
+# @type string
+# @const
+# @private
+###
+TAG_NAME = vars.readPrefixed 'pane/pane-tag'
 
-module.exports = class Pane extends Container
 
-  ###*
-  # Pane class which represents a generic pane for displaying content within
-  # the viewport.
-  #
-  # @param {Object} [init] - Initiation object.
-  #
-  # @exports stout-ui/pane/Pane
-  # @extends stout-ui/container/Container
-  # @constructor
-  ###
-  constructor: (init = {}) ->
-    super template, null, {renderOnChange: false}, init
+
+###*
+# Pane class which represents a generic pane for displaying content within
+# the viewport.
+#
+# @param {Object} [init] - Initiation object.
+#
+# @exports stout-ui/pane/Pane
+# @extends stout-ui/container/Container
+# @constructor
+###
+module.exports = class PaneView extends ComponentView
+
+  constructor: (init, events) ->
+    defaults init, {template, tagName: TAG_NAME}
+    super init, events
     @prefixedClasses.add PANE_CLS
+    @syncProperty @context, 'transition start end width height'
 
+    @on 'transition:in', ->
+      @setDisplaySize()
+      @setDisplayTransform()
 
-  ###*
-  # Transition type.
-  #
-  # @member transition
-  # @memberof stout-ui/pane/Pane#
-  # @public
-  ###
-  @property 'transition',
-    default: 'fade'
-    values: [
-      'fade'
-      'zoom'
-      'overlay'
-    ]
+    @on 'transition:out', -> 
+      @setInitialTransform()
 
-
-  ###*
-  # Transition start, e.g. where the pane starts-from when it
-  # transitions-in. Only valid for `overlay` transition type.
-  #
-  # @member start
-  # @memberof stout-ui/pane/Pane#
-  # @public
-  ###
-  @property 'start',
-    values: [
-      null
-      'top'
-      'right'
-      'bottom'
-      'left'
-    ]
-
-
-  ###*
-  # Transition end, e.g. where the pane animates-to when it
-  # transitions-out. Only valid for `overlay` transition type.
-  #
-  # @member end
-  # @memberof stout-ui/pane/Pane#
-  # @public
-  ###
-  @property 'end',
-    values: [
-      null
-      'top'
-      'right'
-      'bottom'
-      'left'
-    ]
-
-
-  ###*
-  # The preferred width of the pane in pixels. May also be set to "auto" to
-  # attempt to automatically determine the size of the pane or "full" to fill
-  # the viewport.
-  ###
-  @property 'width',
-    default: 'full'
-
-
-  ###*
-  # The preferred height of the pane in pixels. May also be set to "auto" to
-  # attempt to automatically determine the size of the pane or "full" to fill
-  # the viewport.
-  ###
-  @property 'height',
-    default: 'full'
+  # Clone shared view-model properties.
+  @cloneProperty Pane, 'transition start end width height'
 
 
   ###*
@@ -161,11 +107,12 @@ module.exports = class Pane extends Container
     h = @height
     w = @width
 
-    content = @select('.' + CONTENTS_CLS)
+    content = @select '.' + @contentsContainerClass
 
     flash = @hidden and not @transitioning
 
     if flash then @show()
+    #if content instanceof ComponentView then content.show()
     rect = content.getBoundingClientRect()
     if flash then @hide()
 
@@ -190,6 +137,10 @@ module.exports = class Pane extends Container
     [b.width, b.height]
 
 
+  ###*
+  # Calculates the pane's starting size with an overlay transition.
+  #
+  ###
   calculateOverlayStartSize: ->
     @calculateDisplaySize()
 
@@ -303,10 +254,8 @@ module.exports = class Pane extends Container
   ###*
   # Calculates the "zoom" transition start center.
   #
-  #
   # @method calculateZoomStartCenter
   # @memberof stout-ui/pane/Pane#
-  # @public
   ###
   calculateZoomStartCenter: ->
     # Get button bounding rectangle if an activator is registered, otherwise
@@ -318,11 +267,14 @@ module.exports = class Pane extends Container
       @calculateFadeStartCenter()
 
 
-
-
+  ###*
+  # Calculates the center of the fade transition's start.
+  #
+  # @method calculateFadeStartCenter
+  # @memberof stout-ui/pane/Pane#
+  ###
   calculateFadeStartCenter: ->
     [window.innerWidth / 2, window.innerHeight / 2]
-
 
 
   ###*
@@ -396,16 +348,13 @@ module.exports = class Pane extends Container
   # @memberof stout-ui/pane/Pane#
   # @public
   ###
-  transitionIn: (time = TRANS_IN_TIME, cb) ->
+  transitionIn: (time = TRANS_IN_TIME) ->
     @setPaneTransitionClasses()
     @resetSizeAndPosition()
-    @setDisplaySize()
     @setInitialTransform()
-    @once 'transition:in', ->
-      @setDisplayTransform()
-    super(time, cb)
-    # When the window is resizes, reposition the modal and its contents.
-    window.addEventListener 'resize', @_resizeHandler
+    super(time).then ->
+      # When the window is resizes, reposition the modal and its contents.
+      window.addEventListener 'resize', @_resizeHandler
 
 
   ###*
@@ -413,16 +362,19 @@ module.exports = class Pane extends Container
   #
   # @method transitionOut
   # @memberof stout-ui/pane/Pane#
-  # @public
   ###
-  transitionOut: (time = TRANS_OUT_TIME, cb) ->
+  transitionOut: (time = TRANS_OUT_TIME) ->
     @setPaneTransitionClasses()
-    @once 'transition:out', ->
-      @setInitialTransform()
-    super(time, cb)
-    window.removeEventListener 'resize', @_resizeHandler
+    super(time).then ->
+      window.removeEventListener 'resize', @_resizeHandler
 
 
+  ###*
+  # Sets the transition classes on the pane element.
+  #
+  # @method setPaneTransitionClasses
+  # @memberof stout-ui/pane/Pane#
+  ###
   setPaneTransitionClasses: ->
     @prefixedClasses.remove 'zoom overlay'
     @prefixedClasses.add @transition

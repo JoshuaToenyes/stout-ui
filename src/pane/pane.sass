@@ -18,6 +18,11 @@
   $display-opacity: 1
   $end-opacity:     0.1
 
+  #{$prefix}#{$pane-tag}
+    display: none
+    &[rendered]
+      display: block
+
   .#{$pane}
     overflow: scroll
     max-width: 100%
