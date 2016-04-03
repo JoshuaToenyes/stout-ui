@@ -1,27 +1,27 @@
-select-selected-class:       selected !default
+select-selected-class:          selected !default
 
-select-box-class:            select-box !default
-select-box-fill-bounds:      radio-fill-bounds !default
-select-box-indicator-class:  indicator !default
-select-box-label-class:      label !default
+select-box-class:               select-box !default
+select-box-fill-bounds:         radio-fill-bounds !default
+select-box-indicator-class:     indicator !default
+select-box-label-class:         label !default
 
-select-box-bg-color:         darken($color-bg, 2%) !default
-select-box-selected-color:   $color-6 !default
+select-box-bg-color:            darken($color-bg, 2%) !default
+select-box-selected-color:      $color-6 !default
 
-select-box-border:           1px solid lighten($color-fg, 58%) !default
-select-box-selected-border:  1px solid $select-box-selected-color !default
+select-box-border:              1px solid lighten($color-fg, 58%) !default
+select-box-selected-border:     1px solid $select-box-selected-color !default
 
-select-box-ink-size:         140%
-select-box-ink-color:        rgba($select-box-selected-color, 0.4)
+select-box-ink-size:            140%
+select-box-ink-color:           rgba($select-box-selected-color, 0.4)
 
-select-box-padding:          2px
+select-box-padding:             1px
 
-select-box-tiny-size:        8px
-select-box-small-size:       10px
-select-box-normal-size:      14px
-select-box-large-size:       18px
-select-box-huge-size:        22px
-select-box-massive-size:     26px
+select-box-tiny-size:           8px
+select-box-small-size:          10px
+select-box-normal-size:         14px
+select-box-large-size:          18px
+select-box-huge-size:           22px
+select-box-massive-size:        26px
 
 select-box-default-fg:          $color-fg !default
 select-box-default-bg:          darken($color-bg, 2%) !default
