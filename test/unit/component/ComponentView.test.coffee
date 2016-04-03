@@ -140,3 +140,27 @@ describe 'stout-ui/component/ComponentView', ->
         expect(v.height).to.be.within 199, 201
         done()
       .catch done
+
+    it 'can target elements within a rendered view', (done) ->
+      el = document.createElement 'div'
+      el.style.height = '50px'
+      el.style.width = '32px'
+      cv.contents = el
+      cv.render().then ->
+        cv.getRenderedDimensions(el).then ({width, height}) ->
+          expect(width).to.be.within 31, 33
+          expect(height).to.be.within 49, 51
+          done()
+        .catch done
+      .catch done
+
+    it 'can target elements within an unrendered view', (done) ->
+      el = document.createElement 'div'
+      el.style.height = '50px'
+      el.style.width = '32px'
+      cv.contents = el
+      cv.getRenderedDimensions(el).then ({width, height}) ->
+        expect(width).to.be.within 31, 33
+        expect(height).to.be.within 49, 51
+        done()
+      .catch done

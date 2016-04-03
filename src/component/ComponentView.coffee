@@ -393,7 +393,6 @@ module.exports = class ComponentView extends View
   ###
   getRenderedDimensions: (target) ->
     promise = new Promise
-
     target ?= @root
 
     calcPositionOffScreen = =>
@@ -424,7 +423,10 @@ module.exports = class ComponentView extends View
       # Restore the original style and DOM position.
       style.position = pos
       style.left = left
-      parent.insertBefore @root, nextSibling
+      if parent and nextSibling
+        parent.insertBefore @root, nextSibling
+      else if parent
+        parent.appendChild @root
 
       Promise.resolve promise, {width, height}
 
