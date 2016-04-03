@@ -19,7 +19,7 @@
   $ink-container:   #{$prefix}ink-container
   $fill-container:  #{$prefix}fill-container
 
-  $final-outline-offset: 3px
+  $final-outline-offset: 2px
 
   +keyframes(button-outline)
     0%
@@ -61,8 +61,8 @@
 
     &::before
       @extend %cover-parent-pseudo
-      +transition(opacity 300ms, outline-color 300ms)
-      outline-width: 3px
+      +transition(outline-color 300ms)
+      outline-width: 2px
       outline-style: solid
       outline-offset: $final-outline-offset
       opacity: 0
