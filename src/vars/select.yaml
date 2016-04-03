@@ -11,7 +11,7 @@ select-box-selected-color:      $color-6 !default
 select-box-border:              1px solid lighten($color-fg, 58%) !default
 select-box-selected-border:     1px solid $select-box-selected-color !default
 
-select-box-ink-size:            140%
+select-box-ink-size:            110%
 select-box-ink-color:           rgba($select-box-selected-color, 0.4)
 
 select-box-padding:             1px

@@ -12,7 +12,7 @@ parser       = require 'stout-client/parser'
 TAG_NAME = vars.readPrefixed 'checkbox/checkbox-tag'
 
 # Register the button tag.
-parser.register TAG_NAME, CheckboxView, Checkbox
+parser.register TAG_NAME, CheckboxView, Checkbox, {contentsMember: 'label'}
 
 module.exports = (init) ->
   defaults init, {context: new Checkbox}

@@ -5,7 +5,7 @@ block content
   h1.ex-title Stout Checkboxes
   
   .ex-heading Simple Checkbox  
-  .ex.simple.last
+  .ex.simple.spaced.last
     .ex-label simple
     
     
@@ -50,3 +50,13 @@ block content
     
   .ex.style-danger
     .ex-label danger
+
+
+  .ex-heading Checkbox Tag
+  p These checkboxes were rendered using the custom 
+    | <code>&lt;ui-checkbox&gt;</code> tag.
+    
+  .ex.spaced.last
+    .ex-label html tag
+    ui-checkbox(type="primary", size="large") Tagged Large-Primary Checkbox
+    ui-checkbox(size="large") Tagged Large-Default Checkbox

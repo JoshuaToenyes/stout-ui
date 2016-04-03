@@ -1,6 +1,9 @@
 checkboxFactory = require '../../checkbox'
+parser = require 'stout-client/parser'
 
 window.onload = ->
+
+  parser.parse()
 
   checkboxFactory
     label: 'Select this test item.'
