@@ -65,7 +65,7 @@ module.exports = class FillableViewTrait extends Foundation
   _fill: (container, cb, t) ->
     if not container then container = @getFillContainer()
     if @hasInk(container) then return
-    @getRenderedDimensions().then ({width, height}) =>
+    @getRenderedDimensions(container).then ({width, height}) =>
       @expandInk container, width / 2, height / 2, width, height, t, ->
         container.classList.add FILLED_CLS
         cb?.call null

@@ -391,8 +391,10 @@ module.exports = class ComponentView extends View
   # @method getRenderedDimensions
   # @memberof stout-ui/component/ComponentView#
   ###
-  getRenderedDimensions: ->
+  getRenderedDimensions: (target) ->
     promise = new Promise
+
+    target ?= @root
 
     calcPositionOffScreen = =>
       style = @root.style
@@ -416,7 +418,7 @@ module.exports = class ComponentView extends View
 
       # Calculate the dimensions.
       @_show()
-      {width, height} = @root.getBoundingClientRect()
+      {width, height} = target.getBoundingClientRect()
       if not pv then @_hide()
 
       # Restore the original style and DOM position.
@@ -427,7 +429,7 @@ module.exports = class ComponentView extends View
       Promise.resolve promise, {width, height}
 
     # Get the current bounding rect.
-    r = @root.getBoundingClientRect()
+    r = target.getBoundingClientRect()
 
     if r.width > 0 and r.height > 0
       Promise.resolve promise, {width: r.width, height: r.height}
