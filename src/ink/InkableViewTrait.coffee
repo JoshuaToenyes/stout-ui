@@ -121,8 +121,10 @@ module.exports = class InkableViewTrait extends Foundation
     [ink, inkRun] = @createInkElement()
     t ?= @inkExpansionTime(w, h)
     inkRun.style.animationDuration = t + 'ms'
+    x = Math.round x
+    y = Math.round y
     ink.style.transform = "translateX(#{x}px) translateY(#{y}px)"
-    s = @calcInkRadius(w, h)
+    s = Math.ceil(@calcInkRadius(w, h))
     ink.style.height = "#{s}px"
     ink.style.width = "#{s}px"
     el.appendChild ink
