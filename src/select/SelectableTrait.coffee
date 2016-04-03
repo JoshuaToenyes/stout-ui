@@ -39,6 +39,11 @@ module.exports = class SelectableTrait extends Foundation
   ###
   initTrait: ->
     @registerEvents ['select', 'unselect', 'toggleselect']
+    @on 'change:selected', (e) ->
+      if e.data.value is true
+        @fire 'select'
+      else
+        @fire 'unselect'
 
 
   ###*
@@ -47,9 +52,7 @@ module.exports = class SelectableTrait extends Foundation
   # @method select
   # @memberof stout-ui/select/SelectableTrait#
   ###
-  select: ->
-    @selected = true
-    @fire('select')
+  select: -> @selected = true
 
 
   ###*
@@ -58,9 +61,7 @@ module.exports = class SelectableTrait extends Foundation
   # @method select
   # @memberof stout-ui/select/SelectableTrait#
   ###
-  unselect: ->
-    @selected = false
-    @fire('unselect')
+  unselect: -> @selected = false
 
 
   ###*

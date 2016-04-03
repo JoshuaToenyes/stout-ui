@@ -1,42 +1,34 @@
-RadioButton = require '../../radio/RadioButton'
-RadioGroup = require '../../radio/RadioGroup'
+radioButton = require '../../radio-button'
+radioGroup  = require '../../radio-group'
+RadioButton = require '../../radio-button/RadioButton'
+RadioButtonView = require '../../radio-button/RadioButtonView'
 
 window.onload = ->
 
-  new RadioButton
+  makeRadioButtons = (size, type) ->
+    for l in ['Select X', 'Select Y', 'Select Z']
+      new RadioButtonView {label: l, context: new RadioButton, size, type}
+
+  radioButton.factory
     label: 'Select this test item.'
     parent: '.simple'
   .render()
 
-  g = new RadioGroup parent: '.group'
-  g.addButton label: 'Selection X'
-  g.addButton label: 'Selection Y'
-  g.addButton label: 'Selection Z'
-  g.render()
+  radioGroup.factory
+    parent: '.group'
+    contents: makeRadioButtons()
+  .render()
 
 
   for size in ['tiny', 'small', 'normal', 'large', 'huge', 'massive']
-    g = new RadioGroup parent: ".size-#{size}"
-    g.addButton
-      label: "Selection A of size #{size}."
-      size: size
-    g.addButton
-      label: "Selection B of size #{size}."
-      size: size
-    g.addButton
-      label: "Selection C of size #{size}."
-      size: size
-    g.render()
+    radioGroup.factory
+      parent: ".size-#{size}"
+      contents: makeRadioButtons(size)
+    .render()
 
-  for style in ['default', 'inverse', 'primary', 'danger', 'warn']
-    g = new RadioGroup parent: ".style-#{style}"
-    g.addButton
-      label: "Selection A of style #{style}."
-      style: style
-    g.addButton
-      label: "Selection B of style #{style}."
-      style: style
-    g.addButton
-      label: "Selection C of style #{style}."
-      style: style
-    g.render()
+
+  for type in ['default', 'inverse', 'primary', 'danger', 'warn']
+    radioGroup.factory
+      parent: ".type-#{type}"
+      contents: makeRadioButtons(undefined, type)
+    .render()

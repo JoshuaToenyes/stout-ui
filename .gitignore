@@ -17,7 +17,8 @@
 /pane
 /placeholder
 /progress
-/radio
+/radio-button
+/radio-group
 /select
 /times
 /traits
