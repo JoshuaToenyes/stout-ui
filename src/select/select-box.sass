@@ -30,6 +30,9 @@
 
     .#{$ri}
       +transition(border 1s)
+      // 3D translate causes new coordinate system and fixes rendering when
+      // element is within a flexbox.
+      +transform(translate3d(0,0,0))
       width: $select-box-normal-size
       height: $select-box-normal-size
       margin-right: 1em
