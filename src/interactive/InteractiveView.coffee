@@ -8,7 +8,6 @@
 
 ComponentView = require '../component/ComponentView'
 nextTick      = require 'stout-client/util/nextTick'
-keys          = require 'stout-client/keys'
 
 
 ###*
@@ -58,6 +57,19 @@ module.exports = class InteractiveView extends ComponentView
 
 
   ###*
+  # Optionally, key codes may be added to this array. If specified, when the
+  # component is in-focus, pressing these keys will cause it to "activate" on
+  # key-down, and "deactivate" on key up. This is the behavior desired by
+  # buttons, for example.
+  #
+  # @member {Array.<number>} activateKeys
+  # @memberof stout-ui/interactive/InteractiveView#
+  ###
+  @property 'activateKeys',
+    default: []
+
+
+  ###*
   # Set of focus-specific event listeners.
   #
   # @member {timer} _focusEventListeners
@@ -102,10 +114,10 @@ module.exports = class InteractiveView extends ComponentView
   ###
   _addFocusEventListeners: ->
     ft = @getFocusTarget()
-    
+
     downListeners = @addEventListenerTo ft, 'keydown', (e) =>
       keycode = e.which
-      if keycode is keys.SPACE or keycode is keys.RETURN
+      if keycode in @activateKeys
         e.preventDefault()
         if @fireInteractiveEvent('active', e) and
         not @prefixedClasses.contains 'active'
@@ -117,7 +129,7 @@ module.exports = class InteractiveView extends ComponentView
 
     upListeners = @addEventListenerTo ft, 'keyup', (e) =>
       keycode = e.which
-      if keycode is keys.SPACE or keycode is keys.RETURN
+      if keycode in @activateKeys
         if @fireInteractiveEvent('active', e)
           @prefixedClasses.remove 'active'
           @fire('active:keyup')

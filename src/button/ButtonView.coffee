@@ -10,6 +10,7 @@ FillableViewTrait   = require '../fill/FillableViewTrait'
 FocusableViewTrait  = require '../interactive/FocusableViewTrait'
 HasLabelViewTrait   = require '../component/HasLabelViewTrait'
 InteractiveView     = require '../interactive/InteractiveView'
+keys                = require 'stout-client/keys'
 template            = require './button.template'
 
 # Require shared button variables.
@@ -68,6 +69,8 @@ module.exports = class ButtonView extends InteractiveView
     @on 'ready', => @initInkMouseEvents()
 
     @on 'active:keydown', => @rippleInk(null, null, 300)
+
+    @activateKeys = [keys.RETURN, keys.SPACE]
 
 
   ###*
