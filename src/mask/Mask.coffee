@@ -164,9 +164,10 @@ module.exports = class Mask extends Foundation
         d += 2
         continue
 
-      # If the user input doesn't match the mask, then break.
+      # If the user input doesn't match the mask, then continue to the next.
       else if not matches
-        break
+        i++
+        continue
 
       # If the user input matches, then transform and add to output.
       if @transforms.hasOwnProperty m

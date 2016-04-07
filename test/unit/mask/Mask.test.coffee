@@ -42,13 +42,13 @@ describe 'stout-ui/mask/Mask', ->
     it 'masks simple numeric values', ->
       m = new Mask '###'
       expect(m.mask '12a').to.equal '12'
-      expect(m.mask '1xy12').to.equal '1'
-      expect(m.mask 'a12a').to.equal ''
+      expect(m.mask '1xy12').to.equal '112'
+      expect(m.mask 'a12a').to.equal '12'
 
     it 'masks simple any-case alphabetic values', ->
       m = new Mask 'SSSS'
       expect(m.mask 'abcd').to.equal 'abcd'
-      expect(m.mask '1bcd').to.equal ''
+      expect(m.mask '1bcd').to.equal 'bcd'
       expect(m.mask 'ABcD').to.equal 'ABcD'
       expect(m.mask 'xYzC').to.equal 'xYzC'
       expect(m.mask 'xY12').to.equal 'xY'
@@ -76,7 +76,7 @@ describe 'stout-ui/mask/Mask', ->
       expect(m.mask '').to.equal ''
       expect(m.mask '1').to.equal '((1))'
       expect(m.mask 'XXXX').to.equal '(('
-      expect(m.mask 'XXX12').to.equal '(('
+      expect(m.mask 'XXX12').to.equal '((1))'
 
     it 'masks standard US phone numbers', ->
       m = new Mask '(###) ###-####'
