@@ -81,6 +81,14 @@ module.exports = class Mask extends Foundation
       '*': /\w/
 
 
+  @property 'maxlength',
+    get: ->
+      n = 0
+      for c in @definition
+        n++ unless c is @optional
+      n
+
+
   ###*
   # Optional mask definition character.
   #
