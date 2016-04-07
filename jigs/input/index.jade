@@ -1,0 +1,17 @@
+extends ../_blueprint/master.jade
+
+block content
+
+  h1.ex-title Input
+  
+  .ex-heading Basic Text Input
+  p Here's a basic input.
+  
+  .ex.basic
+    .ex-label basic
+    ui-input First Name
+    ui-input(value="Toenyes") Last Name
+    ui-input(mask="#### #### #### ####") Credit Card Number
+    ui-input(mask="+1 (###) ###-####", value="4065551212") US Phone Number
+    ui-input(mask="(##?#?) ####-####") UK Phone Number
+  
