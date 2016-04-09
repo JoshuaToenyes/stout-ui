@@ -1,4 +1,6 @@
 prefix:            ui-
+bump:              bump
+bump-time:         500ms
 visible:           visible !default
 hidden:            hidden !default
 transitioning:     transitioning !default

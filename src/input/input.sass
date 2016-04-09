@@ -1,5 +1,6 @@
 @import "bourbon/bourbon"
 @import "util/exports"
+@import "placeholder/no-select"
 @import "typography/default"
 @import "colors/default"
 @import "vars/input"
@@ -9,32 +10,55 @@
 
   $label: #{$prefix}label
 
+  +keyframes(input-bump-shake)
+    10%, 90%
+      transform: translate3d(-1px, 0, 0)
+    20%, 80%
+      transform: translate3d(0, 0, 0)
+    30%, 50%, 70%
+      transform: translate3d(-2px, 0, 0)
+    40%, 60%
+      transform: translate3d(0, 0, 0)
+
   #{$prefix}#{$input-tag}
     display: none
     &[rendered]
       display: block
 
-
   .#{$prefix}#{$input-class}
-    margin-top: 1.3em
+    +transform(translate3d(0, 0, 0))
+    margin-top: 1.6em
 
     .#{$label}
       @extend %typography-caption-01
-      display: block
+      @extend %no-select
       +transform-origin(top left)
-      +transition(all 230ms $ease-in-out-cubic)
+      +transition-property(scale, transform, color)
+      +transition-duration(230ms)
+      +transition-timing-function($ease-in-out-cubic, $ease-in-out-cubic, linear)
+      display: block
 
     // When the input is empty, expand-down the label.
     &.#{$prefix}empty .#{$label}
       +transform(scale(1.176) translate(0.13em, 1.4em))
+      +filter(blur(0))
+
+    .#{$prefix}input-container
+      +transition(border-color 300ms)
+      border-bottom: 1px solid lighten($color-fg, 60%)
 
     input
       @extend %typography-body-1
+      +transform-origin(top right)
+      +transition-property(color, transform)
+      +transition-duration($bump-time, $bump-time)
+      +transition-timing-function($ease-out-quint, linear)
+      font-weight: 500
       display: block
       margin: 0
       padding: 0.3em 0.1em 0.2em
       border: none
-      border-bottom: 1px solid lighten($color-fg, 60%)
+      background: transparent
       width: 100%
 
     &, input, input:focus
@@ -43,3 +67,10 @@
     &.#{$prefix}focus
       .#{$label}
         +transform(scale(1) translate(0, 0))
+        color: $color-8
+      .#{$prefix}input-container
+        border-bottom-color: $color-4
+
+    &.#{$prefix}#{$bump} input
+      +animation(input-bump-shake $bump-time infinite)
+      color: $input-bump-color

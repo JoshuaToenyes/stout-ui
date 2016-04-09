@@ -17,6 +17,24 @@ require '../vars/component'
 
 
 ###*
+# Class used to "bump" the component, for visual effect to the user.
+# @type string
+# @const
+# @private
+###
+BUMP_CLS = vars.read 'component/bump'
+
+
+###*
+# Class used to "bump" the component, for visual effect to the user.
+# @type string
+# @const
+# @private
+###
+BUMP_TIME = vars.readTime 'component/bump-time'
+
+
+###*
 # The class name of hidden UI components.
 #
 # @type string
@@ -240,6 +258,14 @@ module.exports = class ComponentView extends View
 
 
   ###*
+  # Timer used for adding/removing the "bump" class.
+  #
+  # @member {timer} _bumpTimer
+  # @memberof stout-ui/component/ComponentView#
+  ###
+
+
+  ###*
   # Reference to the latest transition promise.
   #
   # @member {timer} _transitionPromise
@@ -263,6 +289,10 @@ module.exports = class ComponentView extends View
   # @memberof stout-ui/component/ComponentView#
   # @override
   ###
+
+
+  @property 'bumpTime',
+    default: BUMP_TIME
 
 
   ###*
@@ -382,6 +412,15 @@ module.exports = class ComponentView extends View
     if @_transitionPromise
       Promise.reject @_transitionPromise, new TransitionCanceledExc(reason)
     return
+
+
+  bump: ->
+    @prefixedClasses.add BUMP_CLS
+    if @_bumpTimer then clearTimeout @_bumpTimer
+    @_bumpTimer = setTimeout =>
+      @prefixedClasses.remove BUMP_CLS
+    , @bumpTime
+
 
 
   ###*

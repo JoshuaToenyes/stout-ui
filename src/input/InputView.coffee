@@ -188,6 +188,7 @@ module.exports = class InputView extends InteractiveView
       @value = maskedValue or v
     else
       @value = @value
+      @bump()
 
     # Always update the cursor position.
     e.target.setSelectionRange newCursorPos, newCursorPos

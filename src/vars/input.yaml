@@ -1,3 +1,4 @@
 input-tag:                     input
 input-class:                   input !default
 input-empty-class:             empty
+input-bump-color:              $color-danger
