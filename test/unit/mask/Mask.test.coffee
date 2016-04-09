@@ -131,6 +131,33 @@ describe 'stout-ui/mask/Mask', ->
       expect(m.mask '1231').to.equal '123-1'
 
 
+  describe.only '#getUpdatedCursorPosition()', ->
+
+    it 'advances position if entered value is conformant to mask literals', ->
+      m = new Mask '++#'
+      v = '++'
+      mv = m.mask v
+      expect(m.getUpdatedCursorPosition(2, v, mv)).to.equal 2
+
+    it 'doesn\'t change the position if the masked value doesn\'t update', ->
+      m = new Mask '++++'
+      v = '+Q+'
+      mv = m.mask v
+      expect(m.getUpdatedCursorPosition(1, v, mv)).to.equal 1
+
+    it 'advances cursor past mask-inserted literals', ->
+      m = new Mask '++S++'
+      v = '++A'
+      mv = m.mask v
+      expect(m.getUpdatedCursorPosition(3, v, mv)).to.equal 5
+
+    it 'positions cursor right after entered character', ->
+      m = new Mask '(###) ###'
+      v = '(1239)  9'
+      mv = '(123)  99'
+      expect(m.getUpdatedCursorPosition(5, v, mv)).to.equal 8
+
+
   describe '#raw()', ->
 
     it 'removes simple literals', ->
