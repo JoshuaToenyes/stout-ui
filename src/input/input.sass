@@ -37,6 +37,7 @@
       +transition-duration(230ms)
       +transition-timing-function($ease-in-out-cubic, $ease-in-out-cubic, linear)
       display: block
+      cursor: text
 
     // When the input is empty, expand-down the label.
     &.#{$prefix}empty .#{$label}
@@ -44,8 +45,16 @@
       +filter(blur(0))
 
     .#{$prefix}input-container
-      +transition(border-color 300ms)
-      border-bottom: 1px solid lighten($color-fg, 60%)
+      +transition(border-color $input-border-transition-time)
+      border-bottom: 1px solid $input-border-color
+      &::after
+        +transition(all $input-border-transition-time)
+        content: ''
+        position: absolute
+        width: 100%
+        height: 1px
+        bottom: -1px
+        left: 0
 
     input
       @extend %typography-body-1
@@ -64,13 +73,15 @@
     &, input, input:focus
       outline: none !important
 
-    &.#{$prefix}focus
-      .#{$label}
-        +transform(scale(1) translate(0, 0))
-        color: $color-8
-      .#{$prefix}input-container
-        border-bottom-color: $color-4
-
     &.#{$prefix}#{$bump} input
       +animation(input-bump-shake $bump-time infinite)
       color: $input-bump-color
+
+    &.#{$prefix}focus
+      .#{$label}
+        +transform(scale(1) translate(0, 0))
+        color: $input-focus-label-color
+      .#{$prefix}input-container
+        border-bottom-color: $input-focus-border-color
+        &::after
+          background-color: $input-focus-border-color
