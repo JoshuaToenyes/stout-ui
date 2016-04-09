@@ -70,9 +70,6 @@ module.exports = class InputView extends InteractiveView
     # Mask the initial value.
     if @mask then @value = @mask.mask @value
 
-    @on 'change:value', (e) ->
-      console.log e.data
-
 
   ###*
   # Boolean flag indicating if the key just pressed was the backspace key.

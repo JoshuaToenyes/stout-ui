@@ -81,7 +81,15 @@ module.exports = class Mask extends Foundation
       '*': /\w/
 
 
+  ###*
+  # Readyonly property indicating the maximum length of this mask.
+  #
+  # @member {number} maxlength
+  # @memberof stout-ui/mask/Mask#
+  # @readonly
+  ###
   @property 'maxlength',
+    readonly: true
     get: ->
       n = 0
       for c in @definition
@@ -121,6 +129,55 @@ module.exports = class Mask extends Foundation
   ###
   _isMaskCharacter: (m) ->
     @matchers.hasOwnProperty(m)
+
+
+  ###*
+  # Returns the proper position of the cursor after an insert. It returns the
+  # integer number indicating where the cursor should be positioned after an
+  # insert occurs. This method does not actually position the character, instead
+  # that is left to the calling-class.
+  #
+  # @param {number} cursorPos - The position of the cursor when the insert
+  # occurs.
+  #
+  # @param {string} value - The string value of the user input prior to masking.
+  #
+  # @returns {number|null} Returns the position to place the cursor. If the returned
+  # value is `null`, then no position update should occur.
+  #
+  # @method positionCursor
+  # @memberof stout-ui/mask/Mask#
+  ###
+  getUpdatedCursorPosition: (cursorPos, value, maskedValue) ->
+
+    # Move cursor position back by one.
+    cursorPos--
+
+    # If the entered value is part of the mask or is a value conformant to the
+    # mask in the correct positioning (i.e. the mask didn't move the recently
+    # entered character) then move the cursor forward naturally.
+    if maskedValue[cursorPos] is enteredValue then return cursorPos + 1
+
+    # If the length doesn't change after masking, and the user didn't enter a
+    # mask literal (which would have been detected previously) it must have
+    # been an invalid value or the mask has reached full length. Don't update
+    # the cursor position.
+    if value.length - 1 is maskedValue.length then return cursorPos
+
+    # If typing at the end of the value, advanced past mask-inserted literal
+    # characters.
+    if cursorPos + 1 is value.length then return maskedValue.length
+
+    # Get the character entered by the user.
+    enteredValue = value[cursorPos]
+
+    # Iterate through the masked value until the character just-entered is
+    # reached.
+    while maskedValue[cursorPos] isnt enteredValue and cursorPos < value.length
+      cursorPos++
+
+    # Advance the character past the just-typed character.
+    cursorPos + 1
 
 
   ###*
@@ -252,52 +309,3 @@ module.exports = class Mask extends Foundation
 
     # Return the accumulated raw value.
     raw
-
-
-  ###*
-  # Returns the proper position of the cursor after an insert. It returns the
-  # integer number indicating where the cursor should be positioned after an
-  # insert occurs. This method does not actually position the character, instead
-  # that is left to the calling-class.
-  #
-  # @param {number} cursorPos - The position of the cursor when the insert
-  # occurs.
-  #
-  # @param {string} value - The string value of the user input prior to masking.
-  #
-  # @returns {number|null} Returns the position to place the cursor. If the returned
-  # value is `null`, then no position update should occur.
-  #
-  # @method positionCursor
-  # @memberof stout-ui/mask/Mask#
-  ###
-  getUpdatedCursorPosition: (cursorPos, value, maskedValue) ->
-
-    # Move cursor position back by one.
-    cursorPos--
-
-    # If the entered value is part of the mask or is a value conformant to the
-    # mask in the correct positioning (i.e. the mask didn't move the recently
-    # entered character) then move the cursor forward naturally.
-    if maskedValue[cursorPos] is enteredValue then return cursorPos + 1
-
-    # If the length doesn't change after masking, and the user didn't enter a
-    # mask literal (which would have been detected previously) it must have
-    # been an invalid value or the mask has reached full length. Don't update
-    # the cursor position.
-    if value.length - 1 is maskedValue.length then return cursorPos
-
-    # If typing at the end of the value, advanced past mask-inserted literal
-    # characters.
-    if cursorPos + 1 is value.length then return maskedValue.length
-
-    # Get the character entered by the user.
-    enteredValue = value[cursorPos]
-
-    # Iterate through the masked value until the character just-entered is
-    # reached.
-    while maskedValue[cursorPos] isnt enteredValue and cursorPos < value.length
-      cursorPos++
-
-    # Advance the character past the just-typed character.
-    cursorPos + 1

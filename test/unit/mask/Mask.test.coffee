@@ -131,7 +131,7 @@ describe 'stout-ui/mask/Mask', ->
       expect(m.mask '1231').to.equal '123-1'
 
 
-  describe.only '#getUpdatedCursorPosition()', ->
+  describe '#getUpdatedCursorPosition()', ->
 
     it 'advances position if entered value is conformant to mask literals', ->
       m = new Mask '++#'
