@@ -70,12 +70,14 @@ module.exports = class InputView extends InteractiveView
     # Mask the initial value.
     if @mask then @value = @mask.mask @value
 
+    @on 'change:value', (e) ->
+      console.log e.data
+
 
   ###*
-  # Boolean flag indicating if input masking should be enabled, based on recent
-  # user input.
+  # Boolean flag indicating if the key just pressed was the backspace key.
   #
-  # @member _allowMasking
+  # @member _wasBackspace
   # @memberof stout-ui/input/InputView#
   ###
 
@@ -158,7 +160,7 @@ module.exports = class InputView extends InteractiveView
     type: 'string|number'
     set: (v) ->
       v = v.toString()
-      if @rendered then @select('input').value = v
+      if @rendered and not @_wasBackspace then @select('input').value = v
       v
 
 
@@ -172,24 +174,26 @@ module.exports = class InputView extends InteractiveView
   ###
   _onInput: (e) ->
     v = e.target.value
-
     cursorPos = e.target.selectionStart
-    prevLength = @value.length
 
-    setCursor = if cursorPos > @value.length then false else true
+    if @mask
+      maskedValue = @mask.mask v
+      newCursorPos = @mask.getUpdatedCursorPosition(cursorPos, v, maskedValue)
+    else
+      newCursorPos = cursorPos
 
-    maxlength = if @mask then @mask.maxlength or @maxlength
+    # Update the displayed value if below the maxlength of this input or
+    # masked max-length. Otherwise, keep the current value. Note: we must set
+    # the `value` property here regardless to update the on-screen input field,
+    # otherwise the user-entered value will be show, regardless of it's length
+    # or if it matches the mask.
+    if v.length <= (@mask?.maxlength or @maxlength)
+      @value = maskedValue or v
+    else
+      @value = @value
 
-    # If we've exceeded the maxlength then don't change the value.
-    if v.length > maxlength
-      v = @value
-      cursorPos -= 1
-
-    if v.length is 0 or @_allowMasking
-      @value = if @mask then @mask.mask(v) else v
-
-    if setCursor
-      e.target.setSelectionRange cursorPos, cursorPos
+    # Always update the cursor position.
+    e.target.setSelectionRange newCursorPos, newCursorPos
 
 
   ###*
@@ -215,7 +219,7 @@ module.exports = class InputView extends InteractiveView
   # @private
   ###
   _onKeydown: (e) ->
-    @_allowMasking = if e.keyCode is keys.BACKSPACE then false else true
+    @_wasBackspace = if e.keyCode is keys.BACKSPACE then true else false
 
 
   ###*
@@ -243,7 +247,7 @@ module.exports = class InputView extends InteractiveView
       input.value = @value
 
       # Use this boolean flag to help determine if the user is "backspacing"
-      @_allowMasking = true
+      @_wasBackspace = false
 
       # When a key is pressed, check if it's the backspace. If so temporarily
       # disable masking.
