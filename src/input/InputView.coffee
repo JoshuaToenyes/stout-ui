@@ -6,6 +6,7 @@
 ###
 defaults            = require 'lodash/defaults'
 EnableableViewTrait = require '../interactive/EnableableViewTrait'
+HasHintViewTrait    = require './HasHintViewTrait'
 HasLabelViewTrait   = require '../component/HasLabelViewTrait'
 Input               = require './Input'
 InteractiveView     = require '../interactive/InteractiveView'
@@ -55,14 +56,15 @@ TAG_NAME = vars.readPrefixed 'input/input-tag'
 ###
 module.exports = class InputView extends InteractiveView
 
-  @useTrait HasLabelViewTrait
   @useTrait EnableableViewTrait
+  @useTrait HasHintViewTrait
+  @useTrait HasLabelViewTrait
 
   constructor: (init, events) ->
     defaults init, {template, tagName: TAG_NAME}
     super init, events
 
-    @syncProperty @context, "hint maxlength maxlengthWarn
+    @syncProperty @context, "maxlength maxlengthWarn
     maxlengthError value length", inherit: false
 
     @prefixedClasses.add INPUT_CLS
@@ -75,7 +77,7 @@ module.exports = class InputView extends InteractiveView
     # Mask the initial value.
     if @mask then @value = @mask.mask @value
 
-  @cloneProperty Input, "hint length maxlength maxlengthWarn maxlengthError"
+  @cloneProperty Input, "length maxlength maxlengthWarn maxlengthError"
 
 
   ###*

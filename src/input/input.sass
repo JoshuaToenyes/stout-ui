@@ -55,9 +55,12 @@
       padding-top: 0.2em
 
     .#{$hint}
+      +transition(all 500ms)
+      +transform(translateY(-0.4em))
       left: 0
       padding-left: 0.2em
       font-weight: 500
+      opacity: 0
 
     .#{$length-label}
       right: 0
@@ -109,3 +112,7 @@
         border-bottom-color: $input-focus-border-color
         &::after
           background-color: $input-focus-border-color
+
+      .#{$hint}
+        +transform(translateY(0))
+        opacity: 1

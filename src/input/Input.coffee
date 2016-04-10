@@ -5,6 +5,7 @@
 # @module stout-ui/input/Input
 ###
 EnableableTrait = require '../interactive/EnableableTrait'
+HasHintTrait    = require './HasHintTrait'
 Interactive     = require '../interactive/Interactive'
 
 
@@ -18,20 +19,10 @@ Interactive     = require '../interactive/Interactive'
 module.exports = class Input extends Interactive
 
   @useTrait EnableableTrait
+  @useTrait HasHintTrait
 
   constructor: ->
     super arguments...
-
-
-  ###*
-  # Input hint message.
-  #
-  # @member {string} hint
-  # @memberof stout-ui/input/Input#
-  ###
-  @property 'hint',
-    default: ''
-    type: 'string|number'
 
 
   ###*
