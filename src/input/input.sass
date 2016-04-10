@@ -10,6 +10,8 @@
 
   $label: #{$prefix}label
   $length-label: #{$prefix}#{$input-length-indicator-class}
+  $hint: #{$prefix}#{$input-hint-class}
+  $input-padding-top: 0.4em
 
   +keyframes(input-bump-shake)
     10%, 90%
@@ -28,9 +30,9 @@
 
   .#{$prefix}#{$input-class}
     +transform(translate3d(0, 0, 0))
-    margin-top: 1.6em
+    margin-bottom: 2.5em
 
-    .#{$label}, .#{$length-label}
+    .#{$label}, .#{$length-label}, .#{$hint}
       @extend %typography-caption-01
       @extend %no-select
 
@@ -44,13 +46,21 @@
 
     // When the input is empty, expand-down the label.
     &.#{$prefix}empty .#{$label}
-      +transform(scale(1.176) translate(0.13em, 1.4em))
+      +transform(scale(1.176) translate(0.13em, 1.1em + $input-padding-top))
       +filter(blur(0))
 
-    .#{$length-label}
+    .#{$hint}, .#{$length-label}
       position: absolute
-      right: 0
       display: inline-block
+      padding-top: 0.2em
+
+    .#{$hint}
+      left: 0
+      padding-left: 0.2em
+      font-weight: 500
+
+    .#{$length-label}
+      right: 0
 
     &.#{$prefix}max-length-warn .#{$length-label}
       color: $color-warn
@@ -79,7 +89,7 @@
       font-weight: 500
       display: block
       margin: 0
-      padding: 0.3em 0.1em 0.2em
+      padding: $input-padding-top 0.1em 0.2em
       border: none
       background: transparent
       width: 100%

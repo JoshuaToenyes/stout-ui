@@ -5,3 +5,5 @@ label
     - if (maxlength < Infinity)
       span(class="#{prefix}length-indicator")
         | #[span(class="#{prefix}current-length", bind="length")]/#[span(class="#{prefix}max-length", bind="maxlength")]
+    - if (hint)
+      span(class="#{prefix}hint") #{hint}
