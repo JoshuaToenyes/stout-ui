@@ -184,7 +184,8 @@ module.exports = class InputView extends InteractiveView
     exceededMaxLength = v.length > (@mask?.maxlength or @maxlength)
 
     # Indicates an invalid character was pressed.
-    invalidCharacter = newValue is @value and newCursorPos isnt cursorPos
+    invalidCharacter = newValue is @value and
+    (newCursorPos isnt cursorPos or cursorPos is v.length)
 
     # Detect if we should indicate an invalid character was entered or the
     # max-length of the input or mask has been reached. If so, don't updated
@@ -199,6 +200,12 @@ module.exports = class InputView extends InteractiveView
         @bump()
 
     @value = newValue
+
+    # If we've exceeded the max length, and there's no mask to correct the
+    # cursor position, manually move it back by one. This handles the case
+    # where the user types in-the-middle of a string which has exceeded the
+    # maximum input length.
+    if exceededMaxLength and not @mask then newCursorPos--
 
     # Always update the cursor position.
     e.target.setSelectionRange newCursorPos, newCursorPos
