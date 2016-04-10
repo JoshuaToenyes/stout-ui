@@ -4,16 +4,17 @@
 #
 # @module stout-ui/input/InputView
 ###
-defaults            = require 'lodash/defaults'
-EnableableViewTrait = require '../interactive/EnableableViewTrait'
-HasHintViewTrait    = require './HasHintViewTrait'
-HasLabelViewTrait   = require '../component/HasLabelViewTrait'
-Input               = require './Input'
-InteractiveView     = require '../interactive/InteractiveView'
-isString            = require 'lodash/isString'
-keys                = require 'stout-client/keys'
-Mask                = require '../mask/Mask'
-template            = require './input.template'
+defaults                  = require 'lodash/defaults'
+EnableableViewTrait       = require '../interactive/EnableableViewTrait'
+HasLabelViewTrait         = require '../component/HasLabelViewTrait'
+HasValidationMsgViewTrait = require '../traits/HasValidationMsgViewTrait'
+Input                     = require './Input'
+InteractiveView           = require '../interactive/InteractiveView'
+isString                  = require 'lodash/isString'
+keys                      = require 'stout-client/keys'
+Mask                      = require '../mask/Mask'
+template                  = require './input.template'
+vars                      = require '../vars'
 
 # Require shared input variables.
 require '../vars/input'
@@ -57,7 +58,7 @@ TAG_NAME = vars.readPrefixed 'input/input-tag'
 module.exports = class InputView extends InteractiveView
 
   @useTrait EnableableViewTrait
-  @useTrait HasHintViewTrait
+  @useTrait HasValidationMsgViewTrait
   @useTrait HasLabelViewTrait
 
   constructor: (init, events) ->

@@ -1,0 +1,7 @@
+validation-msg-ul-class:              validation-messages
+validation-msg-hint-class:            validation-hint
+validation-msg-warning-class:         validation-warning
+validation-msg-error-class:           validation-error
+
+validation-msg-warning-color:         $color-warn
+validation-msg-error-color:           $color-danger

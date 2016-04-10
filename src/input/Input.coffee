@@ -4,9 +4,9 @@
 #
 # @module stout-ui/input/Input
 ###
-EnableableTrait = require '../interactive/EnableableTrait'
-HasHintTrait    = require './HasHintTrait'
-Interactive     = require '../interactive/Interactive'
+EnableableTrait       = require '../interactive/EnableableTrait'
+HasValidationMsgTrait = require '../traits/HasValidationMsgTrait'
+Interactive           = require '../interactive/Interactive'
 
 
 ###*
@@ -19,7 +19,7 @@ Interactive     = require '../interactive/Interactive'
 module.exports = class Input extends Interactive
 
   @useTrait EnableableTrait
-  @useTrait HasHintTrait
+  @useTrait HasValidationMsgTrait
 
   constructor: ->
     super arguments...
