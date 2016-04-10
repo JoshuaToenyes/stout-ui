@@ -75,7 +75,7 @@ module.exports = class InputView extends InteractiveView
     # Mask the initial value.
     if @mask then @value = @mask.mask @value
 
-  @cloneProperty Input, "length maxlength maxlengthWarn maxlengthError"
+  @cloneProperty Input, "hint length maxlength maxlengthWarn maxlengthError"
 
 
   ###*
@@ -180,15 +180,23 @@ module.exports = class InputView extends InteractiveView
     if newValue.length is @value.length
       newValue = @value
 
+    # Flag indicating if we've exceeded the max length of the mask or input.
+    exceededMaxLength = v.length > (@mask?.maxlength or @maxlength)
+
+    # Indicates an invalid character was pressed.
+    invalidCharacter = newValue is @value and newCursorPos isnt cursorPos
+
     # Detect if we should indicate an invalid character was entered or the
     # max-length of the input or mask has been reached. If so, don't updated
     # the input's value and "bump" the component to indicate the input
     # character was somehow in-error.
-    if v.length > (@mask?.maxlength or @maxlength) or
+    if exceededMaxLength or
     newValue is @value or
     newValue.length is @value.length
       newValue = @value
-      @bump() unless @_wasBackspace
+
+      if (newCursorPos isnt cursorPos or exceededMaxLength) or invalidCharacter
+        @bump()
 
     @value = newValue
 
