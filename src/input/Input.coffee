@@ -35,11 +35,27 @@ module.exports = class Input extends Interactive
     type: 'number'
 
 
+  ###*
+  # The threshold where a warning should be shown indicating when the maximum
+  # length of the input is approaching. This number should be less than 1, as
+  # it is a ratio of input characters to the max length.
+  #
+  # @member {number} maxlengthWarn
+  # @memberof stout-ui/input/Input#
+  ###
   @property 'maxlengthWarn',
     default: 0.7
 
 
-  @property 'maxlengthDanger',
+  ###*
+  # The threshold where an error should be shown indicating when the maximum
+  # length of the input has been reached. This number should be less than 1, as
+  # it is a ratio of input characters to the max length.
+  #
+  # @member {number} maxlengthError
+  # @memberof stout-ui/input/Input#
+  ###
+  @property 'maxlengthError',
     default: 0.9
 
 

@@ -63,7 +63,7 @@ module.exports = class InputView extends InteractiveView
     super init, events
 
     @syncProperty @context, "hint maxlength maxlengthWarn
-    maxlengthDanger value length"
+    maxlengthError value length", inherit: false
 
     @prefixedClasses.add INPUT_CLS
 
@@ -75,7 +75,7 @@ module.exports = class InputView extends InteractiveView
     # Mask the initial value.
     if @mask then @value = @mask.mask @value
 
-  @cloneProperty Input, "length maxlength maxlengthWarn maxlengthDanger"
+  @cloneProperty Input, "length maxlength maxlengthWarn maxlengthError"
 
 
   ###*
@@ -170,21 +170,27 @@ module.exports = class InputView extends InteractiveView
     cursorPos = e.target.selectionStart
 
     if @mask
-      maskedValue = @mask.mask v
-      newCursorPos = @mask.getUpdatedCursorPosition(cursorPos, v, maskedValue)
+      newValue = @mask.mask v
+      newCursorPos = @mask.getUpdatedCursorPosition(cursorPos, v, newValue)
     else
+      newValue = v
       newCursorPos = cursorPos
 
-    # Update the displayed value if below the maxlength of this input or
-    # masked max-length. Otherwise, keep the current value. Note: we must set
-    # the `value` property here regardless to update the on-screen input field,
-    # otherwise the user-entered value will be show, regardless of it's length
-    # or if it matches the mask.
-    if v.length <= (@mask?.maxlength or @maxlength)
-      @value = maskedValue or v
-    else
-      @value = @value
-      @bump()
+    # If the length of the masked value hasn't changed, then
+    if newValue.length is @value.length
+      newValue = @value
+
+    # Detect if we should indicate an invalid character was entered or the
+    # max-length of the input or mask has been reached. If so, don't updated
+    # the input's value and "bump" the component to indicate the input
+    # character was somehow in-error.
+    if v.length > (@mask?.maxlength or @maxlength) or
+    newValue is @value or
+    newValue.length is @value.length
+      newValue = @value
+      @bump() unless @_wasBackspace
+
+    @value = newValue
 
     # Always update the cursor position.
     e.target.setSelectionRange newCursorPos, newCursorPos
@@ -229,7 +235,7 @@ module.exports = class InputView extends InteractiveView
     # Update max-length indicator classes.
     if @maxlength < Infinity
       @prefixedClasses.remove 'max-length max-length-warn'
-      if @length / @maxlength > @maxlengthDanger
+      if @length / @maxlength > @maxlengthError
         @prefixedClasses.add 'max-length'
       else if @length / @maxlength > @maxlengthWarn
         @prefixedClasses.add 'max-length-warn'
