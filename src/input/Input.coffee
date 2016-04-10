@@ -9,7 +9,7 @@ Interactive     = require '../interactive/Interactive'
 
 
 ###*
-# The `Input` class is the view-model component of a text input component.
+# The `Input` class is the view-model of a text input component.
 #
 # @exports stout-ui/input/Input
 # @extends stout-ui/interactive/Interactive
@@ -23,13 +23,33 @@ module.exports = class Input extends Interactive
     super arguments...
 
 
-  @property 'hint'
+  ###*
+  # Input hint message.
+  #
+  # @member {string} hint
+  # @memberof stout-ui/input/Input#
+  ###
+  @property 'hint',
+    default: ''
+    type: 'string|number'
 
 
+  ###*
+  # The current input length.
+  #
+  # @member {number} length
+  # @memberof stout-ui/input/Input#
+  ###
   @property 'length',
     get: -> @value.length
 
 
+  ###*
+  # The maximum input length.
+  #
+  # @member {number} maxlength
+  # @memberof stout-ui/input/Input#
+  ###
   @property 'maxlength',
     default: Infinity
     type: 'number'
@@ -59,4 +79,10 @@ module.exports = class Input extends Interactive
     default: 0.9
 
 
+  ###*
+  # The current input value.
+  #
+  # @member {string} value
+  # @memberof stout-ui/input/Input#
+  ###
   @property 'value'
