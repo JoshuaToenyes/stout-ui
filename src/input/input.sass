@@ -9,6 +9,7 @@
 +exports("input/input")
 
   $label: #{$prefix}label
+  $length-label: #{$prefix}#{$input-length-indicator-class}
 
   +keyframes(input-bump-shake)
     10%, 90%
@@ -29,20 +30,33 @@
     +transform(translate3d(0, 0, 0))
     margin-top: 1.6em
 
-    .#{$label}
+    .#{$label}, .#{$length-label}
       @extend %typography-caption-01
       @extend %no-select
+
+    .#{$label}
       +transform-origin(top left)
       +transition-property(scale, transform, color)
       +transition-duration(230ms)
       +transition-timing-function($ease-in-out-cubic, $ease-in-out-cubic, linear)
-      display: block
       cursor: text
+      display: block
 
     // When the input is empty, expand-down the label.
     &.#{$prefix}empty .#{$label}
       +transform(scale(1.176) translate(0.13em, 1.4em))
       +filter(blur(0))
+
+    .#{$length-label}
+      position: absolute
+      right: 0
+      display: inline-block
+
+    &.#{$prefix}max-length-warn .#{$length-label}
+      color: $color-warn
+
+    &.#{$prefix}max-length .#{$length-label}
+      color: $color-danger
 
     .#{$prefix}input-container
       +transition(border-color $input-border-transition-time)

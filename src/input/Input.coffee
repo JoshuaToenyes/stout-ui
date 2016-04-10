@@ -23,7 +23,24 @@ module.exports = class Input extends Interactive
     super arguments...
 
 
-  @property 'mask'
-
-
   @property 'hint'
+
+
+  @property 'length',
+    get: -> @value.length
+
+
+  @property 'maxlength',
+    default: Infinity
+    type: 'number'
+
+
+  @property 'maxlengthWarn',
+    default: 0.7
+
+
+  @property 'maxlengthDanger',
+    default: 0.9
+
+
+  @property 'value'

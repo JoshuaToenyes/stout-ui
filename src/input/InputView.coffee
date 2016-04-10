@@ -7,6 +7,7 @@
 defaults            = require 'lodash/defaults'
 EnableableViewTrait = require '../interactive/EnableableViewTrait'
 HasLabelViewTrait   = require '../component/HasLabelViewTrait'
+Input               = require './Input'
 InteractiveView     = require '../interactive/InteractiveView'
 isString            = require 'lodash/isString'
 keys                = require 'stout-client/keys'
@@ -61,14 +62,20 @@ module.exports = class InputView extends InteractiveView
     defaults init, {template, tagName: TAG_NAME}
     super init, events
 
+    @syncProperty @context, "hint maxlength maxlengthWarn
+    maxlengthDanger value length"
+
     @prefixedClasses.add INPUT_CLS
 
     if @empty then @prefixedClasses.add EMPTY_CLS
 
     @on 'blur', @_onInputBlur, @
+    @on 'change:value', @_onValueChange, @
 
     # Mask the initial value.
     if @mask then @value = @mask.mask @value
+
+  @cloneProperty Input, "length maxlength maxlengthWarn maxlengthDanger"
 
 
   ###*
@@ -105,17 +112,6 @@ module.exports = class InputView extends InteractiveView
         new Mask m
       else
         m
-
-
-  ###*
-  # The max length of this text input.
-  #
-  # @member {number} maxlength
-  # @memberof stout-ui/input/InputView#
-  ###
-  @property 'maxlength',
-    default: Infinity
-    type: 'number'
 
 
   ###*
@@ -218,6 +214,25 @@ module.exports = class InputView extends InteractiveView
   ###
   _onKeydown: (e) ->
     @_wasBackspace = if e.keyCode is keys.BACKSPACE then true else false
+
+
+  ###*
+  # Handles value property change events.
+  #
+  # @method _onValueChange
+  # @memberof stout-ui/input/InputView#
+  # @private
+  ###
+  _onValueChange: (e) ->
+    @length = @value.length
+
+    # Update max-length indicator classes.
+    if @maxlength < Infinity
+      @prefixedClasses.remove 'max-length max-length-warn'
+      if @length / @maxlength > @maxlengthDanger
+        @prefixedClasses.add 'max-length'
+      else if @length / @maxlength > @maxlengthWarn
+        @prefixedClasses.add 'max-length-warn'
 
 
   ###*

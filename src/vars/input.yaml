@@ -6,3 +6,5 @@ input-focus-border-color:      $color-4
 input-focus-label-color:       $color-8
 input-border-color:            lighten($color-fg, 60%)
 input-border-transition-time:  300ms
+
+input-length-indicator-class:  length-indicator
