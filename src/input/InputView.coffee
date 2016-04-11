@@ -4,17 +4,17 @@
 #
 # @module stout-ui/input/InputView
 ###
-defaults                  = require 'lodash/defaults'
-EnableableViewTrait       = require '../interactive/EnableableViewTrait'
-HasLabelViewTrait         = require '../component/HasLabelViewTrait'
-HasValidationMsgViewTrait = require '../traits/HasValidationMsgViewTrait'
-Input                     = require './Input'
-InteractiveView           = require '../interactive/InteractiveView'
-isString                  = require 'lodash/isString'
-keys                      = require 'stout-client/keys'
-Mask                      = require '../mask/Mask'
-template                  = require './input.template'
-vars                      = require '../vars'
+defaults             = require 'lodash/defaults'
+EnableableViewTrait  = require '../interactive/EnableableViewTrait'
+HasLabelViewTrait    = require '../component/HasLabelViewTrait'
+HasValidationMsgView = require '../traits/HasValidationMsgView'
+Input                = require './Input'
+InteractiveView      = require '../interactive/InteractiveView'
+isString             = require 'lodash/isString'
+keys                 = require 'stout-client/keys'
+Mask                 = require '../mask/Mask'
+template             = require './input.template'
+vars                 = require '../vars'
 
 # Require shared input variables.
 require '../vars/input'
@@ -58,12 +58,14 @@ TAG_NAME = vars.readPrefixed 'input/input-tag'
 module.exports = class InputView extends InteractiveView
 
   @useTrait EnableableViewTrait
-  @useTrait HasValidationMsgViewTrait
+  @useTrait HasValidationMsgView
   @useTrait HasLabelViewTrait
 
   constructor: (init, events) ->
     defaults init, {template, tagName: TAG_NAME}
     super init, events
+
+    @maxListenerCount 'change', 20
 
     @syncProperty @context, "maxlength maxlengthWarn
     maxlengthError value length", inherit: false
@@ -188,6 +190,7 @@ module.exports = class InputView extends InteractiveView
 
     # Indicates an invalid character was pressed.
     invalidCharacter = newValue is @value and
+    v isnt newValue and
     (newCursorPos isnt cursorPos or cursorPos is v.length)
 
     # Detect if we should indicate an invalid character was entered or the
@@ -199,7 +202,9 @@ module.exports = class InputView extends InteractiveView
     newValue.length is @value.length
       newValue = @value
 
-      if (newCursorPos isnt cursorPos or exceededMaxLength) or invalidCharacter
+      if ((newCursorPos isnt cursorPos or exceededMaxLength) or
+      invalidCharacter) and
+      not @_wasBackspace
         @bump()
 
     @value = newValue
