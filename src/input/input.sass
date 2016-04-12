@@ -9,10 +9,20 @@
 
 +exports("input/input")
 
-  $label: #{$prefix}label
-  $length-label: #{$prefix}#{$input-length-indicator-class}
+  $label:               #{$prefix}label
+  $length-label:        #{$prefix}#{$input-length-indicator-class}
   $validation-messages: #{$prefix}#{$validation-msg-ul-class}
+  $validation-hint:     #{$prefix}#{$validation-msg-hint-class}
+  $validation-warning:  #{$prefix}#{$validation-msg-warning-class}
+  $validation-error:    #{$prefix}#{$validation-msg-error-class}
+
   $input-padding-top: 0.4em
+
+  =border-color($color)
+    .#{$prefix}input-container
+      border-bottom-color: $color
+      &::after
+        background-color: $color
 
   +keyframes(input-bump-shake)
     10%, 90%
@@ -65,6 +75,21 @@
       margin: 0
       list-style: none
 
+      li
+        +transition(all 500ms)
+        opacity: 0
+
+        &.#{$validation-hint},
+        &.#{$validation-warning},
+        &.#{$validation-error}
+          opacity: 1
+
+    .#{$validation-warning}
+      color: $validation-msg-warning-color
+
+    .#{$validation-error}
+      color: $validation-msg-error-color
+
     .#{$length-label}
       right: 0
 
@@ -107,15 +132,27 @@
       +animation(input-bump-shake $bump-time infinite)
       color: $input-bump-color
 
-    &.#{$prefix}focus
+
+    &.#{$prefix}focus,
+    &.#{$validation-error},
+    &.#{$validation-warning}
       .#{$label}
         +transform(scale(1) translate(0, 0))
-        color: $input-focus-label-color
-      .#{$prefix}input-container
-        border-bottom-color: $input-focus-border-color
-        &::after
-          background-color: $input-focus-border-color
-
       .#{$validation-messages}
         +transform(translateY(0))
         opacity: 1
+
+    &.#{$prefix}focus
+      .#{$label}
+        color: $input-focus-label-color
+      +border-color($input-focus-border-color)
+
+    &.#{$validation-warning}
+      .#{$label}
+        color: $input-warning-label-color
+      +border-color($input-warning-border-color)
+
+    &.#{$validation-error}
+      .#{$label}
+        color: $input-error-label-color
+      +border-color($input-error-border-color)

@@ -4,10 +4,27 @@
 #
 # @module stout-ui/input/Input
 ###
-EnableableTrait       = require '../interactive/EnableableTrait'
-HasValidationMsgTrait = require '../traits/HasValidationMsgTrait'
-Interactive           = require '../interactive/Interactive'
+EnableableTrait  = require '../interactive/EnableableTrait'
+HasValidationMsg = require '../traits/HasValidationMsg'
+HasValidators    = require '../traits/HasValidators'
+Interactive      = require '../interactive/Interactive'
 
+Validator = require 'stout-core/validation/Validator'
+
+class T extends Validator
+  constructor: -> super()
+  soft: (v) ->
+    if v.length > 10
+      @validation = 'error'
+      @message = 'Input over ten!'
+    else if v.length > 5
+      @validation = 'warning'
+      @message = 'Careful... input getting long.'
+    else
+      @validation = 'ok'
+      @message = ''
+  strict: (v) ->
+    @validation = if v.length > 10 then 'error' else 'ok'
 
 ###*
 # The `Input` class is the view-model of a text input component.
@@ -19,11 +36,13 @@ Interactive           = require '../interactive/Interactive'
 module.exports = class Input extends Interactive
 
   @useTrait EnableableTrait
-  @useTrait HasValidationMsgTrait
+  @useTrait HasValidationMsg
+  @useTrait HasValidators
 
   constructor: ->
     super arguments...
-
+    @validators.push new T()
+    @maxListenerCount 'change', 20
 
   ###*
   # The current input length.
