@@ -8,6 +8,7 @@ defaults             = require 'lodash/defaults'
 EnableableViewTrait  = require '../interactive/EnableableViewTrait'
 HasLabelViewTrait    = require '../component/HasLabelViewTrait'
 HasValidationMsgView = require '../traits/HasValidationMsgView'
+HasValidatorsView    = require '../traits/HasValidatorsView'
 Input                = require './Input'
 InteractiveView      = require '../interactive/InteractiveView'
 isString             = require 'lodash/isString'
@@ -59,6 +60,7 @@ module.exports = class InputView extends InteractiveView
 
   @useTrait EnableableViewTrait
   @useTrait HasValidationMsgView
+  @useTrait HasValidatorsView
   @useTrait HasLabelViewTrait
 
   constructor: (init, events) ->
