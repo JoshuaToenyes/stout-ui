@@ -1,16 +1,23 @@
 ###*
-# @overview Defines the `HasValidationMsgViewTrait`
+# @overview Defines the `HasValidationMsgView`
 #
-# @module stout-ui/traits/HasValidationMsgViewTrait
+# @module stout-ui/traits/HasValidationMsgView
 ###
-Foundation            = require 'stout-core/base/Foundation'
-HasValidationMsgTrait = require './HasValidationMsgTrait'
-sortBy                = require 'lodash/sortBy'
-uuid                  = require 'uuid'
-vars                  = require '../vars'
+Foundation       = require 'stout-core/base/Foundation'
+HasValidationMsg = require './HasValidationMsg'
+OrderedList      = require 'stout-core/collection/OrderedList'
+sortBy           = require 'lodash/sortBy'
+uuid             = require 'uuid'
+vars             = require '../vars'
 
 # Pull-in validation shared vars.
 require '../vars/validation-messages'
+
+
+# Sorting Constants
+ERR = 1
+WARN = 2
+HINT = 3
 
 
 ###*
@@ -57,18 +64,18 @@ ERROR_CLS = vars.readPrefixed 'validation-messages/validation-msg-error-class'
 # The HasHintViewTrait can be used for input-type components which have a hint
 # message.
 #
-# @exports stout-ui/traits/HasValidationMsgViewTrait
+# @exports stout-ui/traits/HasValidationMsgView
 # @mixin
 ###
-module.exports = class HasValidationMsgViewTrait extends Foundation
+module.exports = class HasValidationMsgView extends Foundation
 
-  @cloneProperty HasValidationMsgTrait, 'hint maxValidationMessages'
+  @cloneProperty HasValidationMsg, 'hint maxValidationMessages'
 
   ###*
   # Renders the validation message list.
   #
   # @method _renderValidationMessageList
-  # @memberof stout-ui/traits/HasValidationMsgViewTrait
+  # @memberof stout-ui/traits/HasValidationMsgView
   # @private
   ###
   _renderValidationMessageList: ->
@@ -76,20 +83,20 @@ module.exports = class HasValidationMsgViewTrait extends Foundation
 
     # Sort the validation messages so errors appear on top of warnings, and
     # warnings appear on top of hints (in case we're displaying a bunch).
-    @_validationMsgs = sortBy(@_validationMsgs, (o) -> o.p).slice 0, m
+    msgs = (@_validationMsgs.sortBy('p').take m).reverse()
 
     if @ready
       ul = @select ".#{MSG_LIST_CLS}"
       ul.innerHTML = ''
 
-      for o in @_validationMsgs
+      for o in msgs
         li = document.createElement 'li'
         li.innerHTML = o.msg
 
         switch o.p
-          when 2 then c = ERROR_CLS
-          when 1 then c = WARN_CLS
-          when 0 then c = HINT_CLS
+          when ERR then c = ERROR_CLS
+          when WARN then c = WARN_CLS
+          when HINT then c = HINT_CLS
 
         li.classList.add c
         if ul.firstChild
@@ -98,59 +105,116 @@ module.exports = class HasValidationMsgViewTrait extends Foundation
           ul.appendChild li
 
 
+  ###*
+  # Handles adding a validation message. After a message is added a re-render
+  # of the list is requested.
+  #
+  # @param {string} identifier - Either the messsage ID or exact message string
+  # to remove.
+  #
+  # @method _handleValidationMsgPush
+  # @memberof stout-ui/traits/HasValidationMsgView#
+  # @private
+  ###
   _handleValidationMsgPush: (p, msg, id) ->
     if msg.length is 0 then return
     @removeValidationMessage(id or msg)
     id ?= uuid.v4()
-    @_validationMsgs.push {p, msg, id}
+    @_validationMsgs.add {p, msg, id}
     @_renderValidationMessageList()
     id
 
 
+  ###*
+  # Removes a validation message.
+  #
+  # @param {string} identifier - Either the messsage ID or exact message string
+  # to remove.
+  #
+  # @method removeValidationMessage
+  # @memberof stout-ui/traits/HasValidationMsgView#
+  ###
   removeValidationMessage: (identifier) ->
-    i = 0
-    while i < @_validationMsgs.length
-      m = @_validationMsgs[i]
+    @_validationMsgs.all (m) =>
       if m.id is identifier or m.msg is identifier
-        @_validationMsgs.splice i, 1
-      else
-        i++
+        @_validationMsgs.remove m
     @_renderValidationMessageList()
 
 
+  ###*
+  # Shows a hint message.
+  #
+  # @param {string} message - The string message to show.
+  #
+  # @param {string} [id] - The optional validation message ID.
+  #
+  # @method showHint
+  # @memberof stout-ui/traits/HasValidationMsgView#
+  ###
   showHint: ->
-    @_handleValidationMsgPush 0, arguments...
+    @_handleValidationMsgPush HINT, arguments...
 
 
+  ###*
+  # Shows a validation error message.
+  #
+  # @param {string} message - The string message to show.
+  #
+  # @param {string} [id] - The optional validation message ID.
+  #
+  # @method showValidationError
+  # @memberof stout-ui/traits/HasValidationMsgView#
+  ###
   showValidationError: ->
-    @_handleValidationMsgPush 2, arguments...
+    @_handleValidationMsgPush ERR, arguments...
 
 
+  ###*
+  # Shows a validation warning message.
+  #
+  # @param {string} message - The string message to show.
+  #
+  # @param {string} [id] - The optional validation message ID.
+  #
+  # @method showValidationWarning
+  # @memberof stout-ui/traits/HasValidationMsgView#
+  ###
   showValidationWarning: ->
-    @_handleValidationMsgPush 1, arguments...
+    @_handleValidationMsgPush WARN, arguments...
 
 
   ###*
   # Initiates this trait...
   #
   # @method initTrait
-  # @memberof stout-ui/traits/HasValidationMsgViewTrait
+  # @memberof stout-ui/traits/HasValidationMsgView
   # @private
   ###
   initTrait: ->
-    @syncProperty @context, 'hint maxValidationMessages', inherit: false
-    @_validationMsgs = []
 
-    @showHint @hint
+    # The hint value is not inherited because it may be specified in the
+    @syncProperty @context, 'hint', inherit: false
 
-    @on 'change:hint', (e) => @showHint e.data.value
+    # The maximum validation messages should be set by the implementing context
+    # view model class.
+    @syncProperty @context, 'maxValidationMessages'
 
+    @_validationMsgs = new OrderedList()
+
+    # The validation message list must be rendered immediately to show any
+    # validation messages which were updated before ready/rendered.
     @on 'ready', => @_renderValidationMessageList()
 
+    # Add the validation message list to the list of view classes, usable by
+    # templates at render-time.
     @viewClasses.validationMessageList = MSG_LIST_CLS
 
+    # If the view-model doesn't support the `validation` event, then this
+    # trait can only show/hide validation messages manually.
     if @context.eventRegistered 'validation'
 
+      # When the validation status of the view-model changes, update the
+      # displayed validation classes (error, warning, hint, etc.).
       @context.on 'change:validation', (e) =>
         @classes.remove ERROR_CLS, WARN_CLS
         @prefixedClasses.remove 'valid'
@@ -159,6 +223,8 @@ module.exports = class HasValidationMsgViewTrait extends Foundation
           when 'error' then @classes.add ERROR_CLS
           when 'warning' then @classes.add WARN_CLS
 
+      # When the view-model fires a validation event (meaning a validation just
+      # occurred), update the validation messages.
       @context.on 'validation', (e) =>
         msg = e.data.message
         id = e.data.id

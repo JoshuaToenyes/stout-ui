@@ -13,7 +13,7 @@ Validator = require 'stout-core/validation/Validator'
 
 class T extends Validator
   constructor: -> super()
-  soft: (v) ->
+  softValidate: (v) ->
     if v.length > 10
       @validation = 'error'
       @message = 'Input over ten!'
@@ -23,7 +23,18 @@ class T extends Validator
     else
       @validation = 'ok'
       @message = ''
-  strict: (v) ->
+  validate: (v) ->
+    @validation = if v.length > 10 then 'error' else 'ok'
+
+class Q extends Validator
+  constructor: -> super()
+  softValidate: (v) ->
+    if v is 'Toenyes'
+      @validation = 'error'
+      @message = 'Oh snap!'
+    else
+      @validation = 'ok'
+  validate: (v) ->
     @validation = if v.length > 10 then 'error' else 'ok'
 
 ###*
@@ -41,8 +52,9 @@ module.exports = class Input extends Interactive
 
   constructor: ->
     super arguments...
-    @validators.push new T()
+    @validators.add new T(), new Q()
     @maxListenerCount 'change', 20
+    @maxValidationMessages = 1
 
   ###*
   # The current input length.

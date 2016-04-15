@@ -4,7 +4,8 @@
 #
 # @module stout-ui/input/HasValidationMsgTrait
 ###
-Foundation = require 'stout-core/base/Foundation'
+Foundation    = require 'stout-core/base/Foundation'
+HintValidator = require '../validators/HintValidator'
 
 
 
@@ -20,7 +21,7 @@ module.exports = class HasValidationMsgTrait extends Foundation
   # Hint message.
   #
   # @member {string} hint
-  # @memberof stout-ui/input/HasHintTrait
+  # @memberof stout-ui/traits/HasValidationMsgViewTrait#
   ###
   @property 'hint',
     default: ''
@@ -33,8 +34,24 @@ module.exports = class HasValidationMsgTrait extends Foundation
   # and displayed above warnings.
   #
   # @member {number} maxValidationMessages
-  # @memberof stout-ui/traits/HasValidationMsgViewTrait
+  # @memberof stout-ui/traits/HasValidationMsgViewTrait#
   ###
   @property 'maxValidationMessages',
     default: Infinity
     type: 'number'
+
+
+  ###*
+  # Private reference to current hint validator.
+  #
+  # @member _generatedHintValidator
+  # @memberof stout-ui/traits/HasValidationMsgViewTrait#
+  ###
+
+
+  initTrait: ->
+    @on 'change:hint', (e) =>
+      if @hint
+        @validators.remove @_generatedHintValidator
+        @_generatedHintValidator = new HintValidator(@hint)
+        @validators.add @_generatedHintValidator

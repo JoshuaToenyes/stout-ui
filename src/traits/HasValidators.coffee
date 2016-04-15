@@ -6,7 +6,7 @@
 ###
 Foundation          = require 'stout-core/base/Foundation'
 HasValidationStates = require 'stout-core/traits/HasValidationStates'
-ValidatorAggregate  = require 'stout-core/validation/ValidatorAggregate'
+ValidatorGroup      = require 'stout-core/validation/ValidatorGroup'
 values              = require 'lodash/values'
 
 
@@ -50,13 +50,17 @@ module.exports = class HasValidators extends Foundation
   # @private
   ###
   initTrait: ->
-    @registerEvent 'validation'
-    @_aggregate = new ValidatorAggregate
+    @_validatorGroup = new ValidatorGroup
 
-    @syncProperty @_aggregate, 'validators validation'
-    @proxyEvents @_aggregate, 'validation'
+    # Sync the list of validators and the current validation state with the
+    # validators group.
+    @syncProperty @_validatorGroup, 'validators validation'
+
+    # Proxy all validation events with the validator group.
+    @registerEvent 'validation'
+    @proxyEvents @_validatorGroup, 'validation'
 
     # When the value changes, perform a soft validation. The primary use case
     # for this is on-the-fly validation as the user is typing.
     @on "change:#{@validateProperty}", (e) =>
-      @_aggregate.soft e.data.value
+      @_validatorGroup.softValidate e.data.value

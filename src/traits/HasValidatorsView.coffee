@@ -16,5 +16,27 @@ Foundation = require 'stout-core/base/Foundation'
 ###
 module.exports = class HasValidatorsView extends Foundation
 
+  ###*
+  # The `validators` attribut on views which include this trait. `Validator`
+  # classes are automatically instantiated based on this property.
+  #
+  # @member validators
+  # @memberof stout-ui/traits/HasValidatorsView#
+  ###
+  @property 'validators',
+    default: ''
+
+
+  ###*
+  # Initiates this trait.
+  #
+  # @method initTrait
+  # @memberof stout-ui/traits/HasValidatorsView#
+  # @private
+  ###
   initTrait: ->
+
+    @on 'ready', =>
+      console.log 'got validators:', @validators
+
     @context.on 'validation', (e) ->
