@@ -1,7 +1,7 @@
 module.exports = (config) ->
 
   config.set
-    browsers: ['Chrome', 'Safari', 'PhantomJS', 'Firefox']
+    browsers: ['Chrome']#, 'Safari', 'PhantomJS', 'Firefox']
 
     frameworks: ['browserify', 'mocha', 'chai-sinon']
 

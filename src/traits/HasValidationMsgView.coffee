@@ -3,6 +3,7 @@
 #
 # @module stout-ui/traits/HasValidationMsgView
 ###
+debounce         = require 'lodash/debounce'
 Foundation       = require 'stout-core/base/Foundation'
 HasValidationMsg = require './HasValidationMsg'
 OrderedList      = require 'stout-core/collection/OrderedList'
@@ -18,6 +19,10 @@ require '../vars/validation-messages'
 ERR = 1
 WARN = 2
 HINT = 3
+
+
+# The render debounce time in milliseconds.
+RENDER_DEBOUNCE = 50
 
 
 ###*
@@ -78,7 +83,7 @@ module.exports = class HasValidationMsgView extends Foundation
   # @memberof stout-ui/traits/HasValidationMsgView
   # @private
   ###
-  _renderValidationMessageList: ->
+  _renderValidationMessageList: debounce ->
     m = @maxValidationMessages
 
     # Sort the validation messages so errors appear on top of warnings, and
@@ -103,6 +108,7 @@ module.exports = class HasValidationMsgView extends Foundation
           ul.insertBefore li, ul.firstChild
         else
           ul.appendChild li
+  , RENDER_DEBOUNCE
 
 
   ###*

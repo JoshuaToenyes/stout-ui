@@ -4,6 +4,7 @@
 #
 #
 ###
+IllegalArgumentErr  = require('stout-core/err').IllegalArgumentErr
 HasValidationStates = require 'stout-core/traits/HasValidationStates'
 keys                = require 'lodash/keys'
 Map                 = require 'stout-core/collection/Map'
@@ -11,9 +12,10 @@ merge               = require 'lodash/merge'
 
 
 BUILT_IN_VALIDATORS =
-  'max':  require 'stout-core/validators/Max'
-  'min':  require 'stout-core/validators/Min'
-  'size': require 'stout-core/validators/Size'
+  'max':      require 'stout-core/validators/Max'
+  'min':      require 'stout-core/validators/Min'
+  'size':     require 'stout-core/validators/Size'
+  'required': require 'stout-core/validators/Required'
 
 
 validators = new Map()
@@ -53,6 +55,9 @@ parseMessages = (v) ->
 parseValidator = (v) ->
   v = v.split ':'
   cls = validators.get v[0]
+
+  if not cls then throw new IllegalArgumentErr "Validator \"#{v[0]}\" does not
+  exist or is not registered."
 
   # If arguments were specified.
   if v[1]

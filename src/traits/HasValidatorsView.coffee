@@ -5,7 +5,7 @@
 # @module stout-ui/input/HasValidators
 ###
 Foundation = require 'stout-core/base/Foundation'
-
+parser     = require '../validators/parser'
 
 
 ###*
@@ -35,8 +35,5 @@ module.exports = class HasValidatorsView extends Foundation
   # @private
   ###
   initTrait: ->
-
-    @on 'ready', =>
-      console.log 'got validators:', @validators
-
-    @context.on 'validation', (e) ->
+    if @validators.trim().length > 0
+      @context.validators.add parser.parse(@validators)...
