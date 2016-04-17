@@ -31,6 +31,17 @@ module.exports = class HasValidatorsView extends Foundation
 
 
   ###*
+  # Set to `true` to enabled the "required" validator for this field.
+  #
+  # @member required
+  # @memberof stout-ui/traits/HasValidatorsView#
+  ###
+  @property 'required',
+    default: false
+    type: 'boolean'
+
+
+  ###*
   # Initiates this trait.
   #
   # @method initTrait
@@ -38,14 +49,25 @@ module.exports = class HasValidatorsView extends Foundation
   # @private
   ###
   initTrait: ->
+    # Add the "required" validator if the attribute has been set.
+    if @required then @validators += '|required'
+
+    # Parse the described validators.
     if @validators.trim().length > 0
       @context.validators.add parser.parse(@validators)...
 
-    triggerVal = =>
-      if @visited
-        @context.validatorGroup.validate @context[@context.validateProperty]
+    # Handles actually performing the full validation using the view-model's
+    # validator group.
+    doValidation = =>
+      @context.validatorGroup.validate @context[@context.validateProperty]
 
-    debouncedTriggerVal = debounce triggerVal, VALIDATION_DEBOUNCE
+    # This function handles debounced, live validation.
+    doLiveValidation = debounce ->
+      if @visited then doValidation()
+    , VALIDATION_DEBOUNCE
 
-    @on 'blur', triggerVal
-    @context.on "change:#{@context.validateProperty}", debouncedTriggerVal
+    # Perform a full validation when the field is blurred.
+    @on 'blur', doValidation
+
+    # When the field changes, perform a live debounced full validation.
+    @context.on "change:#{@context.validateProperty}", doLiveValidation

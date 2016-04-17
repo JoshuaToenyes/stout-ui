@@ -6,5 +6,3 @@ module.exports = class HintValidator extends Validator
     super()
     @validation = 'hint'
     @message = msg
-
-  validate: -> super()

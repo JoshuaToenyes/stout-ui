@@ -136,14 +136,13 @@
     &.#{$prefix}focus,
     &.#{$validation-error},
     &.#{$validation-warning}
-      .#{$label}
-        +transform(scale(1) translate(0, 0))
       .#{$validation-messages}
         +transform(translateY(0))
         opacity: 1
 
     &.#{$prefix}focus
       .#{$label}
+        +transform(scale(1) translate(0, 0))
         color: $input-focus-label-color
       +border-color($input-focus-border-color)
 

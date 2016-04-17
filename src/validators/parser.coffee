@@ -83,6 +83,8 @@ module.exports.parse = (s) ->
 
   # Parse each validator descriptor.
   for v in vs
+    v = v.trim()
+    if v.length is 0 then continue
     val = parseValidator v
     merge val.messages, parseMessages v
     vals.push val

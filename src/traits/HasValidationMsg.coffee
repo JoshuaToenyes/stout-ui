@@ -50,7 +50,7 @@ module.exports = class HasValidationMsgTrait extends Foundation
 
 
   initTrait: ->
-    @on 'change:hint', (e) =>
+    @on 'change:hint', =>
       if @hint
         @validators.remove @_generatedHintValidator
         @_generatedHintValidator = new HintValidator(@hint)
