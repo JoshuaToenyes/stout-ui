@@ -39,4 +39,18 @@ module.exports = class HasLabelViewTrait extends Foundation
   ###
   @property 'label',
     default: ''
-    set: (l) -> @contents = "<span class=#{LABEL_CLS}>#{l}</span>"
+    set: (l) ->
+      @contents = "<span class=#{LABEL_CLS}>#{l}</span>"
+      l
+
+
+  ###*
+  # Init this trait by syncing with the view's context.
+  #
+  #
+  # @method initTrait
+  # @memberof stout-ui/component/HasLabelViewTrait#
+  # @private
+  ###
+  initTrait: ->
+    @syncProperty @context, 'label', inherit: false

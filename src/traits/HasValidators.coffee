@@ -6,7 +6,7 @@
 ###
 Foundation          = require 'stout-core/base/Foundation'
 HasValidationStates = require 'stout-core/traits/HasValidationStates'
-ValidatorGroup      = require 'stout-core/validation/ValidatorGroup'
+ValidatorGroup      = require 'stout-core/validator/ValidatorGroup'
 values              = require 'lodash/values'
 
 

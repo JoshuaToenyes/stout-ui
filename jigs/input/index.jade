@@ -13,17 +13,21 @@ block content
     ui-input( 
       maxlength="15", 
       hint="Let us get to know you!", 
+      validator-name="last name",
       validators="required") Last Name
     ui-input(
       mask="#### #### #### ####", 
-      required,
+      required
+      validator-name="credit card number",
       hint="Visa, MasterCard or American Express") Credit Card Number
     ui-input(
       mask="+1 (###) ###-####", 
       value="4065551212", 
       required,
+      validator-name="phone number",
       hint="+1 (###) ###-####") US Phone Number
     ui-input(
       mask="(##?#?) ####-####",
+      validator-name="phone number",
       required) UK Phone Number
   

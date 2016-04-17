@@ -5,6 +5,7 @@
 # @module stout-ui/input/Input
 ###
 EnableableTrait  = require '../interactive/EnableableTrait'
+HasLabel         = require '../traits/HasLabel'
 HasValidationMsg = require '../traits/HasValidationMsg'
 HasValidators    = require '../traits/HasValidators'
 HasValue         = require '../traits/HasValue'
@@ -22,6 +23,7 @@ Interactive      = require '../interactive/Interactive'
 module.exports = class Input extends Interactive
 
   @useTrait EnableableTrait
+  @useTrait HasLabel
   @useTrait HasValidationMsg
   @useTrait HasValidators
   @useTrait HasValue, skip: 'value'
@@ -30,6 +32,7 @@ module.exports = class Input extends Interactive
     super arguments...
     @maxListenerCount 'change', 20
     @maxValidationMessages = 1
+
 
   ###*
   # The current input length.

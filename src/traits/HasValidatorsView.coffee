@@ -6,7 +6,7 @@
 ###
 debounce   = require 'lodash/debounce'
 Foundation = require 'stout-core/base/Foundation'
-parser     = require '../validators/parser'
+parser     = require '../validator/parser'
 
 
 VALIDATION_DEBOUNCE = 300
@@ -28,6 +28,15 @@ module.exports = class HasValidatorsView extends Foundation
   ###
   @property 'validators',
     default: ''
+
+
+  ###*
+  # Optional field name for use by validators.
+  #
+  # @member validatorName
+  # @memberof stout-ui/traits/HasValidatorsView#
+  ###
+  @property 'validatorName'
 
 
   ###*
@@ -54,7 +63,9 @@ module.exports = class HasValidatorsView extends Foundation
 
     # Parse the described validators.
     if @validators.trim().length > 0
-      @context.validators.add parser.parse(@validators)...
+      for v in parser.parse(@validators)
+        v.name = @validatorName or @label
+        @context.validators.add v
 
     # Handles actually performing the full validation using the view-model's
     # validator group.

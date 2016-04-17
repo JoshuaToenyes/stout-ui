@@ -12,10 +12,10 @@ merge               = require 'lodash/merge'
 
 
 BUILT_IN_VALIDATORS =
-  'max':      require 'stout-core/validators/Max'
-  'min':      require 'stout-core/validators/Min'
-  'size':     require 'stout-core/validators/Size'
-  'required': require 'stout-core/validators/Required'
+  'max':      require 'stout-core/validator/Max'
+  'min':      require 'stout-core/validator/Min'
+  'size':     require 'stout-core/validator/Size'
+  'required': require 'stout-core/validator/Required'
 
 
 validators = new Map()
@@ -72,7 +72,7 @@ parseValidator = (v) ->
 ###*
 # Parses a validator string and instantiates the appropriate Validator classes.
 #
-# @exports stout-ui/validators/parser
+# @exports stout-ui/validator/parser
 # @function parser
 ###
 module.exports.parse = (s) ->
@@ -96,6 +96,6 @@ module.exports.parse = (s) ->
 # The validators map which can be added-to for extending the parser's vocabulary
 # of validators.
 #
-# @exports stout-ui/validators/parser.validators
+# @exports stout-ui/validator/parser.validators
 ###
 module.exports.validators = validators

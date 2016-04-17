@@ -1,4 +1,4 @@
-Validator = require 'stout-core/validation/Validator'
+Validator = require 'stout-core/validator/Validator'
 
 module.exports = class HintValidator extends Validator
 

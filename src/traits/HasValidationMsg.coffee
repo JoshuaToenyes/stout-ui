@@ -5,7 +5,7 @@
 # @module stout-ui/input/HasValidationMsgTrait
 ###
 Foundation    = require 'stout-core/base/Foundation'
-HintValidator = require '../validators/HintValidator'
+HintValidator = require '../validator/HintValidator'
 
 
 
