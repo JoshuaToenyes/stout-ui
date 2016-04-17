@@ -7,6 +7,7 @@
 EnableableTrait  = require '../interactive/EnableableTrait'
 HasValidationMsg = require '../traits/HasValidationMsg'
 HasValidators    = require '../traits/HasValidators'
+HasValue         = require '../traits/HasValue'
 Interactive      = require '../interactive/Interactive'
 
 
@@ -23,6 +24,7 @@ module.exports = class Input extends Interactive
   @useTrait EnableableTrait
   @useTrait HasValidationMsg
   @useTrait HasValidators
+  @useTrait HasValue, skip: 'value'
 
   constructor: ->
     super arguments...
@@ -75,9 +77,10 @@ module.exports = class Input extends Interactive
 
 
   ###*
-  # The current input value.
+  # The view model's value.
   #
-  # @member {string} value
-  # @memberof stout-ui/input/Input#
+  # @member {mixed} value
+  # @memberof stout-ui/traits/HasValue#
   ###
-  @property 'value'
+  @property 'value',
+    default: ''

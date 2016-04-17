@@ -9,6 +9,7 @@ EnableableViewTrait  = require '../interactive/EnableableViewTrait'
 HasLabelViewTrait    = require '../component/HasLabelViewTrait'
 HasValidationMsgView = require '../traits/HasValidationMsgView'
 HasValidatorsView    = require '../traits/HasValidatorsView'
+HasValueView         = require '../traits/HasValueView'
 Input                = require './Input'
 InteractiveView      = require '../interactive/InteractiveView'
 isString             = require 'lodash/isString'
@@ -59,9 +60,10 @@ TAG_NAME = vars.readPrefixed 'input/input-tag'
 module.exports = class InputView extends InteractiveView
 
   @useTrait EnableableViewTrait
+  @useTrait HasLabelViewTrait
   @useTrait HasValidationMsgView
   @useTrait HasValidatorsView
-  @useTrait HasLabelViewTrait
+  @useTrait HasValueView
 
   constructor: (init, events) ->
     defaults init, {template, tagName: TAG_NAME}
@@ -70,7 +72,7 @@ module.exports = class InputView extends InteractiveView
     @maxListenerCount 'change', 20
 
     @syncProperty @context, "maxlength maxlengthWarn
-    maxlengthError value length", inherit: false
+    maxlengthError length", inherit: false
 
     @prefixedClasses.add INPUT_CLS
 
@@ -81,6 +83,10 @@ module.exports = class InputView extends InteractiveView
 
     # Mask the initial value.
     if @mask then @value = @mask.mask @value
+
+    @on 'set:value', (e) =>
+      v = e.data.value.toString()
+      if @rendered and not @_wasBackspace then @select('input').value = v
 
   @cloneProperty Input, "length maxlength maxlengthWarn maxlengthError"
 
@@ -145,23 +151,6 @@ module.exports = class InputView extends InteractiveView
     set: (v) ->
       if v
         @value = if @mask then @mask.mask(v) else v
-
-
-  ###*
-  # The `value` property is the value of this input, as presented to the user.
-  # This differs from the `rawValue` property which is the unmasked (or
-  # mask-removed) value.
-  #
-  # @member value
-  # @memberof stout-ui/input/InputView#
-  ###
-  @property 'value',
-    default: ''
-    type: 'string|number'
-    set: (v) ->
-      v = v.toString()
-      if @rendered and not @_wasBackspace then @select('input').value = v
-      v
 
 
   ###*

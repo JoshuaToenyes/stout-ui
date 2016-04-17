@@ -59,15 +59,20 @@ module.exports = class HasValidatorsView extends Foundation
     # Handles actually performing the full validation using the view-model's
     # validator group.
     doValidation = =>
-      @context.validatorGroup.validate @context[@context.validateProperty]
+      if @visited
+        @context.validatorGroup.validate @context[@context.validateProperty]
 
     # This function handles debounced, live validation.
     doLiveValidation = debounce ->
-      if @visited then doValidation()
+      doValidation()
     , VALIDATION_DEBOUNCE
 
     # Perform a full validation when the field is blurred.
-    @on 'blur', doValidation
+    @on 'blur', => if @dirty then doValidation()
+
+    @on 'focus', =>
+      val = @context[@context.validateProperty]
+      @context.validatorGroup.softValidate(val)
 
     # When the field changes, perform a live debounced full validation.
     @context.on "change:#{@context.validateProperty}", doLiveValidation
