@@ -5,9 +5,9 @@
 #
 # @module stout-ui/interactive/InteractiveView
 ###
-
 ComponentView = require '../component/ComponentView'
 nextTick      = require 'stout-client/util/nextTick'
+Interactive   = require './Interactive'
 
 
 ###*
@@ -26,6 +26,7 @@ STATE =
 EVENTS = ['blur', 'focus', 'active', 'hover', 'click', 'tap', 'leave']
 
 
+
 ###*
 # The InteractiveView class defines the view of a UI component with support for
 # common UI component states and behaviors such as blur, focus, mouseenter,
@@ -39,9 +40,16 @@ module.exports = class InteractiveView extends ComponentView
 
   constructor: (init, events = []) ->
     super init, events.concat EVENTS
+
+    @syncProperty @context, 'visited'
+
     @_state = STATE.DEFAULT
     @_interactiveEventListeners = []
     @_focusEventListeners = []
+
+    @on 'blur', => @visited = true
+
+  @cloneProperty Interactive, 'visited'
 
 
   # Add event properties for each.

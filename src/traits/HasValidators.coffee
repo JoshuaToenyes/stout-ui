@@ -39,6 +39,12 @@ module.exports = class HasValidators extends Foundation
     default: 'value'
 
 
+  ###*
+  # The current validation state, synced with the validator group.
+  #
+  # @member {string} validation
+  # @memberof stout-ui/traits/HasValidators#
+  ###
   @property 'validation'
 
 
@@ -50,17 +56,17 @@ module.exports = class HasValidators extends Foundation
   # @private
   ###
   initTrait: ->
-    @_validatorGroup = new ValidatorGroup
+    @validatorGroup = new ValidatorGroup
 
     # Sync the list of validators and the current validation state with the
     # validators group.
-    @syncProperty @_validatorGroup, 'validators validation'
+    @syncProperty @validatorGroup, 'validators validation'
 
     # Proxy all validation events with the validator group.
     @registerEvent 'validation'
-    @proxyEvents @_validatorGroup, 'validation'
+    @proxyEvents @validatorGroup, 'validation'
 
     # When the value changes, perform a soft validation. The primary use case
     # for this is on-the-fly validation as the user is typing.
     @on "change:#{@validateProperty}", (e) =>
-      @_validatorGroup.softValidate e.data.value
+      @validatorGroup.softValidate e.data.value

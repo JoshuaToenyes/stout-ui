@@ -43,3 +43,15 @@ module.exports = class Interactive extends Component
   constructor: (init, events = []) ->
     super init, events.concat [
       'blur', 'focus', 'active', 'hover', 'click', 'leave']
+
+
+  ###*
+  # Flag indicating if the user has visited component. A component which has
+  # been "visited" has been focused then blurred.
+  #
+  # @member {boolean} visited
+  # @memberof stout-ui/interactive/InteractiveView
+  ###
+  @property 'visited',
+    default: false
+    type: 'boolean'

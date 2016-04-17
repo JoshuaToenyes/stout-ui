@@ -4,9 +4,12 @@
 #
 # @module stout-ui/input/HasValidators
 ###
+debounce   = require 'lodash/debounce'
 Foundation = require 'stout-core/base/Foundation'
 parser     = require '../validators/parser'
 
+
+VALIDATION_DEBOUNCE = 300
 
 ###*
 # The `HasValidatorsView`
@@ -37,3 +40,12 @@ module.exports = class HasValidatorsView extends Foundation
   initTrait: ->
     if @validators.trim().length > 0
       @context.validators.add parser.parse(@validators)...
+
+    triggerVal = =>
+      if @visited
+        @context.validatorGroup.validate @context[@context.validateProperty]
+
+    debouncedTriggerVal = debounce triggerVal, VALIDATION_DEBOUNCE
+
+    @on 'blur', triggerVal
+    @context.on "change:#{@context.validateProperty}", debouncedTriggerVal

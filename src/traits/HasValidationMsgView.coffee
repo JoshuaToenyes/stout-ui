@@ -21,9 +21,6 @@ WARN = 2
 HINT = 3
 
 
-# The render debounce time in milliseconds.
-RENDER_DEBOUNCE = 50
-
 
 ###*
 # Read the class name attached to the validation messages list.
@@ -83,7 +80,7 @@ module.exports = class HasValidationMsgView extends Foundation
   # @memberof stout-ui/traits/HasValidationMsgView
   # @private
   ###
-  _renderValidationMessageList: debounce ->
+  _renderValidationMessageList: ->
     m = @maxValidationMessages
 
     # Sort the validation messages so errors appear on top of warnings, and
@@ -108,7 +105,6 @@ module.exports = class HasValidationMsgView extends Foundation
           ul.insertBefore li, ul.firstChild
         else
           ul.appendChild li
-  , RENDER_DEBOUNCE
 
 
   ###*

@@ -9,33 +9,7 @@ HasValidationMsg = require '../traits/HasValidationMsg'
 HasValidators    = require '../traits/HasValidators'
 Interactive      = require '../interactive/Interactive'
 
-Validator = require 'stout-core/validation/Validator'
 
-class T extends Validator
-  constructor: -> super()
-  softValidate: (v) ->
-    if v.length > 10
-      @validation = 'error'
-      @message = 'Input over ten!'
-    else if v.length > 5
-      @validation = 'warning'
-      @message = 'Careful... input getting long.'
-    else
-      @validation = 'ok'
-      @message = ''
-  validate: (v) ->
-    @validation = if v.length > 10 then 'error' else 'ok'
-
-class Q extends Validator
-  constructor: -> super()
-  softValidate: (v) ->
-    if v is 'Toenyes'
-      @validation = 'error'
-      @message = 'Oh snap!'
-    else
-      @validation = 'ok'
-  validate: (v) ->
-    @validation = if v.length > 10 then 'error' else 'ok'
 
 ###*
 # The `Input` class is the view-model of a text input component.
@@ -52,7 +26,6 @@ module.exports = class Input extends Interactive
 
   constructor: ->
     super arguments...
-    @validators.add new T(), new Q()
     @maxListenerCount 'change', 20
     @maxValidationMessages = 1
 

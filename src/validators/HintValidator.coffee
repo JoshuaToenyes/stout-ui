@@ -7,4 +7,4 @@ module.exports = class HintValidator extends Validator
     @validation = 'hint'
     @message = msg
 
-  validate: -> #no-op
+  validate: -> super()
