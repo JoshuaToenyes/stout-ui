@@ -220,6 +220,7 @@ module.exports = class HasValidationMsgView extends Foundation
       @context.on 'change:validation', (e) =>
         @classes.remove ERROR_CLS, WARN_CLS
         @prefixedClasses.remove 'valid'
+        console.log 'validation change:', e.data.value, e
         switch e.data.value
           when 'ok' then @prefixedClasses.add 'valid'
           when 'error' then @classes.add ERROR_CLS

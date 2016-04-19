@@ -71,7 +71,7 @@ module.exports = class InputView extends InteractiveView
 
     @maxListenerCount 'change', 20
 
-    @syncProperty @context, "maxlength maxlengthWarn
+    @syncProperty @context, "maxlength maxlengthWarn maxlengthWarning
     maxlengthError length", inherit: false
 
     @prefixedClasses.add INPUT_CLS
@@ -88,7 +88,18 @@ module.exports = class InputView extends InteractiveView
       v = e.data.value.toString()
       if @rendered and not @_wasBackspace then @select('input').value = v
 
-  @cloneProperty Input, "length maxlength maxlengthWarn maxlengthError"
+    @context.on 'max-length:ok', =>
+      @prefixedClasses.remove 'max-length-warn max-length'
+
+    @context.on 'max-length:error', =>
+      @prefixedClasses.remove 'max-length-warn'
+      @prefixedClasses.add 'max-length'
+
+    @context.on 'max-length:warning', =>
+      @prefixedClasses.remove 'max-length'
+      @prefixedClasses.add 'max-length-warn'
+
+  @cloneProperty Input, "length maxlength maxlengthWarn maxlengthError maxlengthWarning"
 
 
   ###*
@@ -147,10 +158,10 @@ module.exports = class InputView extends InteractiveView
   # @memberof stout-ui/input/InputView#
   ###
   @property 'rawValue',
-    get: (v) -> if @mask then @mask.raw(@value) else @value
+    get: (v) ->
+      if @mask then @mask.raw(@value) else @value
     set: (v) ->
-      if v
-        @value = if @mask then @mask.mask(v) else v
+      if v then @value = if @mask then @mask.mask(v) else v
 
 
   ###*
@@ -245,14 +256,6 @@ module.exports = class InputView extends InteractiveView
   ###
   _onValueChange: (e) ->
     @length = @value.length
-
-    # Update max-length indicator classes.
-    if @maxlength < Infinity
-      @prefixedClasses.remove 'max-length max-length-warn'
-      if @length / @maxlength > @maxlengthError
-        @prefixedClasses.add 'max-length'
-      else if @length / @maxlength > @maxlengthWarn
-        @prefixedClasses.add 'max-length-warn'
 
 
   ###*

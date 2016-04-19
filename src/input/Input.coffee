@@ -10,6 +10,7 @@ HasValidationMsg = require '../traits/HasValidationMsg'
 HasValidators    = require '../traits/HasValidators'
 HasValue         = require '../traits/HasValue'
 Interactive      = require '../interactive/Interactive'
+MaxLength        = require '../validator/MaxLength'
 
 
 
@@ -28,10 +29,22 @@ module.exports = class Input extends Interactive
   @useTrait HasValidators
   @useTrait HasValue, skip: 'value'
 
-  constructor: ->
-    super arguments...
-    @maxListenerCount 'change', 20
+  constructor: (init, events = []) ->
+    super init, events.concat 'max-length'
+    @maxListenerCount 'change', 30
     @maxValidationMessages = 1
+
+
+    mxval = new MaxLength @maxlength, @maxlengthWarning
+    @validators.add mxval
+
+    mxval.on 'validation:ok', => @fire 'max-length:ok'
+    mxval.on 'validation:error', => @fire 'max-length:error'
+    mxval.on 'validation:warning', => @fire 'max-length:warning'
+
+    @on 'change:maxlength', (e) -> mxval.max = e.data.value
+    @on 'change:maxlengthWarning', (e) -> mxval.warn = e.data.value
+
 
 
   ###*
@@ -56,27 +69,14 @@ module.exports = class Input extends Interactive
 
 
   ###*
-  # The threshold where a warning should be shown indicating when the maximum
-  # length of the input is approaching. This number should be less than 1, as
-  # it is a ratio of input characters to the max length.
+  # The length when to start warning of approching maximum length.
   #
-  # @member {number} maxlengthWarn
+  # @member {number} maxlengthWarning
   # @memberof stout-ui/input/Input#
   ###
-  @property 'maxlengthWarn',
-    default: 0.7
-
-
-  ###*
-  # The threshold where an error should be shown indicating when the maximum
-  # length of the input has been reached. This number should be less than 1, as
-  # it is a ratio of input characters to the max length.
-  #
-  # @member {number} maxlengthError
-  # @memberof stout-ui/input/Input#
-  ###
-  @property 'maxlengthError',
-    default: 0.9
+  @property 'maxlengthWarning',
+    default: Infinity
+    type: 'number'
 
 
   ###*
@@ -87,3 +87,12 @@ module.exports = class Input extends Interactive
   ###
   @property 'value',
     default: ''
+
+
+  ###*
+  # Internal reference to max-length validator. May be accessed by the view.
+  #
+  # @member {module:stout-ui/validator/MaxLength} maxlengthValidator
+  # @memberof stout-ui/input/Input
+  # @private
+  ###
