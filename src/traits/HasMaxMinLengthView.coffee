@@ -17,8 +17,7 @@ HasMaxMinLength = require './HasMaxMinLength'
 SYNCED_PROPERTIES = '
   maxlength
   maxlengthWarning
-  minlength
-  minlengthWarning'
+  minlength'
 
 
 

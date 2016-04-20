@@ -30,8 +30,8 @@ module.exports = class Input extends Interactive
   @useTrait HasValidators
   @useTrait HasValue, skip: 'value'
 
-  constructor: (init, events = []) ->
-    super init, events.concat 'max-length'
+  constructor: ->
+    super arguments...
     @maxListenerCount 'change', 30
     @maxValidationMessages = 1
 

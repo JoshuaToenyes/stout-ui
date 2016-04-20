@@ -6,6 +6,7 @@
 ###
 Foundation = require 'stout-core/base/Foundation'
 MaxLength  = require '../validator/MaxLength'
+MinLength  = require '../validator/MinLength'
 nextTick   = require 'stout-client/util/nextTick'
 
 
@@ -54,17 +55,6 @@ module.exports = class HasMaxMinLength extends Foundation
 
 
   ###*
-  # Minimum length warnings are displayed for inputs below this length.
-  #
-  # @member {number} minlengthWarning
-  # @memberof stout-ui/traits/HasMaxMinLength#
-  ###
-  @property 'minlengthWarning',
-    default: 0
-    type: 'number'
-
-
-  ###*
   # Initiates this trait.
   #
   # @method initTrait
@@ -72,13 +62,22 @@ module.exports = class HasMaxMinLength extends Foundation
   # @private
   ###
   initTrait: ->
+    @registerEvents 'maxlength minlength'
+
     nextTick =>
-      mxval = new MaxLength @maxlength, @maxlengthWarning
-      mxval.name = @validatorName
-      @validators.add mxval
+      minval = new MinLength @minlength
+      maxval = new MaxLength @maxlength, @maxlengthWarning
+      minval.name = maxval.name = @validatorName
 
-      @proxyEvents mxval, 'validation', 'max-length'
+      @validators.add minval, maxval
 
-      @stream 'validatorName', (n) -> mxval.name = n
-      @stream 'maxlength', (l) -> mxval.max = l
-      @stream 'maxlengthWarning', (l) -> mxval.warn = l
+      @proxyEvents maxval, 'validation', 'maxlength'
+      @proxyEvents minval, 'validation', 'minlength'
+
+      @stream 'validatorName', (n) ->
+        minval.name = n
+        maxval.name = n
+
+      @stream 'maxlength', (l) -> maxval.max = l
+      @stream 'minlength', (l) -> minval.min = l
+      @stream 'maxlengthWarning', (l) -> maxval.warn = l

@@ -87,14 +87,14 @@ module.exports = class InputView extends InteractiveView
       v = e.data.value.toString()
       if @rendered and not @_wasBackspace then @select('input').value = v
 
-    @context.on 'max-length:ok', =>
+    @context.on 'maxlength:ok', =>
       @prefixedClasses.remove 'max-length-warn max-length'
 
-    @context.on 'max-length:error', =>
+    @context.on 'maxlength:error', =>
       @prefixedClasses.remove 'max-length-warn'
       @prefixedClasses.add 'max-length'
 
-    @context.on 'max-length:warning', =>
+    @context.on 'maxlength:warning', =>
       @prefixedClasses.remove 'max-length'
       @prefixedClasses.add 'max-length-warn'
 
