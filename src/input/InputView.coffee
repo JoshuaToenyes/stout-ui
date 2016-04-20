@@ -202,12 +202,13 @@ module.exports = class InputView extends InteractiveView
     if exceededMaxLength or
     newValue is @value or
     newValue.length is @value.length
+      originalValue = newValue
       newValue = @value
 
       if ((newCursorPos isnt cursorPos or exceededMaxLength) or
       invalidCharacter) and
       not @_wasBackspace
-        @bump()
+        @bump('maxlength', originalValue)
 
     @value = newValue
 
