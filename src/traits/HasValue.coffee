@@ -37,14 +37,3 @@ module.exports = class HasValue extends Foundation
   @property 'dirty',
     default: false
     type: 'boolean'
-
-
-  ###*
-  # The `visited` property indicates if the user has focused this component
-  # at least once.
-  #
-  #
-  # @member {boolean} value
-  # @memberof stout-ui/traits/HasValue#
-  ###
-  @property 'visited'

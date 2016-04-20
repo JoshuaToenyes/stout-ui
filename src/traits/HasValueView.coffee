@@ -21,7 +21,7 @@ HasValue   = require './HasValue'
 ###
 module.exports = class HasValueView extends Foundation
 
-  @cloneProperty HasValue, 'value dirty visited'
+  @cloneProperty HasValue, 'value dirty'
 
 
   ###*
@@ -33,6 +33,5 @@ module.exports = class HasValueView extends Foundation
   # @private
   ###
   initTrait: ->
-    @syncProperty @context, 'value dirty visited'
-    @on 'blur', => @visited = true
+    @syncProperty @context, 'value dirty'
     @once 'change:value', => @dirty = true
