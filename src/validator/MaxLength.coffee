@@ -65,7 +65,7 @@ module.exports = class MaxLength extends Validator
     if v.length > @max
       @_error()
       @_errorTimeout = setTimeout =>
-        @_ok()
+        if @warn < @max then @_warning() else @_ok()
       , @removeTime
     else if v.length > @warn
       @_warning()
