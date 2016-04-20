@@ -34,17 +34,14 @@ module.exports = class Input extends Interactive
     @maxListenerCount 'change', 30
     @maxValidationMessages = 1
 
-
     mxval = new MaxLength @maxlength, @maxlengthWarning
     @validators.add mxval
 
-    mxval.on 'validation:ok', => @fire 'max-length:ok'
-    mxval.on 'validation:error', => @fire 'max-length:error'
-    mxval.on 'validation:warning', => @fire 'max-length:warning'
+    @proxyEvents mxval, 'validation', 'max-length'
 
-    @on 'change:maxlength', (e) -> mxval.max = e.data.value
-    @on 'change:maxlengthWarning', (e) -> mxval.warn = e.data.value
-
+    @stream 'validatorName', (n) -> mxval.name = n
+    @stream 'maxlength', (l) -> mxval.max = l
+    @stream 'maxlengthWarning', (l) -> mxval.warn = l
 
 
   ###*
