@@ -96,6 +96,7 @@ module.exports = class HasValidatorsView extends Foundation
       if @dirty then doValidation()
     , VALIDATION_DEBOUNCE
 
+    # Trigger a soft validation as soon as the user focuses the component.
     @on 'focus', =>
       @context.validatorGroup.softValidate  @context[@context.validateProperty]
 
