@@ -128,6 +128,40 @@ module.exports = class HasValidationMsgView extends Foundation
 
 
   ###*
+  # Handles when a validation occurs.
+  #
+  # @method _onValidation
+  # @memberof stout-ui/traits/HasValidationMsgView
+  # @private
+  ###
+  _onValidation: (e) ->
+    msg = e.data.message
+    id = e.data.id
+    switch e.data.validation
+      when 'ok' then @removeValidationMessage(id or msg)
+      when 'hint' then @showHint msg, id
+      when 'warning' then @showValidationWarning msg, id
+      when 'error' then @showValidationError msg, id
+
+
+  ###*
+  # Handle a validation state change event. This occurs when the overall
+  # validation shifts from one state to another (e.g. "hint" to "error").
+  #
+  # @method _onValidationChange
+  # @memberof stout-ui/traits/HasValidationMsgView
+  # @private
+  ###
+  _onValidationChange: (e) ->
+    @classes.remove ERROR_CLS, WARN_CLS
+    @prefixedClasses.remove 'valid'
+    switch e.data.value
+      when 'ok' then @prefixedClasses.add 'valid'
+      when 'error' then @classes.add ERROR_CLS
+      when 'warning' then @classes.add WARN_CLS
+
+
+  ###*
   # Removes a validation message.
   #
   # @param {string} identifier - Either the messsage ID or exact message string
@@ -217,22 +251,8 @@ module.exports = class HasValidationMsgView extends Foundation
 
       # When the validation status of the view-model changes, update the
       # displayed validation classes (error, warning, hint, etc.).
-      @context.on 'change:validation', (e) =>
-        @classes.remove ERROR_CLS, WARN_CLS
-        @prefixedClasses.remove 'valid'
-        console.log 'validation change:', e.data.value, e
-        switch e.data.value
-          when 'ok' then @prefixedClasses.add 'valid'
-          when 'error' then @classes.add ERROR_CLS
-          when 'warning' then @classes.add WARN_CLS
+      @context.on 'change:validation', @_onValidationChange, @
 
       # When the view-model fires a validation event (meaning a validation just
       # occurred), update the validation messages.
-      @context.on 'validation', (e) =>
-        msg = e.data.message
-        id = e.data.id
-        switch e.data.validation
-          when 'ok' then @removeValidationMessage(id or msg)
-          when 'hint' then @showHint msg, id
-          when 'warning' then @showValidationWarning msg, id
-          when 'error' then @showValidationError msg, id
+      @context.on 'validation', @_onValidation, @
