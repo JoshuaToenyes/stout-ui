@@ -49,6 +49,15 @@ module.exports = class HasValidators extends Foundation
 
 
   ###*
+  # Optional field name for use by validators.
+  #
+  # @member validatorName
+  # @memberof stout-ui/traits/HasValidatorsView#
+  ###
+  @property 'validatorName'
+
+
+  ###*
   # Initializes this trait.
   #
   # @member initTrait

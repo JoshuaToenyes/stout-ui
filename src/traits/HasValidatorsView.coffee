@@ -4,9 +4,11 @@
 #
 # @module stout-ui/input/HasValidators
 ###
-debounce   = require 'lodash/debounce'
-Foundation = require 'stout-core/base/Foundation'
-parser     = require '../validator/parser'
+debounce      = require 'lodash/debounce'
+Foundation    = require 'stout-core/base/Foundation'
+HasValidators = require './HasValidators'
+parser        = require '../validator/parser'
+
 
 
 ###*
@@ -27,6 +29,8 @@ VALIDATION_DEBOUNCE = 100
 ###
 module.exports = class HasValidatorsView extends Foundation
 
+  @cloneProperty HasValidators, 'validatorName'
+
   ###*
   # The `validators` attribut on views which include this trait. `Validator`
   # classes are automatically instantiated based on this property.
@@ -36,15 +40,6 @@ module.exports = class HasValidatorsView extends Foundation
   ###
   @property 'validators',
     default: ''
-
-
-  ###*
-  # Optional field name for use by validators.
-  #
-  # @member validatorName
-  # @memberof stout-ui/traits/HasValidatorsView#
-  ###
-  @property 'validatorName'
 
 
   ###*
@@ -66,6 +61,8 @@ module.exports = class HasValidatorsView extends Foundation
   # @private
   ###
   initTrait: ->
+    @syncProperty @context, 'validatorName', inherit: false
+
     # Add the "required" validator if the attribute has been set.
     if @required then @validators += '|required'
 
@@ -101,8 +98,8 @@ module.exports = class HasValidatorsView extends Foundation
       @context.validatorGroup.softValidate  @context[@context.validateProperty]
 
     # When the field changes, perform a live debounced full validation.
-    @context.on "change:#{@context.validateProperty}", (e) =>
-      @context.validatorGroup.softValidate(e.data.value)
+    @context.stream "#{@context.validateProperty}", (v) =>
+      @context.validatorGroup.softValidate(v)
 
     # When a view "bump" occurs, also perform a validation.
     @on 'bump:maxlength', (e) =>
