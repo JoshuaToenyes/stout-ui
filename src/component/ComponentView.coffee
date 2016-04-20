@@ -233,7 +233,7 @@ updateTransitionPromise = (target, promise) ->
 module.exports = class ComponentView extends View
 
   constructor: (init, events = []) ->
-    super init, events.concat ['show', 'hide', 'transition']
+    super init, events.concat ['show', 'hide', 'transition', 'bump']
 
     @prefix = PREFIX
 
@@ -414,12 +414,13 @@ module.exports = class ComponentView extends View
     return
 
 
-  bump: ->
+  bump: (reason, data) ->
     @prefixedClasses.add BUMP_CLS
     if @_bumpTimer then clearTimeout @_bumpTimer
     @_bumpTimer = setTimeout =>
       @prefixedClasses.remove BUMP_CLS
     , @bumpTime
+    @fire "bump:#{reason}", data
 
 
 
