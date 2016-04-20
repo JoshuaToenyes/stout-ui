@@ -9,7 +9,15 @@ Foundation = require 'stout-core/base/Foundation'
 parser     = require '../validator/parser'
 
 
-VALIDATION_DEBOUNCE = 300
+###*
+# Inner constant used for debouncing validation related functions.
+#
+# @const number
+# @inner
+###
+VALIDATION_DEBOUNCE = 100
+
+
 
 ###*
 # The `HasValidatorsView`
@@ -78,12 +86,23 @@ module.exports = class HasValidatorsView extends Foundation
       doValidation()
     , VALIDATION_DEBOUNCE
 
-    # Perform a full validation when the field is blurred.
-    @on 'blur', => if @dirty then doValidation()
+    # Perform a full validation when the field is blurred. We have to debounce
+    # this listener most importantly because we depend on the `#dirty` property
+    # being set correctly on the first blur event. This happens syncronously
+    # but this method may be called before `#dirty` is set. Therefore, we
+    # debounce to ensure the event loop has cleared and the property is set
+    # correctly.
+    @on 'blur', debounce =>
+      if @dirty then doValidation()
+    , VALIDATION_DEBOUNCE
 
     @on 'focus', =>
-      val = @context[@context.validateProperty]
-      @context.validatorGroup.softValidate(val)
+      @context.validatorGroup.softValidate  @context[@context.validateProperty]
 
     # When the field changes, perform a live debounced full validation.
-    @context.on "change:#{@context.validateProperty}", doLiveValidation
+    @context.on "change:#{@context.validateProperty}", (e) =>
+      @context.validatorGroup.softValidate(e.data.value)
+
+    # When a view "bump" occurs, also perform a validation.
+    @on 'bump:maxlength', (e) =>
+      @context.validatorGroup.softValidate(e.data)
