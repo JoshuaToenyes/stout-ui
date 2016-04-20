@@ -6,6 +6,7 @@
 ###
 EnableableTrait  = require '../interactive/EnableableTrait'
 HasLabel         = require '../traits/HasLabel'
+HasMask          = require '../traits/HasMask'
 HasMaxMinLength  = require '../traits/HasMaxMinLength'
 HasValidationMsg = require '../traits/HasValidationMsg'
 HasValidators    = require '../traits/HasValidators'
@@ -25,6 +26,7 @@ module.exports = class Input extends Interactive
 
   @useTrait EnableableTrait
   @useTrait HasLabel
+  @useTrait HasMask
   @useTrait HasMaxMinLength
   @useTrait HasValidationMsg
   @useTrait HasValidators

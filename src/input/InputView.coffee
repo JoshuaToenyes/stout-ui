@@ -7,6 +7,7 @@
 defaults             = require 'lodash/defaults'
 EnableableViewTrait  = require '../interactive/EnableableViewTrait'
 HasLabelViewTrait    = require '../component/HasLabelViewTrait'
+HasMaskView          = require '../traits/HasMaskView'
 HasMaxMinLengthView  = require '../traits/HasMaxMinLengthView'
 HasValidationMsgView = require '../traits/HasValidationMsgView'
 HasValidatorsView    = require '../traits/HasValidatorsView'
@@ -15,7 +16,6 @@ Input                = require './Input'
 InteractiveView      = require '../interactive/InteractiveView'
 isString             = require 'lodash/isString'
 keys                 = require 'stout-client/keys'
-Mask                 = require '../mask/Mask'
 template             = require './input.template'
 vars                 = require '../vars'
 
@@ -62,6 +62,7 @@ module.exports = class InputView extends InteractiveView
 
   @useTrait EnableableViewTrait
   @useTrait HasLabelViewTrait
+  @useTrait HasMaskView
   @useTrait HasMaxMinLengthView
   @useTrait HasValidationMsgView
   @useTrait HasValidatorsView
@@ -122,41 +123,11 @@ module.exports = class InputView extends InteractiveView
 
 
   ###*
-  # The input mask for this field. Masks can be used to format the input
-  # presentation to the user. Examples would include formating phone numbers,
-  # credit card numbers, email addresses, etc.
+  # Increase the max listener count prior to traits being initialized.
   #
-  # @member {module:stout-ui/mask/Mask} mask
+  # @method _preTraitInit
   # @memberof stout-ui/input/InputView#
-  ###
-  @property 'mask',
-    set: (m) ->
-      if isString m
-        new Mask m
-      else
-        m
-
-
-  ###*
-  # The `value` property is the value of this input, as presented to the user.
-  # This differs from the `rawValue` property which is the unmasked (or
-  # mask-removed) value.
-  #
-  # @member {string} rawValue
-  # @memberof stout-ui/input/InputView#
-  ###
-  @property 'rawValue',
-    get: (v) ->
-      if @mask then @mask.raw(@value) else @value
-    set: (v) ->
-      if v then @value = if @mask then @mask.mask(v) else v
-
-
-  ###*
-  # Special hook called prior to initiating traits.
-  #
-  #
-  #
+  # @private
   ###
   _preTraitInit: ->
     @maxListenerCount 'change', 30
