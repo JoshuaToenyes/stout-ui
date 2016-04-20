@@ -7,6 +7,7 @@
 defaults             = require 'lodash/defaults'
 EnableableViewTrait  = require '../interactive/EnableableViewTrait'
 HasLabelViewTrait    = require '../component/HasLabelViewTrait'
+HasMaxMinLengthView  = require '../traits/HasMaxMinLengthView'
 HasValidationMsgView = require '../traits/HasValidationMsgView'
 HasValidatorsView    = require '../traits/HasValidatorsView'
 HasValueView         = require '../traits/HasValueView'
@@ -61,6 +62,7 @@ module.exports = class InputView extends InteractiveView
 
   @useTrait EnableableViewTrait
   @useTrait HasLabelViewTrait
+  @useTrait HasMaxMinLengthView
   @useTrait HasValidationMsgView
   @useTrait HasValidatorsView
   @useTrait HasValueView
@@ -69,10 +71,7 @@ module.exports = class InputView extends InteractiveView
     defaults init, {template, tagName: TAG_NAME}
     super init, events
 
-    @maxListenerCount 'change', 20
-
-    @syncProperty @context, "maxlength maxlengthWarn maxlengthWarning
-    maxlengthError length", inherit: false
+    @syncProperty @context, 'length', inherit: false
 
     @prefixedClasses.add INPUT_CLS
 
@@ -99,7 +98,7 @@ module.exports = class InputView extends InteractiveView
       @prefixedClasses.remove 'max-length'
       @prefixedClasses.add 'max-length-warn'
 
-  @cloneProperty Input, "length maxlength maxlengthWarn maxlengthError maxlengthWarning"
+  @cloneProperty Input, 'length'
 
 
   ###*
@@ -139,17 +138,6 @@ module.exports = class InputView extends InteractiveView
 
 
   ###*
-  # The min length of this text input.
-  #
-  # @member {number} minlength
-  # @memberof stout-ui/input/InputView#
-  ###
-  @property 'minlength',
-    default: 0
-    type: 'number'
-
-
-  ###*
   # The `value` property is the value of this input, as presented to the user.
   # This differs from the `rawValue` property which is the unmasked (or
   # mask-removed) value.
@@ -162,6 +150,16 @@ module.exports = class InputView extends InteractiveView
       if @mask then @mask.raw(@value) else @value
     set: (v) ->
       if v then @value = if @mask then @mask.mask(v) else v
+
+
+  ###*
+  # Special hook called prior to initiating traits.
+  #
+  #
+  #
+  ###
+  _preTraitInit: ->
+    @maxListenerCount 'change', 30
 
 
   ###*

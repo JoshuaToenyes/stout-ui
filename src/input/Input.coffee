@@ -6,11 +6,11 @@
 ###
 EnableableTrait  = require '../interactive/EnableableTrait'
 HasLabel         = require '../traits/HasLabel'
+HasMaxMinLength  = require '../traits/HasMaxMinLength'
 HasValidationMsg = require '../traits/HasValidationMsg'
 HasValidators    = require '../traits/HasValidators'
 HasValue         = require '../traits/HasValue'
 Interactive      = require '../interactive/Interactive'
-MaxLength        = require '../validator/MaxLength'
 
 
 
@@ -25,6 +25,7 @@ module.exports = class Input extends Interactive
 
   @useTrait EnableableTrait
   @useTrait HasLabel
+  @useTrait HasMaxMinLength
   @useTrait HasValidationMsg
   @useTrait HasValidators
   @useTrait HasValue, skip: 'value'
@@ -33,15 +34,6 @@ module.exports = class Input extends Interactive
     super init, events.concat 'max-length'
     @maxListenerCount 'change', 30
     @maxValidationMessages = 1
-
-    mxval = new MaxLength @maxlength, @maxlengthWarning
-    @validators.add mxval
-
-    @proxyEvents mxval, 'validation', 'max-length'
-
-    @stream 'validatorName', (n) -> mxval.name = n
-    @stream 'maxlength', (l) -> mxval.max = l
-    @stream 'maxlengthWarning', (l) -> mxval.warn = l
 
 
   ###*
@@ -52,28 +44,6 @@ module.exports = class Input extends Interactive
   ###
   @property 'length',
     get: -> @value.length
-
-
-  ###*
-  # The maximum input length.
-  #
-  # @member {number} maxlength
-  # @memberof stout-ui/input/Input#
-  ###
-  @property 'maxlength',
-    default: Infinity
-    type: 'number'
-
-
-  ###*
-  # The length when to start warning of approching maximum length.
-  #
-  # @member {number} maxlengthWarning
-  # @memberof stout-ui/input/Input#
-  ###
-  @property 'maxlengthWarning',
-    default: Infinity
-    type: 'number'
 
 
   ###*
