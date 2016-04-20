@@ -26,9 +26,21 @@ module.exports = class MaxLength extends Validator
     @messages.error = 'The maximum length of :max characters has been reached.'
 
 
+  ###*
+  # The maximum number of characters allowed for this validator.
+  #
+  # @member {number} max
+  # @memberof stout-ui/validator/MaxLength
+  ###
   @property 'max'
 
 
+  ###*
+  # The length when length-warnings are issues.
+  #
+  # @member {number} max
+  # @memberof stout-ui/validator/MaxLength
+  ###
   @property 'warn'
 
 
@@ -49,14 +61,13 @@ module.exports = class MaxLength extends Validator
   # @memberof stout-ui/validator/MaxLength#
   ###
   softValidate: (v) ->
-    if v.length >= @max
+    if @_errorTimeout then clearTimeout @_errorTimeout
+    if v.length > @max
       @_error()
-      if @_errorTimeout then clearTimeout @_errorTimeout
       @_errorTimeout = setTimeout =>
-        console.log 'okaying...', @
         @_ok()
       , @removeTime
-    else if v.length >= @warn
+    else if v.length > @warn
       @_warning()
     else
       @_ok()
@@ -72,3 +83,5 @@ module.exports = class MaxLength extends Validator
   # @memberof stout-ui/validator/MaxLength#
   ###
   validate: ->
+    if @_errorTimeout then clearTimeout @_errorTimeout
+    @_ok()
