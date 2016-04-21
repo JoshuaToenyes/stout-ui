@@ -1,5 +1,6 @@
 # Ignore transpiled source at project root.
 /button
+/card
 /checkbox
 /colors
 /common
@@ -27,6 +28,7 @@
 /util
 /validator
 /vars
+/whiteframe
 
 # Ignore annoying OS X files.
 .DS_Store
