@@ -50,9 +50,9 @@ isString   = require 'lodash/isString'
 ###
 module.exports = class Mask extends Foundation
 
-  constructor: (init, events) ->
+  constructor: (init, events = []) ->
     if isString init then init = definition: init
-    super init, events
+    super init, events.concat ['invalidinput']
 
 
   ###*
@@ -257,6 +257,8 @@ module.exports = class Mask extends Foundation
       # Increment position counters.
       d++
       i++
+
+    if output.length < input.length then @fire 'invalidinput', input
 
     # Return the accumulated output.
     output

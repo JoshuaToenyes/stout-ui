@@ -57,4 +57,4 @@ module.exports = class HasMaskView extends Foundation
   # @private
   ###
   initTrait: ->
-    @syncProperty @context, 'rawValue', inherit: false
+    @syncProperty @context, 'rawValue mask', inherit: false

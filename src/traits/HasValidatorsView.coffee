@@ -102,5 +102,5 @@ module.exports = class HasValidatorsView extends Foundation
       @context.validatorGroup.softValidate(v)
 
     # When a view "bump" occurs, also perform a validation.
-    @on 'bump:maxlength', (e) =>
+    @on 'bump', (e) =>
       @context.validatorGroup.softValidate(e.data)
