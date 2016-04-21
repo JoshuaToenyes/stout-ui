@@ -45,18 +45,32 @@ module.exports = class HasMask extends Foundation
   # @private
   ###
   initTrait: ->
-
     nextTick =>
-      if @mask and  @usingTrait HasValidators
-        maskval = new MaskValidator
-        maskval.name = @validatorName
 
-        @validators.add maskval
+      maskval = null
 
-        @stream 'validatorName', (n) -> maskval.name = n
+      showMaskError = (e) -> maskval.showMaskError e.data
 
-        @on 'change:value', ->
-          maskval.clearMaskError()
+      @stream 'validatorName', (n) -> if maskval then maskval.name = n
+      @on 'change:value', -> if maskval then maskval.validate()
 
-        @mask.on 'invalidinput', (e) ->
-          maskval.maskValidate e.data
+      # Inner-method to create mask validators.
+      createMaskValidator = =>
+
+        # If there is in-fact a mask, and this object has validators...
+        if @mask and @usingTrait HasValidators
+          if maskval then @validators.remove maskval
+          maskval = new MaskValidator
+          maskval.name = @validatorName
+          @validators.add maskval
+          @mask.on 'invalidinput', showMaskError
+
+        # If the mask was removed, removed an existing validator.
+        else if maskval
+          @validators.remove maskval
+
+      # If the mask changes, create a new mask validator.
+      @stream 'mask', createMaskValidator
+
+      # Create the initial mask validator.
+      createMaskValidator()
