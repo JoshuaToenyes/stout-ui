@@ -1,0 +1,11 @@
+@import "../_blueprint/master.sass"
+@import "../../card/card"
+@import "../../typography/default"
+
+ui-card
+  +transition(background 350ms)
+  @extend %typography-body-1
+  padding: 1em
+
+  &.hover-example.ui-hover
+    background: orange
