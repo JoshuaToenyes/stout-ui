@@ -1,0 +1,10 @@
+@import "../_blueprint/master.sass"
+@import "../../tree/tree"
+@import "../../typography/default"
+
+ui-tree
+  +transition(background 350ms)
+  @extend %typography-body-1
+
+  &.hover-example.ui-hover
+    background: orange

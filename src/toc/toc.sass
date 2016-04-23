@@ -1,0 +1,17 @@
+@import "bourbon/bourbon"
+@import "util/exports"
+@import "tree/tree"
+@import "vars/toc"
+
++exports("toc/toc")
+
+  $item: #{$prefix}#{$toc-item-tag}
+
+  #{$prefix}#{$toc-tag},
+  #{$prefix}#{$toc-item-tag}
+    display: none
+    &[rendered]
+      display: block
+
+  #{$item} #{$item}
+    margin-left: 1em

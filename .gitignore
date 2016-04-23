@@ -10,6 +10,7 @@
 /dropdown
 /fill
 /group
+/icons
 /indicator
 /ink
 /interactive
@@ -23,7 +24,9 @@
 /radio-group
 /select
 /times
+/toc
 /traits
+/tree
 /typography
 /util
 /validator

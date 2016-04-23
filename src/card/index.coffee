@@ -18,4 +18,4 @@ module.exports = (init) ->
 
   factory: (init) ->
     defaults init, {context: new Card}
-    (new Card init).context
+    (new CardView init).context
