@@ -440,7 +440,7 @@ module.exports = class ComponentView extends View
 
       # Save reference to parent and next sibling for later re-insertion at
       # current position.
-      parent = @parent
+      parent = @parentEl
       nextSibling = @root.nextSibling
       pos = style.position
       left = style.left
@@ -478,12 +478,12 @@ module.exports = class ComponentView extends View
     else if @rendered
       calcPositionOffScreen()
     else
-      p = @parent
+      p = @parentEl
       sor = @options.showOnRender
-      if not p then @parent = document.body
+      if not p then @parentEl = document.body
       @render().then =>
         calcPositionOffScreen()
-        @parent = p
+        @parentEl = p
         @options.showOnRender = sor
 
     promise
