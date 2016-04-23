@@ -112,6 +112,7 @@ module.exports = class InteractiveView extends ComponentView
     fn ft, 'focus', @_focus
     fn ft, 'blur', @_blur
     fn ft, 'tap', @_tap
+    null
 
 
   ###*
