@@ -9,36 +9,37 @@ $emphasisFontStack: Baskerville, 'Baskerville Old Face', 'Hoefler Text', Garamon
 
 // Large, Bold Display Fonts
 
-$font-display-6:   normal normal 700 4em/120% $standardFontStack !default
-$font-display-5:   normal normal 700 3.5em/120% $standardFontStack !default
-$font-display-4:   normal normal 400 3em/120% $standardFontStack !default
-$font-display-3:   normal normal 400 2.5em/120% $standardFontStack !default
-$font-display-2:   normal normal 400 2em/120% $standardFontStack !default
-$font-display-1:   normal normal 700 1.2em/120% $standardFontStack !default
+$font-display-6:   normal normal 700 #{+modular-scale(6)}/#{+modular-scale(1)} $standardFontStack !default
+$font-display-5:   normal normal 700 #{+modular-scale(5)}/#{+modular-scale(1)} $standardFontStack !default
+$font-display-4:   normal normal 400 #{+modular-scale(4)}/#{+modular-scale(1)} $standardFontStack !default
+$font-display-3:   normal normal 400 #{+modular-scale(3)}/#{+modular-scale(1)} $standardFontStack !default
+$font-display-2:   normal normal 400 #{+modular-scale(2)}/#{+modular-scale(1)} $standardFontStack !default
+$font-display-1:   normal normal 700 #{+modular-scale(1)}/#{+modular-scale(1)} $standardFontStack !default
 
 
 // Lead Paragraph Fonts
 
-$font-lead-2:      normal normal 700 1.5em/135% $standardFontStack !default
-$font-lead-1:      normal normal 400 1.5em/135% $standardFontStack !default
-$font-lead-01:     normal normal 300 1.5em/135% $standardFontStack !default
-$font-lead-001:    normal normal 100 1.5em/135% $standardFontStack !default
+$font-lead-2:      normal normal 700 #{+modular-scale(2)}/#{+modular-scale(1)} $standardFontStack !default
+$font-lead-1:      normal normal 400 #{+modular-scale(2)}/#{+modular-scale(1)} $standardFontStack !default
+$font-lead-01:     normal normal 300 #{+modular-scale(2)}/#{+modular-scale(1)} $standardFontStack !default
+$font-lead-001:    normal normal 100 #{+modular-scale(2)}/#{+modular-scale(1)} $standardFontStack !default
 
 
 // Body Fonts
 
-$font-body-2:      normal normal 700 1em/140% $standardFontStack !default
-$font-body-1:      normal normal 400 1em/140% $standardFontStack !default
-$font-body-01:     normal normal 300 1em/140% $standardFontStack !default
-$font-body-001:    normal normal 300 0.9em/140% $standardFontStack !default
+$font-body-3:      normal normal 700 #{+modular-scale(0)}/#{+modular-scale(2)} $standardFontStack !default
+$font-body-2:      normal normal 500 #{+modular-scale(0)}/#{+modular-scale(2)} $standardFontStack !default
+$font-body-1:      normal normal 400 #{+modular-scale(0)}/#{+modular-scale(2)} $standardFontStack !default
+$font-body-01:     normal normal 300 #{+modular-scale(0)}/#{+modular-scale(2)} $standardFontStack !default
+$font-body-001:    normal normal 400 #{+modular-scale(-1)}/#{+modular-scale(1)} $standardFontStack !default
 
 
 // Emphasis Fonts
 
-$font-emphasis-2:      italic normal 700 1.3em/125% $emphasisFontStack !default
-$font-emphasis-1:      italic normal 400 1.2em/140% $emphasisFontStack !default
-$font-emphasis-01:     italic normal 300 1.1em/140% $emphasisFontStack !default
-$font-emphasis-001:    italic normal 300 1em/140% $emphasisFontStack !default
+$font-emphasis-2:      italic normal 700 #{+modular-scale(2)}/#{+modular-scale(1)}  $emphasisFontStack !default
+$font-emphasis-1:      italic normal 400 #{+modular-scale(2)}/#{+modular-scale(1)}  $emphasisFontStack !default
+$font-emphasis-01:     italic normal 300 #{+modular-scale(1)}/#{+modular-scale(1)}  $emphasisFontStack !default
+$font-emphasis-001:    italic normal 300 #{+modular-scale(0)}/#{+modular-scale(1)} $emphasisFontStack !default
 
 
 // Preformatted Fonts
@@ -51,10 +52,10 @@ $font-pre-001:     normal normal 400 0.8em/145% $monoFontStack !default
 
 // Caption Fonts
 
-$font-caption-2:   normal normal 700 0.85em/120% $standardFontStack !default
-$font-caption-1:   normal normal 400 0.85em/120% $standardFontStack !default
-$font-caption-01:  normal normal 300 0.85em/120% $standardFontStack !default
-$font-caption-001: normal normal 300 0.8em/120% $standardFontStack !default
+$font-caption-2:   normal normal 700 #{+modular-scale(-1)}/#{+modular-scale(1)} $standardFontStack !default
+$font-caption-1:   normal normal 400 #{+modular-scale(-1)}/#{+modular-scale(1)} $standardFontStack !default
+$font-caption-01:  normal normal 300 #{+modular-scale(-1)}/#{+modular-scale(1)} $standardFontStack !default
+$font-caption-001: normal normal 300 #{+modular-scale(-1)}/#{+modular-scale(1)} $standardFontStack !default
 
 
 // Control Fonts
@@ -143,7 +144,7 @@ $font-control-001: normal normal 500 0.7em/120% $standardFontStack !default
 %typography-display-3,
 %typography-display-2,
 %typography-display-1
-  margin: 1em 0 0.6em
+  margin: #{+modular-scale(0)} 0 #{+modular-scale(-1)}
 
 %typography-display-6
   font: $font-display-6
@@ -163,7 +164,7 @@ $font-control-001: normal normal 500 0.7em/120% $standardFontStack !default
 %typography-display-1
   font: $font-display-1
   text-transform: uppercase
-  margin-top: 1.5em
+  margin-top: #{+modular-scale(1)}
 
 
 
@@ -173,7 +174,7 @@ $font-control-001: normal normal 500 0.7em/120% $standardFontStack !default
 %typography-lead-1,
 %typography-lead-01,
 %typography-lead-001
-  margin: 1.3em 0
+  margin: #{+modular-scale(1)} 0
 
 %typography-lead-2
   font: $font-lead-2
@@ -193,11 +194,15 @@ $font-control-001: normal normal 500 0.7em/120% $standardFontStack !default
 
 // Body
 
+%typography-body-3,
 %typography-body-2,
 %typography-body-1,
 %typography-body-01,
 %typography-body-001
-  margin: 1em 0
+  margin: #{+modular-scale(0)} 0
+
+%typography-body-3
+  font: $font-body-3
 
 %typography-body-2
   font: $font-body-2
@@ -216,6 +221,7 @@ $font-control-001: normal normal 500 0.7em/120% $standardFontStack !default
 %typography-body-em
   font-style: italic
 
+%typography-body-3-b,
 %typography-body-2-b
   font-weight: 900
   text-transform: uppercase
@@ -238,7 +244,7 @@ $font-control-001: normal normal 500 0.7em/120% $standardFontStack !default
 %typography-emphasis-1,
 %typography-emphasis-01,
 %typography-emphasis-001
-  margin: 1em 0
+  margin: #{+modular-scale(0)} 0
 
 %typography-emphasis-2
   font: $font-emphasis-2

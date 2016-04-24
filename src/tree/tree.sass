@@ -1,13 +1,16 @@
 @import "bourbon/bourbon"
 @import "util/exports"
+@import "typography/default"
 @import "vars/tree"
 @import "vars/component"
 
 +exports("tree/tree")
 
-  $tree: ".#{$prefix}#{$tree-class}"
-  $item: ".#{$prefix}#{$tree-item-class}"
-  $caret: "#{$item} svg"
+  $tree:        ".#{$prefix}#{$tree-class}"
+  $item:        ".#{$prefix}#{$tree-item-class}"
+  $caret:       "#{$item} svg"
+  $collapsible: "#{$item}.#{$prefix}#{$tree-collapsible-class}"
+  $collapsed:   "#{$item}.#{$prefix}#{$tree-collapsed-class}"
 
   #{$prefix}#{$tree-tag},
   #{$prefix}#{$tree-item-tag}
@@ -19,10 +22,37 @@
   #{$item}
     position: relative
 
+  #{$tree}
+    +transition(all 500ms)
+    overflow: hidden
+
+  #{$item}
+    @extend %typography-body-1-b
+    padding-left: 1em
+    margin: 0 !important
+
   #{$item} #{$item}
-    margin-left: 1em
+    @extend %typography-body-1
+
+  #{$item} #{$item} #{$item}
+    @extend %typography-body-01
 
   #{$caret}
     height: +modular-scale(-2)
     position: relative
     bottom: 0.06em
+    display: none
+
+  #{$collapsible} > svg
+    +transition(all 500ms)
+    +transform(rotate(90deg))
+    display: inline-block
+    position: absolute
+    left: 0
+    top: 0.62em
+
+  #{$collapsed} > svg
+    +transform(rotate(0deg))
+
+  #{$collapsed} #{$tree}
+    height: 0

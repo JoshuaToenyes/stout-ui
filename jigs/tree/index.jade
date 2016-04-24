@@ -9,14 +9,21 @@ block content
   .ex
     .ex-label tree
     ui-tree
+      
       ui-tree-item
         a(href="#a") Item A
-        ui-tree-item: a(href="#a1") Item A.1
-        ui-tree-item: a(href="#a2") Item A.2
-        ui-tree-item(collapsible="true")
-          a(href="#a3") Item A.3
-          ui-tree-item: a(href="#a31") Item A.3.1
-          ui-tree-item: a(href="#a32") Item A.3.2
-          ui-tree-item: a(href="#a33") Item A.3.3
+        
+        ui-tree
+          ui-tree-item: a(href="#a1") Item A.1
+          ui-tree-item: a(href="#a2") Item A.2
+          ui-tree-item
+            a(href="#a3") Item A.3
+            
+            ui-tree
+              ui-tree-item: a(href="#a31") Item A.3.1
+              ui-tree-item: a(href="#a32") Item A.3.2
+              ui-tree-item: a(href="#a33") Item A.3.3
+              
       ui-tree-item: a(href="#b") Item B
+      
       ui-tree-item: a(href="#c") Item C

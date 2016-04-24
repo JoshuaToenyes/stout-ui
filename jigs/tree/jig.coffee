@@ -3,4 +3,4 @@ parser = require 'stout-client/parser'
 
 
 window.onload = ->
-  parser.parse()
+  parser.parse().error (e) -> console.error e

@@ -8,6 +8,7 @@ block content
   - var paragraph = "Lamarck was the first man whose conclusions on the subject excited much attention. This justly celebrated naturalist first published his views in 1801; he much enlarged them in 1809 in his \"Philosophie Zoologique\", and subsequently, 1815, in the Introduction to his \"Hist. Nat. des Animaux sans Vertebres\". In these works he up holds the doctrine that all species, including man, are descended from other species. He first did the eminent service of arousing attention to the probability of all change in the organic, as well as in the inorganic world, being the result of law, and not of miraculous interposition."
   - var paragraphOrnamental = "One morning, when Gregor Samsa woke from troubled dreams, <b>he found himself transformed in his bed into a horrible vermin.</b> He lay on his armour-like back, and if he lifted his head a little he could see his brown belly, slightly domed and divided by arches into stiff sections. <em>The bedding was hardly able to cover it and seemed ready to slide off any moment.</em> His many legs, pitifully thin compared with the size of the rest of him, waved about helplessly as he looked."
   - var caption = "This is a sample caption"
+  - var list = "Sample list item."
   - var control = "Make reservation"
   - var pre = "algorithm quicksort(A, lo, hi) is\n  if lo < hi then\n    p := partition(A, lo, hi)\n    quicksort(A, lo, p - 1)\n    quicksort(A, p + 1, hi)"
   
@@ -143,6 +144,11 @@ block content
     | <code>&lt;b&gt;</code> tags) and <code>&lt;em&gt;</code> tags.
   
   .ex
+    .ex-label body-3
+    p.body-3 #{paragraph}
+    p.body-3 !{paragraphOrnamental}
+  
+  .ex
     .ex-label body-2
     p.body-2 #{paragraph}
     p.body-2 !{paragraphOrnamental}
@@ -235,6 +241,26 @@ block content
     .ex-label caption-001
     p.caption-001 #{caption}
     
+    
+  
+  .ex-heading Lists
+  p.body-01 List styles are used for lists and list-type controls.
+
+  .ex
+    .ex-label list-2
+    p.list-2 #{list}
+  
+  .ex
+    .ex-label list-1
+    p.list-1 #{list}
+  
+  .ex
+    .ex-label list-01
+    p.list-01 #{list}
+    
+  .ex.last
+    .ex-label list-001
+    p.list-001 #{list}
   
 
   
