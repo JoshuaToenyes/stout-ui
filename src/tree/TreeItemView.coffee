@@ -112,6 +112,13 @@ module.exports = class TreeItemView extends InteractiveView
     default: true
 
 
+  ###*
+  # Opens the child tree of this tree item, if it is currently collapsed and
+  # is collapsible.
+  #
+  # @method open
+  # @memberof stout-ui/tree/TreeItemView#
+  ###
   open: ->
     if @collapsible and @collapsed
       @prefixedClasses.remove COLLAPSED_CLS
@@ -119,12 +126,27 @@ module.exports = class TreeItemView extends InteractiveView
       @_updateHeight()
 
 
+  ###*
+  # Closes the child tree of this tree item, if it is currently open and
+  # is collapsible.
+  #
+  # @method close
+  # @memberof stout-ui/tree/TreeItemView#
+  ###
   close: ->
-    @prefixedClasses.add COLLAPSED_CLS
     @collapsed = true
     @_updateHeight(true)
+    setTimeout =>
+      @prefixedClasses.add COLLAPSED_CLS
+    , 500
 
 
+  ###*
+  # Toggles the open/closed state of this tree view item.
+  #
+  # @method toggle
+  # @memberof stout-ui/tree/TreeItemView#
+  ###
   toggle: ->
     if @collapsed then @open() else @close()
 
@@ -152,10 +174,19 @@ module.exports = class TreeItemView extends InteractiveView
         a.reduce ((p, v) -> p + (+v?.height or 0)), 0
 
 
+  ###*
+  # Updates the height of this tree item, then travels up the tree and adjusts
+  # the height of all parents trees.
+  #
+  # @param {boolean} close - Set to `true` if closing the tree.
+  #
+  # @method _updateCollapsible
+  # @memberof stout-ui/tree/TreeItemView#
+  # @private
+  ###
   _updateHeight: (close) ->
     @_getHeight().then (r) =>
       tree = @children.get(TREE_TAG_NAME)[0]
-      tree.repaint()
 
       m = if close then -1 else 1
 
@@ -179,6 +210,7 @@ module.exports = class TreeItemView extends InteractiveView
   #
   # @method _updateCollapsible
   # @memberof stout-ui/tree/TreeItemView#
+  # @private
   ###
   _updateCollapsible: ->
 
@@ -189,5 +221,5 @@ module.exports = class TreeItemView extends InteractiveView
       @_updateHeight(@collapsed)
       @prefixedClasses.add COL_CLS
 
-    if @collapsed
+    if @collapsed and @collapsible
       @prefixedClasses.add COLLAPSED_CLS

@@ -24,11 +24,11 @@ block content
               ui-tree-item: a(href="#a32") Item A.3.2
               ui-tree-item: a(href="#a33") Item A.3.3
               
-      ui-tree-item 
+      ui-tree-item(collapsed="false")
         a(href="#b") Item B
       
         ui-tree
-          ui-tree-item: a(href="#a1") Item B.1
+          ui-tree-item: img(src="https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97150&w=350&h=150")
           ui-tree-item: a(href="#a2") Item B.2
           ui-tree-item
             a(href="#a3") Item B.3
@@ -45,3 +45,17 @@ block content
                   ui-tree-item: a(href="#a33") Item B.3.3.3
       
       ui-tree-item: a(href="#c") Item C
+      
+      ui-tree-item(collapsible="false")
+        a(href="#a") Non-collapsible Item D
+        
+        ui-tree
+          ui-tree-item: a(href="#a1") Item D.1
+          ui-tree-item: a(href="#a2") Item D.2
+          ui-tree-item(collapsible="false")
+            a(href="#a3") Item D.3
+            
+            ui-tree
+              ui-tree-item: a(href="#a31") Item D.3.1
+              ui-tree-item: a(href="#a32") Item D.3.2
+              ui-tree-item: a(href="#a33") Item D.3.3
