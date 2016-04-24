@@ -23,7 +23,16 @@ STATE =
   FOCUS:   4  # Button is focused.
 
 
-EVENTS = ['blur', 'focus', 'active', 'hover', 'click', 'tap', 'leave']
+###*
+# List of events that InteractiveView creates and/or proxies. The class also
+# dynamically creates properties for each event which may be set to easily
+# add event listeners.
+#
+# @type {Array.<string>}
+# @const
+###
+EVENTS = 'blur focus active hover click tap leave mouseup mousedown
+touchstart touchend'.split /\s+/
 
 
 
@@ -107,6 +116,8 @@ module.exports = class InteractiveView extends ComponentView
       @_interactiveEventListeners.push [target, event, listeners]
     fn at, 'mousedown', @_mousedown
     fn at, 'mouseup', @_mouseup
+    fn at, 'touchstart', @_mouseleave
+    fn at, 'touchend', @_mouseleave
     fn ht, 'mouseenter', @_mouseenter
     fn ht, 'mouseleave', @_mouseleave
     fn ft, 'focus', @_focus
@@ -206,6 +217,7 @@ module.exports = class InteractiveView extends ComponentView
   # @memberof stout-ui/interactive/InteractiveView#
   ###
   _mousedown: (e) =>
+    @fire 'mousedown', e
     if @fireInteractiveEvent('active', e)
       @prefixedClasses.add 'active'
 
@@ -257,6 +269,7 @@ module.exports = class InteractiveView extends ComponentView
   # @memberof stout-ui/interactive/InteractiveView#
   ###
   _mouseup: (e) =>
+    @fire 'mouseup', e
     @prefixedClasses.remove 'active'
     if @getHoverTarget().contains e.target
       @fire 'click'
@@ -270,6 +283,14 @@ module.exports = class InteractiveView extends ComponentView
   ###
   _tap: (e) =>
     if @fireInteractiveEvent('tap', e) then @fire 'tap', e
+
+
+  _touchstart: (e) =>
+    @fire 'touchstart', e
+
+
+  _touchend: (e) =>
+    @fire 'touchend', e
 
 
   ###*
