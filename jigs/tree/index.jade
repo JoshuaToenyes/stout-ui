@@ -14,8 +14,10 @@ block content
         a(href="#a") Item A
         
         ui-tree
-          ui-tree-item: a(href="#a1") Item A.1
-          ui-tree-item: a(href="#a2") Item A.2
+          - var i = 0
+          while i++ < 10
+            ui-tree-item: a(href="#a1") Item A.#{i}
+          
           ui-tree-item
             a(href="#a3") Item A.3
             

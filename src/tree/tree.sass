@@ -3,6 +3,8 @@
 @import "typography/default"
 @import "vars/tree"
 @import "vars/component"
+@import "util/transitioning"
+@import "util/visibility"
 
 +exports("tree/tree")
 
@@ -23,27 +25,52 @@
   #{$tree},
   #{$item}
     position: relative
+    display: none
+
+    +visible
+      display: block
+
 
   #{$tree}
-    +transition(all 500ms)
+    +transition(all $tree-item-collapse-time)
     overflow: hidden
+
 
   #{$item}
     @extend %typography-body-1-b
     padding-left: 1em
     margin: 0 !important
+    +transform(translate(0, 0.4em))
+    opacity: 0
+
+    +visible
+      +transform(translate(0, 0))
+      opacity: 1
+
+    +transitioning-out
+      +transition(all $tree-item-trans-out-time)
+      //+transform(translate(0.2em, -0.7em))
+
+    +transitioning-in
+      +transition(all $tree-item-trans-in-time)
+      +transform(translate(0, 0))
+      opacity: 1
+
 
   #{$item} #{$item}
     @extend %typography-body-1
 
+
   #{$item} #{$item} #{$item}
     @extend %typography-body-01
+
 
   #{$caret}
     height: +modular-scale(-2)
     position: relative
     bottom: 0.06em
     display: none
+
 
   #{$collapsible} > svg
     +transition(all 500ms)
@@ -53,9 +80,11 @@
     left: 0
     top: 0.62em
 
+
   #{$collapsed} > svg,
   #{$collapsing} > svg
     +transform(rotate(0deg))
+
 
   #{$collapsed} #{$tree}
     height: 0

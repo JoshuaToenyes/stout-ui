@@ -107,22 +107,23 @@ EXPANDING_CLS = vars.read 'tree/tree-expanding-class'
 # @inner
 ###
 transitionHelper = (dir, target) ->
-  switch dir
-    when 'expand'
-      t = EXPAND_T
-      target.prefixedClasses.remove COLLAPSED_CLS
-      target.prefixedClasses.add EXPANDING_CLS
-    when 'collapse'
-      t = COLLAPSE_T
-      target.prefixedClasses.add COLLAPSING_CLS
-
-  target._collapseTransitioning = true
-
-  setTimeout ->
+  t = if dir is 'expand' then EXPAND_T else COLLAPSE_T
+  target._collapseTimer = setTimeout ->
     target._collapseTransitioning = false
     target.prefixedClasses.remove EXPANDING_CLS, COLLAPSING_CLS
     if dir is 'collapse' then target.prefixedClasses.add COLLAPSED_CLS
   , t
+
+
+###*
+# Helper function to set the collapse-prevention flag.
+#
+#
+#
+###
+setCollapseFlag = (target) ->
+  if target._collapseTimer then clearTimeout target._collapseTimer
+  target._collapseTransitioning = true
 
 
 
@@ -179,6 +180,14 @@ module.exports = class TreeItemView extends InteractiveView
 
 
   ###*
+  # Timer for updating `_collapseTransitioning` flag.
+  #
+  # @member _collapseTimer
+  # @memberof stout-ui/tree/TreeItemView#
+  ###
+
+
+  ###*
   # Flag indicating if the tree is currently expanding or collapsing. A `true`
   # state indicates that transition is currently occurring.
   #
@@ -197,8 +206,15 @@ module.exports = class TreeItemView extends InteractiveView
   expand: ->
     if @collapsible and @collapsed and not @_collapseTransitioning
       @collapsed = false
-      @_updateHeight()
-      transitionHelper 'expand', @
+      setCollapseFlag @
+      @prefixedClasses.remove COLLAPSED_CLS
+      @prefixedClasses.add EXPANDING_CLS
+      @_updateHeight().then =>
+        transitionHelper 'expand', @
+      .catch (e) ->
+        console.error e
+    else
+      Promise.fulfilled()
 
 
   ###*
@@ -209,10 +225,16 @@ module.exports = class TreeItemView extends InteractiveView
   # @memberof stout-ui/tree/TreeItemView#
   ###
   collapse: ->
-    if not @_collapseTransitioning
+    if not @_collapseTransitioning and @collapsible and not @collapsed
       @collapsed = true
-      @_updateHeight(true)
-      transitionHelper 'collapse', @
+      setCollapseFlag @
+      @prefixedClasses.add COLLAPSING_CLS
+      @_updateHeight(true).then =>
+        transitionHelper 'collapse', @
+      .catch (e) ->
+        console.error e
+    else
+      Promise.fulfilled()
 
 
   ###*
@@ -258,25 +280,38 @@ module.exports = class TreeItemView extends InteractiveView
   # @memberof stout-ui/tree/TreeItemView#
   # @private
   ###
-  _updateHeight: (collapse) ->
+  _updateHeight: (collapse, immediate) ->
     @_getHeight().then (r) =>
-      tree = @children.get(TREE_TAG_NAME)[0]
-
       m = if collapse then -1 else 1
 
-      if not @collapsed
-        tree.root.style.height = r + 'px'
-      else
-        tree.root.style.height = '0'
+      tree = @children.get(TREE_TAG_NAME)[0]
+
+      if tree and not @collapsed
+        tree.setHeight(r)
+        promise = tree.expand()
+      else if tree
+        promise = tree.collapse().then ->
+          tree.setHeight(0)
 
       collapseUpTree = (tree) ->
         if not tree then return
         if tree.parent and tree.parent.collapsible
           tree.getRenderedDimensions().then (d) =>
-            tree.root.style.height = d.height + m * r + 'px'
+            tree.setHeight(d.height + m * r)
             collapseUpTree tree.parent.parent
 
-      collapseUpTree @parent
+      # If we are collapsing the tree, then wait until after the children
+      # are collapsed, then collapse the parent trees.
+      if immediate or not collapse
+        collapseUpTree @parent
+
+      # If expanding, then expand immediately.
+      else
+        promise.then => collapseUpTree @parent
+
+      # Return the promise from the tree.
+      promise
+
 
 
   ###*
@@ -292,7 +327,7 @@ module.exports = class TreeItemView extends InteractiveView
     @prefixedClasses.remove COL_CLS, COLLAPSED_CLS
 
     if @children.get(TREE_TAG_NAME).length > 0 and @collapsible
-      @_updateHeight(@collapsed)
+      @_updateHeight(@collapsed, true)
       @prefixedClasses.add COL_CLS
 
     if @collapsed and @collapsible

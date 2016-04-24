@@ -116,9 +116,9 @@ VISIBLE_CLS = vars.read 'component/visible'
 # @inner
 ###
 makeTransitionFunc = (func, transitionClass, removeClass, state, evt, test) ->
-  (time) ->
+  (time = 0, delay = 0) ->
     promise = new Promise()
-    nextTick =>
+    setTimeout =>
       # Start the transition if the view is rendered and the test function
       # return true.
       if @rendered and test.call(@)
@@ -141,7 +141,7 @@ makeTransitionFunc = (func, transitionClass, removeClass, state, evt, test) ->
         @_transitionTimer = setTimeout =>
           @_transitionTimer = null
           Promise.resolve promise, @[func].call(@)
-        , (time or 0)
+        , time
 
         if func is 'hide' then @repaint()
 
@@ -155,6 +155,7 @@ makeTransitionFunc = (func, transitionClass, removeClass, state, evt, test) ->
         view is not yet rendered."
         reason = new TransitionCanceledExc(msg)
         Promise.reject promise, reason
+    , delay
     promise
 
 
