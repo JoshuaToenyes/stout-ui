@@ -6,6 +6,7 @@
 ###
 defaults        = require 'lodash/defaults'
 InteractiveView = require '../interactive/InteractiveView'
+Promise         = require 'stout-core/promise/Promise'
 template        = require './tree-item.template'
 vars            = require '../vars'
 
@@ -84,11 +85,7 @@ module.exports = class TreeItemView extends InteractiveView
 
     @on 'tap', (e) =>
       e.data.stopPropagation()
-      if @collapsible
-        @prefixedClasses.toggle COLLAPSED_CLS
-        tree = @children.get(TREE_TAG_NAME)[0]
-        tree.getRenderedDimensions().then (v) =>
-          tree.root.style.height = v.height + 'px'
+      @toggle()
 
 
   ###*
@@ -115,6 +112,68 @@ module.exports = class TreeItemView extends InteractiveView
     default: true
 
 
+  open: ->
+    if @collapsible and @collapsed
+      @prefixedClasses.remove COLLAPSED_CLS
+      @collapsed = false
+      @_updateHeight()
+
+
+  close: ->
+    @prefixedClasses.add COLLAPSED_CLS
+    @collapsed = true
+    @_updateHeight(true)
+
+
+  toggle: ->
+    if @collapsed then @open() else @close()
+
+
+  ###*
+  # Calculates and returns (as a promise) the height of this tree including
+  # any subtrees.
+  #
+  # @returns {module:stout-core/promise/Promise} Promise resolved to the height
+  # of the tree in pixels.
+  ###
+  _getHeight: ->
+    promises = []
+
+    @children.get(TREE_TAG_NAME).every (tree) ->
+      promises.push tree.getRenderedDimensions(null, ['height'])
+
+      tree.children.get(TAG_NAME).every (item) ->
+        promises.push item._getHeight()
+
+    Promise.all(promises).then (a) ->
+      if not a or a.length is 0
+        0
+      else
+        a.reduce ((p, v) -> p + (+v?.height or 0)), 0
+
+
+  _updateHeight: (close) ->
+    @_getHeight().then (r) =>
+      tree = @children.get(TREE_TAG_NAME)[0]
+      tree.repaint()
+
+      m = if close then -1 else 1
+
+      if not @collapsed
+        tree.root.style.height = r + 'px'
+      else
+        tree.root.style.height = '0'
+
+      closeUpTree = (tree) ->
+        if not tree then return
+        if tree.parent and tree.parent.collapsible
+          tree.getRenderedDimensions().then (d) =>
+            tree.root.style.height = d.height + m * r + 'px'
+            closeUpTree tree.parent.parent
+
+      closeUpTree @parent
+
+
   ###*
   # Updates the "collapsible" display state of this item.
   #
@@ -122,8 +181,13 @@ module.exports = class TreeItemView extends InteractiveView
   # @memberof stout-ui/tree/TreeItemView#
   ###
   _updateCollapsible: ->
+
+    # Update collapsed and collapsable classes based on child trees.
     @prefixedClasses.remove COL_CLS, COLLAPSED_CLS
+
     if @children.get(TREE_TAG_NAME).length > 0 and @collapsible
+      @_updateHeight(@collapsed)
       @prefixedClasses.add COL_CLS
+
     if @collapsed
       @prefixedClasses.add COLLAPSED_CLS

@@ -431,9 +431,12 @@ module.exports = class ComponentView extends View
   # @method getRenderedDimensions
   # @memberof stout-ui/component/ComponentView#
   ###
-  getRenderedDimensions: (target) ->
+  getRenderedDimensions: (target, resetStyles = []) ->
     promise = new Promise
     target ?= @root
+
+    savedStyles = {}
+    resetStyles = resetStyles.concat ['position', 'left']
 
     calcPositionOffScreen = =>
       style = @root.style
@@ -442,8 +445,11 @@ module.exports = class ComponentView extends View
       # current position.
       parent = @parentEl
       nextSibling = @root.nextSibling
-      pos = style.position
-      left = style.left
+
+      # Save specified styles.
+      for r in resetStyles
+        savedStyles[r] = style[r]
+        style[r] = ''
 
       # Position off-screen.
       style.position = 'fixed'
@@ -461,8 +467,9 @@ module.exports = class ComponentView extends View
       if not pv then @_hide()
 
       # Restore the original style and DOM position.
-      style.position = pos
-      style.left = left
+      for k, v of savedStyles
+        style[k] = v
+
       if parent and nextSibling
         parent.insertBefore @root, nextSibling
       else if parent
