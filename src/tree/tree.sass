@@ -11,6 +11,8 @@
   $caret:       "#{$item} svg"
   $collapsible: "#{$item}.#{$prefix}#{$tree-collapsible-class}"
   $collapsed:   "#{$item}.#{$prefix}#{$tree-collapsed-class}"
+  $collapsing:  "#{$item}.#{$prefix}#{$tree-collapsing-class}"
+  $expanding:   "#{$item}.#{$prefix}#{$tree-expanding-class}"
 
   #{$prefix}#{$tree-tag},
   #{$prefix}#{$tree-item-tag}
@@ -51,7 +53,8 @@
     left: 0
     top: 0.62em
 
-  #{$collapsed} > svg
+  #{$collapsed} > svg,
+  #{$collapsing} > svg
     +transform(rotate(0deg))
 
   #{$collapsed} #{$tree}

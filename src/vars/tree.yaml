@@ -2,5 +2,9 @@ tree-tag:                 tree
 tree-item-tag:            tree-item
 tree-class:               tree !default
 tree-item-class:          tree-item !default
+tree-collapsing-class:    collapsing
+tree-expanding-class:     expanding
 tree-collapsible-class:   collapsible
 tree-collapsed-class:     collapsed
+tree-item-collapse-time:  500ms
+tree-item-expand-time:    300ms

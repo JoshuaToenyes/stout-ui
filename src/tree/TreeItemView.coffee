@@ -62,6 +62,69 @@ COL_CLS = vars.read 'tree/tree-collapsible-class'
 COLLAPSED_CLS = vars.read 'tree/tree-collapsed-class'
 
 
+###*
+# The time (in millseconds) a collapse operation should take.
+#
+# @type {number}
+# @const
+###
+COLLAPSE_T = vars.readTime 'tree/tree-item-collapse-time'
+
+
+###*
+# The time (in millseconds) an expand operation should take.
+#
+# @type {number}
+# @const
+###
+EXPAND_T = vars.readTime 'tree/tree-item-expand-time'
+
+
+###*
+# Class added to the tree during a collapsing transition.
+#
+# @type {string}
+# @const
+###
+COLLAPSING_CLS = vars.read 'tree/tree-collapsing-class'
+
+
+###*
+# Class added to the tree during an expand transition.
+#
+# @type {string}
+# @const
+###
+EXPANDING_CLS = vars.read 'tree/tree-expanding-class'
+
+
+
+###*
+# Helper function sets then schedules the clearing of the collapse transition
+# flag.
+#
+# @function
+# @inner
+###
+transitionHelper = (dir, target) ->
+  switch dir
+    when 'expand'
+      t = EXPAND_T
+      target.prefixedClasses.remove COLLAPSED_CLS
+      target.prefixedClasses.add EXPANDING_CLS
+    when 'collapse'
+      t = COLLAPSE_T
+      target.prefixedClasses.add COLLAPSING_CLS
+
+  target._collapseTransitioning = true
+
+  setTimeout ->
+    target._collapseTransitioning = false
+    target.prefixedClasses.remove EXPANDING_CLS, COLLAPSING_CLS
+    if dir is 'collapse' then target.prefixedClasses.add COLLAPSED_CLS
+  , t
+
+
 
 ###*
 # The `TreeItemView` class represents the view part of a table of contents
@@ -81,9 +144,12 @@ module.exports = class TreeItemView extends InteractiveView
 
     @root.setAttribute 'role', 'listitem'
 
+    @_collapseTransitioning = false
+
     @on 'ready', @_updateCollapsible, @
 
-    @on 'tap', (e) =>
+    # Listen for touchstart/mouseup events to toggle the tree.
+    @on 'mouseup', (e) =>
       e.data.stopPropagation()
       @toggle()
 
@@ -113,42 +179,50 @@ module.exports = class TreeItemView extends InteractiveView
 
 
   ###*
+  # Flag indicating if the tree is currently expanding or collapsing. A `true`
+  # state indicates that transition is currently occurring.
+  #
+  # @member _collapseTransitioning
+  # @memberof stout-ui/tree/TreeItemView#
+  ###
+
+
+  ###*
   # Opens the child tree of this tree item, if it is currently collapsed and
   # is collapsible.
   #
-  # @method open
+  # @method expand
   # @memberof stout-ui/tree/TreeItemView#
   ###
-  open: ->
-    if @collapsible and @collapsed
-      @prefixedClasses.remove COLLAPSED_CLS
+  expand: ->
+    if @collapsible and @collapsed and not @_collapseTransitioning
       @collapsed = false
       @_updateHeight()
+      transitionHelper 'expand', @
 
 
   ###*
-  # Closes the child tree of this tree item, if it is currently open and
+  # Closes the child tree of this tree item, if it is currently expand and
   # is collapsible.
   #
-  # @method close
+  # @method collapse
   # @memberof stout-ui/tree/TreeItemView#
   ###
-  close: ->
-    @collapsed = true
-    @_updateHeight(true)
-    setTimeout =>
-      @prefixedClasses.add COLLAPSED_CLS
-    , 500
+  collapse: ->
+    if not @_collapseTransitioning
+      @collapsed = true
+      @_updateHeight(true)
+      transitionHelper 'collapse', @
 
 
   ###*
-  # Toggles the open/closed state of this tree view item.
+  # Toggles the expanded/collapsed state of this tree view item.
   #
   # @method toggle
   # @memberof stout-ui/tree/TreeItemView#
   ###
   toggle: ->
-    if @collapsed then @open() else @close()
+    if @collapsed then @expand() else @collapse()
 
 
   ###*
@@ -178,31 +252,31 @@ module.exports = class TreeItemView extends InteractiveView
   # Updates the height of this tree item, then travels up the tree and adjusts
   # the height of all parents trees.
   #
-  # @param {boolean} close - Set to `true` if closing the tree.
+  # @param {boolean} collapse - Set to `true` if closing the tree.
   #
   # @method _updateCollapsible
   # @memberof stout-ui/tree/TreeItemView#
   # @private
   ###
-  _updateHeight: (close) ->
+  _updateHeight: (collapse) ->
     @_getHeight().then (r) =>
       tree = @children.get(TREE_TAG_NAME)[0]
 
-      m = if close then -1 else 1
+      m = if collapse then -1 else 1
 
       if not @collapsed
         tree.root.style.height = r + 'px'
       else
         tree.root.style.height = '0'
 
-      closeUpTree = (tree) ->
+      collapseUpTree = (tree) ->
         if not tree then return
         if tree.parent and tree.parent.collapsible
           tree.getRenderedDimensions().then (d) =>
             tree.root.style.height = d.height + m * r + 'px'
-            closeUpTree tree.parent.parent
+            collapseUpTree tree.parent.parent
 
-      closeUpTree @parent
+      collapseUpTree @parent
 
 
   ###*
