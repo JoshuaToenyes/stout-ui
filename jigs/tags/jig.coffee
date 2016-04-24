@@ -1,4 +1,4 @@
-Button = require '../../button/Button'
+button = require '../../button'
 parser = require 'stout-client/parser'
 scope = require 'stout-client/scope'
 

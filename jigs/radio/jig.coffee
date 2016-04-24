@@ -11,24 +11,24 @@ window.onload = ->
 
   radioButton.factory
     label: 'Select this test item.'
-    parent: '.simple'
+    parentEl: '.simple'
   .render()
 
   radioGroup.factory
-    parent: '.group'
+    parentEl: '.group'
     contents: makeRadioButtons()
   .render()
 
 
   for size in ['tiny', 'small', 'normal', 'large', 'huge', 'massive']
     radioGroup.factory
-      parent: ".size-#{size}"
+      parentEl: ".size-#{size}"
       contents: makeRadioButtons(size)
     .render()
 
 
   for type in ['default', 'inverse', 'primary', 'danger', 'warn']
     radioGroup.factory
-      parent: ".type-#{type}"
+      parentEl: ".type-#{type}"
       contents: makeRadioButtons(undefined, type)
     .render()

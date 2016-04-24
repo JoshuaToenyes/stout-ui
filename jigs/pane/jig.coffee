@@ -16,7 +16,7 @@ document.addEventListener 'DOMContentLoaded', ->
 
   pane = new PaneView
     context: new Pane
-    parent: document.body
+    parentEl: document.body
     id: 'basic-pane'
     contents: closeBtn
 
@@ -35,7 +35,7 @@ document.addEventListener 'DOMContentLoaded', ->
 
   buttonFactory
     label: 'Show PaneView'
-    parent: '.ex.basic .controls'
+    parentEl: '.ex.basic .controls'
     click: ->
       pane.transition = 'fade'
       pane.transitionIn()
@@ -47,7 +47,7 @@ document.addEventListener 'DOMContentLoaded', ->
       label: transition
       size: 'small'
       type: 'inverse'
-      parent: '.ex.transitions .controls'
+      parentEl: '.ex.transitions .controls'
       click: ((t)->
           (e) ->
             pane.activator = e.source.root
@@ -63,7 +63,7 @@ document.addEventListener 'DOMContentLoaded', ->
       label: start
       size: 'small'
       type: 'inverse'
-      parent: '.ex.overlay-starts .controls'
+      parentEl: '.ex.overlay-starts .controls'
       click: ((st)->
           ->
             pane.transition = 'overlay'
@@ -79,7 +79,7 @@ document.addEventListener 'DOMContentLoaded', ->
     label: 'Auto Size Width'
     size: 'small'
     type: 'inverse'
-    parent: '.ex.sizing .controls'
+    parentEl: '.ex.sizing .controls'
     click: ->
       pane.root.style.left = 'auto'
       pane.root.style.right = '0'
@@ -93,7 +93,7 @@ document.addEventListener 'DOMContentLoaded', ->
     label: '200px Height'
     size: 'small'
     type: 'inverse'
-    parent: '.ex.sizing .controls'
+    parentEl: '.ex.sizing .controls'
     click: ->
       pane.height = 200
       pane.transition = 'overlay'

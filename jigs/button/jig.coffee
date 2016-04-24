@@ -10,7 +10,7 @@ window.onload = ->
   for size in ['tiny', 'small', 'normal', 'large', 'huge', 'massive']
     buttonFactory
       label: 'Make Reservation'
-      parent: '.size-' + size
+      parentEl: '.size-' + size
       size: size
     .render().then (v) ->
       console.log 'rendered!'
@@ -21,7 +21,7 @@ window.onload = ->
   # Inverse button style example.
   buttonFactory
     label: 'Confirm Order'
-    parent: '.inverse'
+    parentEl: '.inverse'
     type: 'inverse'
   .render()
 
@@ -31,7 +31,7 @@ window.onload = ->
 
     buttonFactory
       label: style + ' flat button'
-      parent: ".#{style}-flat"
+      parentEl: ".#{style}-flat"
       type: style + '-flat'
     .render()
 
@@ -40,7 +40,7 @@ window.onload = ->
   # Primary button style example.
   buttonFactory
     label: 'Place Order'
-    parent: '.primary'
+    parentEl: '.primary'
     type: 'primary'
   .render()
 
@@ -49,7 +49,7 @@ window.onload = ->
   # Warn button style example.
   buttonFactory
     label: 'Launch Missile'
-    parent: '.warn'
+    parentEl: '.warn'
     type: 'warn'
   .render()
 
@@ -57,7 +57,7 @@ window.onload = ->
   # Danger button style example.
   buttonFactory
     label: 'Delete Everything'
-    parent: '.danger'
+    parentEl: '.danger'
     type: 'danger'
   .render()
 
@@ -67,14 +67,14 @@ window.onload = ->
 
     disabledButton = buttonFactory
       label: 'Button Disabled'
-      parent: ".disabled-#{style} .subject"
+      parentEl: ".disabled-#{style} .subject"
       type: style
     disabledButton.disable().render()
 
     buttonFactory
       label: 'Enable'
       size: 'tiny'
-      parent: ".disabled-#{style} .controls"
+      parentEl: ".disabled-#{style} .controls"
       click: ((db) ->
         -> db.enable()
       )(disabledButton)
@@ -83,7 +83,7 @@ window.onload = ->
     buttonFactory
       label: 'Disable'
       size: 'tiny'
-      parent: ".disabled-#{style} .controls"
+      parentEl: ".disabled-#{style} .controls"
       tap: -> console.log 'tapped!'
       click: ((db) ->
         -> db.disable()
@@ -95,7 +95,7 @@ window.onload = ->
   # Show-hide example buttons.
   showButtonEx = buttonFactory
     label: 'Reveal Example'
-    parent: '.show-hide .subject'
+    parentEl: '.show-hide .subject'
     type: 'primary'
     classes: 'show-hide-subject'
   showButtonEx.render()
@@ -103,7 +103,7 @@ window.onload = ->
   buttonFactory
     label: 'Show'
     size: 'tiny'
-    parent: '.show-hide .controls'
+    parentEl: '.show-hide .controls'
     classes: 'show-button'
     click: ->
       showButtonEx.show()
@@ -112,7 +112,7 @@ window.onload = ->
   buttonFactory
     label: 'Hide'
     size: 'tiny'
-    parent: '.show-hide .controls'
+    parentEl: '.show-hide .controls'
     classes: 'hide-button'
     click: ->
       showButtonEx.hide()

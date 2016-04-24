@@ -7,7 +7,7 @@
 # @requires stout-ui/vars
 ###
 
-Interactive = require '../common/Interactive'
+Interactive = require '../interactive/Interactive'
 vars        = require '../vars'
 
 
