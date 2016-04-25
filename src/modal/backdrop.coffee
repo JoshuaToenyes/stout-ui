@@ -6,8 +6,9 @@
 # @requires stout-ui/vars/modal
 # @requires stout-ui/vars
 ###
-
+defaults = require 'lodash/defaults'
 Interactive = require '../interactive/Interactive'
+InteractiveView = require '../interactive/InteractiveView'
 vars        = require '../vars'
 
 
@@ -52,7 +53,7 @@ instance = null
 
 
 
-module.exports.Backdrop = class Backdrop extends Interactive
+module.exports.Backdrop = class Backdrop extends InteractiveView
 
   ###*
   # Backdrop element which overlays the application's main window and prevents
@@ -63,10 +64,11 @@ module.exports.Backdrop = class Backdrop extends Interactive
   # @extends stout-ui/common/Interactive
   # @memberof stout-ui/modal/backdrop
   ###
-  constructor: ->
-    super (-> ''), null, {renderOnChange: false}
+  constructor: (init = {}, events) ->
+    defaults init, {template: '', context: new Interactive}
+    super init, events
     @prefixedClasses.add BACKDROP_CLASS, 'hidden'
-    @parent = document.body
+    @parentEl = document.body
     @render()
     @static = true
 

@@ -51,7 +51,7 @@ calcOffscreen = (w, h) ->
 # @inner
 ###
 positionOut = ->
-  @contents.getRenderedDimensions().then ({width, height}) =>
+  @getRenderedDimensions().then ({width, height}) =>
     [tx, ty] = calcOffscreen.call @, width, height
     p = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, tx, ty, 0, 1]
     @root.style.transform = "matrix3d(#{p.join(',')})"

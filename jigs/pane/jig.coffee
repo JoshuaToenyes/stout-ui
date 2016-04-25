@@ -1,8 +1,8 @@
-buttonFactory = require '../../button'
-Button        = require '../../button/Button'
-ButtonView    = require '../../button/ButtonView'
-Pane          = require '../../pane/Pane'
-PaneView      = require '../../pane/PaneView'
+button     = require '../../button'
+Button     = require '../../button/Button'
+ButtonView = require '../../button/ButtonView'
+Pane       = require '../../pane/Pane'
+PaneView   = require '../../pane/PaneView'
 
 
 document.addEventListener 'DOMContentLoaded', ->
@@ -33,7 +33,7 @@ document.addEventListener 'DOMContentLoaded', ->
 
   pane.render().then -> pane.hide()
 
-  buttonFactory
+  button.factory
     label: 'Show PaneView'
     parentEl: '.ex.basic .controls'
     click: ->
@@ -43,7 +43,7 @@ document.addEventListener 'DOMContentLoaded', ->
 
 
   for transition in ['fade', 'zoom', 'overlay']
-    buttonFactory
+    button.factory
       label: transition
       size: 'small'
       type: 'inverse'
@@ -59,7 +59,7 @@ document.addEventListener 'DOMContentLoaded', ->
 
 
   for start in ['top', 'right', 'bottom', 'left']
-    buttonFactory
+    button.factory
       label: start
       size: 'small'
       type: 'inverse'
@@ -75,7 +75,7 @@ document.addEventListener 'DOMContentLoaded', ->
 
   # --- Sizing ---
 
-  buttonFactory
+  button.factory
     label: 'Auto Size Width'
     size: 'small'
     type: 'inverse'
@@ -89,7 +89,7 @@ document.addEventListener 'DOMContentLoaded', ->
       pane.transitionIn()
   .render()
 
-  buttonFactory
+  button.factory
     label: '200px Height'
     size: 'small'
     type: 'inverse'

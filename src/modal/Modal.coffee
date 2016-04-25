@@ -1,62 +1,24 @@
 ###*
-# @overview Defines a basic modal window UI component.
+# @overview Defines the Modal view-model class.
+#
 # @module stout-ui/modal/Modal
 ###
+Pane = require '../pane/Pane'
+Promise = require 'stout-core/promise/Promise'
 
-Pane      = require '../pane/Pane'
-backdrop  = require './backdrop'
-vars      = require '../vars'
-Promise    = require 'stout-core/promise/Promise'
-
-# Load modal variables.
-require '../vars/modal'
 
 
 ###*
-# The class to add to the root modal container.
-# @const
-# @type string
-# @private
+# The Modal class is the view-model of a generic modal component.
+#
+# @exports stout-ui/modal/Modal
+# @extends stout-ui/pane/Pane
+# @constructor
 ###
-MODAL_CLS = vars.read 'modal/modal-class'
-
-
-###*
-# The modal transition-in time in milliseconds.
-# @const
-# @type number
-# @private
-###
-TRANS_IN_TIME = vars.readTime 'modal/modal-trans-in-time'
-
-
-###*
-# The modal transition-out time in milliseconds.
-# @const
-# @type number
-# @private
-###
-TRANS_OUT_TIME = vars.readTime 'modal/modal-trans-out-time'
-
-
-
 module.exports = class Modal extends Pane
 
-  ###*
-  # MaskedTextInput constructor.
-  #
-  # @param {Object} [init] - Initiation object.
-  #
-  # @exports stout-ui/modal/Modal
-  # @extends stout-ui/pane/Pane
-  # @constructor
-  ###
-  constructor: ->
-    super arguments...
-    @transition = 'zoom'
-    @height = 'auto'
-    @width = 'auto'
-    @prefixedClasses.add MODAL_CLS
+  constructor: (init, events = []) ->
+    super init, events.concat ['open', 'close']
 
 
   ###*
@@ -68,75 +30,13 @@ module.exports = class Modal extends Pane
     default: true
 
 
-  ###*
-  # Set to `true` if the close "x" should be shown on the modal.
-  #
-  # @property showClose
-  # @type boolean
-  # @default true
-  # @public
-  ###
-  @property 'showClose',
-    default: true
-
-
-  ##
-  # The modal header's title.
-  #
-  # @property title
-  # @type string
-  # @default null
-  # @public
-
-  @property 'title'
-
-
-  ###*
-  # Closes this modal window.
-  #
-  #
-  # @memberof stout-ui/modal/Modal#
-  # @public
-  ###
-  close: ->
-    closePromise = new Promise()
-
-    backdrop().transitionOut()
-
-    @transitionOut TRANS_OUT_TIME, =>
-      Promise.resolve closePromise
-
-
-  ###*
-  # Opens the modal window.
-  #
-  # @param {Event} [e] - Event that triggered the opening of this modal.
-  #
-  # @method open
-  # @memberof stout-ui/modal/Modal#
-  # @public
-  ###
   open: (e) =>
-    openPromise = new Promise()
+    promise = new Promise
+    @fire 'open', {promise, activator: e?.source.root}
+    promise
 
-    @render()
 
-    # Capture the activating component (button, etc.) if present.
-    @activator = e?.source.root
-
-    # If this modal isn't static, then attach an event listener so it's closed
-    # when/if the user clicks on the backdrop.
-    if not @static
-      backdrop().once 'transition:out', =>
-        @close()
-        Promise.reject openPromise
-
-    # Initiate the modal transition.
-    @transitionIn TRANS_IN_TIME, ->
-      Promise.fulfill openPromise
-
-    # Show the backdrop, making it inherit the modal's "static" state.
-    backdrop().static = @static
-    backdrop().transitionIn()
-
-    openPromise
+  close: (e) =>
+    promise = new Promise
+    @fire 'close', {promise, activator: e?.source.root}
+    promise

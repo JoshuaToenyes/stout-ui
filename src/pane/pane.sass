@@ -11,6 +11,7 @@
   $contents:  #{$prefix}#{$container-contents-class}
   $overlay:   #{$prefix}overlay
   $pane:      #{$prefix}#{$pane-class}
+  $pane-contents: ".#{$prefix}#{$pane-content-class}"
   $zoom:      #{$prefix}zoom
   $fade:      #{$prefix}fade
 
@@ -22,6 +23,13 @@
     display: none
     &[rendered]
       display: block
+
+  // Default setting for pane contents. When non-ComponentView content is
+  // added to a pane, a ComponentView is automatically created for the content.
+  // The contentent view is then given this class which helps calculate its
+  // size.
+  //#{$pane-contents}
+  //  width: 62%
 
   .#{$pane}
     overflow: scroll

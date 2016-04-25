@@ -13,6 +13,8 @@ vars                  = require '../vars'
 Promise               = require 'stout-core/promise/Promise'
 transitions           = require './transitions'
 TransitionCanceledExc = require('stout-client/exc').TransitionCanceledExc
+ComponentView         = require '../component/ComponentView'
+Component             = require '../component/Component'
 
 # Load shared variables.
 require '../vars/pane'
@@ -25,6 +27,17 @@ require '../vars/pane'
 # @private
 ###
 PANE_CLS = vars.read 'pane/pane-class'
+
+
+###*
+# Dynamically created component class for non `ComponentView` instance pane
+# content.
+#
+# @const
+# @type string
+# @private
+###
+PANE_CONTENT_CLS = vars.readPrefixed 'pane/pane-content-class'
 
 
 ###*
@@ -69,13 +82,19 @@ module.exports = class PaneView extends ComponentView
 
   constructor: (init, events) ->
     defaults init, {template, tagName: TAG_NAME}
+    if init.contents and not (init.contents instanceof ComponentView)
+      init.contents = new ComponentView
+        contents: init.contents
+        context: new Component
+        template: ''
+        classes: PANE_CONTENT_CLS
     super init, events
     @prefixedClasses.add PANE_CLS
     @syncProperty @context, 'transition start end width height'
 
     @on 'transition:in', ->
       transitions[@transition].in?.call @
-      @setDisplaySize()
+      #@setDisplaySize()
 
     @on 'transition:out', ->
       transitions[@transition].out?.call @
@@ -122,8 +141,8 @@ module.exports = class PaneView extends ComponentView
     H = window.innerHeight
 
     setWH = (w, h) =>
-      @root.style.width = "#{w}px"
-      @root.style.height = "#{h}px"
+      if w then @root.style.width = "#{w}px"
+      if h then @root.style.height = "#{h}px"
 
     if @width is 'auto' or @height is 'auto'
       @contents.getRenderedDimensions().then ({width, height}) =>
@@ -135,6 +154,14 @@ module.exports = class PaneView extends ComponentView
           when 'full' then h = H
           when 'auto' then h = height
           else h = @height
+
+        if w < 1
+          w *= W
+          h = null
+        if h < 1
+          h *= H
+          w = null
+
         setWH w, h
 
     else
@@ -174,6 +201,7 @@ module.exports = class PaneView extends ComponentView
     else
       @setPaneTransitionClasses()
       @resetSizeAndPosition()
+      @setDisplaySize()
       transitions[@transition].setupIn.call(@).then =>
         super(time).then =>
           window.addEventListener 'resize', @_resizeHandler

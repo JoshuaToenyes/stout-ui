@@ -58,6 +58,9 @@ positionOut = ->
       when 'auto' then fz[1] = height
       else fz[1] = @height
 
+    if fz[0] < 1 then fz[0] *= W
+    if fz[1] < 1 then fz[1] *= H
+
     sx = iz[0] / fz[0]
     sy = iz[1] / fz[1]
     tx = fc[0] - ic[0]

@@ -9,7 +9,7 @@
 
 +exports("modal/modal")
 
-  $contents:  #{$prefix}#{$container-contents-class}
+  $contents:  #{$prefix}contents
   $pane:      #{$prefix}#{$modal-class}
   $modal:     #{$prefix}#{$pane-class}
 
@@ -17,6 +17,9 @@
     background-color: white
     border-radius: 2px
     box-shadow: 0 0 20px rgba(black, 0.25)
+
+    .#{$contents}
+      max-width: 100%
 
     +transitioning-out
       +transition-duration($modal-trans-out-time)

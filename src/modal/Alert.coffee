@@ -6,7 +6,7 @@
 
 Modal = require './Modal'
 Button = require '../button/Button'
-Component = require '../common/Component'
+Component = require '../component/Component'
 template = require './alert.template'
 omit = require 'lodash/omit'
 pick = require 'lodash/pick'
