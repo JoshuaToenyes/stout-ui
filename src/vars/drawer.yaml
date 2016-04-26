@@ -1,0 +1,20 @@
+# Custom tag name (prefix added at run time).
+drawer-tag:                     drawer
+
+# Class name added to the drawer component.
+drawer-class:                   drawer
+
+# Locked-open drawers push-over the contents of it's parent so the drawer
+# appears to be a part of the content. Non-locked drawers appear to "slide-over"
+# or "push-over" the parent content.
+drawer-locked-class:            drawer-locked
+
+# Added to the parent and drawer when the drawer opens with "push" behavior.
+drawer-push-class:              drawer-push
+
+# Added to the parent and drawer when the drawer opens with "overlay" behavior.
+drawer-overlay-class:           drawer-overlay
+
+# The class applied to a drawer's parent element. This class allows the drawer
+# to dynamically apply transitions to it's parent container.
+drawer-parent-class:            drawer-parent
