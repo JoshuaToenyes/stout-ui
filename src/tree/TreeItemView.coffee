@@ -110,6 +110,7 @@ transitionHelper = (dir, target) ->
   t = if dir is 'expand' then EXPAND_T else COLLAPSE_T
   target._collapseTimer = setTimeout ->
     target._collapseTransitioning = false
+    target._collapseSource = false
     target.prefixedClasses.remove EXPANDING_CLS, COLLAPSING_CLS
     if dir is 'collapse' then target.prefixedClasses.add COLLAPSED_CLS
   , t
@@ -146,12 +147,14 @@ module.exports = class TreeItemView extends InteractiveView
     @root.setAttribute 'role', 'listitem'
 
     @_collapseTransitioning = false
+    @_collapseSource = false
 
     @on 'ready', @_updateCollapsible, @
 
     # Listen for touchstart/mouseup events to toggle the tree.
     @on 'mouseup', (e) =>
       e.data.stopPropagation()
+      @_collapseSource = true
       @toggle()
 
 
@@ -197,6 +200,14 @@ module.exports = class TreeItemView extends InteractiveView
 
 
   ###*
+  # Flag indicating if this tree-item was the source of the collapse.
+  #
+  # @member _collapseSource
+  # @memberof stout-ui/tree/TreeItemView#
+  ###
+
+
+  ###*
   # Opens the child tree of this tree item, if it is currently collapsed and
   # is collapsible.
   #
@@ -229,10 +240,25 @@ module.exports = class TreeItemView extends InteractiveView
       @collapsed = true
       setCollapseFlag @
       @prefixedClasses.add COLLAPSING_CLS
-      @_updateHeight(true).then =>
-        transitionHelper 'collapse', @
-      .catch (e) ->
-        console.error e
+
+      reduceParentTreeHeight = (tree, h) ->
+        if not tree then return
+        tree.reduceHeight h
+        if tree.parent.parent and tree.parent.parent.collapsible
+          reduceParentTreeHeight tree.parent.parent, h
+
+      @_getDescendantsHeight().then (h) =>
+        promises = []
+        @children.get(TREE_TAG_NAME).every (tree) ->
+          promises.push tree.collapse().then -> tree.setHeight(0)
+        Promise.all(promises).then =>
+          transitionHelper 'collapse', @
+          if @_collapseSource then reduceParentTreeHeight(@parent, h)
+
+      # @_updateHeight(true).then =>
+      #   transitionHelper 'collapse', @
+      # .catch (e) ->
+      #   console.error e
     else
       Promise.fulfilled()
 
@@ -252,22 +278,27 @@ module.exports = class TreeItemView extends InteractiveView
   # any subtrees.
   #
   # @returns {module:stout-core/promise/Promise} Promise resolved to the height
-  # of the tree in pixels.
+  # of the descendants in pixels.
+  #
+  # @member _getDescendantsHeight
+  # @memberof stout-ui/tree/TreeItemView#
   ###
-  _getHeight: ->
+  _getDescendantsHeight: ->
     promises = []
 
     @children.get(TREE_TAG_NAME).every (tree) ->
       promises.push tree.getRenderedDimensions(null, ['height'])
 
       tree.children.get(TAG_NAME).every (item) ->
-        promises.push item._getHeight()
+        promises.push item._getDescendantsHeight()
 
     Promise.all(promises).then (a) ->
       if not a or a.length is 0
         0
       else
         a.reduce ((p, v) -> p + (+v?.height or 0)), 0
+
+
 
 
   ###*
@@ -281,33 +312,58 @@ module.exports = class TreeItemView extends InteractiveView
   # @private
   ###
   _updateHeight: (collapse, immediate) ->
-    @_getHeight().then (r) =>
+
+    # Inner help function for updating parent tree heights.
+    setTreeHeight = (tree, h) ->
+      if not tree then return
+
+      # If expanding this tree, then update the parent tree's height.
+      if h > 0
+        tree.getRenderedDimensions().then (d) =>
+          tree.setHeight(d.height + h)
+          setTreeHeight tree.parent.parent, h
+
+      # Otherwise, we're collapsing the tree. Travel up the tree and collapse
+      # the highest-ancestor.
+      else if tree.parent.parent and tree.parent.parent.collapsible
+        console.log 'traveling up the tree...'
+        setTreeHeight tree.parent.parent, h
+
+      # We are collapsing and reached the top-most tree.
+      else
+        tree.updateHeight h
+
+
+    # Calculate the height of this tree (including sub trees)...
+    @_getDescendantsHeight().then (r) =>
+
+      # If we are collapsing this tree, then we need to subtract this tree's
+      # height from it's parents. we use the multiplier "m" to add/subtract.
       m = if collapse then -1 else 1
 
+      # Grab the tree which should be expanded/collapsed.
       tree = @children.get(TREE_TAG_NAME)[0]
 
+      # If there is a tree, and we're expanding, set it's height.
       if tree and not @collapsed
         tree.setHeight(r)
         promise = tree.expand()
+
+      # If collapsing the tree, collapse all its items, then set the height
+      # to zero.
       else if tree
         promise = tree.collapse().then ->
           tree.setHeight(0)
 
-      collapseUpTree = (tree) ->
-        if not tree then return
-        if tree.parent and tree.parent.collapsible
-          tree.getRenderedDimensions().then (d) =>
-            tree.setHeight(d.height + m * r)
-            collapseUpTree tree.parent.parent
-
-      # If we are collapsing the tree, then wait until after the children
-      # are collapsed, then collapse the parent trees.
+      # If expanding the tree, update the height immediately.
       if immediate or not collapse
-        collapseUpTree @parent
+        setTreeHeight @parent, m * r
 
-      # If expanding, then expand immediately.
+      # If collapsing, wait until the children tree items are transitioned-out
+      # the update parent tree heights.
       else
-        promise.then => collapseUpTree @parent
+        promise.then =>
+          setTreeHeight @parent, m * r
 
       # Return the promise from the tree.
       promise

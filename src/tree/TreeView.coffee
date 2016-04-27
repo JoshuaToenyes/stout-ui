@@ -74,8 +74,6 @@ module.exports = class TreeView extends InteractiveView
     @children.get(ITEM_TAG_NAME).reverse().every (item) ->
       promises.push item.transitionOut(ITEM_TRANS_OUT_T, ++i * ITEM_OFFSET_T)
       promises.push item.collapse()
-      # item.children.get(TAG_NAME).every (decendentTree) ->
-      #   promises.push decendentTree.collapse()
     Promise.all promises
 
 
@@ -92,4 +90,21 @@ module.exports = class TreeView extends InteractiveView
     @root.style.height = h + 'px'
 
 
+
+  reduceHeight: (h) ->
+    ch = parseInt(@root.style.height)
+    @setHeight(ch - h)
+
+
+  updateHeight: (h) ->
+    ch = parseInt(@root.style.height)
+    @setHeight(ch + h)
+
+
   toggle: ->
+
+
+  render: ->
+    super().then =>
+      @getRenderedDimensions().then (d) =>
+        @setHeight(d.height)
