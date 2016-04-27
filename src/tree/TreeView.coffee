@@ -78,17 +78,24 @@ module.exports = class TreeView extends InteractiveView
 
 
   expand: ->
-    i = 0
-    promises = []
-    @children.get(ITEM_TAG_NAME).every (item) ->
-      delay = ++i * ITEM_OFFSET_T + TREE_TRANS_T / 2
-      promises.push item.transitionIn(ITEM_TRANS_IN_T, delay)
-    Promise.all promises
+    @getRenderedDimensions(null, ['height']).then (d) =>
+      i = 0
+      promises = []
+      @setHeight(d.height)
+      @children.get(ITEM_TAG_NAME).every (item) ->
+        delay = ++i * ITEM_OFFSET_T + TREE_TRANS_T / 2
+        promises.push item.transitionIn(ITEM_TRANS_IN_T, delay)
+      Promise.all promises
 
 
   setHeight: (h) ->
     @root.style.height = h + 'px'
 
+
+
+  increaseHeight: (h) ->
+    ch = parseInt(@root.style.height)
+    @setHeight(ch + h)
 
 
   reduceHeight: (h) ->
