@@ -74,7 +74,7 @@ module.exports = class TreeView extends InteractiveView
     @children.get(ITEM_TAG_NAME).reverse().every (item) ->
       promises.push item.transitionOut(ITEM_TRANS_OUT_T, ++i * ITEM_OFFSET_T)
       promises.push item.collapse()
-    Promise.all promises
+    Promise.all(promises).then => @setHeight 0
 
 
   expand: ->
