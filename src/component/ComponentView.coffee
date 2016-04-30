@@ -426,6 +426,28 @@ module.exports = class ComponentView extends View
 
 
   ###*
+  # Indicates if this component is currently allowed to transition in. An "in"
+  # transition can occur if the component is hidden or is already executing a
+  # "transition-out."
+  #
+  # @method canTransitionIn
+  # @memberof stout-ui/component/ComponentView
+  ###
+  canTransitionIn: -> @hidden or @transitioningOut
+
+
+  ###*
+  # Indicates if this component is currently allowed to transition out. An "out"
+  # transition can occur if the component is visible or is already executing a
+  # "transition-in."
+  #
+  # @method canTransitionOut
+  # @memberof stout-ui/component/ComponentView
+  ###
+  canTransitionOut: -> @visible or @transitioningIn
+
+
+  ###*
   # Calculates and returns the rendered dimensions of this `ComponentView`'s
   # root HTMLElement.
   #
@@ -476,13 +498,13 @@ module.exports = class ComponentView extends View
       else if parent
         parent.appendChild @root
 
-      Promise.resolve promise, {width, height}
+      Promise.fulfill promise, {width, height}
 
     # Get the current bounding rect.
     r = target.getBoundingClientRect()
 
     if r.width > 0 and r.height > 0
-      Promise.resolve promise, {width: r.width, height: r.height}
+      Promise.fulfill promise, {width: r.width, height: r.height}
     else if @rendered
       calcPositionOffScreen()
     else
