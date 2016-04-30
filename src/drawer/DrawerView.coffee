@@ -136,7 +136,7 @@ module.exports = class DrawerView extends PaneView
   # @method close
   # @memberof stout-ui/drawer/DrawerView#
   ###
-  close: => if @visible and not @transitioning then @transitionOut()
+  close: => @transitionOut()
 
 
   ###*
@@ -145,7 +145,7 @@ module.exports = class DrawerView extends PaneView
   # @method open
   # @memberof stout-ui/drawer/DrawerView#
   ###
-  open: => if not @visible and not @transitioning then @transitionIn()
+  open: => @transitionIn()
 
 
   ###*

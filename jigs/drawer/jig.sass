@@ -1,3 +1,15 @@
 @import "../_blueprint/wide.sass"
 @import "../../drawer/drawer"
+@import "../../tree/tree"
 @import "../../typography/default"
+
+ui-tree
+  background-color: #eee
+
+  ui-tree-item
+    @extend %typography-body-1
+    margin: 0
+
+    a
+      text-decoration: none
+      color: $color-fg
