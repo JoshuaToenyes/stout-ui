@@ -1,6 +1,6 @@
 Map    = require 'stout-core/collection/Map'
-Max    = require 'stout-core/validators/Max'
-parser = require '../../../validators/parser'
+Max    = require 'stout-core/validator/Max'
+parser = require '../../../validator/parser'
 
 
 describe 'stout-ui/validators/parser', ->
