@@ -1,9 +1,6 @@
 # Component Classes
 collapsible-class:                  collapsible
-collapsible-item-class:             collapsible-item
-
-# Collapsible Capability Classes
-collapsible-collapsible-class:      collapsible
+collapsible-trigger-class:          collapsible-trigger
 
 # Collapsible State Classes
 collapsible-collapsed-class:        collapsed

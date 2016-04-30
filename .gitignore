@@ -1,4 +1,5 @@
 # Ignore transpiled source at project root.
+/accordion
 /button
 /card
 /checkbox

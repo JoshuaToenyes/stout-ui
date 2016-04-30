@@ -195,7 +195,7 @@ module.exports = class PaneView extends ComponentView
   # @public
   ###
   transitionIn: (time = TRANS_IN_TIME) ->
-    if @visible
+    if not @canTransitionIn()
       Promise.rejected new TransitionCanceledExc "Transition Canceled
       because the pane is already visible."
     else
@@ -214,7 +214,7 @@ module.exports = class PaneView extends ComponentView
   # @memberof stout-ui/pane/Pane#
   ###
   transitionOut: (time = TRANS_OUT_TIME) ->
-    if @hidden
+    if not @canTransitionOut()
       Promise.rejected new TransitionCanceledExc "Transition Canceled
       because the pane is already hidden."
     else
