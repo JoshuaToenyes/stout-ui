@@ -7,8 +7,9 @@ tree-expanding-class:     expanding
 tree-collapsible-class:   collapsible
 tree-collapsed-class:     collapsed
 
-tree-item-collapse-time:  300ms
-tree-item-expand-time:    300ms
 tree-item-trans-in-time:  200ms
 tree-item-trans-out-time: 200ms
 tree-item-offset-time:    15ms
+
+tree-collapse-time:       200ms
+tree-expand-time:         400ms

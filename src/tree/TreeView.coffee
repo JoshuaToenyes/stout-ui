@@ -47,7 +47,24 @@ ITEM_TAG_NAME = vars.readPrefixed 'tree/tree-item-tag'
 ITEM_TRANS_IN_T = vars.readTime 'tree/tree-item-trans-in-time'
 ITEM_TRANS_OUT_T = vars.readTime 'tree/tree-item-trans-out-time'
 ITEM_OFFSET_T = vars.readTime 'tree/tree-item-offset-time'
-TREE_TRANS_T = vars.readTime 'tree/tree-item-collapse-time'
+
+
+###*
+# The time (in millseconds) a collapse operation should take.
+#
+# @type {number}
+# @const
+###
+COLLAPSE_T = vars.readTime 'tree/tree-collapse-time'
+
+
+###*
+# The time (in millseconds) an expand operation should take.
+#
+# @type {number}
+# @const
+###
+EXPAND_T = vars.readTime 'tree/tree-expand-time'
 
 
 ###*
@@ -68,50 +85,68 @@ module.exports = class TreeView extends InteractiveView
     @root.setAttribute 'role', 'list'
 
 
+  ###*
+  # Height-setting timer.
+  #
+  # @member _heightSettingTimer
+  # @memberof stout-ui/tree/TreeView
+  # @private
+  ###
+
+
   collapse: ->
     i = 0
     promises = []
-    @children.get(ITEM_TAG_NAME).reverse().every (item) ->
-      promises.push item.transitionOut(ITEM_TRANS_OUT_T, ++i * ITEM_OFFSET_T)
-      promises.push item.collapse()
-    Promise.all(promises).then => @setHeight 0
+
+    @getRenderedDimensions(null, ['height']).then (d) =>
+
+      @root.style.height = d.height + 'px'
+      @repaint()
+
+      # Transition out all children items in a ripple-like fashion.
+      @children.get(ITEM_TAG_NAME).reverse().every (item) ->
+        delay = ++i * ITEM_OFFSET_T
+        promises.push item.transitionOut(ITEM_TRANS_OUT_T, delay)
+
+      # Transition out this tree.
+      promises.push @transitionOut(COLLAPSE_T, ITEM_TRANS_OUT_T)
+
+      clearTimeout @_heightSettingTimer
+      @_heightSettingTimer = setTimeout =>
+        @root.style.height = '0'
+      , ITEM_TRANS_OUT_T
+
+      # Return a promise that resolves when the tree and all its children are
+      # collapsed and its height is set to zero.
+      Promise.all(promises)
 
 
+  ###*
+  #
+  #
+  ###
   expand: ->
+    # Clear existing collapsing timer.
+    clearTimeout @_heightSettingTimer
+
+    # Calculate the rendered height of this tree.
     @getRenderedDimensions(null, ['height']).then (d) =>
       i = 0
       promises = []
-      @setHeight(d.height)
+
+      @once 'transition:in', =>
+        @root.style.height = d.height + 'px'
+
+      # Transition-in all children.
       @children.get(ITEM_TAG_NAME).every (item) ->
-        delay = ++i * ITEM_OFFSET_T + TREE_TRANS_T / 2
+        delay = ++i * ITEM_OFFSET_T + ITEM_TRANS_IN_T / 2
         promises.push item.transitionIn(ITEM_TRANS_IN_T, delay)
-      Promise.all promises
 
+      promises.push @transitionIn(EXPAND_T)
 
-  setHeight: (h) ->
-    @root.style.height = h + 'px'
+      Promise.all(promises).then =>
+        @root.style.height = 'auto'
 
-
-
-  increaseHeight: (h) ->
-    ch = parseInt(@root.style.height)
-    @setHeight(ch + h)
-
-
-  reduceHeight: (h) ->
-    ch = parseInt(@root.style.height)
-    @setHeight(ch - h)
-
-
-  updateHeight: (h) ->
-    ch = parseInt(@root.style.height)
-    @setHeight(ch + h)
 
 
   toggle: ->
-
-
-  render: ->
-    super().then =>
-      @getRenderedDimensions().then (d) =>
-        @setHeight(d.height)

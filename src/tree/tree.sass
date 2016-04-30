@@ -32,8 +32,14 @@
 
 
   #{$tree}
-    +transition(all $tree-item-collapse-time)
     overflow: hidden
+
+  #{$tree}
+    +transitioning-in
+      +transition(height $tree-expand-time)
+
+    +transitioning-out
+      +transition(height $tree-collapse-time)
 
 
   #{$item}
@@ -49,7 +55,6 @@
 
     +transitioning-out
       +transition(all $tree-item-trans-out-time)
-      //+transform(translate(0.2em, -0.7em))
 
     +transitioning-in
       +transition(all $tree-item-trans-in-time)
@@ -73,8 +78,8 @@
 
 
   #{$collapsible} > svg
-    +transition(all 500ms)
-    +transform(rotate(90deg))
+    +transition(all $tree-expand-time)
+    +transform(rotate(90deg) translate3d(0,0,0))
     display: inline-block
     position: absolute
     left: 0
@@ -83,8 +88,8 @@
 
   #{$collapsed} > svg,
   #{$collapsing} > svg
+    +transition(all $tree-collapse-time $tree-item-trans-out-time)
     +transform(rotate(0deg))
-
 
   #{$collapsed} #{$tree}
     height: 0
