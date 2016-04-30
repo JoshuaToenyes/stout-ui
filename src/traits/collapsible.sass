@@ -1,0 +1,32 @@
+@import "vars/collapsible"
+@import "vars/component"
+@import "util/transitioning"
+
+
++exports("collapsible/collapsible")
+
+  // The "collapsible trigger" is the item which makes the "collapsible"
+  // component expand and contract.
+  $trigger:         ".#{$prefix}#{$collapsible-trigger-class}"
+
+  // The "collapsible" is the component that is actually expanding and
+  // contracting.
+  $collapsible:     ".#{$prefix}#{$collapsible-class}"
+
+  // A currently collapsed "collapsible" component.
+  $collapsed:       "#{$collapsible}.#{$prefix}#{$collapsible-collapsed-class}"
+
+
+  // Collapsible items should transition their height property.
+  #{$collapsible}
+    overflow: hidden
+    +transitioning-in
+      +transition(height $collapsible-expand-time)
+    +transitioning-out
+      +transition(height $collapsible-collapse-time)
+
+
+  // Totally hide hidden collapsible view.
+  #{$collapsed}:not(#{$trigger})
+    height: 0
+    display: none

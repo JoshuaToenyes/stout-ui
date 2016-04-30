@@ -2,7 +2,9 @@
 @import "util/exports"
 @import "typography/default"
 @import "vars/tree"
+@import "vars/collapsible"
 @import "vars/component"
+@import "traits/collapsible"
 @import "util/transitioning"
 @import "util/visibility"
 
@@ -11,10 +13,11 @@
   $tree:        ".#{$prefix}#{$tree-class}"
   $item:        ".#{$prefix}#{$tree-item-class}"
   $caret:       "#{$item} svg"
-  $collapsible: "#{$item}.#{$prefix}#{$tree-collapsible-class}"
-  $collapsed:   "#{$item}.#{$prefix}#{$tree-collapsed-class}"
-  $collapsing:  "#{$item}.#{$prefix}#{$tree-collapsing-class}"
-  $expanding:   "#{$item}.#{$prefix}#{$tree-expanding-class}"
+  $collapsible: "#{$item}.#{$prefix}#{$collapsible-class}"
+  $expanded:    "#{$item}.#{$prefix}#{$collapsible-expanded-class}"
+  $collapsed:   "#{$item}.#{$prefix}#{$collapsible-collapsed-class}"
+  $collapsing:  "#{$item}.#{$prefix}#{$collapsible-collapsing-class}"
+  $expanding:   "#{$item}.#{$prefix}#{$collapsible-expanding-class}"
 
   #{$prefix}#{$tree-tag},
   #{$prefix}#{$tree-item-tag}
@@ -30,18 +33,6 @@
     +visible
       display: block
 
-
-  #{$tree}
-    overflow: hidden
-
-  #{$tree}
-    +transitioning-in
-      +transition(height $tree-expand-time)
-
-    +transitioning-out
-      +transition(height $tree-collapse-time)
-
-
   #{$item}
     @extend %typography-body-1-b
     padding-left: 1em
@@ -54,10 +45,10 @@
       opacity: 1
 
     +transitioning-out
-      +transition(all $tree-item-trans-out-time)
+      +transition(all $collapsible-child-trans-out-time)
 
     +transitioning-in
-      +transition(all $tree-item-trans-in-time)
+      +transition(all $collapsible-child-trans-in-time)
       +transform(translate(0, 0))
       opacity: 1
 
@@ -76,21 +67,20 @@
     bottom: 0.06em
     display: none
 
-
   #{$collapsible} > svg
-    +transition(all $tree-expand-time)
-    +transform(rotate(90deg) translate3d(0,0,0))
+    +transition(all $collapsible-expand-time)
     display: inline-block
     position: absolute
     left: 0
     top: 0.62em
 
+  #{$expanded} > svg,
+  #{$expanding} > svg
+    +transform(rotate(90deg) translate3d(0,0,0))
+
+
 
   #{$collapsed} > svg,
   #{$collapsing} > svg
-    +transition(all $tree-collapse-time $tree-item-trans-out-time)
+    +transition(all $collapsible-collapse-time $collapsible-child-trans-out-time)
     +transform(rotate(0deg))
-
-  #{$collapsed} #{$tree}
-    height: 0
-    display: none

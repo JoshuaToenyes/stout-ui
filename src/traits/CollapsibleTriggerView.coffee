@@ -5,13 +5,16 @@
 #
 # @module stout-ui/traits/CollapsibleTriggerView
 ###
-Collapsible       = require './Collapsible'
-CollapsibleView   = require './CollapsibleView'
-Foundation        = require 'stout-core/base/Foundation'
-NotImplementedErr = require('stout-core/err').NotImplementedErr
-vars              = require '../vars'
+Collapsible              = require './Collapsible'
+CollapsibleView          = require './CollapsibleView'
+Foundation               = require 'stout-core/base/Foundation'
+HasCollapsibleStatesView = require './HasCollapsibleStatesView'
+NotImplementedErr        = require('stout-core/err').NotImplementedErr
+Promise                  = require 'stout-core/promise/Promise'
+vars                     = require '../vars'
 
 # Require shared input variables.
+require '../vars/component'
 require '../vars/collapsible'
 
 
@@ -21,7 +24,7 @@ require '../vars/collapsible'
 # @type {string}
 # @const
 ###
-COLLAPSIBLE = vars.read 'collapsible/collapsible-collapsible-class'
+COLLAPSIBLE = vars.read 'collapsible/collapsible-class'
 
 
 ###*
@@ -34,15 +37,6 @@ COLLAPSED_CLS = vars.read 'collapsible/collapsible-collapsed-class'
 
 
 ###*
-# Class added to the tree during a collapsing transition.
-#
-# @type {string}
-# @const
-###
-COLLAPSING_CLS = vars.read 'collapsible/collapsible-collapsing-class'
-
-
-###*
 # Class indicating that the item is currently expanded.
 #
 # @type {string}
@@ -52,35 +46,36 @@ EXPANDED_CLS = vars.read 'collapsible/collapsible-expanded-class'
 
 
 ###*
-# Class added to the tree during an expand transition.
+# Collapsible trigger class added to items which are collapsible triggers.
 #
 # @type {string}
 # @const
 ###
-EXPANDING_CLS = vars.read 'collapsible/collapsible-expanding-class'
+TRIGGER_CLS = vars.readPrefixed 'collapsible/collapsible-trigger-class'
 
 
 
 ###*
-#
+# The `CollapsibleTriggerView` view class is the view portion of a component
+# which can trigger the collapse/expansion of another `CollapsibleView`.
 #
 # @exports stout-ui/traits/CollapsibleTriggerView
 # @mixin
 ###
 module.exports = class CollapsibleTriggerView extends Foundation
 
-  @cloneProperty Collapsible, 'collapsible collapsed expanded
-  expanding collapsing'
-
+  @useTrait HasCollapsibleStatesView
 
   ###*
-  #
+  # Initiates this trait by adding the appropriate classes and event listeners.
   #
   # @method initTrait
   # @memberof stout-ui/traits/CollapsibleTriggerView#
   # @private
   ###
   initTrait: ->
+    @classes.add TRIGGER_CLS
+
     @on 'ready', @_onCollapsibleReady, @
 
     # Listen for touchstart/mouseup events to toggle the tree.
@@ -94,36 +89,39 @@ module.exports = class CollapsibleTriggerView extends Foundation
   # doesn't do any checking to determine if a collpase should be "allowed" or
   # not.
   #
+  # @param {boolean} now - Set to `true` to immediately collapse without
+  # animation.
+  #
   # @method _collapse
   # @memberof stout-ui/traits/CollapsibleTriggerView#
   # @private
   ###
-  _collapse: ->
-    @prefixedClasses.remove EXPANDING_CLS
-    @prefixedClasses.add COLLAPSING_CLS
-
-    @children.get(CollapsibleView).every (collapsible) =>
-      collapsible.collapse().then =>
-        @collapsed = true
-        @prefixedClasses.remove EXPANDING_CLS, COLLAPSING_CLS
-        @prefixedClasses.add COLLAPSED_CLS
+  _collapse: (now) ->
+    children = @children.get(CollapsibleView)
+    if children.length > 0
+      @_setCollapsingState 'collapsing'
+      children.every (collapsible) =>
+        collapsible.collapse(now).then =>
+          @_setCollapsingState 'collapsed'
 
 
   ###*
   # Expands child CollapsibleView's and their descendants. This method doesn't
   # do any checking to determine if an expand should be "allowed" or not.
   #
+  # @param {boolean} now - Set to `true` to immediately expand without
+  # animation.
+  #
   # @method _expand
   # @memberof stout-ui/traits/CollapsibleTriggerView#
   ###
-  _expand: ->
-    @prefixedClasses.remove COLLAPSED_CLS, COLLAPSING_CLS
-    @prefixedClasses.add EXPANDING_CLS
-
-    @children.get(CollapsibleView).every (collapsible) =>
-      collapsible.expand().then =>
-        @collapsed = false
-        @prefixedClasses.remove EXPANDING_CLS, COLLAPSING_CLS
+  _expand: (now) ->
+    children = @children.get(CollapsibleView)
+    if children.length > 0
+      @_setCollapsingState 'expanding'
+      children.every (collapsible) =>
+        collapsible.expand(now).then =>
+          @_setCollapsingState 'expanded'
 
 
   ###*
@@ -134,13 +132,12 @@ module.exports = class CollapsibleTriggerView extends Foundation
   # @private
   ###
   _onCollapsibleReady: ->
-
-    @prefixedClasses.remove COLLAPSIBLE, COLLAPSED_CLS
-
     if @children.get(CollapsibleView).length > 0 and @collapsible
-      if @collapsed then @_collapse()
+      if @collapsed
+        @_collapse(true)
+      else
+        @prefixedClasses.add EXPANDED_CLS
       @prefixedClasses.add COLLAPSIBLE
-
     if @collapsed and @collapsible
       @prefixedClasses.add COLLAPSED_CLS
 
@@ -153,7 +150,7 @@ module.exports = class CollapsibleTriggerView extends Foundation
   # @memberof stout-ui/traits/CollapsibleTriggerView#
   ###
   collapse: ->
-    if @collapsible and not @collapsed
+    if @collapsible and @expanded
       @_collapse()
     else
       Promise.fulfilled()
