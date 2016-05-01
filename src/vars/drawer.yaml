@@ -18,3 +18,9 @@ drawer-overlay-class:           drawer-overlay
 # The class applied to a drawer's parent element. This class allows the drawer
 # to dynamically apply transitions to it's parent container.
 drawer-parent-class:            drawer-parent
+
+# State classes for the drawer parent.
+drawer-parent-open-class:       drawer-open
+drawer-parent-closed-class:     drawer-closed
+drawer-parent-opening-class:    drawer-opening
+drawer-parent-closing-class:    drawer-closing

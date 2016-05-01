@@ -3,6 +3,7 @@
 #
 # @module stout-ui/drawer/DrawerView
 ###
+debouce  = require 'lodash/debounce'
 defaults = require 'lodash/defaults'
 Drawer   = require './Drawer'
 nextTick = require 'stout-client/util/nextTick'
@@ -24,12 +25,36 @@ DRAWER_CLS = vars.read 'drawer/drawer-class'
 
 
 ###*
+# The class added to the drawer when it's locked open.
+#
+# @const {string}
+# @private
+###
+DRAWER_LOCKED_CLS = vars.read 'drawer/drawer-locked-class'
+
+
+###*
 # Class name to add to the drawer's parent element for transitions.
 #
 # @const {string}
 # @private
 ###
 DRAWER_PARENT_CLS = vars.readPrefixed 'drawer/drawer-parent-class'
+
+
+DRAWER_P_OPEN_CLS = vars.readPrefixed 'drawer/drawer-parent-open-class'
+DRAWER_P_CLOSED_CLS = vars.readPrefixed 'drawer/drawer-parent-closed-class'
+DRAWER_P_OPENING_CLS = vars.readPrefixed 'drawer/drawer-parent-opening-class'
+DRAWER_P_CLOSING_CLS = vars.readPrefixed 'drawer/drawer-parent-closing-class'
+
+
+###*
+# The debounce time for window resizes to trigger drawer open/close.
+#
+# @const {number}
+# @private
+###
+RESIZE_DEBOUNCE = 100
 
 
 ###*
@@ -80,11 +105,18 @@ module.exports = class DrawerView extends PaneView
     @stream 'side', @_updateSizeAndPosition, @
     @_updateSizeAndPosition()
 
-    @addEventListenerTo window, 'resize', @_lockDrawer, @
+    debouncedLock = debouce =>
+      @_lockDrawer()
+    , RESIZE_DEBOUNCE
+
+    @addEventListenerTo window, 'resize', debouncedLock
 
     # Attach to view-model event signals.
     @context.on 'open', @open, @
     @context.on 'close', @close, @
+
+    @on 'transition:in', => @_setParentPadding(false)
+    @on 'transition:out', => @_setParentPadding(true)
 
   @cloneProperty Drawer, SYNCED_PROPS
 
@@ -103,9 +135,39 @@ module.exports = class DrawerView extends PaneView
 
     # If the window is of the minimum size, then lock open or close the drawer.
     if W >= @minWidth and H >= @minHeight
+      @prefixedClasses.add DRAWER_LOCKED_CLS
       @open()
     else
-      @close()
+      @close().then =>
+        @prefixedClasses.remove DRAWER_LOCKED_CLS
+
+
+  _setParentState: (state) ->
+    remove = [
+      DRAWER_P_OPEN_CLS
+      DRAWER_P_CLOSED_CLS
+      DRAWER_P_OPENING_CLS
+      DRAWER_P_CLOSING_CLS]
+    @parentEl.classList.remove(c) for c in remove
+    switch state
+      when 'open' then add = DRAWER_P_OPEN_CLS
+      when 'closed' then add = DRAWER_P_CLOSED_CLS
+      when 'opening' then add = DRAWER_P_OPENING_CLS
+      when 'closing' then add = DRAWER_P_CLOSING_CLS
+    @parentEl.classList.add add
+
+
+  _setParentPadding: (close) ->
+    prop = "padding-#{@side}"
+    if close
+      size = 0
+    else
+      if @side in ['left', 'right']
+        size = @root.style.width
+      else
+        size = @root.style.height
+      size = parseInt size
+    @parentEl.style[prop] = size + 'px'
 
 
   ###*
@@ -136,7 +198,12 @@ module.exports = class DrawerView extends PaneView
   # @method close
   # @memberof stout-ui/drawer/DrawerView#
   ###
-  close: => @transitionOut()
+  close: =>
+    if @canTransitionOut()
+      @_setParentState 'closing'
+      @transitionOut().then => @_setParentState 'closed'
+    else
+      Promise.rejected()
 
 
   ###*
@@ -145,7 +212,12 @@ module.exports = class DrawerView extends PaneView
   # @method open
   # @memberof stout-ui/drawer/DrawerView#
   ###
-  open: => @transitionIn()
+  open: =>
+    if @canTransitionIn()
+      @_setParentState 'opening'
+      @transitionIn().then => @_setParentState 'open'
+    else
+      Promise.rejected()
 
 
   ###*

@@ -3,12 +3,33 @@
 @import "util/component"
 @import "vars/drawer"
 @import "vars/component"
+@import "vars/pane"
 @import "whiteframe/whiteframe"
 @import "pane/pane"
 
 +exports("drawer/drawer")
 
   $drawer:          ".#{$prefix}#{$drawer-class}"
+  $locked:          "#{$drawer}.#{$prefix}#{$drawer-locked-class}"
+
   $drawer-parent:   ".#{$prefix}#{$drawer-parent-class}"
+  $open:            "#{$drawer-parent}.#{$prefix}#{$drawer-parent-open-class}"
+  $closed:          "#{$drawer-parent}.#{$prefix}#{$drawer-parent-closed-class}"
+  $opening:         "#{$drawer-parent}.#{$prefix}#{$drawer-parent-opening-class}"
+  $closing:         "#{$drawer-parent}.#{$prefix}#{$drawer-parent-closing-class}"
 
   +component($drawer-tag)
+
+  #{$locked}
+    box-shadow: none
+
+  #{$drawer-parent}
+    +transition-property(padding-top, padding-right, padding-bottom, padding-left)
+
+  #{$opening}
+    +transition-duration($pane-trans-in-time)
+    +transition-timing-function($ease-in-out-cubic)
+
+  #{$closing}
+    +transition-duration($pane-trans-out-time)
+    +transition-timing-function($ease-in-out-cubic)
