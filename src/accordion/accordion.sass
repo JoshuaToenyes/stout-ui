@@ -1,0 +1,89 @@
+@import "bourbon/bourbon"
+@import "util/exports"
+@import "typography/default"
+@import "vars/accordion"
+@import "vars/collapsible"
+@import "vars/component"
+@import "traits/collapsible"
+@import "util/component"
+@import "util/transitioning"
+@import "util/visibility"
+
++exports("accordion/accordion")
+
+  $accordion:   ".#{$prefix}#{$accordion-class}"
+  $item:        ".#{$prefix}#{$accordion-item-class}"
+
+  $trigger:     ".#{$prefix}#{$accordion-trigger-class}"
+
+  $caret:       "#{$trigger} svg"
+
+  $collapsible: "#{$trigger}.#{$prefix}#{$collapsible-class}"
+  $expanded:    "#{$trigger}.#{$prefix}#{$collapsible-expanded-class}"
+  $collapsed:   "#{$trigger}.#{$prefix}#{$collapsible-collapsed-class}"
+  $collapsing:  "#{$trigger}.#{$prefix}#{$collapsible-collapsing-class}"
+  $expanding:   "#{$trigger}.#{$prefix}#{$collapsible-expanding-class}"
+
+  +component($accordion-tag)
+  +component($accordion-item-tag)
+  +component($accordion-trigger-tag)
+  +component($accordion-content-tag)
+
+  #{$accordion},
+  #{$item}
+    position: relative
+    display: none
+
+    +visible
+      display: block
+
+  #{$item}
+    @extend %typography-body-1-b
+    +transform(translate(0, 0.4em))
+    margin: 0 0 1em
+    opacity: 0
+
+    .ui-contents
+      padding-left: 2em
+
+    +visible
+      +transform(translate(0, 0))
+      opacity: 1
+
+    +transitioning-out
+      +transition(all $collapsible-child-trans-out-time)
+
+    +transitioning-in
+      +transition(all $collapsible-child-trans-in-time)
+      +transform(translate(0, 0))
+      opacity: 1
+
+
+  #{$item} #{$item}
+    @extend %typography-body-1
+
+
+  #{$item} #{$item} #{$item}
+    @extend %typography-body-01
+
+
+  #{$caret}
+    height: +modular-scale(1)
+    position: relative
+    display: none
+
+  #{$collapsible} > svg
+    +transition(all $collapsible-expand-time)
+    display: inline-block
+    position: absolute
+    left: 0.3em
+    top: 0.2em
+
+  #{$expanded} > svg,
+  #{$expanding} > svg
+    +transform(rotate(-45deg) translate3d(0,0,0))
+
+  #{$collapsed} > svg,
+  #{$collapsing} > svg
+    +transition(all $collapsible-collapse-time $collapsible-child-trans-out-time)
+    +transform(rotate(0deg))

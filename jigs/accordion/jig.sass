@@ -1,0 +1,15 @@
+@import "../_blueprint/master.sass"
+@import "../../typography/default"
+@import "../../accordion/accordion"
+
+ui-accordion
+  //+transition(background 350ms)
+  background-color: #eee
+
+  ui-accordion-item
+    @extend %typography-body-1
+    margin: 0
+
+    a
+      text-decoration: none
+      color: $color-fg
