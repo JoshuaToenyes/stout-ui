@@ -73,10 +73,12 @@ module.exports = class CollapsibleTriggerView extends Foundation
   # @memberof stout-ui/traits/CollapsibleTriggerView#
   # @private
   ###
-  initTrait: ->
+  initTrait: (readyTarget) ->
     @classes.add TRIGGER_CLS
 
-    @on 'ready', @_onCollapsibleReady, @
+    readyTarget = @[readyTarget] or @
+
+    readyTarget.once 'ready', @_onCollapsibleReady, @
 
     # Listen for touchstart/mouseup events to toggle the tree.
     @on 'mouseup', (e) =>
@@ -97,12 +99,24 @@ module.exports = class CollapsibleTriggerView extends Foundation
   # @private
   ###
   _collapse: (now) ->
-    children = @children.get(CollapsibleView)
-    if children.length > 0
+    targets = @_getCollapseTargets()
+    if targets.length > 0
       @_setCollapsingState 'collapsing'
-      children.every (collapsible) =>
+      targets.every (collapsible) =>
         collapsible.collapse(now).then =>
           @_setCollapsingState 'collapsed'
+        .catch console.error
+
+
+  ###*
+  # Finds and returns the items which should be collapsed by this trigger.
+  #
+  # @method _getCollapseTargets
+  # @memberof stout-ui/traits/CollapsibleTriggerView#
+  # @protected
+  ###
+  _getCollapseTargets: ->
+    @children.get(CollapsibleView)
 
 
   ###*
@@ -116,12 +130,13 @@ module.exports = class CollapsibleTriggerView extends Foundation
   # @memberof stout-ui/traits/CollapsibleTriggerView#
   ###
   _expand: (now) ->
-    children = @children.get(CollapsibleView)
-    if children.length > 0
+    targets = @_getCollapseTargets()
+    if targets.length > 0
       @_setCollapsingState 'expanding'
-      children.every (collapsible) =>
+      targets.every (collapsible) =>
         collapsible.expand(now).then =>
           @_setCollapsingState 'expanded'
+        .catch console.error
 
 
   ###*
@@ -132,7 +147,7 @@ module.exports = class CollapsibleTriggerView extends Foundation
   # @private
   ###
   _onCollapsibleReady: ->
-    if @children.get(CollapsibleView).length > 0 and @collapsible
+    if @_getCollapseTargets().length > 0 and @collapsible
       if @collapsed
         @_collapse(true)
       else
