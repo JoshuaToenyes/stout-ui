@@ -53,6 +53,17 @@ PREFIX = vars.read 'component/prefix'
 
 
 ###*
+# Default styles to set when calculating component dimensions.
+#
+# @type Object<string, string>
+# @const
+###
+STYLE_DEFAULTS =
+  height: 'auto'
+  width: 'auto'
+
+
+###*
 # The class to add to components currently transitioning.
 #
 # @type string
@@ -454,12 +465,19 @@ module.exports = class ComponentView extends View
   # @method getRenderedDimensions
   # @memberof stout-ui/component/ComponentView#
   ###
-  getRenderedDimensions: (target, resetStyles = []) ->
+  getRenderedDimensions: (target, resetStyles = [], setStyles = {}) ->
     promise = new Promise
     target ?= @root
 
     savedStyles = {}
     resetStyles = resetStyles.concat ['position', 'left']
+    pv = @visible
+
+    calculateDimensions = =>
+      @_show()
+      d = target.getBoundingClientRect()
+      if not pv then @_hide()
+      d
 
     calcPositionOffScreen = =>
       style = @root.style
@@ -472,31 +490,33 @@ module.exports = class ComponentView extends View
       # Save specified styles.
       for r in resetStyles
         savedStyles[r] = style[r]
-        style[r] = ''
-
-      # Position off-screen.
-      style.position = 'fixed'
-      style.left = '-10000px'
-
-      # Move this component to directly under the body, so even if the parent
-      # is hidden we can still calculate the size of this object.
-      document.body.appendChild @root
-
-      pv = @visible
+        style[r] = setStyles[r] or STYLE_DEFAULTS[r] or ''
 
       # Calculate the dimensions.
-      @_show()
-      {width, height} = target.getBoundingClientRect()
-      if not pv then @_hide()
+      {width, height} = calculateDimensions()
+
+      # If we still have a zero height or width, move out of it's parent and
+      # recalculate.
+      if width is 0 or height is 0
+
+        # Move this component to directly under the body, so even if the parent
+        # is hidden we can still calculate the size of this object.
+        document.body.appendChild @root
+
+        # Position off-screen.
+        style.position = 'fixed'
+        style.left = '-10000px'
+
+        {width, height} = calculateDimensions()
+
+        if parent and nextSibling
+          parent.insertBefore @root, nextSibling
+        else if parent
+          parent.appendChild @root
 
       # Restore the original style and DOM position.
       for k, v of savedStyles
         style[k] = v
-
-      if parent and nextSibling
-        parent.insertBefore @root, nextSibling
-      else if parent
-        parent.appendChild @root
 
       Promise.fulfill promise, {width, height}
 
