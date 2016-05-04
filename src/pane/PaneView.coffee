@@ -182,7 +182,7 @@ module.exports = class PaneView extends ComponentView
   # @public
   ###
   setTransform: (params) ->
-    @root.style.transform = "matrix3d(#{params.join(',')})"
+    @root.style.transform = "matrix3d(#{params.join(',')}) "
     if @transition is 'zoom'
       @root.style.transform += " translate3d(-50%, -50%, 0)"
 
@@ -204,6 +204,7 @@ module.exports = class PaneView extends ComponentView
       @setDisplaySize()
       transitions[@transition].setupIn.call(@).then =>
         super(time).then =>
+          @root.style.transform = ''
           window.addEventListener 'resize', @_resizeHandler
 
 

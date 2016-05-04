@@ -54,7 +54,7 @@ positionOut = ->
   @getRenderedDimensions().then ({width, height}) =>
     [tx, ty] = calcOffscreen.call @, width, height
     p = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, tx, ty, 0, 1]
-    @root.style.transform = "matrix3d(#{p.join(',')})"
+    @setTransform p
 
 
 
@@ -72,7 +72,7 @@ module.exports =
   ###
   in: ->
     p = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
-    @root.style.transform = "matrix3d(#{p.join(',')})"
+    @setTransform p
 
 
   ###*
