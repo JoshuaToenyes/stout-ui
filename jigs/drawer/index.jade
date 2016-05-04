@@ -3,7 +3,7 @@ extends ../_blueprint/master.jade
 block content
 
   div
-    ui-drawer This is the drawer's content.
+    ui-drawer(id="drawer", min-width="768") This is the drawer's content.
       ui-tree
         
         ui-tree-item
@@ -29,4 +29,6 @@ block content
     
     .ex.basic
       .ex-label simple card
-    
+      ui-button(id="drawer-toggle", type="primary-flat") Toggle Drawer
+      p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc malesuada, lorem non hendrerit egestas, turpis enim fermentum felis, in tempor libero purus ut leo. Suspendisse varius interdum ante ut tincidunt. Maecenas mollis ipsum sed ipsum tincidunt, sit amet faucibus erat euismod. Nam odio sem, aliquam vitae vulputate non, venenatis quis dolor. Pellentesque id sodales magna. Etiam semper congue vulputate. Nulla facilisis feugiat facilisis. Suspendisse potenti. Mauris molestie odio a massa mollis, a aliquam nunc sodales. Maecenas consectetur mollis dolor, ac bibendum augue. Donec fermentum sem tortor, ac tincidunt lorem varius non. Sed varius ac sem at lobortis.
+      p Fusce condimentum est ac risus dignissim rutrum. Vestibulum egestas sapien vitae scelerisque accumsan. Quisque condimentum venenatis purus, ut scelerisque purus commodo quis. Praesent sollicitudin eget tortor congue rhoncus. Etiam lacinia, arcu ut suscipit sagittis, tellus orci euismod ex, in suscipit velit nisi sed eros. Pellentesque a nibh lacus. Sed volutpat ac felis vitae tincidunt. Etiam a metus elit. Suspendisse non nisl vel magna euismod interdum sed nec erat. Fusce sem quam, euismod sed nisi quis, auctor maximus massa. Aliquam pharetra eu nisl a facilisis.

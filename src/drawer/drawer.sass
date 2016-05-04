@@ -20,12 +20,16 @@
 
   +component($drawer-tag)
 
+  #{$drawer}:not(.#{$prefix}#{$transitioning})
+    +transition(box-shadow $pane-trans-in-time)
+
   #{$locked}
     box-shadow: none
 
   #{$drawer-parent}
     +transition-property(padding-top, padding-right, padding-bottom, padding-left)
 
+  #{$open},
   #{$opening}
     +transition-duration($pane-trans-in-time)
     +transition-timing-function($ease-in-out-cubic)

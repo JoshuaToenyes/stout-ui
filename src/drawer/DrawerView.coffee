@@ -63,7 +63,7 @@ RESIZE_DEBOUNCE = 100
 # @const {string}
 # @private
 ###
-SYNCED_PROPS = 'minWidth minHeight openBehavior side'
+SYNCED_PROPS = 'minWidth minHeight openBehavior side locked'
 
 
 ###*
@@ -94,7 +94,7 @@ module.exports = class DrawerView extends PaneView
     # Don't immediately show the view.
     @options.showOnRender = false
 
-    @syncProperty @context, SYNCED_PROPS
+    @syncProperty @context, SYNCED_PROPS, inherit: 'falsy'
 
     # Set the pane transition type.
     @transition = 'overlay'
@@ -114,9 +114,12 @@ module.exports = class DrawerView extends PaneView
     # Attach to view-model event signals.
     @context.on 'open', @open, @
     @context.on 'close', @close, @
+    @context.on 'toggle', @toggle, @
 
-    @on 'transition:in', => @_setParentPadding(false)
-    @on 'transition:out', => @_setParentPadding(true)
+    @on 'transition:in', =>
+      if @locked then @_setParentPadding(false)
+    @on 'transition:out', =>
+      @_setParentPadding(true)
 
   @cloneProperty Drawer, SYNCED_PROPS
 
@@ -136,10 +139,22 @@ module.exports = class DrawerView extends PaneView
     # If the window is of the minimum size, then lock open or close the drawer.
     if W >= @minWidth and H >= @minHeight
       @prefixedClasses.add DRAWER_LOCKED_CLS
-      @open()
-    else
+      @locked = true
+      if @hidden
+        @open()
+      else
+        @_setParentPadding(false)
+
+    # If the drawer was previously locked open, and we've decresed the window
+    # size, close the drawer.
+    else if @locked
+      @locked = false
       @close().then =>
         @prefixedClasses.remove DRAWER_LOCKED_CLS
+
+    else
+      @prefixedClasses.remove DRAWER_LOCKED_CLS
+      @locked = false
 
 
   _setParentState: (state) ->
@@ -157,16 +172,39 @@ module.exports = class DrawerView extends PaneView
     @parentEl.classList.add add
 
 
+  ###*
+  # Increase the max listener count prior to traits being initialized.
+  #
+  # @method _preTraitInit
+  # @memberof stout-ui/drawer/DrawerView#
+  # @private
+  ###
+  _preTraitInit: ->
+    @maxListenerCount 'change', 30
+
+
+
   _setParentPadding: (close) ->
     prop = "padding-#{@side}"
     if close
       size = 0
     else
+      computedStyle = getComputedStyle @root
+      cs = {}
+      cs[k] = parseInt(computedStyle[k]) for k in [
+        'width'
+        'height'
+        'paddingLeft'
+        'paddingRight'
+        'paddingTop'
+        'paddingBottom'
+      ]
+
       if @side in ['left', 'right']
-        size = @root.style.width
+        size = cs.width + cs.paddingLeft + cs.paddingRight
       else
-        size = @root.style.height
-      size = parseInt size
+        size = cs.height + cs.paddingTop + cs.paddingBottom
+
     @parentEl.style[prop] = size + 'px'
 
 
@@ -179,14 +217,22 @@ module.exports = class DrawerView extends PaneView
   # @private
   ###
   _updateSizeAndPosition: ->
+    # Reset all side positioning.
+    @root.style[s] = 'auto' for s in ['top', 'right', 'bottom', 'left']
+
     # Set the width and height based on the configured "side" where the drawer
     # should open. Drawer sizing should be adjusted by modifying the content.
     if @side in ['left', 'right']
       @height = 'full'
       @width = 'auto'
+      @root.style.top = '0'
     else
       @height = 'auto'
       @width = 'full'
+      @root.style.left = '0'
+
+    # Stick the drawer to the specified side.
+    @root.style[@side] = '0'
 
     # The drawer should slide in and out from the side it's attached to.
     @start = @end = @side
@@ -231,3 +277,13 @@ module.exports = class DrawerView extends PaneView
     super().then =>
       @parentEl.className += ' ' + DRAWER_PARENT_CLS
       @_lockDrawer()
+
+
+  ###*
+  # Toggles the drawer open/closed.
+  #
+  # @method toggle
+  # @memberof stout-ui/drawer/DrawerView#
+  ###
+  toggle: =>
+    if @visible then @close() else @open()

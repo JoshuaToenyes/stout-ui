@@ -18,7 +18,16 @@ Promise = require 'stout-core/promise/Promise'
 module.exports = class Drawer extends Pane
 
   constructor: (init, events = []) ->
-    super init, events.concat ['open', 'close']
+    super init, events.concat ['open', 'close', 'toggle']
+
+
+  ###*
+  # Indicates if this drawer is currently locked open.
+  #
+  # @member locked
+  # @memberof stout-ui/drawer/Drawer#
+  ###
+  @property 'locked'
 
 
   ###*
@@ -76,6 +85,18 @@ module.exports = class Drawer extends Pane
 
 
   ###*
+  # Closes the drawer.
+  #
+  # @method close
+  # @memberof stout-ui/drawer/Drawer#
+  ###
+  close: (e) =>
+    promise = new Promise
+    @fire 'close', {promise}
+    promise
+
+
+  ###*
   # Opens the drawer.
   #
   # @method open
@@ -88,12 +109,12 @@ module.exports = class Drawer extends Pane
 
 
   ###*
-  # Closes the drawer.
+  # Toggles the drawer.
   #
-  # @method close
+  # @method toggle
   # @memberof stout-ui/drawer/Drawer#
   ###
-  close: (e) =>
+  toggle: (e) =>
     promise = new Promise
-    @fire 'close', {promise}
+    @fire 'toggle', {promise}
     promise
