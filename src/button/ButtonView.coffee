@@ -27,6 +27,15 @@ BUTTON_CLS = vars.read 'button/button-class'
 
 
 ###*
+# Class added to buttons which include icons.
+# @type string
+# @const
+# @private
+###
+BUTTON_HAS_ICON_CLS = vars.read 'button/button-has-icon-class'
+
+
+###*
 # The button custom tag name.
 # @type string
 # @const
@@ -59,6 +68,8 @@ module.exports = class ButtonView extends InteractiveView
     @prefixedClasses.add BUTTON_CLS
     @prefixedClasses.add @size
     @prefixedClasses.add @type
+
+    if @hasIcon then @prefixedClasses.add BUTTON_HAS_ICON_CLS
 
     @on 'hide disable', => @unfill()
 
@@ -132,3 +143,16 @@ module.exports = class ButtonView extends InteractiveView
       'warn-flat'
       'danger-flat'
     ]
+
+
+  ###*
+  # Set to `true` to indicate that this button has an icon, and should be styled
+  # accordingly.
+  #
+  # @member {boolean} hasIcon
+  # @default false
+  # @memberof stout-ui/button/ButtonView#
+  ###
+  @property 'hasIcon',
+    default: false
+    type: 'boolean'

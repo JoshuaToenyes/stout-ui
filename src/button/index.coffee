@@ -16,7 +16,7 @@ parser.register TAG_NAME, ButtonView, Button, {contentsMember: 'label'}
 
 module.exports =
 
-  factory: (init) ->
+  create: (init) ->
     defaults init, {context: new Button}
     view = new ButtonView init
 

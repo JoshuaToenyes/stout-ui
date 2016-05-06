@@ -19,6 +19,8 @@
   $ink-container:   #{$prefix}ink-container
   $fill-container:  #{$prefix}fill-container
 
+  $has-icon:        #{$prefix}#{$button-has-icon-class}
+
   $final-outline-offset: 2px
 
   +keyframes(button-outline)
@@ -94,6 +96,8 @@
       .#{$indicator}
         +transition(background-color 400ms)
 
+    &.#{$has-icon} button
+      padding: $button-with-icon-padding
 
     // ## Button Styles
 
@@ -295,17 +299,41 @@
     &.#{$prefix}tiny button
       @extend %typography-control-001
 
+      svg
+        height: $button-tiny-icon-size
+        width: $button-tiny-icon-size
+
     &.#{$prefix}small button
       @extend %typography-control-01
+
+      svg
+        height: $button-small-icon-size
+        width: $button-small-icon-size
 
     button
       @extend %typography-control-1
 
+      svg
+        height: $button-normal-icon-size
+        width: $button-normal-icon-size
+
     &.#{$prefix}large button
       @extend %typography-control-2
+
+      svg
+        height: $button-large-icon-size
+        width: $button-large-icon-size
 
     &.#{$prefix}huge button
       @extend %typography-control-3
 
+      svg
+        height: $button-huge-icon-size
+        width: $button-huge-icon-size
+
     &.#{$prefix}massive button
       @extend %typography-control-4
+
+      svg
+        height: $button-massive-icon-size
+        width: $button-massive-icon-size

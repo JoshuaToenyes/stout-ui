@@ -1,6 +1,8 @@
 button-tag:                     button
 button-class:                   button !default
+button-has-icon-class:          has-icon
 button-padding:                 1em 1.3em !default
+button-with-icon-padding:       0.4em
 button-radius:                  1px !default
 button-shadow-size:             8px !default
 button-label-transition-time:   300ms !default
@@ -57,3 +59,10 @@ button-danger-shadow-focus:     rgba(black, 0.25) !default
 
 button-disabled-bg:             darken($color-ifg, 5%) !default
 button-disabled-fg:             lighten($color-fg, 55%) !default
+
+button-tiny-icon-size:          12px
+button-small-icon-size:         20px
+button-normal-icon-size:        30px
+button-large-icon-size:         40px
+button-huge-icon-size:          50px
+button-massive-icon-size:       60px

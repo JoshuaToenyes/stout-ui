@@ -1,4 +1,4 @@
-buttonFactory = require '../../button'
+button = require '../../button'
 parser = require 'stout-client/parser'
 
 
@@ -8,7 +8,7 @@ window.onload = ->
 
   # Size examples.
   for size in ['tiny', 'small', 'normal', 'large', 'huge', 'massive']
-    buttonFactory
+    button.create
       label: 'Make Reservation'
       parentEl: '.size-' + size
       size: size
@@ -19,7 +19,7 @@ window.onload = ->
 
 
   # Inverse button style example.
-  buttonFactory
+  button.create
     label: 'Confirm Order'
     parentEl: '.inverse'
     type: 'inverse'
@@ -29,7 +29,7 @@ window.onload = ->
   # Flat button styles
   for style in ['normal', 'primary', 'inverse', 'warn', 'danger']
 
-    buttonFactory
+    button.create
       label: style + ' flat button'
       parentEl: ".#{style}-flat"
       type: style + '-flat'
@@ -38,7 +38,7 @@ window.onload = ->
 
 
   # Primary button style example.
-  buttonFactory
+  button.create
     label: 'Place Order'
     parentEl: '.primary'
     type: 'primary'
@@ -47,7 +47,7 @@ window.onload = ->
 
 
   # Warn button style example.
-  buttonFactory
+  button.create
     label: 'Launch Missile'
     parentEl: '.warn'
     type: 'warn'
@@ -55,7 +55,7 @@ window.onload = ->
 
 
   # Danger button style example.
-  buttonFactory
+  button.create
     label: 'Delete Everything'
     parentEl: '.danger'
     type: 'danger'
@@ -65,13 +65,13 @@ window.onload = ->
   # Disabled button example.
   for style in ['normal', 'primary', 'inverse']
 
-    disabledButton = buttonFactory
+    disabledButton = button.create
       label: 'Button Disabled'
       parentEl: ".disabled-#{style} .subject"
       type: style
     disabledButton.disable().render()
 
-    buttonFactory
+    button.create
       label: 'Enable'
       size: 'tiny'
       parentEl: ".disabled-#{style} .controls"
@@ -80,7 +80,7 @@ window.onload = ->
       )(disabledButton)
     .render()
 
-    buttonFactory
+    button.create
       label: 'Disable'
       size: 'tiny'
       parentEl: ".disabled-#{style} .controls"
@@ -93,14 +93,14 @@ window.onload = ->
 
 
   # Show-hide example buttons.
-  showButtonEx = buttonFactory
+  showButtonEx = button.create
     label: 'Reveal Example'
     parentEl: '.show-hide .subject'
     type: 'primary'
     classes: 'show-hide-subject'
   showButtonEx.render()
 
-  buttonFactory
+  button.create
     label: 'Show'
     size: 'tiny'
     parentEl: '.show-hide .controls'
@@ -109,7 +109,7 @@ window.onload = ->
       showButtonEx.show()
   .render()
 
-  buttonFactory
+  button.create
     label: 'Hide'
     size: 'tiny'
     parentEl: '.show-hide .controls'
