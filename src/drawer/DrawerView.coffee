@@ -6,8 +6,10 @@
 debouce  = require 'lodash/debounce'
 defaults = require 'lodash/defaults'
 Drawer   = require './Drawer'
+isString = require 'lodash/isString'
 nextTick = require 'stout-client/util/nextTick'
 PaneView = require '../pane/PaneView'
+prefix   = require 'stout-client/util/prefix'
 Promise  = require 'stout-core/promise/Promise'
 vars     = require '../vars'
 
@@ -34,7 +36,16 @@ DRAWER_LOCKED_CLS = vars.read 'drawer/drawer-locked-class'
 
 
 ###*
-# Class name to add to the drawer's parent element for transitions.
+# Class name to add to the drawer's target element for transitions.
+#
+# @const {string}
+# @private
+###
+DRAWER_TARGET_CLS = vars.readPrefixed 'drawer/drawer-target-class'
+
+
+###*
+# Class name to add to the drawer's parent element to contain screen overflow.
 #
 # @const {string}
 # @private
@@ -42,10 +53,10 @@ DRAWER_LOCKED_CLS = vars.read 'drawer/drawer-locked-class'
 DRAWER_PARENT_CLS = vars.readPrefixed 'drawer/drawer-parent-class'
 
 
-DRAWER_P_OPEN_CLS = vars.readPrefixed 'drawer/drawer-parent-open-class'
-DRAWER_P_CLOSED_CLS = vars.readPrefixed 'drawer/drawer-parent-closed-class'
-DRAWER_P_OPENING_CLS = vars.readPrefixed 'drawer/drawer-parent-opening-class'
-DRAWER_P_CLOSING_CLS = vars.readPrefixed 'drawer/drawer-parent-closing-class'
+DRAWER_P_OPEN_CLS = vars.readPrefixed 'drawer/drawer-target-open-class'
+DRAWER_P_CLOSED_CLS = vars.readPrefixed 'drawer/drawer-target-closed-class'
+DRAWER_P_OPENING_CLS = vars.readPrefixed 'drawer/drawer-target-opening-class'
+DRAWER_P_CLOSING_CLS = vars.readPrefixed 'drawer/drawer-target-closing-class'
 
 
 ###*
@@ -100,6 +111,7 @@ module.exports = class DrawerView extends PaneView
     @transition = 'overlay'
 
     @prefixedClasses.add DRAWER_CLS
+    @prefixedClasses.add 'open-behavior-' + @openBehavior
 
     # Handle "side" changes
     @stream 'side', @_updateSizeAndPosition, @
@@ -116,12 +128,34 @@ module.exports = class DrawerView extends PaneView
     @context.on 'close', @close, @
     @context.on 'toggle', @toggle, @
 
-    @on 'transition:in', =>
-      if @locked then @_setParentPadding(false)
-    @on 'transition:out', =>
-      @_setParentPadding(true)
+    @on 'transition', @_offsetTarget, @
 
   @cloneProperty Drawer, SYNCED_PROPS
+
+
+  ###*
+  # The target content element which is offset by the drawer.
+  #
+  # @member target
+  # @memberof stout-ui/drawer/DrawerView#
+  ###
+  @property 'target',
+    set: (v) ->
+      if isString v
+        els = document.querySelector(v)
+        if els is null
+          null
+        else if els.length and els.length > 0
+          els[0]
+        else
+          els
+      else
+        v
+    get: (v) ->
+      if not v
+        @parentEl
+      else
+        v
 
 
   ###*
@@ -146,7 +180,7 @@ module.exports = class DrawerView extends PaneView
       if @hidden
         @open()
       else
-        @_setParentPadding(false)
+        @_offsetTarget(false)
 
     # If the drawer was previously locked open, and we've decresed the window
     # size, or the size of the viewport has increased past the maximum width
@@ -161,19 +195,19 @@ module.exports = class DrawerView extends PaneView
       @locked = false
 
 
-  _setParentState: (state) ->
+  _setTargetState: (state) ->
     remove = [
       DRAWER_P_OPEN_CLS
       DRAWER_P_CLOSED_CLS
       DRAWER_P_OPENING_CLS
       DRAWER_P_CLOSING_CLS]
-    @parentEl.classList.remove(c) for c in remove
+    @target.classList.remove(c) for c in remove
     switch state
       when 'open' then add = DRAWER_P_OPEN_CLS
       when 'closed' then add = DRAWER_P_CLOSED_CLS
       when 'opening' then add = DRAWER_P_OPENING_CLS
       when 'closing' then add = DRAWER_P_CLOSING_CLS
-    @parentEl.classList.add add
+    @target.classList.add add
 
 
   ###*
@@ -187,10 +221,17 @@ module.exports = class DrawerView extends PaneView
     @maxListenerCount 'change', 30
 
 
-
-  _setParentPadding: (close) ->
-    prop = "padding-#{@side}"
-    if close
+  ###*
+  # Offsets the drawer target (corresponding content container). Depending on
+  # the drawer behavior (overlay or push), the target's padding or transform
+  # is adjusted.
+  #
+  # @method _offsetTarget
+  # @memberof stout-ui/drawer/DrawerView#
+  # @private
+  ###
+  _offsetTarget: ->
+    if @transitioningOut
       size = 0
     else
       computedStyle = getComputedStyle @root
@@ -209,7 +250,22 @@ module.exports = class DrawerView extends PaneView
       else
         size = cs.height + cs.paddingTop + cs.paddingBottom
 
-    @parentEl.style[prop] = size + 'px'
+      # Invert size for negative translation.
+      if @openBehavior is 'push' and @side in ['right', 'bottom']
+        size = -size
+
+    if @side in ['top', 'bottom']
+      translateFunc = 'translateY'
+    else
+      translateFunc = 'translateX'
+
+    if @openBehavior is 'push'
+      t = if @transitioningOut then 'none' else "#{translateFunc}(#{size}px)"
+      prefix @target, 'transform', t
+      @target.style["padding-#{@side}"] = '0'
+    else
+      prefix @target, 'transform', 'none'
+      @target.style["padding-#{@side}"] = size + 'px'
 
 
   ###*
@@ -250,8 +306,8 @@ module.exports = class DrawerView extends PaneView
   ###
   close: =>
     if @canTransitionOut()
-      @_setParentState 'closing'
-      @transitionOut().then => @_setParentState 'closed'
+      @_setTargetState 'closing'
+      @transitionOut().then => @_setTargetState 'closed'
     else
       Promise.rejected()
 
@@ -264,8 +320,8 @@ module.exports = class DrawerView extends PaneView
   ###
   open: =>
     if @canTransitionIn()
-      @_setParentState 'opening'
-      @transitionIn().then => @_setParentState 'open'
+      @_setTargetState 'opening'
+      @transitionIn().then => @_setTargetState 'open'
     else
       Promise.rejected()
 
@@ -279,6 +335,7 @@ module.exports = class DrawerView extends PaneView
   ###
   render: ->
     super().then =>
+      @target.className += ' ' + DRAWER_TARGET_CLS
       @parentEl.className += ' ' + DRAWER_PARENT_CLS
       @_lockDrawer()
 

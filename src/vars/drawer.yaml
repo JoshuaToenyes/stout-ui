@@ -4,23 +4,27 @@ drawer-tag:                     drawer
 # Class name added to the drawer component.
 drawer-class:                   drawer
 
-# Locked-open drawers push-over the contents of it's parent so the drawer
+# Locked-open drawers push-over the contents of it's target so the drawer
 # appears to be a part of the content. Non-locked drawers appear to "slide-over"
-# or "push-over" the parent content.
+# or "push-over" the target content.
 drawer-locked-class:            drawer-locked
 
-# Added to the parent and drawer when the drawer opens with "push" behavior.
+# Added to the target and drawer when the drawer opens with "push" behavior.
 drawer-push-class:              drawer-push
 
-# Added to the parent and drawer when the drawer opens with "overlay" behavior.
+# Added to the target and drawer when the drawer opens with "overlay" behavior.
 drawer-overlay-class:           drawer-overlay
 
-# The class applied to a drawer's parent element. This class allows the drawer
-# to dynamically apply transitions to it's parent container.
+# The class applied to a drawer's target element. This class allows the drawer
+# to dynamically apply transitions to it's target container.
+drawer-target-class:            drawer-target
+
+# The class applied to a drawer's parent element. This class contains
+# pushed-open drawers, preventing horizontal scrolling
 drawer-parent-class:            drawer-parent
 
-# State classes for the drawer parent.
-drawer-parent-open-class:       drawer-open
-drawer-parent-closed-class:     drawer-closed
-drawer-parent-opening-class:    drawer-opening
-drawer-parent-closing-class:    drawer-closing
+# State classes for the drawer target.
+drawer-target-open-class:       drawer-open
+drawer-target-closed-class:     drawer-closed
+drawer-target-opening-class:    drawer-opening
+drawer-target-closing-class:    drawer-closing

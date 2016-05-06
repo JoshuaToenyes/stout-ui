@@ -1,6 +1,7 @@
 @import "bourbon/bourbon"
 @import "util/exports"
 @import "util/component"
+@import "util/transitioning"
 @import "vars/drawer"
 @import "vars/component"
 @import "vars/pane"
@@ -12,22 +13,31 @@
   $drawer:          ".#{$prefix}#{$drawer-class}"
   $locked:          "#{$drawer}.#{$prefix}#{$drawer-locked-class}"
 
+  $drawer-target:   ".#{$prefix}#{$drawer-target-class}"
   $drawer-parent:   ".#{$prefix}#{$drawer-parent-class}"
-  $open:            "#{$drawer-parent}.#{$prefix}#{$drawer-parent-open-class}"
-  $closed:          "#{$drawer-parent}.#{$prefix}#{$drawer-parent-closed-class}"
-  $opening:         "#{$drawer-parent}.#{$prefix}#{$drawer-parent-opening-class}"
-  $closing:         "#{$drawer-parent}.#{$prefix}#{$drawer-parent-closing-class}"
+
+  $open:            "#{$drawer-target}.#{$prefix}#{$drawer-target-open-class}"
+  $closed:          "#{$drawer-target}.#{$prefix}#{$drawer-target-closed-class}"
+  $opening:         "#{$drawer-target}.#{$prefix}#{$drawer-target-opening-class}"
+  $closing:         "#{$drawer-target}.#{$prefix}#{$drawer-target-closing-class}"
+
+  $push-behavior:   "#{$drawer}.#{$prefix}open-behavior-push"
 
   +component($drawer-tag)
 
   #{$drawer}:not(.#{$prefix}#{$transitioning})
     +transition(box-shadow $pane-trans-in-time)
 
-  #{$locked}
+  #{$locked},
+  #{$push-behavior}
     box-shadow: none
 
+  #{$drawer-target}
+    +transition-property(padding-top, padding-right, padding-bottom, padding-left, transform, -webkit-transform, -o-transform, -ms-transform, -moz-transform)
+
   #{$drawer-parent}
-    +transition-property(padding-top, padding-right, padding-bottom, padding-left)
+    overflow-x: hidden
+    max-width: 100%
 
   #{$open},
   #{$opening}
