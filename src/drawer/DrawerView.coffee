@@ -63,7 +63,7 @@ RESIZE_DEBOUNCE = 100
 # @const {string}
 # @private
 ###
-SYNCED_PROPS = 'minWidth minHeight openBehavior side locked'
+SYNCED_PROPS = 'maxHeight maxWidth minHeight minWidth openBehavior side locked'
 
 
 ###*
@@ -137,7 +137,10 @@ module.exports = class DrawerView extends PaneView
     H = window.innerHeight
 
     # If the window is of the minimum size, then lock open or close the drawer.
-    if W >= @minWidth and H >= @minHeight
+    if (@minWidth >= 0 and W >= @minWidth) or
+    (@minHeight >= 0 and H >= @minHeight) or
+    (@maxWidth >= 0 and W < @maxWidth) or
+    (@maxHeight >= 0 and H < @maxHeight)
       @prefixedClasses.add DRAWER_LOCKED_CLS
       @locked = true
       if @hidden
@@ -146,7 +149,8 @@ module.exports = class DrawerView extends PaneView
         @_setParentPadding(false)
 
     # If the drawer was previously locked open, and we've decresed the window
-    # size, close the drawer.
+    # size, or the size of the viewport has increased past the maximum width
+    # or height, then close the drawer.
     else if @locked
       @locked = false
       @close().then =>

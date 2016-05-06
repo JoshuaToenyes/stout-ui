@@ -20,6 +20,9 @@ module.exports = class Drawer extends Pane
   constructor: (init, events = []) ->
     super init, events.concat ['open', 'close', 'toggle']
 
+    # Increase the maximum listener count.
+    @maxListenerCount 'change', 30
+
 
   ###*
   # Indicates if this drawer is currently locked open.
@@ -31,13 +34,24 @@ module.exports = class Drawer extends Pane
 
 
   ###*
-  # The minimum width of the viewport for the drawer to "lock" open.
+  # When the height viewport is smaller than `maxHeight` the drawer will close.
   #
-  # @member minWidth
+  # @member maxHeight
   # @memberof stout-ui/drawer/Drawer#
   ###
-  @property 'minWidth',
-    default: 768
+  @property 'maxHeight',
+    default: -1
+    type: 'number'
+
+
+  ###*
+  # The maximum width of the viewport before the drawer will close.
+  #
+  # @member maxWidth
+  # @memberof stout-ui/drawer/Drawer#
+  ###
+  @property 'maxWidth',
+    default: -1
     type: 'number'
 
 
@@ -48,7 +62,18 @@ module.exports = class Drawer extends Pane
   # @memberof stout-ui/drawer/Drawer#
   ###
   @property 'minHeight',
-    default: 0
+    default: -1
+    type: 'number'
+
+
+  ###*
+  # The minimum width of the viewport for the drawer to "lock" open.
+  #
+  # @member minWidth
+  # @memberof stout-ui/drawer/Drawer#
+  ###
+  @property 'minWidth',
+    default: -1
     type: 'number'
 
 
