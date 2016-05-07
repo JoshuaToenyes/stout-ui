@@ -105,7 +105,7 @@ onMove = (e) ->
   if scrolling
     y = ypos(e)
     delta = reference - y
-    if Math.abs(delta) > 2
+    if Math.abs(delta) > 3
       reference = y
       scroll.call @, offset + delta
   e.preventDefault()
@@ -127,20 +127,24 @@ onWheel = (e) ->
 
 
 
+elastic = (y, limit) ->
+  # * x = distance from the edge
+  # * c = constant value, UIScrollView uses 0.55
+  # * d = dimension, either width or height
+  x = Math.abs(limit - y)
+  c = 0.55
+  d = refHeight
+  b = (1 - (1 / ((x * c / d) + 1.0))) * d
+  -b
+
+
 
 scroll = (y) ->
   if y > max
-    offset = max
+    #console.log elastic(y, max)
+    offset = y + elastic y, max
   else if y < min
-    # * x = distance from the edge
-    # * c = constant value, UIScrollView uses 0.55
-    # * d = dimension, either width or height
-    x = Math.abs(min - y)
-    c = 0.55
-    d = refHeight
-    b = (1 - (1 / ((x * c / d) + 1.0))) * d
-    offset = -b
-    #offset = min
+    offset = elastic y, min
   else
     offset = y
   prefix @root.firstChild, 'transform', "translateY(#{-offset}px)"
