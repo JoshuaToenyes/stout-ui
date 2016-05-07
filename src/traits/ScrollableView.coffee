@@ -56,10 +56,14 @@ offset = 0
 reference = 0
 
 
+refHeight = 0
+
+
 startScrolling = (e) ->
   scrolling = true
   reference = ypos e
-  max = parseInt(getComputedStyle(@root.firstChild).height) - window.innerHeight
+  refHeight = parseInt(getComputedStyle(@root.firstChild).height)
+  max = refHeight - window.innerHeight
 
 
 stopScrolling = ->
@@ -128,7 +132,15 @@ scroll = (y) ->
   if y > max
     offset = max
   else if y < min
-    offset = min
+    # * x = distance from the edge
+    # * c = constant value, UIScrollView uses 0.55
+    # * d = dimension, either width or height
+    x = Math.abs(min - y)
+    c = 0.55
+    d = refHeight
+    b = (1 - (1 / ((x * c / d) + 1.0))) * d
+    offset = -b
+    #offset = min
   else
     offset = y
   prefix @root.firstChild, 'transform', "translateY(#{-offset}px)"
