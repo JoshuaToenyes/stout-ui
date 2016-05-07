@@ -1,5 +1,5 @@
 # Custom tag name (prefix added at run time).
-content-tag:      drawer
+content-tag:      content
 
 # Class name added to the content component.
-content-class:    drawer
+content-class:    content

@@ -3,9 +3,11 @@
 #
 # @module stout-ui/content/ContentView
 ###
-ComponentView = require '../component/ComponentView'
-defaults      = require 'lodash/defaults'
-vars          = require '../vars'
+ComponentView   = require '../component/ComponentView'
+defaults        = require 'lodash/defaults'
+ScrollableView  = require '../traits/ScrollableView'
+template        = require './content.template'
+vars            = require '../vars'
 
 # Load content variables.
 require '../vars/content'
@@ -39,10 +41,13 @@ TAG_NAME = vars.readPrefixed 'content/content-tag'
 # @extends stout-ui/component/ComponentView
 # @constructor
 ###
-module.exports = class DrawerView extends ComponentView
+module.exports = class ContentView extends ComponentView
+
+  @useTrait ScrollableView
 
   constructor: (init, events) ->
-    defaults init, {tagName: TAG_NAME}
+    console.log 'making content view...', TAG_NAME
+    defaults init, {tagName: TAG_NAME, template}
     super arguments...
 
     @prefixedClasses.add CONTENT_CLS

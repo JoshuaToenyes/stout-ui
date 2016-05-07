@@ -1,0 +1,22 @@
+@import "bourbon/bourbon"
+@import "util/exports"
+@import "util/component"
+@import "vars/component"
+@import "vars/scrollable"
+
+
++exports("traits/scrollable")
+
+  $scrollable:    ".#{$prefix}#{$scrollable-class}"
+  $contents:      "#{$scrollable} > .#{$prefix}contents"
+
+  #{$scrollable},
+  #{$contents}
+    position: absolute
+    left: 0
+    top: 0
+
+  #{$scrollable}
+    height: 100%
+    width: 100%
+    overflow: hidden
