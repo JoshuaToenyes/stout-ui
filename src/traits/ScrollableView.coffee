@@ -106,6 +106,9 @@ TICK_INTERVAL = 30
 
 T_CONST = 325
 
+AMPLITUDE_CONST = 0.55
+MAX_EDGE_VELOCITY = 1000
+
 ###*
 # Start the view scrolling.
 #
@@ -155,8 +158,21 @@ stopScrolling = ->
 stopKineticScrolling = ->
   clearInterval scrollTicker
   if Math.abs(velocity) > 10
-    amplitude = 0.8 * velocity
+
+    amplitude = AMPLITUDE_CONST * velocity
     target = Math.round(offset + amplitude)
+
+    if target < min
+      target = min
+    else if target > max
+      target = max
+
+    if target is min or target is max
+      pv = velocity
+      velocity = Math.min Math.abs(velocity), MAX_EDGE_VELOCITY
+      if pv < 0 then velocity *= -1
+      amplitude = AMPLITUDE_CONST * velocity
+
     scrollTimestamp = Date.now()
     requestAnimationFrame => autoScroll.call @
 
@@ -165,9 +181,15 @@ autoScroll = ->
   if amplitude
     elapsed = Date.now() - scrollTimestamp
     delta = -amplitude * Math.exp(-elapsed / T_CONST)
+
     if Math.abs(delta) > 0.5
-      console.log target, delta, target + delta
-      scroll.call @, target + delta
+
+      if target is min or target is max
+        t = target - delta
+      else
+        t = target + delta
+
+      scroll.call @, t
       requestAnimationFrame => autoScroll.call @
     else
       scroll.call @, target
