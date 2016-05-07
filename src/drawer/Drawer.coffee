@@ -82,10 +82,10 @@ module.exports = class Drawer extends Pane
   # makes the drawer overlay the parent content, while the "push" behavior
   # "pushes" over the parent's content.
   #
-  # @member openBehavior
+  # @member behavior
   # @memberof stout-ui/drawer/Drawer#
   ###
-  @property 'openBehavior',
+  @property 'behavior',
     default: 'overlay'
     values: [
       'push'

@@ -45,12 +45,21 @@ DRAWER_TARGET_CLS = vars.readPrefixed 'drawer/drawer-target-class'
 
 
 ###*
-# Class name to add to the drawer's parent element to contain screen overflow.
+# Class name to add to the drawer's container element.
 #
 # @const {string}
 # @private
 ###
-DRAWER_PARENT_CLS = vars.readPrefixed 'drawer/drawer-parent-class'
+DRAWER_CONTAINER_CLS = vars.readPrefixed 'drawer/drawer-container-class'
+
+
+###*
+# Class name to add to the drawer's viewport element to contain screen overflow.
+#
+# @const {string}
+# @private
+###
+DRAWER_VIEWPORT_CLS = vars.readPrefixed 'drawer/drawer-viewport-class'
 
 
 DRAWER_P_OPEN_CLS = vars.readPrefixed 'drawer/drawer-target-open-class'
@@ -74,7 +83,7 @@ RESIZE_DEBOUNCE = 100
 # @const {string}
 # @private
 ###
-SYNCED_PROPS = 'maxHeight maxWidth minHeight minWidth openBehavior side locked'
+SYNCED_PROPS = 'maxHeight maxWidth minHeight minWidth behavior side locked'
 
 
 ###*
@@ -84,6 +93,25 @@ SYNCED_PROPS = 'maxHeight maxWidth minHeight minWidth openBehavior side locked'
 # @private
 ###
 TAG_NAME = vars.readPrefixed 'drawer/drawer-tag'
+
+
+###*
+# Helper to grab matching string query selectors, if a string is specified.
+#
+# @function selectorHelper
+# @inner
+###
+selectorHelper = (v) ->
+  if isString v
+    els = document.querySelector(v)
+    if els is null
+      null
+    else if els.length and els.length > 0
+      els[0]
+    else
+      els
+  else
+    v
 
 
 
@@ -102,20 +130,19 @@ module.exports = class DrawerView extends PaneView
     defaults init, {tagName: TAG_NAME}
     super arguments...
 
+    console.log @container, @viewport
+
     # Don't immediately show the view.
     @options.showOnRender = false
 
     @syncProperty @context, SYNCED_PROPS, inherit: 'falsy'
 
-    # Set the pane transition type.
-    @transition = 'overlay'
-
     @prefixedClasses.add DRAWER_CLS
-    @prefixedClasses.add 'open-behavior-' + @openBehavior
+    @prefixedClasses.add 'behavior-' + @behavior
 
     # Handle "side" changes
-    @stream 'side', @_updateSizeAndPosition, @
-    @_updateSizeAndPosition()
+    for s in 'side container target viewport'.split /\s+/
+      @stream s, @_setupDrawer, @
 
     debouncedLock = debouce =>
       @_lockDrawer()
@@ -134,28 +161,36 @@ module.exports = class DrawerView extends PaneView
 
 
   ###*
+  # The container element for "push" behavior.
+  #
+  # @member container
+  # @memberof stout-ui/drawer/DrawerView#
+  ###
+  @property 'container',
+    set: selectorHelper
+    get: (v) -> v or @parentEl
+
+
+  ###*
   # The target content element which is offset by the drawer.
   #
   # @member target
   # @memberof stout-ui/drawer/DrawerView#
   ###
   @property 'target',
-    set: (v) ->
-      if isString v
-        els = document.querySelector(v)
-        if els is null
-          null
-        else if els.length and els.length > 0
-          els[0]
-        else
-          els
-      else
-        v
-    get: (v) ->
-      if not v
-        @parentEl
-      else
-        v
+    set: selectorHelper
+    get: (v) -> v or @root.nextElementSibling
+
+
+  ###*
+  # The viewport container element for "push" behavior.
+  #
+  # @member viewport
+  # @memberof stout-ui/drawer/DrawerView#
+  ###
+  @property 'viewport',
+    set: selectorHelper
+    get: (v) -> v or @container.parentElement
 
 
   ###*
@@ -194,20 +229,27 @@ module.exports = class DrawerView extends PaneView
       @prefixedClasses.remove DRAWER_LOCKED_CLS
       @locked = false
 
+    if @locked
+      @transition = 'overlay'
+    else if @behavior is 'push'
+      @transition = 'fade'
 
-  _setTargetState: (state) ->
+
+  _setElementClasses: (state) ->
     remove = [
       DRAWER_P_OPEN_CLS
       DRAWER_P_CLOSED_CLS
       DRAWER_P_OPENING_CLS
       DRAWER_P_CLOSING_CLS]
     @target.classList.remove(c) for c in remove
+    @container.classList.remove(c) for c in remove
     switch state
       when 'open' then add = DRAWER_P_OPEN_CLS
       when 'closed' then add = DRAWER_P_CLOSED_CLS
       when 'opening' then add = DRAWER_P_OPENING_CLS
       when 'closing' then add = DRAWER_P_CLOSING_CLS
     @target.classList.add add
+    @container.classList.add add
 
 
   ###*
@@ -251,7 +293,7 @@ module.exports = class DrawerView extends PaneView
         size = cs.height + cs.paddingTop + cs.paddingBottom
 
       # Invert size for negative translation.
-      if @openBehavior is 'push' and @side in ['right', 'bottom']
+      if @behavior is 'push' and @side in ['right', 'bottom']
         size = -size
 
     if @side in ['top', 'bottom']
@@ -259,12 +301,13 @@ module.exports = class DrawerView extends PaneView
     else
       translateFunc = 'translateX'
 
-    if @openBehavior is 'push'
+    # Handle moving the appropriate containers.
+    if @behavior is 'push'
       t = if @transitioningOut then 'none' else "#{translateFunc}(#{size}px)"
-      prefix @target, 'transform', t
-      @target.style["padding-#{@side}"] = '0'
+      prefix @container, 'transform', t
+      #@container.style["padding-#{@side}"] = '0'
     else
-      prefix @target, 'transform', 'none'
+      #prefix @target, 'transform', 'none'
       @target.style["padding-#{@side}"] = size + 'px'
 
 
@@ -272,11 +315,11 @@ module.exports = class DrawerView extends PaneView
   # Updates the size and position of the drawer based on configured "size"
   # property.
   #
-  # @method _updateSizeAndPosition
+  # @method _setupDrawer
   # @memberof stout-ui/drawer/DrawerView#
   # @private
   ###
-  _updateSizeAndPosition: ->
+  _setupDrawer: ->
     # Reset all side positioning.
     @root.style[s] = 'auto' for s in ['top', 'right', 'bottom', 'left']
 
@@ -297,6 +340,24 @@ module.exports = class DrawerView extends PaneView
     # The drawer should slide in and out from the side it's attached to.
     @start = @end = @side
 
+    # Set the pane transition type.
+    if @behavior is 'push'
+      @transition = 'fade'
+      @getRenderedDimensions().then (d) =>
+        @root.style.left = -d.width + 'px'
+    else
+      @transition = 'overlay'
+
+    # Set initial classes.
+    @target.classList.add DRAWER_TARGET_CLS
+
+    if @behavior is 'push'
+      @container.classList.add DRAWER_CONTAINER_CLS
+      @viewport.classList.add DRAWER_VIEWPORT_CLS
+    else
+      @container.classList.remove DRAWER_CONTAINER_CLS
+      @viewport.classList.remove DRAWER_VIEWPORT_CLS
+
 
   ###*
   # Closes the drawer.
@@ -306,8 +367,8 @@ module.exports = class DrawerView extends PaneView
   ###
   close: =>
     if @canTransitionOut()
-      @_setTargetState 'closing'
-      @transitionOut().then => @_setTargetState 'closed'
+      @_setElementClasses 'closing'
+      @transitionOut().then => @_setElementClasses 'closed'
     else
       Promise.rejected()
 
@@ -320,8 +381,8 @@ module.exports = class DrawerView extends PaneView
   ###
   open: =>
     if @canTransitionIn()
-      @_setTargetState 'opening'
-      @transitionIn().then => @_setTargetState 'open'
+      @_setElementClasses 'opening'
+      @transitionIn().then => @_setElementClasses 'open'
     else
       Promise.rejected()
 
@@ -335,8 +396,7 @@ module.exports = class DrawerView extends PaneView
   ###
   render: ->
     super().then =>
-      @target.className += ' ' + DRAWER_TARGET_CLS
-      @parentEl.className += ' ' + DRAWER_PARENT_CLS
+      @_setupDrawer()
       @_lockDrawer()
 
 

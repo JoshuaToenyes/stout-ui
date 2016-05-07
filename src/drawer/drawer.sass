@@ -10,40 +10,60 @@
 
 +exports("drawer/drawer")
 
-  $drawer:          ".#{$prefix}#{$drawer-class}"
-  $locked:          "#{$drawer}.#{$prefix}#{$drawer-locked-class}"
+  $drawer:                 ".#{$prefix}#{$drawer-class}"
+  $locked:                 "#{$drawer}.#{$prefix}#{$drawer-locked-class}"
 
-  $drawer-target:   ".#{$prefix}#{$drawer-target-class}"
-  $drawer-parent:   ".#{$prefix}#{$drawer-parent-class}"
+  $drawer-target:          ".#{$prefix}#{$drawer-target-class}"
+  $drawer-container:       ".#{$prefix}#{$drawer-container-class}"
+  $drawer-viewport:        ".#{$prefix}#{$drawer-viewport-class}"
 
-  $open:            "#{$drawer-target}.#{$prefix}#{$drawer-target-open-class}"
-  $closed:          "#{$drawer-target}.#{$prefix}#{$drawer-target-closed-class}"
-  $opening:         "#{$drawer-target}.#{$prefix}#{$drawer-target-opening-class}"
-  $closing:         "#{$drawer-target}.#{$prefix}#{$drawer-target-closing-class}"
+  $open-target:            "#{$drawer-target}.#{$prefix}#{$drawer-target-open-class}"
+  $closed-target:          "#{$drawer-target}.#{$prefix}#{$drawer-target-closed-class}"
+  $opening-target:         "#{$drawer-target}.#{$prefix}#{$drawer-target-opening-class}"
+  $closing-target:         "#{$drawer-target}.#{$prefix}#{$drawer-target-closing-class}"
 
-  $push-behavior:   "#{$drawer}.#{$prefix}open-behavior-push"
+  $open-container:         "#{$drawer-container}.#{$prefix}#{$drawer-target-open-class}"
+  $closed-container:       "#{$drawer-container}.#{$prefix}#{$drawer-target-closed-class}"
+  $opening-container:      "#{$drawer-container}.#{$prefix}#{$drawer-target-opening-class}"
+  $closing-container:      "#{$drawer-container}.#{$prefix}#{$drawer-target-closing-class}"
+
+  $push-behavior:   "#{$drawer}.#{$prefix}behavior-push"
+
 
   +component($drawer-tag)
 
+
   #{$drawer}:not(.#{$prefix}#{$transitioning})
     +transition(box-shadow $pane-trans-in-time)
+
 
   #{$locked},
   #{$push-behavior}
     box-shadow: none
 
-  #{$drawer-target}
-    +transition-property(padding-top, padding-right, padding-bottom, padding-left, transform, -webkit-transform, -o-transform, -ms-transform, -moz-transform)
 
-  #{$drawer-parent}
+  #{$drawer-target}
+    +transition-property(padding-top, padding-right, padding-bottom, padding-left)
+
+
+  #{$drawer-container}
+    +transition-property(transform, -webkit-transform, -o-transform, -ms-transform, -moz-transform)
+
+
+  #{$drawer-viewport}
     overflow-x: hidden
     max-width: 100%
 
-  #{$open},
-  #{$opening}
+
+  #{$open-container},
+  #{$opening-container},
+  #{$open-target},
+  #{$opening-target}
     +transition-duration($pane-trans-in-time)
     +transition-timing-function($ease-in-out-cubic)
 
-  #{$closing}
+
+  #{$closing-container},
+  #{$closing-target}
     +transition-duration($pane-trans-out-time)
     +transition-timing-function($ease-in-out-cubic)

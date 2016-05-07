@@ -19,9 +19,12 @@ drawer-overlay-class:           drawer-overlay
 # to dynamically apply transitions to it's target container.
 drawer-target-class:            drawer-target
 
-# The class applied to a drawer's parent element. This class contains
-# pushed-open drawers, preventing horizontal scrolling
-drawer-parent-class:            drawer-parent
+# The class applied to a drawer's container element.
+drawer-container-class:         drawer-container
+
+# The viewport contains the drawer and target element. It also prevents the
+# contents from sliding off-screen if using the "push" behavior.
+drawer-viewport-class:          drawer-viewport
 
 # State classes for the drawer target.
 drawer-target-open-class:       drawer-open
