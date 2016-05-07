@@ -31,6 +31,12 @@ SCROLLABLE_CLS = vars.readPrefixed 'scrollable/scrollable-class'
 scrolling = false
 
 
+wheelTimer = null
+
+
+WHEEL_TIME = 100
+
+
 ###*
 # Maximum scrollable height.
 #
@@ -50,15 +56,23 @@ offset = 0
 reference = 0
 
 
+startScrolling = (e) ->
+  scrolling = true
+  reference = ypos e
+  max = parseInt(getComputedStyle(@root.firstChild).height) - window.innerHeight
+
+
+stopScrolling = ->
+  scrolling = false
+
+
 ###*
 # `touchstart` handler for scrollable view.
 #
 #
 ###
 onTouchStart = (e) ->
-  scrolling = true
-  reference = ypos e
-  max = parseInt(getComputedStyle(@root.firstChild).height) - window.innerHeight
+  startScrolling.call @, e
   e.preventDefault()
   e.stopPropagation()
   return
@@ -71,7 +85,7 @@ onTouchStart = (e) ->
 #
 ###
 onTouchEnd = (e) ->
-  scrolling = false
+  stopScrolling()
   e.preventDefault()
   e.stopPropagation()
   return
@@ -83,7 +97,7 @@ onTouchEnd = (e) ->
 #
 #
 ###
-onTouchMove = (e) ->
+onMove = (e) ->
   if scrolling
     y = ypos(e)
     delta = reference - y
@@ -93,6 +107,20 @@ onTouchMove = (e) ->
   e.preventDefault()
   e.stopPropagation()
   return
+
+
+
+onWheel = (e) ->
+  if wheelTimer then clearTimeout wheelTimer
+
+  if not scrolling then startScrolling.call @, e
+
+  wheelTimer = setTimeout ->
+    stopScrolling()
+  , WHEEL_TIME
+
+  onMove.call @, e
+
 
 
 
@@ -106,7 +134,12 @@ scroll = (y) ->
   prefix @root.firstChild, 'transform', "translateY(#{-offset}px)"
 
 
-ypos = (e) -> e.targetTouches[0].clientY
+
+ypos = (e) ->
+  if e.targetTouches
+    e.targetTouches[0].clientY
+  else if e instanceof WheelEvent
+    reference - e.deltaY
 
 
 
@@ -131,4 +164,5 @@ module.exports = class ScrollableView extends Foundation
     @classes.add SCROLLABLE_CLS
     @addEventListener 'touchstart', onTouchStart, @
     @addEventListener 'touchend', onTouchEnd, @
-    @addEventListener 'touchmove', onTouchMove, @
+    @addEventListener 'touchmove', onMove, @
+    @addEventListener 'wheel', onWheel, @
