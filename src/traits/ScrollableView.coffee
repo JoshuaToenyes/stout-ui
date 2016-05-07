@@ -90,6 +90,22 @@ reference = 0
 refHeight = 0
 
 
+velocity = 0
+
+amplitude = 0
+
+frame = 0
+
+target = 0
+
+scrollTimestamp = null
+
+scrollTicker = null
+
+TICK_INTERVAL = 30
+
+T_CONST = 325
+
 ###*
 # Start the view scrolling.
 #
@@ -106,6 +122,25 @@ startScrolling = (e) ->
   return
 
 
+startKineticScrolling = ->
+  velocity = amplitude = 0
+  frame = offset
+  scrollTimestamp = Date.now()
+  clearInterval scrollTicker
+  scrollTicker = setInterval track, TICK_INTERVAL
+
+
+track = ->
+  now = Date.now()
+  elapsed = now - scrollTimestamp
+  scrollTimestamp = now
+  delta = offset - frame
+  frame = offset
+  v = 1000 * delta / (1 + elapsed)
+  velocity = 0.8 * v + 0.2 * velocity
+
+
+
 ###*
 # Stops view scrolling.
 #
@@ -114,6 +149,28 @@ startScrolling = (e) ->
 ###
 stopScrolling = ->
   scrolling = false
+
+
+
+stopKineticScrolling = ->
+  clearInterval scrollTicker
+  if Math.abs(velocity) > 10
+    amplitude = 0.8 * velocity
+    target = Math.round(offset + amplitude)
+    scrollTimestamp = Date.now()
+    requestAnimationFrame => autoScroll.call @
+
+
+autoScroll = ->
+  if amplitude
+    elapsed = Date.now() - scrollTimestamp
+    delta = -amplitude * Math.exp(-elapsed / T_CONST)
+    if Math.abs(delta) > 0.5
+      console.log target, delta, target + delta
+      scroll.call @, target + delta
+      requestAnimationFrame => autoScroll.call @
+    else
+      scroll.call @, target
 
 
 ###*
@@ -125,6 +182,7 @@ stopScrolling = ->
 ###
 onTouchStart = (e) ->
   startScrolling.call @, e
+  startKineticScrolling.call @
   e.preventDefault()
   e.stopPropagation()
   return
@@ -138,7 +196,8 @@ onTouchStart = (e) ->
 # @function onTouchEnd
 ###
 onTouchEnd = (e) ->
-  stopScrolling()
+  stopScrolling.call @
+  stopKineticScrolling.call @
   e.preventDefault()
   e.stopPropagation()
   return
