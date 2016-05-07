@@ -106,8 +106,9 @@ TICK_INTERVAL = 30
 
 T_CONST = 325
 
-AMPLITUDE_CONST = 0.55
-MAX_EDGE_VELOCITY = 1000
+ELASTIC_CONST = 0.55
+AMPLITUDE_CONST = 0.7
+MAX_EDGE_VELOCITY = 450
 
 ###*
 # Start the view scrolling.
@@ -157,24 +158,23 @@ stopScrolling = ->
 
 stopKineticScrolling = ->
   clearInterval scrollTicker
-  if Math.abs(velocity) > 10
 
+  amplitude = AMPLITUDE_CONST * velocity
+  target = Math.round(offset + amplitude)
+
+  if target < min
+    target = min
+  else if target > max
+    target = max
+
+  if target is min or target is max
+    pv = velocity
+    velocity = Math.min Math.abs(velocity), MAX_EDGE_VELOCITY
+    if pv < 0 then velocity *= -1
     amplitude = AMPLITUDE_CONST * velocity
-    target = Math.round(offset + amplitude)
 
-    if target < min
-      target = min
-    else if target > max
-      target = max
-
-    if target is min or target is max
-      pv = velocity
-      velocity = Math.min Math.abs(velocity), MAX_EDGE_VELOCITY
-      if pv < 0 then velocity *= -1
-      amplitude = AMPLITUDE_CONST * velocity
-
-    scrollTimestamp = Date.now()
-    requestAnimationFrame => autoScroll.call @
+  scrollTimestamp = Date.now()
+  requestAnimationFrame => autoScroll.call @
 
 
 autoScroll = ->
@@ -255,8 +255,14 @@ onMove = (e) ->
 ###
 onWheel = (e) ->
   if wheelTimer then clearTimeout wheelTimer
-  if not scrolling then startScrolling.call @, e
-  wheelTimer = setTimeout (-> stopScrolling.call @), WHEEL_TIME
+  if not scrolling
+    startScrolling.call @, e
+    startKineticScrolling.call @, e
+  wheelTimer = setTimeout =>
+    onMove.call @, e
+    stopScrolling.call @
+    stopKineticScrolling.call @
+  , WHEEL_TIME
   onMove.call @, e
 
 
@@ -278,7 +284,7 @@ elastic = (y, limit) ->
   # * c = constant value, UIScrollView uses 0.55
   # * d = dimension, either width or height
   x = Math.abs(limit - y)
-  c = 0.55
+  c = ELASTIC_CONST
   d = refHeight
   b = (1 - (1 / ((x * c / d) + 1.0))) * d
   -b
