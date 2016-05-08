@@ -1,0 +1,16 @@
+extends ../_blueprint/master.jade
+
+block content
+
+  h1.ex-title Placeholders
+  
+  .ex-heading Viewport
+  p The viewport placeholder defines an absolutely positioned element that, 
+    | expands to fill its parent. The viewport's contents will scroll natively 
+    | by default.
+  
+  .ex.viewport.last
+    .ex-label viewport 
+
+    .viewport
+      include ../_dummy/alice.html 

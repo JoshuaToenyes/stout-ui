@@ -16,6 +16,7 @@ module.exports = (config) ->
   gulp.task 'clean:jigs', false, ->
     del [
       config.path.jig + '/**/*.html'
+      '!' + config.path.jig + '/_dummy/*.html'
       config.path.jig + '/**/*.js'
       config.path.jig + '/**/*.js.map'
       config.path.jig + '/**/*.css'

@@ -1,12 +1,18 @@
-@import "typography/default.sass"
+@import "../../util/reset"
+@import "typography/default"
+@import "placeholder/container"
+
 
 $example-fg: #272f32
 
 .wrapper
-  max-width: 42em
+  @extend %container
   margin: 0 auto 0
+  max-width: 62em
+  min-height: 100vh
+  padding: 0 10em
   text-align: left
-  padding: 0 0.5em 2em
+
 
 h1.ex-title
   @extend %typography-display-5
@@ -37,16 +43,16 @@ hr
   color: lighten($example-fg, 10%)
 
 .ex-label
+  @extend %container
   @extend %typography-caption-1
   opacity: 0.5
   position: absolute
-  width: 100%
-  height: 100%
+  width: 20rem
   text-align: right
-  left: -104%
+  left: -20rem
   top: 0
   padding-right: 1em
   line-height: 145%
 
 .controls .ui-button
-    margin: 1em 0.5em 0 0
+  margin: 1em 0.5em 0 0
