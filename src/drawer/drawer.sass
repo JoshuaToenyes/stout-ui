@@ -1,4 +1,5 @@
 @import "bourbon/bourbon"
+@import "placeholder/viewport"
 @import "util/exports"
 @import "util/component"
 @import "util/transitioning"
@@ -42,13 +43,18 @@
     box-shadow: none
 
 
+  #{$drawer-target},
+  #{$drawer-container}
+    @extend %viewport
+
+
   #{$drawer-target}
     +transition-property(padding-top, padding-right, padding-bottom, padding-left)
-    position: relative
 
 
   #{$drawer-container}
     +transition-property(top, right, bottom, left, transform, -webkit-transform, -o-transform, -ms-transform, -moz-transform)
+    overflow: visible
 
 
   #{$drawer-viewport}

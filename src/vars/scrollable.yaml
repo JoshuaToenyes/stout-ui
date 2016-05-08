@@ -1,2 +1,3 @@
 # Class name added to scrollable container.
-scrollable-class:   scrollable
+scrollable-class:           scrollable
+scrollable-viewport-class:  scrollable-viewport

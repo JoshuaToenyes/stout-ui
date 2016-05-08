@@ -9,3 +9,10 @@
 +exports("content/content")
 
   +component($content-tag)
+
+  $content:           ".#{$prefix}#{$content-class}"
+  $scrolling-area:    "#{$content} .#{$prefix}contents"
+
+
+  #{$scrolling-area}
+    backface-visibility: hidden

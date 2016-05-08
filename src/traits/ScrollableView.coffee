@@ -21,6 +21,15 @@ SCROLLABLE_CLS = vars.readPrefixed 'scrollable/scrollable-class'
 
 
 ###*
+# The class applied to the scrollable's viewport area.
+#
+# @const {string}
+# @private
+###
+VIEWPORT_CLS = vars.readPrefixed 'scrollable/scrollable-viewport-class'
+
+
+###*
 # Inner boolean flag indicating that scrolling is in-progress. Only one is
 # required because the user isn't able to scroll multiple scollables
 # simultaneously.
@@ -44,7 +53,7 @@ wheelTimer = null
 # @const {number}
 # @inner
 ###
-WHEEL_TIME = 100
+WHEEL_TIME = 30
 
 
 ###*
@@ -121,7 +130,7 @@ MAX_EDGE_VELOCITY = 450
 startScrolling = (e) ->
   scrolling = true
   reference = ypos e
-  refHeight = parseInt(getComputedStyle(@root.firstChild).height)
+  refHeight = parseInt(getComputedStyle(@viewport.firstChild).height)
   max = refHeight - window.innerHeight
   return
 
@@ -237,7 +246,7 @@ onMove = (e) ->
   if scrolling
     y = ypos(e)
     delta = reference - y
-    if Math.abs(delta) > 3
+    if Math.abs(delta) > 2
       reference = y
       scroll.call @, offset + delta
   e.preventDefault()
@@ -306,7 +315,7 @@ scroll = (y) ->
     offset = elastic y, min
   else
     offset = y
-  prefix @root.firstChild, 'transform', "translateY(#{-offset}px)"
+  prefix @viewport.firstChild, 'transform', "translateY(#{-offset}px)"
   return
 
 
@@ -333,6 +342,10 @@ ypos = (e) ->
 ###
 module.exports = class ScrollableView extends Foundation
 
+  @property 'viewport',
+    get: ->
+      @select(".#{VIEWPORT_CLS}") or @root
+
 
   ###*
   # Initialize this trait ...
@@ -343,6 +356,7 @@ module.exports = class ScrollableView extends Foundation
   ###
   initTrait: ->
     @classes.add SCROLLABLE_CLS
+    @viewClasses.scrollableViewport = VIEWPORT_CLS
     @addEventListener 'touchstart', onTouchStart, @
     @addEventListener 'touchend', onTouchEnd, @
     @addEventListener 'touchmove', onMove, @
