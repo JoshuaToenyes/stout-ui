@@ -44,10 +44,11 @@
 
   #{$drawer-target}
     +transition-property(padding-top, padding-right, padding-bottom, padding-left)
+    position: relative
 
 
   #{$drawer-container}
-    +transition-property(transform, -webkit-transform, -o-transform, -ms-transform, -moz-transform)
+    +transition-property(top, right, bottom, left, transform, -webkit-transform, -o-transform, -ms-transform, -moz-transform)
 
 
   #{$drawer-viewport}

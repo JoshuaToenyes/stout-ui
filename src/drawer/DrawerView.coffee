@@ -229,10 +229,10 @@ module.exports = class DrawerView extends PaneView
       @prefixedClasses.remove DRAWER_LOCKED_CLS
       @locked = false
 
-    if @locked
-      @transition = 'overlay'
-    else if @behavior is 'push'
-      @transition = 'fade'
+    # if @locked
+    #   @transition = 'overlay'
+    # else if @behavior is 'push'
+    #   @transition = 'fade'
 
 
   _setElementClasses: (state) ->
@@ -301,13 +301,23 @@ module.exports = class DrawerView extends PaneView
     else
       translateFunc = 'translateX'
 
+    switch @side
+      when 'top' then oppositeSide = 'bottom'
+      when 'right' then oppositeSide = 'left'
+      when 'bottom' then oppositeSide = 'top'
+      when 'left' then oppositeSide = 'right'
+
     # Handle moving the appropriate containers.
     if @behavior is 'push'
       t = if @transitioningOut then 'none' else "#{translateFunc}(#{size}px)"
       prefix @container, 'transform', t
-      #@container.style["padding-#{@side}"] = '0'
+
+      if @locked
+        @target.style["padding-#{oppositeSide}"] = size + 'px'
+      else
+        @target.style["padding-#{oppositeSide}"] = '0'
+
     else
-      #prefix @target, 'transform', 'none'
       @target.style["padding-#{@side}"] = size + 'px'
 
 
