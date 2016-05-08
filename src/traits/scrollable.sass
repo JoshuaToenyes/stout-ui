@@ -13,11 +13,16 @@
   $contents:      "#{$viewport} > .#{$prefix}contents"
 
   #{$contents}
+    +filter(blur(0))
+    backface-visibility: hidden
     position: absolute
     left: 0
     top: 0
-    height: 100%
-    width: 100%
+    height: auto
+    min-height: 100%
+    min-width: 100%
+    width: auto
+
 
   #{$scrollable}
 

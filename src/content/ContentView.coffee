@@ -46,7 +46,6 @@ module.exports = class ContentView extends ComponentView
   @useTrait ScrollableView
 
   constructor: (init, events) ->
-    console.log 'making content view...', TAG_NAME
     defaults init, {tagName: TAG_NAME, template}
     super arguments...
 

@@ -119,6 +119,13 @@ ELASTIC_CONST = 0.55
 AMPLITUDE_CONST = 0.7
 MAX_EDGE_VELOCITY = 450
 
+
+getScrollableContainer = (el) ->
+  while not el.classList.contains SCROLLABLE_CLS
+    el = el.parentElement
+  el
+
+
 ###*
 # Start the view scrolling.
 #
@@ -131,7 +138,13 @@ startScrolling = (e) ->
   scrolling = true
   reference = ypos e
   refHeight = parseInt(getComputedStyle(@viewport.firstChild).height)
-  max = refHeight - window.innerHeight
+
+  container = getScrollableContainer(@viewport)
+  viewportCS = getComputedStyle(container)
+  paddingTop = parseInt(viewportCS.paddingTop)
+  paddingBottom = parseInt(viewportCS.paddingBottom)
+
+  max = refHeight - container.offsetHeight + paddingTop + paddingBottom
   return
 
 
