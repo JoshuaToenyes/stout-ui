@@ -9,12 +9,15 @@ $emphasisFontStack: Baskerville, 'Baskerville Old Face', 'Hoefler Text', Garamon
 
 // Large, Bold Display Fonts
 
-$font-display-6:   normal normal 700 #{+modular-scale(6)}/#{+modular-scale(1)} $standardFontStack !default
-$font-display-5:   normal normal 700 #{+modular-scale(5)}/#{+modular-scale(1)} $standardFontStack !default
-$font-display-4:   normal normal 400 #{+modular-scale(4)}/#{+modular-scale(1)} $standardFontStack !default
-$font-display-3:   normal normal 400 #{+modular-scale(3)}/#{+modular-scale(1)} $standardFontStack !default
-$font-display-2:   normal normal 400 #{+modular-scale(2)}/#{+modular-scale(1)} $standardFontStack !default
-$font-display-1:   normal normal 700 #{+modular-scale(1)}/#{+modular-scale(1)} $standardFontStack !default
+$font-display-9:   normal normal 700 #{+modular-scale(6)}/#{+modular-scale(1)} $standardFontStack !default
+$font-display-8:   normal normal 700 #{+modular-scale(4)}/#{+modular-scale(1)} $standardFontStack !default
+$font-display-7:   normal normal 400 #{+modular-scale(4)}/#{+modular-scale(1)} $standardFontStack !default
+$font-display-6:   normal normal 400 #{+modular-scale(4)}/#{+modular-scale(1)} $standardFontStack !default
+$font-display-5:   normal normal 400 #{+modular-scale(3)}/#{+modular-scale(1)} $standardFontStack !default
+$font-display-4:   normal normal 400 #{+modular-scale(2)}/#{+modular-scale(1)} $standardFontStack !default
+$font-display-3:   normal normal 400 #{+modular-scale(1)}/#{+modular-scale(1)} $standardFontStack !default
+$font-display-2:   normal normal 700 #{+modular-scale(0)}/#{+modular-scale(1)} $standardFontStack !default
+$font-display-1:   normal normal 700 #{+modular-scale(-1)}/#{+modular-scale(1)} $standardFontStack !default
 
 
 // Lead Paragraph Fonts
@@ -160,6 +163,8 @@ $font-control-001: normal normal 500 0.7em/120% $standardFontStack !default
 
 %typography-display-2
   font: $font-display-2
+  text-transform: uppercase
+  margin-top: #{+modular-scale(1)}
 
 %typography-display-1
   font: $font-display-1

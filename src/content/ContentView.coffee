@@ -43,7 +43,7 @@ TAG_NAME = vars.readPrefixed 'content/content-tag'
 ###
 module.exports = class ContentView extends ComponentView
 
-  @useTrait ScrollableView
+  #@useTrait ScrollableView
 
   constructor: (init, events) ->
     defaults init, {tagName: TAG_NAME, template}
