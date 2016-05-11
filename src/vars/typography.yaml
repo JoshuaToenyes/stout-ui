@@ -1,0 +1,8 @@
+# Typography Margins
+typography-margin-display:          "#{+modular-scale(0)} 0 #{+modular-scale(-1)}"
+typography-margin-lead:             "#{+modular-scale(1)} 0"
+typography-margin-body:             "#{+modular-scale(0)} 0"
+
+# Block code margin.
+typography-margin-figure:           "#{+modular-scale(0)} 0"
+typography-margin-figure-code:      "$typography-margin-figure"

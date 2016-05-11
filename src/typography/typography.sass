@@ -1,0 +1,78 @@
+@import "bourbon/bourbon"
+@import "fonts"
+@import "vars/typography"
+
+
+/// Sets up the common typographic features and settings.
+///
+/// @param {String} $type [proportional] - The type of typography to set up,
+/// either proportional of monospaced.
+///
+/// @output Common typographic styling and features for the passed type.
+///
+/// @group typography
+/// @access private
+=typography-common($type: proportional)
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+  @if $type != mono
+    +hyphens(auto)
+    +font-feature-settings("pnum", "kern", "liga")
+
+
+/// Typography for large display blocks, like headings.
+///
+/// @param {String} $level - The font level or display size.
+///
+/// @group typography
+/// @access public
+=typography-display($level)
+  +font-display($level)
+  +typography-common(proportional)
+  margin: $typography-margin-display
+
+
+/// Typography for lead paragraphs.
+///
+/// @param {String} $level - The font level or display size.
+///
+/// @group typography
+/// @access public
+=typography-lead($level)
+  +font-lead($level)
+  +typography-common(proportional)
+  margin: $typography-margin-lead
+
+
+/// Typography for body copy.
+///
+/// @param {String} $level - The font level or display size.
+///
+/// @group typography
+/// @access public
+=typography-body($level)
+  +font-body($level)
+  +typography-common(proportional)
+  margin: $typography-margin-body
+
+
+/// Typography for monospaced copy.
+///
+/// @param {String} $level - The font level or display size.
+///
+/// @group typography
+/// @access public
+=typography-mono($level)
+  +font-mono($level)
+  +typography-common(mono)
+
+
+/// Typography for controls.
+///
+/// @param {String} $level - The font level or display size.
+///
+/// @group typography
+/// @access public
+=typography-control($level)
+  +font-control($level)
+  +typography-common(proportional)

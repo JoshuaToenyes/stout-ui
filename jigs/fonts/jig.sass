@@ -1,0 +1,72 @@
+@import "../_blueprint/master.sass"
+@import "typography/fonts"
+
+body
+  +linear-gradient(to bottom, rgba(red, 0.4) 0, rgba(white, 0) 1px)
+  background-color: transparent
+  background-repeat: repeat-y
+  background-size: 100% 1rem
+
+// Generate classes to illustrate all fonts using the below loops.
+
+// Display Fonts
+$i: 6
+@while $i > 0
+  .font-display-#{$i}
+    +font-display($i)
+    //+ellipsis
+  $i: $i - 1
+
+
+// Lead Paragraph Fonts
+$i: 6
+@while $i > 0
+  .font-lead-#{$i}
+    +font-lead($i)
+    //+ellipsis
+  $i: $i - 1
+
+
+// Body Fonts
+$i: 6
+@while $i > 0
+  .font-body-#{$i}
+    +font-body($i)
+    //+ellipsis
+  $i: $i - 1
+
+
+// Emphasis Fonts
+$i: 6
+@while $i > 0
+  .font-emphasis-#{$i}
+    +font-emphasis($i)
+    //+ellipsis
+  $i: $i - 1
+
+
+// Monospaced Paragraph Fonts
+$i: 6
+@while $i > 0
+  .font-mono-#{$i}
+    +font-mono($i)
+    //+ellipsis
+  $i: $i - 1
+
+
+// Caption Fonts
+$i: 6
+@while $i > 0
+  .font-caption-#{$i}
+    +font-caption($i)
+    //+ellipsis
+  $i: $i - 1
+
+
+// Lead Paragraph Fonts
+$i: 6
+@while $i > 0
+  .font-control-#{$i}
+    +font-control($i)
+    //+ellipsis
+  $i: $i - 1

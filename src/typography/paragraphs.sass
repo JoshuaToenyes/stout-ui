@@ -1,13 +1,16 @@
+@import "bourbon/bourbon"
+@import "../colors/default"
 @import "./default"
+@import "util/exports"
 
-p
-  @extend %typography-body-1
 
-  em
-    @extend %typography-body-em
++exports("typography/default/paragraphs")
 
-  strong, b
-    @extend %typography-body-1-b
+  p
+    @extend %typography-body-1
 
-  code
-    @extend %typography-pre-1
+    em
+      @extend %typography-body-em
+
+    strong, b
+      @extend %typography-body-1-b

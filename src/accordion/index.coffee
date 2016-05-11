@@ -8,6 +8,7 @@ AccordionItemView    = require './AccordionItemView'
 AccordionTriggerView = require './AccordionTriggerView'
 AccordionView        = require './AccordionView'
 defaults             = require 'lodash/defaults'
+namespace            = require '../util/namespace'
 Interactive          = require '../interactive/Interactive'
 InteractiveView      = require '../interactive/InteractiveView'
 parser               = require 'stout-client/parser'
@@ -24,7 +25,7 @@ parser.register ACCORDION_ITEM_TAG_NAME, AccordionItemView, Interactive
 parser.register ACCORDION_TRIGGER_TAG_NAME, AccordionTriggerView, Interactive
 parser.register ACCORDION_CONTENT_TAG_NAME, AccordionContentView, Interactive
 
-module.exports = (init) ->
+accordion =
 
   factory: (init = {}) ->
     defaults init, {context: new Interactive}
@@ -44,3 +45,7 @@ module.exports = (init) ->
 
     # Return the accordion item.
     item
+
+namespace '$stout.ui.accordion', accordion
+
+module.exports = accordion

@@ -1,0 +1,25 @@
+
+@import "bourbon/bourbon"
+@import "../colors/default"
+@import "./default"
+@import "util/exports"
+
+
++exports("typography/default/code")
+
+  $bg: darken($color-bg, 5%)
+
+  code
+    @extend %typography-pre-1
+    background: $bg
+    border: 1px solid darken($color-bg, 10%)
+    border-radius: 3px
+    -webkit-box-decoration-break: clone
+    -moz-box-decoration-break: clone
+    -ms-box-decoration-break: clone
+    -o-box-decoration-break: clone
+    box-decoration-break: clone
+    display: inline-block
+    font-size: 85%
+    padding: 0 0.2em
+    white-space: normal
