@@ -2,11 +2,14 @@
 @import "vars/fonts"
 
 
-=typeset($font-size, $line-height, $cap-height, $margin-bottom, $pad-top, $pad-bottom)
+=typeset($font-size, $line-height, $cap-height)
   $baseline-shift: $font-size * ($line-height - $cap-height * $font-size) / 2rem + 0.00001rem
+  $baseline-push: round($font-size) - $baseline-shift
   padding-top: $baseline-shift - floor($baseline-shift)
-  margin-bottom: $margin-bottom - $baseline-shift
-  padding-bottom: $pad-bottom
+  @if $baseline-push > 0
+    margin-bottom: $baseline-push - floor($baseline-push)
+  @else
+    margin-bottom: ceil(-$baseline-push) + $baseline-push
 
 
 =typeset-container
