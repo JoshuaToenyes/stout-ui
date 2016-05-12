@@ -1,13 +1,5 @@
-html {
-  font-size: 8px;
-}
-
-body {
-  font-size: 2em;
-}
-
 // -- Base Variables --
-$font-root: 2rem;
+$font-root: 1rem;
 
 
 
@@ -20,20 +12,6 @@ $font-root: 2rem;
 $font-stack-default:     Roboto, Helvetica, Arial, sans-serif;
 $font-stack-mono:        'Andale Mono', AndaleMono, 'Lucida Console', 'Lucida Sans Typewriter', monospace;
 $font-stack-emphasis:    Baskerville, 'Baskerville Old Face', 'Hoefler Text', Garamond, 'Times New Roman', serif;
-
-
-
-
-// -- Cap Height Values --
-
-$font-stack-display-cap-height:    0.72;
-$font-stack-lead-cap-height:       $font-stack-display-cap-height;
-$font-stack-body-cap-height:       $font-stack-display-cap-height;
-$font-stack-emphasis-cap-height:   0.66;
-$font-stack-strong-cap-height:     0.66;
-$font-stack-mono-cap-height:       0.66;
-$font-stack-caption-cap-height:    $font-stack-display-cap-height;
-$font-stack-control-cap-height:    $font-stack-display-cap-height;
 
 
 
@@ -51,67 +29,47 @@ $font-stack-control:     $font-stack-default;
 
 
 
+// -- Baseline Shifts --
+$font-default-baseline-shift: 0.2;
+
+
+
 
 // -- Display Fonts --
 
 $font-display-alpha: (
-  style:        normal,
-  weight:       900,
-  variant:      normal,
-  size:         +modular-scale(4, $font-root),
-  line-height:  7rem,
-  family:       $font-stack-display,
-  cap-height:   $font-stack-display-cap-height - 0.02
+  weight:         900,
+  size:           +modular-scale(4, $font-root),
+  family:         $font-stack-display,
+  line-height:    3,
+  top:            0,
 );
 
 $font-display-beta: (
-  style:        normal,
-  weight:       700,
-  variant:      normal,
-  size:         +modular-scale(3, $font-root),
-  line-height:  5rem,
-  family:       $font-stack-display,
-  cap-height:   $font-stack-display-cap-height
+  weight:         700,
+  size:           +modular-scale(3, $font-root),
+  family:         $font-stack-display,
+  top:            0,
 );
 
 $font-display-gamma: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
-  size:         +modular-scale(2, $font-root),
-  line-height:  2 * $font-root,
-  family:       $font-stack-display,
-  cap-height:   $font-stack-display-cap-height - 0.04
+  size:           +modular-scale(2, $font-root),
+  family:         $font-stack-display,
 );
 
 $font-display-delta: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
-  size:         +modular-scale(1, $font-root),
-  line-height:  2 * $font-root,
-  family:       $font-stack-display,
-  cap-height:   $font-stack-display-cap-height - 0.06
+  size:           +modular-scale(1, $font-root),
+  family:         $font-stack-display,
 );
 
 $font-display-epsilon: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
-  size:         +modular-scale(0, $font-root),
-  line-height:  3rem,
-  family:       $font-stack-display,
-  cap-height:   $font-stack-display-cap-height - 0.1
+  size:           +modular-scale(0, $font-root),
+  family:         $font-stack-display,
 );
 
 $font-display-zeta: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
-  size:         +modular-scale(-1, $font-root),
-  line-height:  2rem,
-  family:       $font-stack-display,
-  cap-height:   $font-stack-display-cap-height + 0.1
+  size:           +modular-scale(-1, $font-root),
+  family:         $font-stack-display,
 );
 
 $font-display: (
@@ -129,63 +87,37 @@ $font-display: (
 // -- Lead Fonts --
 
 $font-lead-alpha: (
-  style:        normal,
   weight:       700,
-  variant:      normal,
   size:         +modular-scale(2, $font-root),
-  line-height:  5rem,
   family:       $font-stack-lead,
-  cap-height:   $font-stack-lead-cap-height
 );
 
 $font-lead-beta: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(2, $font-root),
-  line-height:  5rem,
   family:       $font-stack-lead,
-  cap-height:   $font-stack-lead-cap-height
 );
 
 $font-lead-gamma: (
-  style:        normal,
   weight:       300,
-  variant:      normal,
   size:         +modular-scale(2, $font-root),
-  line-height:  5rem,
   family:       $font-stack-lead,
-  cap-height:   $font-stack-lead-cap-height
 );
 
 $font-lead-delta: (
-  style:        normal,
   weight:       700,
-  variant:      normal,
   size:         +modular-scale(1, $font-root),
-  line-height:  4rem,
   family:       $font-stack-lead,
-  cap-height:   $font-stack-lead-cap-height - 0.1
 );
 
 $font-lead-epsilon: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(1, $font-root),
-  line-height:  4rem,
   family:       $font-stack-lead,
-  cap-height:   $font-stack-lead-cap-height - 0.1
 );
 
 $font-lead-zeta: (
-  style:        normal,
   weight:       300,
-  variant:      normal,
   size:         +modular-scale(1, $font-root),
-  line-height:  4rem,
   family:       $font-stack-lead,
-  cap-height:   $font-stack-lead-cap-height - 0.1
 );
 
 $font-lead: (
@@ -202,63 +134,36 @@ $font-lead: (
 // -- Body Fonts --
 
 $font-body-alpha: (
-  style:        normal,
   weight:       700,
-  variant:      normal,
   size:         +modular-scale(1, $font-root),
-  line-height:  4rem,
   family:       $font-stack-body,
-  cap-height:   $font-stack-body-cap-height
 );
 
 $font-body-beta: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(1, $font-root),
-  line-height:  4rem,
   family:       $font-stack-body,
-  cap-height:   $font-stack-body-cap-height
 );
 
 $font-body-gamma: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  3rem,
   family:       $font-stack-body,
-  cap-height:   $font-stack-body-cap-height
 );
 
 $font-body-delta: (
-  style:        normal,
   weight:       300,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  3rem,
   family:       $font-stack-body,
-  cap-height:   $font-stack-body-cap-height
 );
 
 $font-body-epsilon: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(-1, $font-root),
-  line-height:  2rem,
   family:       $font-stack-body,
-  cap-height:   $font-stack-body-cap-height
 );
 
 $font-body-zeta: (
-  style:        normal,
   weight:       300,
-  variant:      normal,
   size:         +modular-scale(-1, $font-root),
-  line-height:  2rem,
   family:       $font-stack-body,
-  cap-height:   $font-stack-body-cap-height
 );
 
 $font-body: (
@@ -275,63 +180,33 @@ $font-body: (
 // -- Emphasis Fonts --
 
 $font-emphasis-alpha: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-emphasis,
-  cap-height:   $font-stack-emphasis-cap-height
 );
 
 $font-emphasis-beta: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-emphasis,
-  cap-height:   $font-stack-emphasis-cap-height
 );
 
 $font-emphasis-gamma: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-emphasis,
-  cap-height:   $font-stack-emphasis-cap-height
 );
 
 $font-emphasis-delta: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-emphasis,
-  cap-height:   $font-stack-emphasis-cap-height
 );
 
 $font-emphasis-epsilon: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-emphasis,
-  cap-height:   $font-stack-emphasis-cap-height
 );
 
 $font-emphasis-zeta: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-emphasis,
-  cap-height:   $font-stack-emphasis-cap-height
 );
 
 $font-emphasis: (
@@ -348,63 +223,33 @@ $font-emphasis: (
 // -- Strong Fonts --
 
 $font-strong-alpha: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-strong,
-  cap-height:   $font-stack-strong-cap-height
 );
 
 $font-strong-beta: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-strong,
-  cap-height:   $font-stack-strong-cap-height
 );
 
 $font-strong-gamma: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-strong,
-  cap-height:   $font-stack-strong-cap-height
 );
 
 $font-strong-delta: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-strong,
-  cap-height:   $font-stack-strong-cap-height
 );
 
 $font-strong-epsilon: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-strong,
-  cap-height:   $font-stack-strong-cap-height
 );
 
 $font-strong-zeta: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-strong,
-  cap-height:   $font-stack-strong-cap-height
 );
 
 $font-strong: (
@@ -421,63 +266,33 @@ $font-strong: (
 // Monospaced Fonts;
 
 $font-mono-alpha: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-mono,
-  cap-height:   $font-stack-mono-cap-height
 );
 
 $font-mono-beta: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-mono,
-  cap-height:   $font-stack-mono-cap-height
 );
 
 $font-mono-gamma: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-mono,
-  cap-height:   $font-stack-mono-cap-height
 );
 
 $font-mono-delta: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-mono,
-  cap-height:   $font-stack-mono-cap-height
 );
 
 $font-mono-epsilon: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-mono,
-  cap-height:   $font-stack-mono-cap-height
 );
 
 $font-mono-zeta: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-mono,
-  cap-height:   $font-stack-mono-cap-height
 );
 
 $font-mono: (
@@ -494,63 +309,33 @@ $font-mono: (
 // -- Caption Fonts --
 
 $font-caption-alpha: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-caption,
-  cap-height:   $font-stack-caption-cap-height
 );
 
 $font-caption-beta: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-caption,
-  cap-height:   $font-stack-caption-cap-height
 );
 
 $font-caption-gamma: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-caption,
-  cap-height:   $font-stack-caption-cap-height
 );
 
 $font-caption-delta: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-caption,
-  cap-height:   $font-stack-caption-cap-height
 );
 
 $font-caption-epsilon: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(-1, $font-root),
-  line-height:  1 * $font-root,
   family:       $font-stack-caption,
-  cap-height:   $font-stack-caption-cap-height
 );
 
 $font-caption-zeta: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-caption,
-  cap-height:   $font-stack-caption-cap-height
 );
 
 $font-caption: (
@@ -567,63 +352,33 @@ $font-caption: (
 // -- Control Fonts --
 
 $font-control-alpha: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-control,
-  cap-height:   $font-stack-control-cap-height
 );
 
 $font-control-beta: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-control,
-  cap-height:   $font-stack-control-cap-height
 );
 
 $font-control-gamma: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-control,
-  cap-height:   $font-stack-control-cap-height
 );
 
 $font-control-delta: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-control,
-  cap-height:   $font-stack-control-cap-height
 );
 
 $font-control-epsilon: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-control,
-  cap-height:   $font-stack-control-cap-height
 );
 
 $font-control-zeta: (
-  style:        normal,
-  weight:       normal,
-  variant:      normal,
   size:         +modular-scale(0, $font-root),
-  line-height:  2 * $font-root,
   family:       $font-stack-control,
-  cap-height:   $font-stack-control-cap-height
 );
 
 $font-control: (

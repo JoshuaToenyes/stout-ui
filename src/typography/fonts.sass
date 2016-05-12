@@ -14,16 +14,27 @@
 /// @access public
 =font-generate-font($font-map, $lvl)
   $font: map-get($font-map, $lvl)
+  $family: map-get($font, family)
+  $weight: map-get($font, weight)
+  $variant: map-get($font, variant)
+  $style: map-get($font, style)
   $font-size: map-get($font, size)
+  $baseline-shift: map-get($font, baseline-shift)
+  $top: map-get($font, top)
+  $bottom: map-get($font, bottom)
   $line-height: map-get($font, line-height)
-  $cap-height: map-get($font, cap-height)
-  +typeset($font-size, $line-height, $cap-height)
-  font-style: map-get($font, style)
-  font-weight: map-get($font, weight)
-  font-variant: map-get($font, variant)
-  font-size: $font-size
-  line-height: $line-height
-  font-family: map-get($font, family)
+  +fontset($family, $weight, $variant, $style)
+  +typeset($font-size, $line-height, $baseline-shift, $top, $bottom)
+
+
+
+
+=fontset($family, $weight: null, $variant: null, $style: null)
+  font-family: $family
+  font-weight: $weight
+  font-variant: $variant
+  font-style: $style
+
 
 
 

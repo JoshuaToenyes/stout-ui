@@ -1,15 +1,42 @@
 @import "bourbon/bourbon"
 @import "vars/fonts"
 
+$typeset-rythm: 1.7 !default
 
-=typeset($font-size, $line-height, $cap-height)
-  $baseline-shift: $font-size * ($line-height - $cap-height * $font-size) / 2rem + 0.00001rem
-  $baseline-push: round($font-size) - $baseline-shift
-  padding-top: $baseline-shift - floor($baseline-shift)
-  @if $baseline-push > 0
-    margin-bottom: $baseline-push - floor($baseline-push)
-  @else
-    margin-bottom: ceil(-$baseline-push) + $baseline-push
+
+=typeset-grid
+  +linear-gradient(to bottom, rgba(red, 0.2) 0, rgba(white, 0) 1px)
+  background-color: transparent
+  background-repeat: repeat-y
+  background-size: 100% $typeset-rythm + rem
+
+
+=typeset($font-size: null, $line-height: null, $baseline-shift: null, $top: null, $bottom: null)
+  @if $line-height == null
+    $line-height: ceil($font-size) / 1rem
+
+  @if $baseline-shift == null
+    $baseline-shift: $font-default-baseline-shift
+
+
+  @if $top != null
+    margin-top: $top * $typeset-rythm + rem
+
+  @if $bottom == null
+    $bottom: 0
+
+  $line-height: $line-height * $typeset-rythm
+
+  //$baseline-shift: ($baseline-shift * ($line-height - $font-size)) / 1rem
+  //$baseline-shift: ($font-size / 1rem * ($line-height - $font-size * $baseline-shift)) / 2rem
+
+
+  $baseline-shift: ($baseline-shift * $font-size + ($line-height - $font-size)) / 2rem
+
+  padding-top: $baseline-shift + rem
+  font-size: $font-size
+  line-height: $line-height + rem
+  margin-bottom: $typeset-rythm - $baseline-shift + $bottom * $typeset-rythm + rem
 
 
 =typeset-container

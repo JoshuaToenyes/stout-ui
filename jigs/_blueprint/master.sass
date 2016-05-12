@@ -9,6 +9,9 @@ $example-fg: #272f32
 .ex
   +typeset-container
 
+.group
+  +typeset-grid
+
 .wrapper
   @extend %container
   margin: 0 auto 0
@@ -16,6 +19,7 @@ $example-fg: #272f32
   min-height: 100vh
   padding: 0 10em
   text-align: left
+  overflow: hidden
 
 
 h1.ex-title
@@ -37,11 +41,11 @@ hr
   position: relative
   border-left: 1px solid #ddd
   padding-left: 1em
-  margin-bottom: 1rem
+  margin-bottom: $typeset-rythm + rem
 
   &:last-child,
   &.last
-    margin-bottom: 6rem
+    margin-bottom: 6 * $typeset-rythm + rem
 
 
 .ex-heading
