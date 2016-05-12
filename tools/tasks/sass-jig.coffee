@@ -17,12 +17,17 @@ sass       = require 'gulp-sass'
 module.exports = (config, options) ->
 
   src = config.path.jig + '/**/*.sass'
+  watch = [
+    src,
+    config.path.src + '/**/*.sass'
+    config.path.src + '/**/*.scss'
+  ]
   name = 'sass:jig'
   opts =
     includePaths: ['src', 'lib']
 
-  gulp.task name, false, ['vars'], ->
-    if options.watch then gulp.watch src, [name]
+  gulp.task name, false, ['vars', 'assets'], ->
+    if options.watch then gulp.watch watch, [name]
     gulp.src src
     .pipe sourcemaps.init()
     .pipe sass(opts).on('error', sass.logError)

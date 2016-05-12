@@ -23,4 +23,6 @@ module.exports = (config) ->
       server:
         baseDir: config.path.jig
       ui: false
+      reloadDelay: 1000
+      reloadDebounce: 1000
     , done

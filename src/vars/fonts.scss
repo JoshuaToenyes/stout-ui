@@ -1,0 +1,732 @@
+html {
+  font-size: 8px;
+}
+
+body {
+  font-size: 2em;
+}
+
+// -- Base Variables --
+$font-root: 2rem;
+
+
+
+// -- Font Imports -- TODO: Move these someplace else?
+@import "https://fonts.googleapis.com/css?family=Roboto:400,500,700,900,300";
+
+
+// -- Font Stacks --
+
+$font-stack-default:     Roboto, Helvetica, Arial, sans-serif;
+$font-stack-mono:        'Andale Mono', AndaleMono, 'Lucida Console', 'Lucida Sans Typewriter', monospace;
+$font-stack-emphasis:    Baskerville, 'Baskerville Old Face', 'Hoefler Text', Garamond, 'Times New Roman', serif;
+
+
+
+
+// -- Cap Height Values --
+
+$font-stack-display-cap-height:    0.72;
+$font-stack-lead-cap-height:       $font-stack-display-cap-height;
+$font-stack-body-cap-height:       $font-stack-display-cap-height;
+$font-stack-emphasis-cap-height:   0.66;
+$font-stack-strong-cap-height:     0.66;
+$font-stack-mono-cap-height:       0.66;
+$font-stack-caption-cap-height:    $font-stack-display-cap-height;
+$font-stack-control-cap-height:    $font-stack-display-cap-height;
+
+
+
+
+// -- Specific Font Stacks --
+
+$font-stack-display:     $font-stack-default;
+$font-stack-lead:        $font-stack-default;
+$font-stack-body:        $font-stack-default;
+$font-stack-emphasis:    $font-stack-default;
+$font-stack-strong:      $font-stack-default;
+$font-stack-mono:        $font-stack-default;
+$font-stack-caption:     $font-stack-default;
+$font-stack-control:     $font-stack-default;
+
+
+
+
+// -- Display Fonts --
+
+$font-display-alpha: (
+  style:        normal,
+  weight:       900,
+  variant:      normal,
+  size:         +modular-scale(4, $font-root),
+  line-height:  7rem,
+  family:       $font-stack-display,
+  pad-bottom:   2rem,
+  pad-top:      0,
+  cap-height:   $font-stack-display-cap-height - 0.02
+);
+
+$font-display-beta: (
+  style:        normal,
+  weight:       700,
+  variant:      normal,
+  size:         +modular-scale(3, $font-root),
+  line-height:  5rem,
+  family:       $font-stack-display,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-display-cap-height
+);
+
+$font-display-gamma: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(2, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-display,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-display-cap-height - 0.02
+);
+
+$font-display-delta: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(1, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-display,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-display-cap-height - 0.06
+);
+
+$font-display-epsilon: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  3rem,
+  family:       $font-stack-display,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-display-cap-height - 0.1
+);
+
+$font-display-zeta: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(-1, $font-root),
+  line-height:  2rem,
+  family:       $font-stack-display,
+  pad-bottom:   0,
+  pad-top:      1rem,
+  cap-height:   $font-stack-display-cap-height + 0.1
+);
+
+$font-display: (
+  alpha:        $font-display-alpha,
+  beta:         $font-display-beta,
+  gamma:        $font-display-gamma,
+  delta:        $font-display-delta,
+  epsilon:      $font-display-epsilon,
+  zeta:         $font-display-zeta,
+);
+
+
+
+
+// -- Lead Fonts --
+
+$font-lead-alpha: (
+  style:        normal,
+  weight:       700,
+  variant:      normal,
+  size:         +modular-scale(2, $font-root),
+  line-height:  5rem,
+  family:       $font-stack-lead,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-lead-cap-height
+);
+
+$font-lead-beta: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(2, $font-root),
+  line-height:  5rem,
+  family:       $font-stack-lead,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-lead-cap-height
+);
+
+$font-lead-gamma: (
+  style:        normal,
+  weight:       300,
+  variant:      normal,
+  size:         +modular-scale(2, $font-root),
+  line-height:  5rem,
+  family:       $font-stack-lead,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-lead-cap-height
+);
+
+$font-lead-delta: (
+  style:        normal,
+  weight:       700,
+  variant:      normal,
+  size:         +modular-scale(1, $font-root),
+  line-height:  4rem,
+  family:       $font-stack-lead,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-lead-cap-height
+);
+
+$font-lead-epsilon: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(1, $font-root),
+  line-height:  4rem,
+  family:       $font-stack-lead,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-lead-cap-height
+);
+
+$font-lead-zeta: (
+  style:        normal,
+  weight:       300,
+  variant:      normal,
+  size:         +modular-scale(1, $font-root),
+  line-height:  4rem,
+  family:       $font-stack-lead,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-lead-cap-height
+);
+
+$font-lead: (
+  alpha:        $font-lead-alpha,
+  beta:         $font-lead-beta,
+  gamma:        $font-lead-gamma,
+  delta:        $font-lead-delta,
+  epsilon:      $font-lead-epsilon,
+  zeta:         $font-lead-zeta,
+);
+
+
+
+// -- Body Fonts --
+
+$font-body-alpha: (
+  style:        normal,
+  weight:       700,
+  variant:      normal,
+  size:         +modular-scale(1, $font-root),
+  line-height:  4rem,
+  family:       $font-stack-body,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-body-cap-height
+);
+
+$font-body-beta: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(1, $font-root),
+  line-height:  4rem,
+  family:       $font-stack-body,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-body-cap-height
+);
+
+$font-body-gamma: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  3rem,
+  family:       $font-stack-body,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-body-cap-height
+);
+
+$font-body-delta: (
+  style:        normal,
+  weight:       300,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  3rem,
+  family:       $font-stack-body,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-body-cap-height
+);
+
+$font-body-epsilon: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(-1, $font-root),
+  line-height:  2rem,
+  family:       $font-stack-body,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-body-cap-height
+);
+
+$font-body-zeta: (
+  style:        normal,
+  weight:       300,
+  variant:      normal,
+  size:         +modular-scale(-1, $font-root),
+  line-height:  2rem,
+  family:       $font-stack-body,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-body-cap-height
+);
+
+$font-body: (
+  alpha:        $font-body-alpha,
+  beta:         $font-body-beta,
+  gamma:        $font-body-gamma,
+  delta:        $font-body-delta,
+  epsilon:      $font-body-epsilon,
+  zeta:         $font-body-zeta,
+);
+
+
+
+// -- Emphasis Fonts --
+
+$font-emphasis-alpha: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-emphasis,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-emphasis-cap-height
+);
+
+$font-emphasis-beta: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-emphasis,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-emphasis-cap-height
+);
+
+$font-emphasis-gamma: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-emphasis,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-emphasis-cap-height
+);
+
+$font-emphasis-delta: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-emphasis,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-emphasis-cap-height
+);
+
+$font-emphasis-epsilon: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-emphasis,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-emphasis-cap-height
+);
+
+$font-emphasis-zeta: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-emphasis,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-emphasis-cap-height
+);
+
+$font-emphasis: (
+  alpha:        $font-emphasis-alpha,
+  beta:         $font-emphasis-beta,
+  gamma:        $font-emphasis-gamma,
+  delta:        $font-emphasis-delta,
+  epsilon:      $font-emphasis-epsilon,
+  zeta:         $font-emphasis-zeta,
+);
+
+
+
+// -- Strong Fonts --
+
+$font-strong-alpha: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-strong,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-strong-cap-height
+);
+
+$font-strong-beta: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-strong,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-strong-cap-height
+);
+
+$font-strong-gamma: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-strong,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-strong-cap-height
+);
+
+$font-strong-delta: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-strong,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-strong-cap-height
+);
+
+$font-strong-epsilon: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-strong,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-strong-cap-height
+);
+
+$font-strong-zeta: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-strong,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-strong-cap-height
+);
+
+$font-strong: (
+  alpha:        $font-strong-alpha,
+  beta:         $font-strong-beta,
+  gamma:        $font-strong-gamma,
+  delta:        $font-strong-delta,
+  epsilon:      $font-strong-epsilon,
+  zeta:         $font-strong-zeta,
+);
+
+
+
+// Monospaced Fonts;
+
+$font-mono-alpha: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-mono,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-mono-cap-height
+);
+
+$font-mono-beta: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-mono,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-mono-cap-height
+);
+
+$font-mono-gamma: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-mono,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-mono-cap-height
+);
+
+$font-mono-delta: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-mono,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-mono-cap-height
+);
+
+$font-mono-epsilon: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-mono,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-mono-cap-height
+);
+
+$font-mono-zeta: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-mono,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-mono-cap-height
+);
+
+$font-mono: (
+  alpha:        $font-mono-alpha,
+  beta:         $font-mono-beta,
+  gamma:        $font-mono-gamma,
+  delta:        $font-mono-delta,
+  epsilon:      $font-mono-epsilon,
+  zeta:         $font-mono-zeta,
+);
+
+
+
+// -- Caption Fonts --
+
+$font-caption-alpha: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-caption,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-caption-cap-height
+);
+
+$font-caption-beta: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-caption,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-caption-cap-height
+);
+
+$font-caption-gamma: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-caption,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-caption-cap-height
+);
+
+$font-caption-delta: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-caption,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-caption-cap-height
+);
+
+$font-caption-epsilon: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(-1, $font-root),
+  line-height:  1 * $font-root,
+  family:       $font-stack-caption,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-caption-cap-height
+);
+
+$font-caption-zeta: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-caption,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-caption-cap-height
+);
+
+$font-caption: (
+  alpha:        $font-caption-alpha,
+  beta:         $font-caption-beta,
+  gamma:        $font-caption-gamma,
+  delta:        $font-caption-delta,
+  epsilon:      $font-caption-epsilon,
+  zeta:         $font-caption-zeta,
+);
+
+
+
+// -- Control Fonts --
+
+$font-control-alpha: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-control,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-control-cap-height
+);
+
+$font-control-beta: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-control,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-control-cap-height
+);
+
+$font-control-gamma: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-control,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-control-cap-height
+);
+
+$font-control-delta: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-control,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-control-cap-height
+);
+
+$font-control-epsilon: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-control,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-control-cap-height
+);
+
+$font-control-zeta: (
+  style:        normal,
+  weight:       normal,
+  variant:      normal,
+  size:         +modular-scale(0, $font-root),
+  line-height:  2 * $font-root,
+  family:       $font-stack-control,
+  pad-bottom:   0,
+  pad-top:      0,
+  cap-height:   $font-stack-control-cap-height
+);
+
+$font-control: (
+  alpha:        $font-control-alpha,
+  beta:         $font-control-beta,
+  gamma:        $font-control-gamma,
+  delta:        $font-control-delta,
+  epsilon:      $font-control-epsilon,
+  zeta:         $font-control-zeta,
+);

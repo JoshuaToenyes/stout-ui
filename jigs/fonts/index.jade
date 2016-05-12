@@ -2,8 +2,9 @@ extends ../_blueprint/master.jade
 
 block content
   
+  - var lvls = ['alpha', 'beta', 'gamma', 'delta', 'epsilon', 'zeta']
   - var shortHeading = "Grumpy wizards"
-  - var longHeading = "Grumpy Wizards make toxic brew for the evil Queen and Jack."
+  - var longHeading = "Grumpy wizards make toxic brew for the evil Queen and Jack."
   - var lead = "I will here give a brief sketch of the progress of opinion on the Origin of Species. Until recently the great majority of naturalists believed that species were immutable productions, and had been separately created."
   - var paragraph = "Lamarck was the first man whose conclusions on the subject excited much attention. This justly celebrated naturalist first published his views in 1801; he much enlarged them in 1809 in his \"Philosophie Zoologique\", and subsequently, 1815, in the Introduction to his \"Hist. Nat. des Animaux sans Vertebres\". In these works he up holds the doctrine that all species, including man, are descended from other species. He first did the eminent service of arousing attention to the probability of all change in the organic, as well as in the inorganic world, being the result of law, and not of miraculous interposition."
   - var paragraphOrnamental = "One morning, when Gregor Samsa woke from troubled dreams, <b>he found himself transformed in his bed into a horrible vermin.</b> He lay on his armour-like back, and if he lifted his head a little he could see his brown belly, slightly domed and divided by arches into stiff sections. <em>The bedding was hardly able to cover it and seemed ready to slide off any moment.</em> His many legs, pitifully thin compared with the size of the rest of him, waved about helplessly as he looked."
@@ -24,12 +25,10 @@ block content
       | text. The typographic style is completely separate from the semantic 
       | markup and meaning.
 
-    - var i = 6
-    while i > 0
+    each lvl in lvls
       .ex
-        .ex-label +font-display(#{i})
-        div(class="font-display-#{i}") #{longHeading}
-      - i--
+        .ex-label +font-display(#{lvl})
+        div(class="font-display-#{lvl}") #{longHeading}
 
 
 
@@ -40,12 +39,10 @@ block content
       | paragraphs.</em> The lead styles are illustrated below with follow-on
       | body text to exhibit their likely usage.
 
-    - var i = 6
-    while i > 0
+    each lvl in lvls
       .ex
-        .ex-label +font-lead(#{i})
-        div(class="font-lead-#{i}") #{lead}
-      - i--
+        .ex-label +font-lead(#{lvl})
+        div(class="font-lead-#{lvl}") #{lead}
   
   
   
@@ -57,12 +54,10 @@ block content
       | while the second contains <code>&lt;strong&gt;</code> tags (or 
       | <code>&lt;b&gt;</code> tags) and <code>&lt;em&gt;</code> tags.
 
-    - var i = 6
-    while i > 0
+    each lvl in lvls
       .ex
-        .ex-label +font-body(#{i})
-        div(class="font-body-#{i}") #{paragraph}
-      - i--
+        .ex-label +font-body(#{lvl})
+        div(class="font-body-#{lvl}") #{paragraph}
   
 
 
@@ -72,12 +67,10 @@ block content
       | have extra emphasis or are blockquotes. They provide a noticeable 
       | contrast in aesthetic to pull out content.
 
-    - var i = 6
-    while i > 0
+    each lvl in lvls
       .ex
-        .ex-label +font-emphasis(#{i})
-        div(class="font-emphasis-#{i}") #{paragraph}
-      - i--
+        .ex-label +font-emphasis(#{lvl})
+        div(class="font-emphasis-#{lvl}") #{paragraph}
   
   
   
@@ -86,12 +79,10 @@ block content
     p.body-01 Code blocks, or other preformatted text can appear in the styles
       | below.
 
-    - var i = 6
-    while i > 0
+    each lvl in lvls
       .ex
-        .ex-label +font-mono(#{i})
-        div(class="font-mono-#{i}") #{pre}
-      - i--
+        .ex-label +font-mono(#{lvl})
+        div(class="font-mono-#{lvl}") #{pre}
 
 
 
@@ -103,12 +94,10 @@ block content
       | greater detail. Notice the captions to the left of all styles on this 
       | page, which describe the SASS placeholder selectors.
 
-    - var i = 6
-    while i > 0
+    each lvl in lvls
       .ex
-        .ex-label +font-caption(#{i})
-        div(class="font-caption-#{i}") #{caption}
-      - i--
+        .ex-label +font-caption(#{lvl})
+        div(class="font-caption-#{lvl}") #{caption}
 
 
 
@@ -117,12 +106,10 @@ block content
     p.body-01 These are the various styles for controls with text labels 
       | (i.e. buttons).
 
-    - var i = 6
-    while i > 0
+    each lvl in lvls
       .ex
-        .ex-label +font-control(#{i})
-        div(class="font-control-#{i}") #{control}
-      - i--
+        .ex-label +font-control(#{lvl})
+        div(class="font-control-#{lvl}") #{control}
 
   
   .ex-heading Lists

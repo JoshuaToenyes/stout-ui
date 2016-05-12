@@ -1,0 +1,14 @@
+@import "bourbon/bourbon"
+@import "vars/fonts"
+
+
+=typeset($font-size, $line-height, $cap-height, $margin-bottom, $pad-top, $pad-bottom)
+  $baseline-shift: $font-size * ($line-height - $cap-height * $font-size) / 2rem + 0.00001rem
+  padding-top: $baseline-shift - floor($baseline-shift)
+  margin-bottom: $margin-bottom - $baseline-shift
+  padding-bottom: $pad-bottom
+
+
+=typeset-container
+  width: 100%
+  display: inline-block

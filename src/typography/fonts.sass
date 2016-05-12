@@ -1,146 +1,118 @@
 @import "bourbon/bourbon"
 @import "vars/fonts"
+@import "./typeset"
 
 
-//=font-margin-bottom
-//  margin-bottom:
 
-
-=font-generate-font($style, $weight, $variant, $size, $line-height, $family, $cap-height, $level)
-  $font-size: nth($size, $level)
-  $line-height: nth($line-height, $level)
-  $cap-height: nth($cap-height, $level)
-  $move-down: $font-size * ($line-height - $cap-height * $font-size) / 2rem + 0.00001rem
-  $margin-bottom: 5rem
-  margin: 0
-  border: 0
-  padding: 0
-  font-style: nth($style, $level)
-  font-weight: nth($weight, $level)
-  font-variant: nth($variant, $level)
+/// Generates a font for output given its map, level, and bottom margin.
+///
+/// @param {Map} $font-map - The font map.
+///
+/// @param {String} $lvl - The font level, i.e. alpha, beta, etc.
+///
+/// @group font
+/// @access public
+=font-generate-font($font-map, $lvl)
+  $font: map-get($font-map, $lvl)
+  $font-size: map-get($font, size)
+  $line-height: map-get($font, line-height)
+  $cap-height: map-get($font, cap-height)
+  $pad-top: map-get($font, pad-top)
+  $pad-bottom: map-get($font, pad-bottom)
+  +typeset($font-size, $line-height, $cap-height, round($font-size), $pad-top, $pad-bottom)
+  font-style: map-get($font, style)
+  font-weight: map-get($font, weight)
+  font-variant: map-get($font, variant)
   font-size: $font-size
   line-height: $line-height
-  font-family: nth($family, $level)
-  padding-top: $move-down
-  margin-bottom: $margin-bottom - $move-down
-  background-color: rgba(#ddd, 0.4)
-  vertical-align: baseline
+  font-family: map-get($font, family)
+
 
 
 /// Outputs the display font of the specified level.
 ///
-/// @param {String} $level - The font level or display size.
+/// @param {String} $lvl - The font level, i.e. alpha, beta, etc.
 ///
 /// @group font
 /// @access public
-=font-display($level)
-  $style: $font-display-1-style $font-display-2-style $font-display-3-style $font-display-4-style $font-display-5-style $font-display-6-style
-  $weight: $font-display-1-weight $font-display-2-weight $font-display-3-weight $font-display-4-weight $font-display-5-weight $font-display-6-weight
-  $variant: $font-display-1-variant $font-display-2-variant $font-display-3-variant $font-display-4-variant $font-display-5-variant $font-display-6-variant
-  $size: $font-display-1-size $font-display-2-size $font-display-3-size $font-display-4-size $font-display-5-size $font-display-6-size
-  $line-height: $font-display-1-line-height $font-display-2-line-height $font-display-3-line-height $font-display-4-line-height $font-display-5-line-height $font-display-6-line-height
-  $family: $font-display-1-family $font-display-2-family $font-display-3-family $font-display-4-family $font-display-5-family $font-display-6-family
-  $cap-height: $font-display-1-cap-height $font-display-2-cap-height $font-display-3-cap-height $font-display-4-cap-height $font-display-5-cap-height $font-display-6-cap-height
-  +font-generate-font($style, $weight, $variant, $size, $line-height, $family, $cap-height, $level)
+=font-display($lvl)
+  $map: $font-display
+  +font-generate-font($map, $lvl)
 
 
 /// Outputs the lead paragraph font of the specified level.
 ///
-/// @param {String} $level - The font level or display size.
+/// @param {String} $lvl - The font level, i.e. alpha, beta, etc.
 ///
 /// @group font
 /// @access public
-=font-lead($level)
-  $style: $font-lead-1-style $font-lead-2-style $font-lead-3-style $font-lead-4-style $font-lead-5-style $font-lead-6-style
-  $weight: $font-lead-1-weight $font-lead-2-weight $font-lead-3-weight $font-lead-4-weight $font-lead-5-weight $font-lead-6-weight
-  $variant: $font-lead-1-variant $font-lead-2-variant $font-lead-3-variant $font-lead-4-variant $font-lead-5-variant $font-lead-6-variant
-  $size: $font-lead-1-size $font-lead-2-size $font-lead-3-size $font-lead-4-size $font-lead-5-size $font-lead-6-size
-  $line-height: $font-lead-1-line-height $font-lead-2-line-height $font-lead-3-line-height $font-lead-4-line-height $font-lead-5-line-height $font-lead-6-line-height
-  $family: $font-lead-1-family $font-lead-2-family $font-lead-3-family $font-lead-4-family $font-lead-5-family $font-lead-6-family
-  $cap-height: $font-lead-1-cap-height $font-lead-2-cap-height $font-lead-3-cap-height $font-lead-4-cap-height $font-lead-5-cap-height $font-lead-6-cap-height
-  +font-generate-font($style, $weight, $variant, $size, $line-height, $family, $cap-height, $level)
+=font-lead($lvl)
+  $map: $font-lead
+  +font-generate-font($map, $lvl)
 
 
 /// Outputs the body-copy font of the specified level.
 ///
-/// @param {String} $level - The font level or display size.
+/// @param {String} $lvl - The font level, i.e. alpha, beta, etc.
 ///
 /// @group font
 /// @access public
-=font-body($level)
-  $style: $font-body-1-style $font-body-2-style $font-body-3-style $font-body-4-style $font-body-5-style $font-body-6-style
-  $weight: $font-body-1-weight $font-body-2-weight $font-body-3-weight $font-body-4-weight $font-body-5-weight $font-body-6-weight
-  $variant: $font-body-1-variant $font-body-2-variant $font-body-3-variant $font-body-4-variant $font-body-5-variant $font-body-6-variant
-  $size: $font-body-1-size $font-body-2-size $font-body-3-size $font-body-4-size $font-body-5-size $font-body-6-size
-  $line-height: $font-body-1-line-height $font-body-2-line-height $font-body-3-line-height $font-body-4-line-height $font-body-5-line-height $font-body-6-line-height
-  $family: $font-body-1-family $font-body-2-family $font-body-3-family $font-body-4-family $font-body-5-family $font-body-6-family
-  $cap-height: $font-body-1-cap-height $font-body-2-cap-height $font-body-3-cap-height $font-body-4-cap-height $font-body-5-cap-height $font-body-6-cap-height
-  +font-generate-font($style, $weight, $variant, $size, $line-height, $family, $cap-height, $level)
+=font-body($lvl)
+  $map: $font-body
+  +font-generate-font($map, $lvl)
 
 
 /// Outputs the emphasis font of the specified level.
 ///
-/// @param {String} $level - The font level or display size.
+/// @param {String} $lvl - The font level, i.e. alpha, beta, etc.
 ///
 /// @group font
 /// @access public
-=font-emphasis($level)
-  $style: $font-emphasis-1-style $font-emphasis-2-style $font-emphasis-3-style $font-emphasis-4-style $font-emphasis-5-style $font-emphasis-6-style
-  $weight: $font-emphasis-1-weight $font-emphasis-2-weight $font-emphasis-3-weight $font-emphasis-4-weight $font-emphasis-5-weight $font-emphasis-6-weight
-  $variant: $font-emphasis-1-variant $font-emphasis-2-variant $font-emphasis-3-variant $font-emphasis-4-variant $font-emphasis-5-variant $font-emphasis-6-variant
-  $size: $font-emphasis-1-size $font-emphasis-2-size $font-emphasis-3-size $font-emphasis-4-size $font-emphasis-5-size $font-emphasis-6-size
-  $line-height: $font-emphasis-1-line-height $font-emphasis-2-line-height $font-emphasis-3-line-height $font-emphasis-4-line-height $font-emphasis-5-line-height $font-emphasis-6-line-height
-  $family: $font-emphasis-1-family $font-emphasis-2-family $font-emphasis-3-family $font-emphasis-4-family $font-emphasis-5-family $font-emphasis-6-family
-  $cap-height: $font-emphasis-1-cap-height $font-emphasis-2-cap-height $font-emphasis-3-cap-height $font-emphasis-4-cap-height $font-emphasis-5-cap-height $font-emphasis-6-cap-height
-  +font-generate-font($style, $weight, $variant, $size, $line-height, $family, $cap-height, $level)
+=font-emphasis($lvl)
+  $map: $font-emphasis
+  +font-generate-font($map, $lvl)
+
+
+/// Outputs the strong font of the specified level.
+///
+/// @param {String} $lvl - The font level, i.e. alpha, beta, etc.
+///
+/// @group font
+/// @access public
+=font-strong($lvl)
+  $map: $font-strong
+  +font-generate-font($map, $lvl)
+
 
 
 /// Outputs the monospaced font of the specified level.
 ///
-/// @param {String} $level - The font level or display size.
+/// @param {String} $lvl - The font level, i.e. alpha, beta, etc.
 ///
 /// @group font
 /// @access public
-=font-mono($level)
-  $style: $font-mono-1-style $font-mono-2-style $font-mono-3-style $font-mono-4-style $font-mono-5-style $font-mono-6-style
-  $weight: $font-mono-1-weight $font-mono-2-weight $font-mono-3-weight $font-mono-4-weight $font-mono-5-weight $font-mono-6-weight
-  $variant: $font-mono-1-variant $font-mono-2-variant $font-mono-3-variant $font-mono-4-variant $font-mono-5-variant $font-mono-6-variant
-  $size: $font-mono-1-size $font-mono-2-size $font-mono-3-size $font-mono-4-size $font-mono-5-size $font-mono-6-size
-  $line-height: $font-mono-1-line-height $font-mono-2-line-height $font-mono-3-line-height $font-mono-4-line-height $font-mono-5-line-height $font-mono-6-line-height
-  $family: $font-mono-1-family $font-mono-2-family $font-mono-3-family $font-mono-4-family $font-mono-5-family $font-mono-6-family
-  $cap-height: $font-mono-1-cap-height $font-mono-2-cap-height $font-mono-3-cap-height $font-mono-4-cap-height $font-mono-5-cap-height $font-mono-6-cap-height
-  +font-generate-font($style, $weight, $variant, $size, $line-height, $family, $cap-height, $level)
+=font-mono($lvl)
+  $map: $font-mono
+  +font-generate-font($map, $lvl)
 
 
 /// Outputs the caption font of the specified level.
 ///
-/// @param {String} $level - The font level or display size.
+/// @param {String} $lvl - The font level, i.e. alpha, beta, etc.
 ///
 /// @group font
 /// @access public
-=font-caption($level)
-  $style: $font-caption-1-style $font-caption-2-style $font-caption-3-style $font-caption-4-style $font-caption-5-style $font-caption-6-style
-  $weight: $font-caption-1-weight $font-caption-2-weight $font-caption-3-weight $font-caption-4-weight $font-caption-5-weight $font-caption-6-weight
-  $variant: $font-caption-1-variant $font-caption-2-variant $font-caption-3-variant $font-caption-4-variant $font-caption-5-variant $font-caption-6-variant
-  $size: $font-caption-1-size $font-caption-2-size $font-caption-3-size $font-caption-4-size $font-caption-5-size $font-caption-6-size
-  $line-height: $font-caption-1-line-height $font-caption-2-line-height $font-caption-3-line-height $font-caption-4-line-height $font-caption-5-line-height $font-caption-6-line-height
-  $family: $font-caption-1-family $font-caption-2-family $font-caption-3-family $font-caption-4-family $font-caption-5-family $font-caption-6-family
-  $cap-height: $font-caption-1-cap-height $font-caption-2-cap-height $font-caption-3-cap-height $font-caption-4-cap-height $font-caption-5-cap-height $font-caption-6-cap-height
-  +font-generate-font($style, $weight, $variant, $size, $line-height, $family, $cap-height, $level)
+=font-caption($lvl)
+  $map: $font-caption
+  +font-generate-font($map, $lvl)
 
 
 /// Outputs the control font of the specified level.
 ///
-/// @param {String} $level - The font level or display size.
+/// @param {String} $lvl - The font level, i.e. alpha, beta, etc.
 ///
 /// @group font
 /// @access public
-=font-control($level)
-  $style: $font-control-1-style $font-control-2-style $font-control-3-style $font-control-4-style $font-control-5-style $font-control-6-style
-  $weight: $font-control-1-weight $font-control-2-weight $font-control-3-weight $font-control-4-weight $font-control-5-weight $font-control-6-weight
-  $variant: $font-control-1-variant $font-control-2-variant $font-control-3-variant $font-control-4-variant $font-control-5-variant $font-control-6-variant
-  $size: $font-control-1-size $font-control-2-size $font-control-3-size $font-control-4-size $font-control-5-size $font-control-6-size
-  $line-height: $font-control-1-line-height $font-control-2-line-height $font-control-3-line-height $font-control-4-line-height $font-control-5-line-height $font-control-6-line-height
-  $family: $font-control-1-family $font-control-2-family $font-control-3-family $font-control-4-family $font-control-5-family $font-control-6-family
-  $cap-height: $font-control-1-cap-height $font-control-2-cap-height $font-control-3-cap-height $font-control-4-cap-height $font-control-5-cap-height $font-control-6-cap-height
-  +font-generate-font($style, $weight, $variant, $size, $line-height, $family, $cap-height, $level)
+=font-control($lvl)
+  $map: $font-control
+  +font-generate-font($map, $lvl)

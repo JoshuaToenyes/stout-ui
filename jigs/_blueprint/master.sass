@@ -1,8 +1,13 @@
 @import "../../util/reset"
 @import "placeholder/container"
+@import "typography/typeset"
 @import "typography/fonts"
 
 $example-fg: #272f32
+
+.group,
+.ex
+  +typeset-container
 
 .wrapper
   @extend %container
@@ -14,13 +19,13 @@ $example-fg: #272f32
 
 
 h1.ex-title
-  +font-display(5)
+  +font-display(alpha)
 
 p
-  +font-body(3)
+  +font-body(delta)
 
 code
-  +font-mono(1)
+  +font-mono(alpha)
 
 hr
   display: none
@@ -40,12 +45,14 @@ hr
 
 
 .ex-heading
-  +font-display(1)
-  color: lighten($example-fg, 10%)
+  +font-display(delta)
+  color: lighten($example-fg, 1%)
+  text-transform: uppercase
+  font-weight: bold
 
 .ex-label
   @extend %container
-  +font-caption(1)
+  +font-caption(epsilon)
   opacity: 0.5
   position: absolute
   width: 20rem
@@ -53,8 +60,6 @@ hr
   left: -20rem
   top: 0
   padding-right: 1em
-  line-height: 145%
-  display: none
 
 .controls .ui-button
   margin: 1rem 0.5em 0 0
