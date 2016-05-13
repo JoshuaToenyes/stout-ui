@@ -34,20 +34,6 @@ block content
 
 
   .group
-    .ex-heading Lead Paragraphs
-    p.body-01 Paragraphs which start off a section of work, or deserve special 
-      | emphasis at the beginning of an article or page, are called <em>lead
-      | paragraphs.</em> The lead styles are illustrated below with follow-on
-      | body text to exhibit their likely usage.
-
-    each lvl in lvls
-      .ex
-        .ex-label +font-lead(#{lvl})
-        div(class="font-lead-#{lvl}") #{lead}
-  
-  
-  
-  .group
     .ex-heading Body
     p.body-01 Body type style examples are below. These are the styles that 
       | may be used in large blocks of text, such as articles, blog posts, 
@@ -111,24 +97,3 @@ block content
       .ex
         .ex-label +font-control(#{lvl})
         div(class="font-control-#{lvl}") #{control}
-
-  
-  .ex-heading Lists
-  p.body-01 List styles are used for lists and list-type controls.
-
-  .ex
-    .ex-label list-2
-    p.list-2 #{list}
-  
-  .ex
-    .ex-label list-1
-    p.list-1 #{list}
-  
-  .ex
-    .ex-label list-01
-    p.list-01 #{list}
-    
-  .ex.last
-    .ex-label list-001
-    p.list-001 #{list}
-  

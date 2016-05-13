@@ -10,7 +10,7 @@ $example-fg: #272f32
   +typeset-container
 
 .group
-  +typeset-grid
+  //+typeset-grid
 
 .wrapper
   @extend %container
@@ -28,8 +28,8 @@ h1.ex-title
 p
   +font-body(delta)
 
-code
-  +font-mono(alpha)
+  code
+    +font-mono(delta)
 
 hr
   display: none
@@ -56,7 +56,7 @@ hr
 
 .ex-label
   @extend %container
-  +font-caption(epsilon)
+  +font-caption(delta)
   opacity: 0.5
   position: absolute
   width: 20rem

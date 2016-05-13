@@ -73,6 +73,7 @@
     "phantomjs": "^1.9.19",
     "rewire": "^2.5.1",
     "run-sequence": "~1.1",
+    "sassline": "^2.1.2",
     "sauce-connect": "^0.1.1",
     "sauce-connect-launcher": "^0.14.0",
     "selenium-standalone": "^4.8.0",

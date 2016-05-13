@@ -82,18 +82,6 @@
   +font-generate-font($map, $lvl)
 
 
-/// Outputs the strong font of the specified level.
-///
-/// @param {String} $lvl - The font level, i.e. alpha, beta, etc.
-///
-/// @group font
-/// @access public
-=font-strong($lvl)
-  $map: $font-strong
-  +font-generate-font($map, $lvl)
-
-
-
 /// Outputs the monospaced font of the specified level.
 ///
 /// @param {String} $lvl - The font level, i.e. alpha, beta, etc.
@@ -103,6 +91,7 @@
 =font-mono($lvl)
   $map: $font-mono
   +font-generate-font($map, $lvl)
+  white-space: pre
 
 
 /// Outputs the caption font of the specified level.
@@ -125,3 +114,5 @@
 =font-control($lvl)
   $map: $font-control
   +font-generate-font($map, $lvl)
+  text-transform: uppercase
+  letter-spacing: 1px

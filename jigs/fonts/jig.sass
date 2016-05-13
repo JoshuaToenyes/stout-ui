@@ -8,16 +8,10 @@
 $lvls: (alpha, beta, gamma, delta, epsilon, zeta)
 
 
-// Display Fonts
+// Display Fonts 
 @each $lvl in $lvls
   .font-display-#{$lvl}
     +font-display($lvl)
-
-
-// Lead Paragraph Fonts
-@each $lvl in $lvls
-  .font-lead-#{$lvl}
-    +font-lead($lvl)
 
 
 // Body Fonts
@@ -32,12 +26,6 @@ $lvls: (alpha, beta, gamma, delta, epsilon, zeta)
     +font-emphasis($lvl)
 
 
-// Strong Fonts
-@each $lvl in $lvls
-  .font-strong-#{$lvl}
-    +font-strong($lvl)
-
-
 // Monospaced Paragraph Fonts
 @each $lvl in $lvls
   .font-mono-#{$lvl}
@@ -50,7 +38,7 @@ $lvls: (alpha, beta, gamma, delta, epsilon, zeta)
     +font-caption($lvl)
 
 
-// Lead Paragraph Fonts
+// Control Fonts
 @each $lvl in $lvls
   .font-control-#{$lvl}
     +font-control($lvl)
