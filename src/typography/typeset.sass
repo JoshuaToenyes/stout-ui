@@ -1,36 +1,78 @@
 @import "bourbon/bourbon"
 @import "vars/fonts"
-
-$typeset-rythm: 1.7 !default
-
+@import "vars/typeset"
 
 
+/// Returns rem spacing based on the configured typeset rythm.
+///
+/// @param {Number} $n - Integer rythm steps.
+///
+/// @group typeset
+/// @access public
+@function rythm($n)
+  @return $typeset-rythm * $n + rem
+
+
+
+/// Adds a typeset grid to the mixing container.
+///
+/// @group typeset
+/// @access public
 =typeset-grid
-  +linear-gradient(to bottom, rgba(red, 0.2) 0, rgba(white, 0) 1px)
+  +linear-gradient(to bottom, $typeset-grid-color 0, rgba(white, 0) 1px)
   background-color: transparent
   background-repeat: repeat-y
-  background-size: 100% $typeset-rythm + rem
+  background-size: 100% rythm(1)
 
 
-=typeset($font-size: null, $line-height: null, $baseline-shift: null, $top: null, $bottom: null)
+
+/// Add rythm-based spacing around the mixing selector.
+///
+/// @param {Number} $top - Integer specifying top spacing (can be negative).
+///
+/// @param {Number} $bottom - Positive integer specifying bottom spacing.
+///
+/// @group typeset
+/// @access public
+=typeset-space($top: null, $bottom: null)
+  @if $top != null
+    margin-top: rythm($top)
+  @if $bottom != null
+    padding-bottom: rythm($top)
+
+
+
+/// Typesets a selector, which sets the font-size, line-height, shifts the
+/// baseline, and sets initial vertical spacing.
+///
+/// @param {Number} $font-size - The size of the font in `rem`s.
+///
+/// @param {Number} $line-height [null] - Integer specifying the number of
+/// vertical rythm units a single line should occupy.
+///
+/// @param {Number} $baseline-shift [null] - Tiny shift amount to "tweak" font
+/// to baseline.
+///
+/// @param {Number} $top - Integer specifying top spacing (can be negative).
+///
+/// @param {Number} $bottom - Positive integer specifying bottom spacing.
+///
+/// @group typeset
+/// @access public
+=typeset($font-size, $line-height: null, $baseline-shift: null, $top: null, $bottom: null)
   @if $line-height == null
     $line-height: ceil($font-size) / 1rem
 
   @if $baseline-shift == null
     $baseline-shift: $font-default-baseline-shift
 
-
   @if $top != null
-    margin-top: $top * $typeset-rythm + rem
+    margin-top: rythm($top)
 
   @if $bottom == null
     $bottom: 0
 
   $line-height: $line-height * $typeset-rythm
-
-  //$baseline-shift: ($baseline-shift * ($line-height - $font-size)) / 1rem
-  //$baseline-shift: ($font-size / 1rem * ($line-height - $font-size * $baseline-shift)) / 2rem
-
 
   $baseline-shift: ($baseline-shift * $font-size + ($line-height - $font-size)) / 2rem
 
@@ -40,6 +82,13 @@ $typeset-rythm: 1.7 !default
   margin-bottom: $typeset-rythm - $baseline-shift + $bottom * $typeset-rythm + rem
 
 
+
+/// Configures a container element as a "typeset container" which prevents
+/// its margins from collapsing with adjacent siblings. This keeps vertical
+/// spacing consistent.
+///
+/// @group typeset
+/// @access public
 =typeset-container
   width: 100%
   display: inline-block

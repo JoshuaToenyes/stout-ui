@@ -48,7 +48,7 @@ $font-display-alpha: (
   size:           +modular-scale(4, $font-root, $font-scale),
   family:         $font-stack-display,
   line-height:    2,
-  top:            1,
+  top:            0,
 );
 
 $font-display-beta: (
@@ -95,12 +95,14 @@ $font-display: (
 $font-body-alpha: (
   size:         +modular-scale(1, $font-root, $font-scale),
   family:       $font-stack-body,
+  top:          -1,
 );
 
 $font-body-beta: (
   size:         +modular-scale(1, $font-root, $font-scale),
   family:       $font-stack-body,
   weight:       300,
+  top:          -1,
 );
 
 $font-body-gamma: (
@@ -143,12 +145,14 @@ $font-emphasis-alpha: (
   family:       $font-stack-emphasis,
   style:        italic,
   weight:       700,
+  top:          -1,
 );
 
 $font-emphasis-beta: (
   size:         +modular-scale(1, $font-root, $font-scale),
   family:       $font-stack-emphasis,
   style:        italic,
+  top:          -1,
 );
 
 $font-emphasis-gamma: (
@@ -194,11 +198,13 @@ $font-mono-alpha: (
   size:         +modular-scale(1, $font-root, $font-scale),
   family:       $font-stack-mono,
   weight:       700,
+  top:          -1,
 );
 
 $font-mono-beta: (
   size:         +modular-scale(1, $font-root, $font-scale),
   family:       $font-stack-mono,
+  top:          -1,
 );
 
 $font-mono-gamma: (
