@@ -1,26 +1,13 @@
-@import "../../util/reset"
+@import "base"
+@import "colors/default"
 @import "placeholder/container"
 @import "typography/typeset"
 @import "typography/fonts"
 
 $example-fg: #272f32
 
-.group,
-.ex
-  +typeset-container
-
 .group
-  +typeset-grid
-
-.wrapper
-  @extend %container
-  margin: 0 auto 0
-  max-width: 62em
-  min-height: 100vh
-  padding: 0 10em
-  text-align: left
-  overflow: hidden
-
+  //+typeset-grid
 
 h1.ex-title
   +font-display(alpha)
@@ -30,23 +17,6 @@ p
 
   code
     +font-mono(delta)
-
-hr
-  display: none
-  border: none
-  height: 1px
-  background: lighten($example-fg, 70%)
-
-.ex
-  position: relative
-  border-left: 1px solid #ddd
-  padding-left: 1em
-  margin-bottom: $typeset-rythm + rem
-
-  &:last-child,
-  &.last
-    margin-bottom: 6 * $typeset-rythm + rem
-
 
 .ex-heading
   +font-display(delta)
@@ -67,3 +37,19 @@ hr
 
 .controls .ui-button
   margin: 1rem 0.5em 0 0
+
+hr
+  display: none
+  border: none
+  height: 1px
+  background: lighten($example-fg, 70%)
+
+.ex
+  position: relative
+  border-left: 1px solid #ddd
+  padding-left: 1em
+  margin-bottom: rythm(1)
+
+  &:last-child,
+  &.last
+    margin-bottom: rythm(6)

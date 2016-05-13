@@ -48,7 +48,7 @@ $font-display-alpha: (
   size:           +modular-scale(4, $font-root, $font-scale),
   family:         $font-stack-display,
   line-height:    2,
-  top:            0,
+  bottom:         -1,
 );
 
 $font-display-beta: (
@@ -57,26 +57,33 @@ $font-display-beta: (
   family:         $font-stack-display,
   line-height:    2,
   top:            0,
+  bottom:         -1,
 );
 
 $font-display-gamma: (
   size:           +modular-scale(2, $font-root, $font-scale),
   family:         $font-stack-display,
+  bottom:         -1,
+  top:            -1,
 );
 
 $font-display-delta: (
   size:           +modular-scale(1, $font-root, $font-scale),
   family:         $font-stack-display,
+  bottom:         -1,
+  top:            -1,
 );
 
 $font-display-epsilon: (
   size:           +modular-scale(0, $font-root, $font-scale),
   family:         $font-stack-display,
+  bottom:         -1,
 );
 
 $font-display-zeta: (
   size:           +modular-scale(-1, $font-root, $font-scale),
   family:         $font-stack-display,
+  bottom:         -1,
 );
 
 $font-display: (
@@ -292,19 +299,21 @@ $font-control-alpha: (
   size:         +modular-scale(3, $font-root, $font-scale),
   family:       $font-stack-control,
   weight:       500,
-  top:          -1,
+  top:          -2,
 );
 
 $font-control-beta: (
   size:         +modular-scale(2, $font-root, $font-scale),
   family:       $font-stack-control,
   weight:       500,
+  top:          -1,
 );
 
 $font-control-gamma: (
   size:         +modular-scale(1, $font-root, $font-scale),
   family:       $font-stack-control,
   weight:       500,
+  top:          -1,
 );
 
 $font-control-delta: (

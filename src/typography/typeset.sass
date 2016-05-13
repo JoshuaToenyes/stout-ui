@@ -38,7 +38,7 @@
   @if $top != null
     margin-top: rythm($top)
   @if $bottom != null
-    padding-bottom: rythm($top)
+    padding-bottom: rythm($bottom)
 
 
 
@@ -70,12 +70,13 @@
     margin-top: rythm($top)
 
   @if $bottom == null
-    $bottom: 0
+    $bottom: -1
 
   $line-height: $line-height * $typeset-rythm
 
   $baseline-shift: ($baseline-shift * $font-size + ($line-height - $font-size)) / 2rem
 
+  //+typeset-container
   padding-top: $baseline-shift + rem
   font-size: $font-size
   line-height: $line-height + rem
