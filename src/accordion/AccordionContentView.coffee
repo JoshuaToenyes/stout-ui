@@ -25,6 +25,26 @@ TAG_NAME = vars.readPrefixed 'accordion/accordion-content-tag'
 
 
 ###*
+# The accordion item tag name.
+#
+# @type string
+# @const
+# @private
+###
+ITEM_TAG_NAME = vars.readPrefixed 'accordion/accordion-item-tag'
+
+
+###*
+# The accordion trigger tag name.
+#
+# @type string
+# @const
+# @private
+###
+TRIGGER_TAG_NAME = vars.readPrefixed 'accordion/accordion-trigger-tag'
+
+
+###*
 # The accordion content class name.
 #
 # @type string
@@ -54,3 +74,9 @@ module.exports = class AccordionContentView extends InteractiveView
     @prefixedClasses.add ACCORDION_CONTENT_CLASS
 
     @root.setAttribute 'role', 'list'
+
+    @on 'transition:in', =>
+      @parent?.parent?.children.get(ITEM_TAG_NAME)?.forEach (item) =>
+        if item.parent isnt @parent
+          item.children.get(TRIGGER_TAG_NAME).forEach (trigger) ->
+            trigger.collapse()
