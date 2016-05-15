@@ -1,7 +1,6 @@
-
 @import "bourbon/bourbon"
 @import "../colors/default"
-@import "./default"
+@import "./fonts"
 @import "util/exports"
 
 
@@ -10,7 +9,8 @@
   $bg: darken($color-bg, 5%)
 
   code
-    @extend %typography-pre-1
+    +font-mono(gamma)
+    color: lighten(black, 20%)
     background: $bg
     border: 1px solid darken($color-bg, 10%)
     border-radius: 3px
@@ -19,7 +19,18 @@
     -ms-box-decoration-break: clone
     -o-box-decoration-break: clone
     box-decoration-break: clone
-    display: inline-block
-    font-size: 85%
-    padding: 0 0.2em
+    font-size: 82%
+    padding: 0 0.4em
     white-space: normal
+    position: relative
+    top: -0.1em
+    text-shadow: 0 0 1px rgba(white, 0.7)
+    line-height: 1.7em
+
+  pre code
+    +font-mono(gamma, 0, 0)
+    display: block
+    white-space: pre
+    padding-left: rythm(0.5)
+    padding-right: rythm(0.5)
+    padding-bottom: rythm(0.5)

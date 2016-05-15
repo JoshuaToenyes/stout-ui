@@ -1,6 +1,6 @@
 @import "bourbon/bourbon"
 @import "util/exports"
-@import "typography/default"
+//@import "typography/default"
 @import "vars/tree"
 @import "vars/collapsible"
 @import "vars/component"
@@ -34,7 +34,7 @@
       display: block
 
   #{$item}
-    @extend %typography-body-1-b
+    //@extend %typography-body-1-b
     padding-left: 1em
     +transform(translate(0, 0.4em))
     opacity: 0
@@ -53,11 +53,11 @@
 
 
   #{$item} #{$item}
-    @extend %typography-body-1
+    //@extend %typography-body-1
 
 
   #{$item} #{$item} #{$item}
-    @extend %typography-body-01
+    //@extend %typography-body-01
 
 
   #{$caret}

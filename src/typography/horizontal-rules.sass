@@ -1,0 +1,25 @@
+@import "bourbon/bourbon"
+@import "./typeset"
+@import "util/exports"
+
+
+
++exports("typography/horizontal-rules")
+
+
+  // Standard horizontal rule.
+  //
+  // No styleguide reference.
+  hr
+    padding: rythm(1) 0
+    margin: 0
+    border: none
+    position: relative
+
+    &::after
+      content: ''
+      width: 100%
+      display: block
+      border-top: 1px solid lighten(black, 80%)
+      position: relative
+      top: 0

@@ -1,19 +1,81 @@
-@import "./default"
+@import "./fonts"
+@import "util/exports"
+@import "vars/component"
 
-h1
-  @extend %typography-display-6
 
-h2
-  @extend %typography-display-5
 
-h3
-  @extend %typography-display-4
++exports("typography/headings")
 
-h4
-  @extend %typography-display-3
 
-h5
-  @extend %typography-display-2
+  h1, h2, h3, h4, h5, h6
+    +typeset-block
 
-h6
-  @extend %typography-display-1
+  // Standard h1 heading.
+  //
+  // .{prefix}h1--collapsed - Collapses vertical spacing around heading.
+  //
+  // No styleguide reference.
+  h1
+    +font-display(alpha, 1, 0)
+    &.#{$prefix}h1--collapsed
+      +font-display(alpha, 0, -1)
+
+
+  // Standard h2 heading.
+  //
+  // .{prefix}h2--collapsed - Collapses vertical spacing around heading.
+  //
+  // No styleguide reference.
+  h2
+    +font-display(beta, 1, 0)
+    &.#{$prefix}h2--collapsed
+      +font-display(beta, 0, -1)
+
+
+  // Standard h3 heading.
+  //
+  // .{prefix}h3--collapsed - Collapses vertical spacing around heading.
+  //
+  // No styleguide reference.
+  h3
+    +font-display(gamma, 1, 0)
+    font-weight: bold
+    &.#{$prefix}h3--collapsed
+      +font-display(gamma, 0)
+
+
+  // Standard h4 heading.
+  //
+  // .{prefix}h4--collapsed - Collapses vertical spacing around heading.
+  //
+  // No styleguide reference.
+  h4
+    +font-display(delta, 1, 0)
+    font-weight: bold
+    &.#{$prefix}h4--collapsed
+      +font-display(delta, 0)
+
+
+  // Standard h5 heading.
+  //
+  // .{prefix}h5--collapsed - Collapses vertical spacing around heading.
+  //
+  // No styleguide reference.
+  h5
+    +font-display(epsilon, 1, 0)
+    font-weight: bold
+    &.#{$prefix}h5--collapsed
+      +font-display(epsilon, 0)
+
+
+  // Standard h6 heading.
+  //
+  // .{prefix}h6--collapsed - Collapses vertical spacing around heading.
+  //
+  // No styleguide reference.
+  h6
+    +font-display(zeta, 1, -1)
+    text-transform: uppercase
+    font-weight: bold
+    &.#{$prefix}h6--collapsed
+      +font-display(zeta, 1)

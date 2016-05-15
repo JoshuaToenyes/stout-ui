@@ -1,0 +1,22 @@
+@import "../util/exports"
+@import "./fonts"
+
+
+
++exports("typography/base")
+
+  // Body element styling.
+  //
+  // No styleguide reference.
+  body
+    +font-body(gamma)
+    margin: 0
+    padding: 0
+    color: lighten(black, 12%)
+
+
+  b, strong
+    font-weight: 700
+
+  em, i
+    font-style: italic

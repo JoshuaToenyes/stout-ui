@@ -1,0 +1,23 @@
+@import "bourbon/bourbon"
+@import "vars/component"
+@import "./fonts"
+@import "util/exports"
+
+
+
++exports("typography/tables")
+
+  table
+    +font-caption(delta, 0, 0)
+
+  th, td
+    padding-left: rythm(0.5)
+    padding-right: rythm(0.5)
+
+  th
+    +font-caption(gamma)
+    border-bottom: 3px solid #ddd
+
+  td:not(:first-child):not(:last-child)
+    border-left: 1px solid #ddd
+    border-right: 1px solid #ddd

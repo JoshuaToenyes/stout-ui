@@ -13,13 +13,38 @@ block content
   - var list = "Sample list item."
   - var control = "Make reservation"
   - var pre = "algorithm quicksort(A, lo, hi) is\n  if lo < hi then\n    p := partition(A, lo, hi)\n    quicksort(A, lo, p - 1)\n    quicksort(A, p + 1, hi)"
+  - var shortQuote = "Here's to the crazy ones. The misfits. The rebels. The troublemakers&hellip;"
+  - var longQuote = "Here's to the crazy ones. The misfits. The rebels. The troublemakers. The round pegs in the square holes. The ones who see things differently. They're not fond of rules. And they have no respect for the status quo. You can quote them, disagree with them, glorify or vilify them. About the only thing you can't do is ignore them. Because they change things. They push the human race forward. And while some may see them as the crazy ones, we see genius. Because the people who are crazy enough to think they can change the world, are the ones who do."
   
-  .heading-sample: h1.ui-collapse-spacing Heading 1
-  .heading-sample: h2.ui-collapse-spacing Heading 2
-  .heading-sample: h3.ui-collapse-spacing Heading 3
-  .heading-sample: h4.ui-collapse-spacing Heading 4
-  .heading-sample: h5.ui-collapse-spacing Heading 5 
-  .heading-sample: h6.ui-collapse-spacing Heading 6 
+  mixin list()
+    li Lorem ipsum dolor amet, consectetur adipiscing elit. 
+    li Inner list example
+      ol
+        li Ut ac augue at ex venenatis finibus at sit amet erat. 
+        li Et magnis dis parturient montes, nascetur ridiculus mus. 
+        li Sed porta ultricies cursus. 
+    li Ut ac augue at ex venenatis finibus at sit amet erat. 
+    li Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed porta ultricies cursus. 
+    li Inner unordered list example
+      ul
+        li Ut ac augue at ex venenatis finibus at sit amet erat. 
+        li Et magnis dis parturient montes, nascetur ridiculus mus. 
+        li Sed porta ultricies cursus. 
+    li Maecenas a erat non leo elementum consectetur. 
+    li Nulla quis erat eget augue fringilla aliquam.
+  
+  
+  
+  h1.ui-h1--collapsed Heading 1
+  h2.ui-h2--collapsed Heading 2
+  h3.ui-h3--collapsed Heading 3
+  h4.ui-h4--collapsed Heading 4
+  h5.ui-h5--collapsed Heading 5 
+  h6.ui-h6--collapsed Heading 6 
+  
+  hr
+  
+  
   
   h1 Heading 1
   p!= shortParagraph
@@ -39,3 +64,119 @@ block content
   
   h6 Heading 6
   p!= shortParagraph
+
+  hr
+    
+    
+    
+  h2 Word Wrapping
+  
+  p Browsers provide options for wrapping long words. Here's some examples.
+  
+  p.bordered-example.word-wrap-example This is a long and supercalifragil&shy;isticexpialidocious sentence. 次の単語グレートブリテンおよび北アイルランド連合王国で本当に大きな言葉
+  
+  hr
+    
+    
+    
+  h2 Hanging Punctuation
+  
+  p.ui-p--hanging-punctuation &ldquo;This sentence start with a quotation mark, which should hang outside the margin. #{paragraph}&rdquo;
+
+  hr
+    
+    
+    
+  h2 Block Quotes
+
+  p This is a short paragraph before the quote. #{shortParagraph}
+
+  blockquote
+    p= longQuote
+    cite Rob Siltanen
+
+  p A short paragraph after the quote. #{shortParagraph}
+
+  blockquote: p!= shortQuote
+  
+  blockquote.ui-blockquote--bar: p Sometimes you might want to use the bar-style block quote, like when referencing technical material, a website, or when not quoting an individual. #{paragraph}
+
+  p This is another spacing paragraph. !{paragraphOrnamental}
+
+  blockquote.ui-blockquote--bar: p This is an example of a short barred blockquote.
+
+  blockquote(cite="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/cite").ui-blockquote--bar
+    p Barred blockquotes can have citations too. #{paragraph}
+    cite Mozilla Developer Network
+    
+  p: strong If you want spacing to be awesome inside a blockquote, be sure to use paragraph tags.
+
+  hr
+    
+  
+  
+  h2 Lists
+  
+  p This is a short paragraph before the list. #{shortParagraph}
+  
+  ul
+    +list
+    +list
+    +list
+    
+  p Sample paragraph between list. #{shortParagraph}
+    
+  ol
+    +list
+    +list
+    +list
+    
+  p Paragraph after a list. #{shortParagraph}
+  
+  hr
+    
+    
+
+  h2 Code
+  
+  p Code blocks inside of #{'<pre>'} tags are treated as blocks of code. 
+  
+  pre
+    code
+      include ../_blueprint/master.sass
+
+  p Sample paragraph after code block. #{shortParagraph}
+
+  p We also style inline code tags like this #[code code] tags are not. We also handle #[code very long code tags in a special way, so they can wrap to another line]. #{shortParagraph}
+  
+  hr
+    
+  
+  
+  h2 Tables
+  
+  p Oh the joy of tables. This is a short sample paragraph, before a table. #{shortParagraph}
+  
+  table
+    tr
+      th First Name
+      th Last Name
+      th Address
+      th Phone Number
+    tr
+      td Fred
+      td Flintstone
+      td 301 Cobblestone Way, Bedrock
+      td (535) 235-3659
+    tr
+      td Steve
+      td Jobs
+      td 2101 Waverley Street, Palo Alto, CA 94301
+      td Not Listed
+    tr
+      td Mr. 
+      td President
+      td 1600 Pennsylvania Avenue, NW Washington, D.C.
+      td (202) 456-1414
+      
+  p Sample paragraph after a table. #{shortParagraph}

@@ -1,16 +1,25 @@
 @import "bourbon/bourbon"
-@import "../colors/default"
-@import "./default"
+@import "vars/component"
+@import "./fonts"
 @import "util/exports"
 
 
-+exports("typography/default/paragraphs")
 
++exports("typography/paragraphs")
+
+
+  // Standard paragraph element.
+  //
+  // .{prefix}p--collapsed            - Collapses vertical spacing around heading.
+  // .{prefix}p--hanging-punctuation  - Collapses vertical spacing around heading.
+  //
+  // No styleguide reference.
   p
-    @extend %typography-body-1
+    +font-body(gamma, 0, 0)
+    +hyphens(auto)
 
-    em
-      @extend %typography-body-em
+    &.#{$prefix}p--collapsed
+      +font-body(gamma, 0, -1)
 
-    strong, b
-      @extend %typography-body-1-b
+    &.#{$prefix}p--hanging-punctuation
+      text-indent: -0.4em

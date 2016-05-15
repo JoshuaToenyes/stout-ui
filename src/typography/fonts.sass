@@ -12,7 +12,7 @@
 ///
 /// @group font
 /// @access public
-=font-generate-font($font-map, $lvl)
+=font-generate-font($font-map, $lvl, $top: null, $bottom: null, $mono: null)
   $font: map-get($font-map, $lvl)
   $family: map-get($font, family)
   $weight: map-get($font, weight)
@@ -20,11 +20,22 @@
   $style: map-get($font, style)
   $font-size: map-get($font, size)
   $baseline-shift: map-get($font, baseline-shift)
-  $top: map-get($font, top)
-  $bottom: map-get($font, bottom)
   $line-height: map-get($font, line-height)
+
+  @if $top == null
+    $top: map-get($font, top)
+
+  @if $bottom == null
+    $bottom: map-get($font, bottom)
+
   +fontset($family, $weight, $variant, $style)
   +typeset($font-size, $line-height, $baseline-shift, $top, $bottom)
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+
+  @if $mono != null
+    +hyphens(auto)
+    +font-feature-settings("pnum", "kern", "liga")
 
 
 
@@ -44,9 +55,9 @@
 ///
 /// @group font
 /// @access public
-=font-display($lvl)
+=font-display($lvl, $top: null, $bottom: null)
   $map: $font-display
-  +font-generate-font($map, $lvl)
+  +font-generate-font($map, $lvl, $top, $bottom)
 
 
 /// Outputs the lead paragraph font of the specified level.
@@ -66,9 +77,9 @@
 ///
 /// @group font
 /// @access public
-=font-body($lvl)
+=font-body($lvl, $top: null, $bottom: null)
   $map: $font-body
-  +font-generate-font($map, $lvl)
+  +font-generate-font($map, $lvl, $top, $bottom)
 
 
 /// Outputs the emphasis font of the specified level.
@@ -77,9 +88,9 @@
 ///
 /// @group font
 /// @access public
-=font-emphasis($lvl)
+=font-emphasis($lvl, $top: null, $bottom: null)
   $map: $font-emphasis
-  +font-generate-font($map, $lvl)
+  +font-generate-font($map, $lvl, $top, $bottom)
 
 
 /// Outputs the monospaced font of the specified level.
@@ -88,9 +99,9 @@
 ///
 /// @group font
 /// @access public
-=font-mono($lvl)
+=font-mono($lvl, $top: null, $bottom: null)
   $map: $font-mono
-  +font-generate-font($map, $lvl)
+  +font-generate-font($map, $lvl, $top, $bottom, true)
   white-space: pre
 
 
@@ -100,9 +111,9 @@
 ///
 /// @group font
 /// @access public
-=font-caption($lvl)
+=font-caption($lvl, $top: null, $bottom: null)
   $map: $font-caption
-  +font-generate-font($map, $lvl)
+  +font-generate-font($map, $lvl, $top, $bottom)
 
 
 /// Outputs the control font of the specified level.
@@ -111,8 +122,8 @@
 ///
 /// @group font
 /// @access public
-=font-control($lvl)
+=font-control($lvl, $top: null, $bottom: null)
   $map: $font-control
-  +font-generate-font($map, $lvl)
+  +font-generate-font($map, $lvl, $top, $bottom)
   text-transform: uppercase
   letter-spacing: 1px
