@@ -1,6 +1,5 @@
 @import "bourbon/bourbon"
 @import "util/exports"
-@import "typography/default"
 @import "placeholder/cover-parent"
 @import "colors/default"
 @import "ink/ink"
@@ -24,9 +23,6 @@
     -webkit-tap-highlight-color: transparent
     cursor: pointer
     +filter(blur(0))
-
-    .#{$rl}
-      @extend %typography-body-1
 
     .#{$ri}
       +transition(border 1s)

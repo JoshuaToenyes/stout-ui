@@ -1,7 +1,6 @@
 @import "bourbon/bourbon"
 @import "util/exports"
 @import "placeholder/no-select"
-@import "typography/default"
 @import "colors/default"
 @import "vars/input"
 @import "vars/component"
@@ -44,7 +43,6 @@
     margin-bottom: 2.5em
 
     .#{$label}, .#{$length-label}, .#{$validation-messages}
-      @extend %typography-caption-01
       @extend %no-select
 
     .#{$label}
@@ -112,7 +110,6 @@
         left: 0
 
     input
-      @extend %typography-body-1
       +transform-origin(top right)
       +transition-property(color, transform)
       +transition-duration($bump-time, $bump-time)

@@ -4,7 +4,6 @@
 @import "util/visibility"
 @import "vars/component"
 @import "vars/modal"
-@import "typography/default"
 
 +exports("modal/alert")
 
@@ -21,12 +20,8 @@
     padding: 1em 1em 0.8em 1em
 
   .#{$title}
-    @extend %typography-display-2
     margin-top: 0.3em
     padding-right: 1rem
-
-  .#{$body}
-    @extend %typography-body-1
 
   .#{$controls}
     text-align: right

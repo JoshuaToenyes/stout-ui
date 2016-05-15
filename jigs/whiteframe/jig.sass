@@ -1,11 +1,9 @@
 @import "../_blueprint/master.sass"
 @import "../../whiteframe/whiteframe"
-@import "../../typography/default"
 
 @for $i from 0 through 30
   .whiteframe-#{$i}
     +whiteframe($i)
-    @extend %typography-pre-01
     height: 140px
     width: 140px
     text-align: center
