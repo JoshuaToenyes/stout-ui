@@ -63,6 +63,20 @@ module.exports = class HasCollapsibleStatesView extends Foundation
 
 
   ###*
+  # Property allows the using class to sync it's collapsible state with it's
+  # parent component. If set to `true` and this component's parent uses the
+  # `HasCollapsibleStatesView` trait, it will set the parent's collapsible state
+  # to match this element's state.
+  #
+  # @member setParentCollapsibleState
+  # @memberof stout-ui/traits/HasCollapsibleStatesView#
+  ###
+  @property 'setParentCollapsibleState',
+    default: false
+    type: 'boolean'
+
+
+  ###*
   # Sets the collpasible state of this component view.
   #
   # @method _setCollapsingState
@@ -86,3 +100,8 @@ module.exports = class HasCollapsibleStatesView extends Foundation
     @prefixedClasses.remove COLLAPSING_CLS, COLLAPSED_CLS,
     EXPANDING_CLS, EXPANDED_CLS
     @prefixedClasses.add add
+
+    # Set the parent's collapsible state to match.
+    if @setParentCollapsibleState and @parent and
+    @parent.usingTrait(HasCollapsibleStatesView)
+      @parent._setCollapsingState(state)

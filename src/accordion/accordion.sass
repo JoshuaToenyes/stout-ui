@@ -49,8 +49,7 @@
     padding-left: rythm(0.5)
     padding-right: rythm(0.5)
 
-  #{$trigger},
-  #{$content}
+  #{$item}
     +transition(all 500ms)
     border-left: 1px solid transparent
     border-right: 1px solid transparent
@@ -61,7 +60,6 @@
       border-right: 1px solid $color-rule
 
 
-
   #{$item}
     border-bottom: 1px solid $color-rule
     cursor: pointer
@@ -69,11 +67,14 @@
     &:first-child
       border-top: 1px solid $color-rule
 
+
+  #{$content}
     +transitioning-out
-      +transition(all $collapsible-child-trans-out-time)
+      +transition(all $collapsible-child-trans-out-time $ease-out-cubic)
+      //+transition(all 50ms $ease-out-expo)
 
     +transitioning-in
-      +transition(all $collapsible-child-trans-in-time)
+      +transition(all $collapsible-child-trans-in-time $ease-in-cubic)
 
 
   #{$caret}

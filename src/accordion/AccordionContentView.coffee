@@ -74,9 +74,3 @@ module.exports = class AccordionContentView extends InteractiveView
     @prefixedClasses.add ACCORDION_CONTENT_CLASS
 
     @root.setAttribute 'role', 'list'
-
-    @on 'transition:in', =>
-      @parent?.parent?.children.get(ITEM_TAG_NAME)?.forEach (item) =>
-        if item.parent isnt @parent
-          item.children.get(TRIGGER_TAG_NAME).forEach (trigger) ->
-            trigger.collapse()

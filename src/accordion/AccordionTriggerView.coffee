@@ -55,7 +55,11 @@ module.exports = class AccordionTriggerView extends InteractiveView
   @useTrait CollapsibleTriggerView, args: ['parent']
 
   constructor: (init, events) ->
-    defaults init, {template, tagName: TAG_NAME}
+    defaults init, {
+      template,
+      tagName: TAG_NAME,
+      setParentCollapsibleState: true
+    }
     super init, events
 
     @prefixedClasses.add ACCORDION_TRIGGER_CLS

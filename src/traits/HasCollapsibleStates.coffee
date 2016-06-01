@@ -57,7 +57,7 @@ module.exports = class HasCollapsibleStates extends Foundation
   ###
   @property 'expanded',
     type: 'boolean'
-    default: true
+    default: false
 
 
   ###*
