@@ -1,0 +1,12 @@
+@import "bourbon/bourbon"
+@import "util/exports"
+@import "vars/draggable"
+@import "vars/component"
+
++exports("draggable/draggable")
+
+  $draggable: ".#{$prefix}#{$draggable-class}"
+  $dragging: ".#{$prefix}#{$dragging-class}"
+
+  #{$draggable}
+    position: relative
