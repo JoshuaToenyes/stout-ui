@@ -1,0 +1,19 @@
+@import "traits/affixable"
+@import "vars/component"
+@import "vars/popup"
+@import "util/component"
+@import "util/transitioning"
+@import "util/visibility"
+
+
++exports("popup/popup")
+
+  +component($popup-tag)
+
+  $popup: ".#{$prefix}#{$popup-class}"
+
+  #{$popup}
+    +hidden
+      display: none
+    +visible
+      display: block

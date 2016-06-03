@@ -1,0 +1,11 @@
+@import "vars/affixable"
+@import "vars/component"
+@import "util/transitioning"
+
+
++exports("affixable/affixable")
+
+  $affixable: ".#{$prefix}#{$affixable-class}"
+
+  #{$affixable}
+    position: fixed

@@ -1,0 +1,25 @@
+@import "../_blueprint/master.sass"
+@import "../../button/button"
+@import "../../popup/popup"
+@import "../../traits/draggable"
+@import "../../whiteframe/whiteframe"
+
+.wrapper
+  height: 4000px
+  width: 4000px
+  max-width: none
+
+ui-popup
+  +whiteframe(4)
+  background-color: whitesmoke
+  padding: 0.5em
+  margin: 0.5em
+
+.draggable-example
+  +whiteframe(2)
+  width: 100px
+  height: 100px
+  background-color: steelblue
+
+  &.ui-dragging
+    +whiteframe(8)
