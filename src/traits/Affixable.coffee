@@ -102,29 +102,28 @@ module.exports = class Affixable extends Foundation
 
     if posY isnt 'center'
       if offScreenLeft
-        left = Math.min(-mleft, targetR.left)
+        left = Math.min(-mleft, targetR.right) # - mleft)
       if offScreenRight
-        left = Math.max(window.innerWidth - r.width - mleft, targetR.right - r.width - mleft)
+        left = Math.max(window.innerWidth - r.width - mleft, targetR.left - r.width - mright - mleft)
 
     if posX isnt 'center'
       if offScreenTop
-        top = Math.min(-mtop, targetR.bottom - r.height - mtop)
+        top = Math.min(-mtop, targetR.bottom) # - mtop)
       if offScreenBottom
-        top = Math.max(window.innerHeight - r.height - mtop, targetR.top - mtop)
+        top = Math.max(window.innerHeight - r.height - mtop, targetR.top - r.height - mtop - mbottom)
 
-    if not force and posY is 'top' and offScreenTop
-      return @__affix "#{posX} bottom"
-
-    if not force and posY is 'bottom' and offScreenBottom
-      return @__affix "#{posX} top"
-
-    if not force and posX is 'left' and offScreenLeft
-      return @__affix "right #{posY}"
-
-    if not force and posX is 'right' and offScreenRight
-      return @__affix "left #{posY}"
-
-    #if posY is 'top' or posY is 'bottom' or posY is 'center'
+    # If the affixable is positioned at the center (x or y axes), and it goes
+    # off-screen, let's swap it to the other side of the target. This keeps it
+    # on-screen as long as possible.
+    if not force and posY is 'center' or posX is 'center'
+      if posX is 'right' and offScreenRight
+        return @__affix "left center"
+      if posX is 'left' and offScreenLeft
+        return @__affix "right center"
+      if posY is 'bottom' and offScreenBottom
+        return @__affix "top center"
+      if posY is 'top' and offScreenTop
+        return @__affix "bottom center"
 
     @root.style.left = "#{left}px"
     @root.style.top = "#{top}px"
