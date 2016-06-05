@@ -62,7 +62,8 @@ window.onload = ->
       affixTo: draggable
       parentEl: document.body
       affixPosition: 'top center'
-      contents: 'moveable popup'
+      contents: 'not swappable affixable'
+      swapAffixable: false
     }
     topPopup.render().then -> topPopup.show()
 
@@ -80,7 +81,8 @@ window.onload = ->
       affixTo: draggable
       parentEl: document.body
       affixPosition: 'right center'
-      contents: 'moveable popup'
+      contents: 'not slidable'
+      slideAffixable: false
     }
     bottomPopup.render().then -> bottomPopup.show()
 

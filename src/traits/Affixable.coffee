@@ -24,13 +24,27 @@ require '../vars/affixable'
 AFFIXABLE_CLASS = vars.readPrefixed 'affixable/affixable-class'
 
 
+
 ###*
+# The Affixable trait allows a component to be "fixed" to some other element,
+# positioning it relative to the element to-which it's "affixed" to.
 #
-#
-# @exports stout-ui/traits/Collapsible
+# @exports stout-ui/traits/Affixable
 # @mixin
 ###
 module.exports = class Affixable extends Foundation
+
+  ###*
+  # The position to render this Affixable, relative it it's `affixTo` target.
+  # This should be a string of the form, "center center", "top center",
+  # "top left", etc.
+  #
+  # @member {string} affixPosition
+  # @memberof stout-ui/traits/Affixable#
+  ###
+  @property 'affixPosition',
+    type: 'string'
+
 
   ###*
   # The target element or view which this Affixable should be "affixed" to. If
@@ -52,10 +66,27 @@ module.exports = class Affixable extends Foundation
         target
 
 
-  @property 'fixed'
+  ###*
+  # Boolean indicating if the Affixable should "slide" to keep it in-view.
+  #
+  # @member {string} slideAffixable
+  # @memberof stout-ui/traits/Affixable#
+  ###
+  @property 'slideAffixable',
+    default: true
+    type: 'boolean'
 
 
-  @property 'affixPosition'
+  ###*
+  # Boolean indicating if the position of the affixable should be swappable, or
+  # should not "swap" to the other side when it is rendered out-of-view.
+  #
+  # @member {string} swapAffixable
+  # @memberof stout-ui/traits/Affixable#
+  ###
+  @property 'swapAffixable',
+    default: true
+    type: 'boolean'
 
 
   ###*
@@ -68,8 +99,6 @@ module.exports = class Affixable extends Foundation
   __affix: (force) ->
     targetR = @affixTo.getBoundingClientRect()
     r = @root.getBoundingClientRect()
-
-    #if force and @fixed then return
 
     [posX, posY] = positionString(force or @affixPosition)
     cs = getComputedStyle @root
@@ -94,28 +123,32 @@ module.exports = class Affixable extends Foundation
       when 'bottom' then top = targetR.bottom
       when 'center' then top = targetCenterY - r.height / 2 - ymargin / 2
 
-
-    offScreenLeft = left + mleft < 0
-    offScreenRight = left + r.width + mleft > window.innerWidth
-    offScreenTop = top + mtop < 0
+    # Calculate booleans flags to indicate if affixible would be off-screen.
+    offScreenLeft   = left + mleft < 0
+    offScreenRight  = left + r.width + mleft > window.innerWidth
+    offScreenTop    = top + mtop < 0
     offScreenBottom = top + r.height + mbottom > window.innerHeight
 
-    if posY isnt 'center'
+    # Update calculated positions to keep "slideable" affixables in-view.
+    if @slideAffixable and posY isnt 'center'
       if offScreenLeft
-        left = Math.min(-mleft, targetR.right) # - mleft)
+        left = Math.min(-mleft, targetR.right)
       if offScreenRight
-        left = Math.max(window.innerWidth - r.width - mleft, targetR.left - r.width - mright - mleft)
+        left = Math.max(window.innerWidth - r.width - mleft,
+        targetR.left - r.width - mright - mleft)
 
-    if posX isnt 'center'
+    if @slideAffixable and posX isnt 'center'
       if offScreenTop
-        top = Math.min(-mtop, targetR.bottom) # - mtop)
+        top = Math.min(-mtop, targetR.bottom)
       if offScreenBottom
-        top = Math.max(window.innerHeight - r.height - mtop, targetR.top - r.height - mtop - mbottom)
+        top = Math.max(window.innerHeight - r.height - mtop,
+        targetR.top - r.height - mtop - mbottom)
 
     # If the affixable is positioned at the center (x or y axes), and it goes
     # off-screen, let's swap it to the other side of the target. This keeps it
     # on-screen as long as possible.
-    if not force and posY is 'center' or posX is 'center'
+    if @swapAffixable and not force and
+    (posY is 'center' or posX is 'center')
       if posX is 'right' and offScreenRight
         return @__affix "left center"
       if posX is 'left' and offScreenLeft
@@ -125,12 +158,17 @@ module.exports = class Affixable extends Foundation
       if posY is 'top' and offScreenTop
         return @__affix "bottom center"
 
+    # Position the component's root element as calculated.
     @root.style.left = "#{left}px"
     @root.style.top = "#{top}px"
 
 
-
-
+  ###*
+  # Initiates the Affixable component.
+  #
+  # @method initTrait
+  # @memberof stout-ui/traits/Affixable#
+  ###
   initTrait: ->
     @classes.add AFFIXABLE_CLASS
 
