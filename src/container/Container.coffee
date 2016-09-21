@@ -59,7 +59,7 @@ module.exports = class Container extends Component
   # @type string|HTMLElement|stout-client/view/ClientViewModel
   ###
   @property 'contents',
-    serializable: false
+    enumerable: false
     get: (c) ->
       if c instanceof ClientViewModel
         c.parent = @root

@@ -64,7 +64,7 @@ module.exports = class InteractiveView extends ComponentView
   # Add event properties for each.
   EVENTS.forEach (eventName) =>
     @property eventName,
-      serializable: false
+      enumerable: false
       set: (handler) ->
         switch typeof handler
           when 'string'
