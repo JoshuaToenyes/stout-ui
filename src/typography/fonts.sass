@@ -82,9 +82,9 @@
 ///
 /// @group font
 /// @access public
-=font-body($lvl, $top: null, $bottom: null)
+=font-body($lvl, $top: null, $bottom: null, $typeset: true)
   $map: $font-body
-  +font-generate-font($map, $lvl, $top, $bottom)
+  +font-generate-font($map, $lvl, $top, $bottom, null, $typeset)
 
 
 /// Outputs the emphasis font of the specified level.
@@ -116,9 +116,9 @@
 ///
 /// @group font
 /// @access public
-=font-caption($lvl, $top: null, $bottom: null)
+=font-caption($lvl, $top: null, $bottom: null, $typeset: true)
   $map: $font-caption
-  +font-generate-font($map, $lvl, $top, $bottom)
+  +font-generate-font($map, $lvl, $top, $bottom, null, $typeset)
 
 
 /// Outputs the control font of the specified level.
