@@ -6,6 +6,7 @@
 @import "placeholder/cover-parent"
 @import "vars/button"
 @import "vars/component"
+@import "typography/fonts"
 
 +exports("button/button")
 
@@ -296,42 +297,42 @@
     // ## Button Sizes
 
     &.#{$prefix}tiny button
-      //@extend %typography-control-001
+      +font-control(zeta)
 
       svg
         height: $button-tiny-icon-size
         width: $button-tiny-icon-size
 
     &.#{$prefix}small button
-      //@extend %typography-control-01
+      +font-control(epsilon)
 
       svg
         height: $button-small-icon-size
         width: $button-small-icon-size
 
     button
-      //@extend %typography-control-1
+      +font-control(delta)
 
       svg
         height: $button-normal-icon-size
         width: $button-normal-icon-size
 
     &.#{$prefix}large button
-      //@extend %typography-control-2
+      +font-control(gamma)
 
       svg
         height: $button-large-icon-size
         width: $button-large-icon-size
 
     &.#{$prefix}huge button
-      //@extend %typography-control-3
+      +font-control(beta)
 
       svg
         height: $button-huge-icon-size
         width: $button-huge-icon-size
 
     &.#{$prefix}massive button
-      //@extend %typography-control-4
+      +font-control(alpha)
 
       svg
         height: $button-massive-icon-size
