@@ -12,7 +12,7 @@
 ///
 /// @group font
 /// @access public
-=font-generate-font($font-map, $lvl, $top: null, $bottom: null, $mono: null)
+=font-generate-font($font-map, $lvl, $top: null, $bottom: null, $mono: null, $typeset: true)
   $font: map-get($font-map, $lvl)
   $family: map-get($font, family)
   $weight: map-get($font, weight)
@@ -29,7 +29,12 @@
     $bottom: map-get($font, bottom)
 
   +fontset($family, $weight, $variant, $style)
-  +typeset($font-size, $line-height, $baseline-shift, $top, $bottom)
+
+  @if $typeset == true
+    +typeset($font-size, $line-height, $baseline-shift, $top, $bottom)
+  @else
+    font-size: $font-size
+
   -webkit-font-smoothing: antialiased
   -moz-osx-font-smoothing: grayscale
 
@@ -122,8 +127,8 @@
 ///
 /// @group font
 /// @access public
-=font-control($lvl, $top: null, $bottom: null)
+=font-control($lvl)
   $map: $font-control
-  +font-generate-font($map, $lvl, $top, $bottom)
+  +font-generate-font($map, $lvl, null, null, null, false)
   text-transform: uppercase
   letter-spacing: 1px
