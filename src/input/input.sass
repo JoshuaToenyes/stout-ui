@@ -2,6 +2,7 @@
 @import "util/exports"
 @import "placeholder/no-select"
 @import "colors/default"
+@import "typography/fonts"
 @import "vars/input"
 @import "vars/component"
 @import "vars/validation-messages"
@@ -44,6 +45,7 @@
 
     .#{$label}, .#{$length-label}, .#{$validation-messages}
       @extend %no-select
+      +font-caption(delta, null, null, false)
 
     .#{$label}
       +transform-origin(top left)
@@ -114,6 +116,7 @@
       +transition-property(color, transform)
       +transition-duration($bump-time, $bump-time)
       +transition-timing-function($ease-out-quint, linear)
+      +font-body(gamma, null, null, false)
       font-weight: 500
       display: block
       margin: 0
