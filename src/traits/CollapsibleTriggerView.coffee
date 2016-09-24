@@ -78,8 +78,6 @@ module.exports = class CollapsibleTriggerView extends Foundation
 
     readyTarget = @[readyTarget] or @
 
-    readyTarget.once 'ready', @_onCollapsibleReady, @
-
     # Listen for touchstart/mouseup events to toggle the tree.
     @on 'mouseup', (e) =>
       e.data.stopPropagation()
@@ -140,7 +138,9 @@ module.exports = class CollapsibleTriggerView extends Foundation
 
 
   ###*
-  # Updates the "collapsible" display state of this item on-ready.
+  # Updates the "collapsible" display state of this item. This method should
+  # be called by the using class when the item is rendered and all collapsible
+  # elements have stabilized their visibility state.
   #
   # @method _onCollapsibleReady
   # @memberof stout-ui/traits/CollapsibleTriggerView#
@@ -151,10 +151,10 @@ module.exports = class CollapsibleTriggerView extends Foundation
       if @collapsed
         @_collapse(true)
       else
-        @prefixedClasses.add EXPANDED_CLS
+        @_setCollapsingState 'expanded'
       @prefixedClasses.add COLLAPSIBLE
     if @collapsed and @collapsible
-      @prefixedClasses.add COLLAPSED_CLS
+      @_setCollapsingState 'collapsed'
 
 
   ###*

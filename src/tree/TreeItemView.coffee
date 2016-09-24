@@ -55,3 +55,8 @@ module.exports = class TreeItemView extends InteractiveView
     @prefixedClasses.add TREE_ITEM_CLS
 
     @root.setAttribute 'role', 'listitem'
+
+
+  render: ->
+    super().then =>
+      @_onCollapsibleReady()
