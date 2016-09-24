@@ -33,6 +33,9 @@
 
   +component($drawer-tag)
 
+  #{$drawer}
+    position: absolute
+
 
   #{$drawer}:not(.#{$prefix}#{$transitioning})
     +transition(box-shadow $pane-trans-in-time)
