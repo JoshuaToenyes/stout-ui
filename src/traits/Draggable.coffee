@@ -49,7 +49,7 @@ module.exports = class Draggable extends Foundation
   # @memberof stout-ui/traits/Draggable#
   ###
   @property 'axis',
-    values: [null, 'x', 'y',]
+    values: [undefined, 'x', 'y',]
     set: (v) -> if isString(v) then v.toLowerCase() else v
 
 
