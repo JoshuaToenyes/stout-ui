@@ -13,6 +13,19 @@ module.exports = class Pane extends Component
     super arguments...
 
   ###*
+  # Set to `true` to horizontally and vertically center the pane in the
+  # viewport.
+  #
+  # @member center
+  # @memberof stout-ui/pane/Pane#
+  # @public
+  ###
+  @property 'center',
+    default: false
+    type: 'boolean'
+
+
+  ###*
   # Transition type.
   #
   # @member transition

@@ -50,7 +50,7 @@ positionOut = ->
 
     switch @width
       when 'full' then fz[0] = W
-      when 'auto' then fz[0] = width
+      when 'auto' then fz[0] = Math.min(width, W)
       else fz[0] = @width
 
     switch @height
@@ -63,8 +63,8 @@ positionOut = ->
 
     sx = iz[0] / fz[0]
     sy = iz[1] / fz[1]
-    tx = fc[0] - ic[0]
-    ty = fc[1] - ic[1]
+    tx = (fc[0] + (W - fz[0]) / 2) - ic[0]
+    ty = (fc[1] + (H - fz[1]) / 2) - ic[1]
 
     tx -= W / 2
     ty -= H / 2

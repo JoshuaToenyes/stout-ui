@@ -100,7 +100,7 @@ module.exports = class PaneView extends ComponentView
       transitions[@transition].out?.call @
 
   # Clone shared view-model properties.
-  @cloneProperty Pane, 'transition start end width height'
+  @cloneProperty Pane, 'transition start end width height center'
 
 
   ###*
@@ -127,6 +127,9 @@ module.exports = class PaneView extends ComponentView
     @root.style.height = "auto"
     @root.style.transform = "none"
 
+    if @center
+      @root.style.top = '0'
+      @root.style.left = '0'
 
 
   ###*
@@ -144,31 +147,28 @@ module.exports = class PaneView extends ComponentView
       if w then @root.style.width = "#{w}px"
       if h then @root.style.height = "#{h}px"
 
-    if @width is 'auto' or @height is 'auto'
-      @contents.getRenderedDimensions().then ({width, height}) =>
-        switch @width
-          when 'full' then w = W
-          when 'auto' then w = width
-          else w = @width
-        switch @height
-          when 'full' then h = H
-          when 'auto' then h = height
-          else h = @height
+      # Center pane in the viewport.
+      if @center
+        if w and w < W
+          @root.style.left = "#{(W - w) / 2}px"
+        if h and h < H
+          @root.style.top = "#{(H - h) / 2}px"
 
-        if w < 1
-          w *= W
-          h = null
-        if h < 1
-          h *= H
-          w = null
+    #if @width is 'auto' or @height is 'auto'
+    @contents.getRenderedDimensions().then ({width, height}) =>
+      switch @width
+        when 'full' then w = W
+        when 'auto' then w = width
+        else w = @width
+      switch @height
+        when 'full' then h = H
+        when 'auto' then h = height
+        else h = @height
 
-        setWH w, h
+      if w < 1 then w *= W
+      if h < 1 then h *= H
 
-    else
-      w = if @width is 'full' then W else @width
-      h = if @height is 'full' then H else @height
       setWH w, h
-
 
 
   ###*
