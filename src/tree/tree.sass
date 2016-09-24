@@ -1,6 +1,5 @@
 @import "bourbon/bourbon"
 @import "util/exports"
-//@import "typography/default"
 @import "vars/tree"
 @import "vars/collapsible"
 @import "vars/component"
@@ -19,11 +18,13 @@
   $collapsing:  "#{$item}.#{$prefix}#{$collapsible-collapsing-class}"
   $expanding:   "#{$item}.#{$prefix}#{$collapsible-expanding-class}"
 
+
   #{$prefix}#{$tree-tag},
   #{$prefix}#{$tree-item-tag}
     display: none
     &[rendered]
       display: block
+
 
   #{$tree},
   #{$item}
@@ -33,8 +34,8 @@
     +visible
       display: block
 
+
   #{$item}
-    //@extend %typography-body-1-b
     padding-left: 1em
     +transform(translate(0, 0.4em))
     opacity: 0
@@ -52,19 +53,12 @@
       opacity: 1
 
 
-  #{$item} #{$item}
-    //@extend %typography-body-1
-
-
-  #{$item} #{$item} #{$item}
-    //@extend %typography-body-01
-
-
   #{$caret}
     height: +modular-scale(-2)
     position: relative
     bottom: 0.06em
     display: none
+
 
   #{$collapsible} > svg
     +transition(all $collapsible-expand-time)
@@ -73,10 +67,10 @@
     left: 0
     top: 0.62em
 
+
   #{$expanded} > svg,
   #{$expanding} > svg
     +transform(rotate(90deg) translate3d(0,0,0))
-
 
 
   #{$collapsed} > svg,
