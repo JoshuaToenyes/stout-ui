@@ -61,6 +61,7 @@ module.exports = class ModalView extends PaneView
     @transition = 'zoom'
     @height = 0.8
     @width = 'auto'
+    @center = true
     #@width = 0.62
     @prefixedClasses.add MODAL_CLS
 
