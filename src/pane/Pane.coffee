@@ -38,7 +38,7 @@ module.exports = class Pane extends Component
   ###
   @property 'start',
     values: [
-      null
+      undefined
       'top'
       'right'
       'bottom'
@@ -56,7 +56,7 @@ module.exports = class Pane extends Component
   ###
   @property 'end',
     values: [
-      null
+      undefined
       'top'
       'right'
       'bottom'
