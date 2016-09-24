@@ -33,7 +33,7 @@ document.addEventListener 'DOMContentLoaded', ->
 
   pane.render().then -> pane.hide()
 
-  button.factory
+  button.create
     label: 'Show PaneView'
     parentEl: '.ex.basic .controls'
     click: ->
@@ -43,7 +43,7 @@ document.addEventListener 'DOMContentLoaded', ->
 
 
   for transition in ['fade', 'zoom', 'overlay']
-    button.factory
+    button.create
       label: transition
       size: 'small'
       type: 'inverse'
@@ -59,7 +59,7 @@ document.addEventListener 'DOMContentLoaded', ->
 
 
   for start in ['top', 'right', 'bottom', 'left']
-    button.factory
+    button.create
       label: start
       size: 'small'
       type: 'inverse'
@@ -75,7 +75,7 @@ document.addEventListener 'DOMContentLoaded', ->
 
   # --- Sizing ---
 
-  button.factory
+  button.create
     label: 'Auto Size Width'
     size: 'small'
     type: 'inverse'
@@ -89,7 +89,7 @@ document.addEventListener 'DOMContentLoaded', ->
       pane.transitionIn()
   .render()
 
-  button.factory
+  button.create
     label: '200px Height'
     size: 'small'
     type: 'inverse'
