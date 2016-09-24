@@ -90,4 +90,4 @@ module.exports =
   ###*
   # Sets-up the transition-out. This method is essentially a no-op.
   ###
-  setupOut: -> Promise.noop()
+  setupOut: -> Promise.fulfilled()
