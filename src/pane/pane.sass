@@ -36,10 +36,11 @@
     overflow: scroll
     max-width: 100%
     background-color: white
-    position: absolute
+    position: fixed
     left: 0
     top: 0
     box-shadow: 0 0 20px rgba(black, 0.25)
+    +transform(translate3d(0, 0, 0))
     +transform-origin(top left 0)
     +filter(blur(0))
 
@@ -70,10 +71,6 @@
         +transition-duration($pane-trans-in-time)
         opacity: $display-opacity
 
-
-  .#{$pane}.#{$zoom}
-    left: 50%
-    top: 50%
 
   .#{$pane}.#{$overlay}
     opacity: 0.5

@@ -26,7 +26,7 @@ calcSize = ->
 calcCenter = ->
   if @activator
     b = @activator.getBoundingClientRect()
-    [b.left + 0.5 * b.width, b.top + 0.5 * b.height]
+    [b.left, b.top]
   else
     [window.innerWidth / 2, window.innerHeight / 2]
 
@@ -66,12 +66,17 @@ positionOut = ->
     tx = fc[0] - ic[0]
     ty = fc[1] - ic[1]
 
+    tx -= W / 2
+    ty -= H / 2
+
     p = [sx, 0, 0, 0, 0, sy, 0, 0, 0, 0, 1, 0, -tx, -ty, 0, 1]
 
-    @root.style.transform = "
-      matrix3d(#{p.join(',')})
-      translate3d(-50%, -50%, 0)"
+    @root.style.transform = "matrix3d(#{p.join(',')})"
 
+
+applyFullSizeTransform = ->
+  p = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
+  @root.style.transform = "matrix3d(#{p.join(',')})"
 
 
 ###*
@@ -86,11 +91,7 @@ module.exports =
   ###*
   # Translates the pane in.
   ###
-  in: ->
-    p = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]
-    @root.style.transform = "
-      matrix3d(#{p.join(',')})
-      translate3d(-50%, -50%, 0)"
+  in: applyFullSizeTransform
 
 
   ###*
@@ -108,4 +109,6 @@ module.exports =
   ###*
   # Sets-up the transition-out. This method is essentially a no-op.
   ###
-  setupOut: -> Promise.noop()
+  setupOut: ->
+    applyFullSizeTransform.call(@)
+    Promise.fulfilled()
