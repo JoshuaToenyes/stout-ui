@@ -16,6 +16,6 @@ parser.register TAG_NAME, ModalView, Modal
 
 module.exports =
 
-  factory: (init) ->
+  create: (init) ->
     defaults init, {context: new Modal}
     (new ModalView init).context
