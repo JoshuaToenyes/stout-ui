@@ -149,8 +149,9 @@ module.exports = class InkableViewTrait extends Foundation
   ###
   fadeInk: (ink, t, cb) ->
     if ink.length
-      for i in [0...ink.length - 2]
-        @fadeInk ink[0], t
+      if ink.length > 1
+        for i in [1...ink.length]
+          @fadeInk ink[i], t
       ink = ink[0]
     ink.classList.add 'fade-out'
     ink.style.transitionDuration = @inkFadeTime + 'ms'
