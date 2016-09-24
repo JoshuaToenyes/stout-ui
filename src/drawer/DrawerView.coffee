@@ -130,8 +130,6 @@ module.exports = class DrawerView extends PaneView
     defaults init, {tagName: TAG_NAME}
     super arguments...
 
-    console.log @container, @viewport
-
     # Don't immediately show the view.
     @options.showOnRender = false
 
