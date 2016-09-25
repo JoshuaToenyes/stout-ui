@@ -19,9 +19,8 @@ module.exports = ->
     minor: 'Bump, commit, and tag the package minor version.'
     major: 'Bump, commit, and tag the package major version.'
   }, (description, importance) ->
-    gulp.task importance, description, ->
+    gulp.task "bump:#{importance}", description, ->
       gulp.src ['./package.json']
       .pipe bump({type: importance})
       .pipe gulp.dest './'
       .pipe git.commit "Bump package #{importance} version."
-      .pipe tag()
