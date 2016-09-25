@@ -2,20 +2,17 @@
   "name": "stout-ui",
   "description": "Stout UI - An advanced user interface library.",
   "author": "Joshua Toenyes <joshua.toenyes@me.com>",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JoshuaToenyes/stout-ui"
+    "url": "https://github.com/RobotSnacks/stout-ui"
   },
   "license": "AGPL-3.0",
-  "dependencies": {
-    "stout-core": "JoshuaToenyes/stout-core",
-    "stout-client": "JoshuaToenyes/stout-client",
-    "async": "0.9.x",
-    "lodash": "^4.2",
-    "underscore.string": "2.3.x",
-    "uuid": "^2.0.0",
-    "validate.js": "*"
+  "peerDependencies": {
+    "lodash": "^4.14",
+    "stout-client": "^0.1.1",
+    "stout-core": "^0.8.5",
+    "uuid": "^2.0.0"
   },
   "devDependencies": {
     "browser-sync": "^2.11.0",
@@ -66,6 +63,7 @@
     "karma-phantomjs-launcher": "^0.2.3",
     "karma-safari-launcher": "^0.1.1",
     "karma-sauce-launcher": "^0.3.0",
+    "lodash": "^4.14",
     "minami": "^1.1.1",
     "mocha": "~2.3",
     "mock-browser": "^0.91.34",
@@ -79,6 +77,8 @@
     "selenium-standalone": "^4.8.0",
     "sinon": "^1.17.3",
     "sinon-chai": "^2.8.0",
+    "stout-client": "^0.1.1",
+    "stout-core": "^0.8.5",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.7.0",
