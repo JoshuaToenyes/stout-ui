@@ -1,13 +1,23 @@
 language: node_js
-
 node_js:
-  - "4.2"
-
+- '4.2'
 before_script:
-  - npm install -g gulp
-
-script: gulp build --fail-on-error
-
+- npm install -g gulp
+script: gulp coffee
 addons:
   sauce_connect:
     sauce_connect: true
+deploy:
+  provider: npm
+  email: joshua.toenyes@me.com
+  api_key:
+    secure: JHb89gsqEUuVOLDALOhvpm9SQ6UVqVXbSJ/04OI8tpYk2cSDrgsWlywWkl0c6xCrsDBMdycFjEEGfCx0vmMq8k6BEjH64TEN8/eRTxWL49qFrvGHma7miRd/M3XJ2IwTHSbiug6yzMs0dnQCrAqAT23eNSkvBR/Ew8zWPdfFf3T47Mq9enwfV/bl+gs1qXqVtCgl5qV/uOjG5MLd28bcJYDRZ3ty8Idjx1nFyx/hAiDSi4hWRsnx4Db+W5ZRKAtaaWay1aqVQ82YRUOLCJCbc612kgzf1PUSH18ahCmVGVRMvPtc+qz4F3UMmrtUNZ7IU45luZRaDkmJqp7RxVh7pw8jVbaufyPFklscfH51V0ECnSokEEXjxym8bKncCNhx34e2+2TM8USJ+nYATJzagtyVkJZclO2TT1AvlvMB7CEN5YgY6LJHY4my+rt2CX2o051aCzSO+lH8/LNCXFGtoSshbPxbr5HT1U82O7B7b6HHJ/3tlYhEclUNVEQja9Y9U70Y9A5DzTOB9aFkydUhn50ERkKFbSy9f3ISasxJF+uAYrit2Ds0QutGIIOgArz3f4m8GHJTJQmCKO+qnx7GveLpCo4zx0ax/WHFJ8SBcfcLs0mzwFncCNNNHkvKqsyx90FJ+fxlO4I3jQcLbnXTvmkJl9KLOMeIzn8Xg8IfeEo=
+  skip_cleanup: true
+  on:
+    tags: true
+    repo: RobotSnacks/stout-ui
+    branch: master
+notifications:
+  email: false
+  slack:
+    secure: OHC3nR1YEls07Rm2OhBk4sOFJMb+LJVlR0o/Ygh7A8aTnY+DELcN4k4ZnTYFJE4WncgPbriCIFZ5Q4EXri363XDupqiCwde/VI9NKx7TyISy6bivFwJHdpi1fK05wm9Fj41k4egNs+3Y/Yggck3VjapZBWDMeyjdxlKwQIWYDFDXiHOt7+FHxhDapXn09UC8Zxdb2fMDfvXLn8xQMoDQOEoE5mcRGdxAF5ZBw5unkFigv0/xg7F/KG2cZCGTvsfdeBNjdl9qwj+PPqnMoFC6UtclR9d4JMqiYe4S0+4PStngbkxdz3hthqBNk/1joAY37dBHuWJrwoI/MHkYXLnpKD1JqcEUytBbALtrk7cT3gUtvYZG8r2zxDn0miEXgrU4B2/pZWtNdmQ6jwWqd4iPvL+/Jxz/cpYq+nALaGRHEguDEejcazZfgBUrB37+QGiBaIxcktiY8Bdh2RsOBvVO/PYJ0KdOeQleU+IestyKUPCwx/FGp0z2RGimaqYshKzkJ7YRsJqZVTPkClI41neP0f/aKJZQ+4sUeIqqRmG4nXvFUkezRHdRY38BCdHgiQwUvWIV2/SbZ40SLJpP5HUkNhBuVIxV5UkaSWqvFbmgvqyFDg72h7jmp3tV5YV43bR6enVfCY2mAy3TG+P89mRU6BKLG6Yc7k54w7F//hMBZrc=
