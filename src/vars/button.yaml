@@ -4,7 +4,7 @@ button-has-icon-class:          has-icon
 button-padding:                 1em 1.3em !default
 button-with-icon-padding:       0.4em
 button-radius:                  1px !default
-button-shadow-size:             8px !default
+button-shadow-size:             4px !default
 button-label-transition-time:   300ms !default
 
 button-bg:                      darken($color-ifg, 1.5%) !default
@@ -12,7 +12,7 @@ button-fg:                      lighten($color-fg, 5%) !default
 button-hover:                   lighten($button-bg, 4%) !default
 button-focus:                   darken($button-bg, 4%) !default
 button-ink:                     darken($button-bg, 10%) !default
-button-shadow:                  rgba(black, 0.13) !default
+button-shadow:                  rgba(black, 0.23) !default
 button-shadow-hover:            rgba(black, 0.2) !default
 button-shadow-active:           rgba(black, 0.3) !default
 button-shadow-focus:            rgba(black, 0.05) !default
