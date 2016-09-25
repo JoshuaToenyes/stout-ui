@@ -1,0 +1,14 @@
+# Ignore generated coverage reports and temp files.
+/coverage
+
+# Ignore annoying OS X files.
+.DS_Store
+
+# Ignore debug and log files.
+*.log
+
+# Ignore IDE directories.
+.idea
+
+# Ignore temporary directory.
+/tmp
