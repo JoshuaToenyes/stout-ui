@@ -1,0 +1,7 @@
+# Tree and Tree-Item Tags
+tree-tag:                     tree
+tree-item-tag:                tree-item
+
+# Tree and Tree-Item Classes
+tree-class:                   tree
+tree-item-class:              tree-item

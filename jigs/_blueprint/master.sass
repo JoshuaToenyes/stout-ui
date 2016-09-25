@@ -1,0 +1,41 @@
+@import "base"
+@import "colors/default"
+@import "typography/fonts"
+
+$example-fg: #272f32
+
+.ex-heading
+  +font-display(delta, 0, 0)
+  color: lighten($example-fg, 1%)
+  text-transform: uppercase
+  font-weight: bold
+
+.ex-label
+  @extend %container
+  +font-caption(delta)
+  opacity: 0.5
+  position: absolute
+  width: 20rem
+  text-align: right
+  left: -20rem
+  top: 0
+  padding-right: 1em
+
+.controls .ui-button
+  margin: 1rem 0.5em 0 0
+
+hr
+  display: none
+  border: none
+  height: 1px
+  background: lighten($example-fg, 70%)
+
+.ex
+  position: relative
+  border-left: 1px solid #ddd
+  padding-left: 1em
+  margin-bottom: rythm(1)
+
+  &:last-child,
+  &.last
+    margin-bottom: rythm(6)

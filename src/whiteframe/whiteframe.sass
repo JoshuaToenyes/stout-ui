@@ -1,0 +1,9 @@
+@import "bourbon/bourbon"
+@import "colors/default"
+@import "vars/whiteframe"
+
+=whiteframe($z)
+  +transition(box-shadow $whiteframe-transition-time)
+  z-index: $z * 1000
+  @if ($z > 0)
+    box-shadow: 0 #{$z / 2}px #{$z * 2}px $whiteframe-color

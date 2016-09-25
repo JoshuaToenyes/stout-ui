@@ -1,0 +1,17 @@
+backdrop-class:           backdrop
+backdrop-trans-in-time:   300ms
+backdrop-trans-out-time:  200ms
+backdrop-opacity:         0.3
+
+modal-tag:                modal
+
+modal-class:              modal
+modal-trans-in-time:      500ms
+modal-trans-out-time:     400ms
+
+alert-class:              alert
+alert-contents-class:     alert-contents
+alert-body-class:         alert-body
+alert-title-class:        alert-title
+alert-controls-class:     alert-controls
+alert-content-t-in-time:  240ms

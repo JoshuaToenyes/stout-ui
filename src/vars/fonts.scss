@@ -1,0 +1,346 @@
+// -- Base Variables --
+$font-root: 1rem;
+$font-scale: $minor-third;
+
+
+// -- Font Imports -- TODO: Move these someplace else?
+@import "https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900";
+@import "https://fonts.googleapis.com/css?family=Lora:400italic,700italic";
+@import "https://fonts.googleapis.com/css?family=Roboto+Mono:400,500";
+
+
+// -- Font Stacks --
+$font-stack-default:     Roboto, sans-serif;
+
+$font-stack-display:     $font-stack-default;
+$font-stack-body:        $font-stack-default;
+$font-stack-emphasis:    Lora, serif;
+$font-stack-mono:        'Roboto Mono', monospace;
+$font-stack-caption:     $font-stack-default;
+$font-stack-control:     $font-stack-default;
+
+
+
+// -- Baseline Shifts --
+$font-default-baseline-shift: 0.2;
+
+
+
+// -- Font Map Keys --
+// family {String} - Font family or font stack.
+// weight {Number|String} - The font weight.
+// variant
+// style
+// style
+// size
+// line-height
+// top {Number} - Integer (units of vertical rythm) specifying top-spacing.
+// bottom {Number} - Integer (units of vertical rythm) specifying bottom-spacing.
+// line-height {Number} - Integer specifying number of units of vertical spacing this font should use.
+// baseline-shift {Number} - The fine baseline adjustment.
+
+
+
+// -- Display Fonts --
+
+$font-display-alpha: (
+  weight:         900,
+  size:           +modular-scale(5, $font-root, $font-scale),
+  family:         $font-stack-display,
+  line-height:    2,
+  bottom:         -1,
+);
+
+$font-display-beta: (
+  weight:         700,
+  size:           +modular-scale(4, $font-root, $font-scale),
+  family:         $font-stack-display,
+  line-height:    2,
+  top:            -1,
+  bottom:         -1,
+);
+
+$font-display-gamma: (
+  size:           +modular-scale(3, $font-root, $font-scale),
+  family:         $font-stack-display,
+  line-height:    2,
+  bottom:         -1,
+  top:            -1,
+);
+
+$font-display-delta: (
+  size:           +modular-scale(2, $font-root, $font-scale),
+  family:         $font-stack-display,
+  bottom:         -1,
+  top:            -1,
+);
+
+$font-display-epsilon: (
+  size:           +modular-scale(1, $font-root, $font-scale),
+  family:         $font-stack-display,
+  bottom:         -1,
+  top:            -1,
+);
+
+$font-display-zeta: (
+  size:           +modular-scale(0, $font-root, $font-scale),
+  family:         $font-stack-display,
+  bottom:         -1,
+);
+
+$font-display: (
+  alpha:        $font-display-alpha,
+  beta:         $font-display-beta,
+  gamma:        $font-display-gamma,
+  delta:        $font-display-delta,
+  epsilon:      $font-display-epsilon,
+  zeta:         $font-display-zeta,
+);
+
+
+
+// -- Body Fonts --
+
+$font-body-alpha: (
+  size:         +modular-scale(1, $font-root, $font-scale),
+  family:       $font-stack-body,
+  top:          -1,
+);
+
+$font-body-beta: (
+  size:         +modular-scale(1, $font-root, $font-scale),
+  family:       $font-stack-body,
+  weight:       300,
+  top:          -1,
+);
+
+$font-body-gamma: (
+  size:         +modular-scale(0, $font-root, $font-scale),
+  family:       $font-stack-body,
+);
+
+$font-body-delta: (
+  size:         +modular-scale(0, $font-root, $font-scale),
+  family:       $font-stack-body,
+  weight:       300,
+);
+
+$font-body-epsilon: (
+  size:         +modular-scale(-1, $font-root, $font-scale),
+  family:       $font-stack-body,
+);
+
+$font-body-zeta: (
+  weight:       300,
+  size:         +modular-scale(-1, $font-root, $font-scale),
+  family:       $font-stack-body,
+);
+
+$font-body: (
+  alpha:        $font-body-alpha,
+  beta:         $font-body-beta,
+  gamma:        $font-body-gamma,
+  delta:        $font-body-delta,
+  epsilon:      $font-body-epsilon,
+  zeta:         $font-body-zeta,
+);
+
+
+
+// -- Emphasis Fonts --
+
+$font-emphasis-alpha: (
+  size:         +modular-scale(1, $font-root, $font-scale),
+  family:       $font-stack-emphasis,
+  style:        italic,
+  weight:       700,
+  top:          -1,
+);
+
+$font-emphasis-beta: (
+  size:         +modular-scale(1, $font-root, $font-scale),
+  family:       $font-stack-emphasis,
+  style:        italic,
+  top:          -1,
+);
+
+$font-emphasis-gamma: (
+  size:         +modular-scale(0, $font-root, $font-scale),
+  family:       $font-stack-emphasis,
+  style:        italic,
+  weight:       700,
+);
+
+$font-emphasis-delta: (
+  size:         +modular-scale(0, $font-root, $font-scale),
+  family:       $font-stack-emphasis,
+  style:        italic,
+);
+
+$font-emphasis-epsilon: (
+  size:         +modular-scale(-1, $font-root, $font-scale),
+  family:       $font-stack-emphasis,
+  style:        italic,
+  weight:       700,
+);
+
+$font-emphasis-zeta: (
+  size:         +modular-scale(-1, $font-root, $font-scale),
+  family:       $font-stack-emphasis,
+  style:        italic,
+);
+
+$font-emphasis: (
+  alpha:        $font-emphasis-alpha,
+  beta:         $font-emphasis-beta,
+  gamma:        $font-emphasis-gamma,
+  delta:        $font-emphasis-delta,
+  epsilon:      $font-emphasis-epsilon,
+  zeta:         $font-emphasis-zeta,
+);
+
+
+
+// Monospaced Fonts;
+
+$font-mono-alpha: (
+  size:         +modular-scale(0, $font-root, $font-scale),
+  family:       $font-stack-mono,
+  weight:       500,
+  top:          -1,
+);
+
+$font-mono-beta: (
+  size:         +modular-scale(0, $font-root, $font-scale),
+  family:       $font-stack-mono,
+  top:          -1,
+);
+
+$font-mono-gamma: (
+  size:         +modular-scale(-1, $font-root, $font-scale),
+  family:       $font-stack-mono,
+  weight:       500,
+);
+
+$font-mono-delta: (
+  size:         +modular-scale(-1, $font-root, $font-scale),
+  family:       $font-stack-mono,
+);
+
+$font-mono-epsilon: (
+  size:         +modular-scale(-2, $font-root, $font-scale),
+  family:       $font-stack-mono,
+  weight:       500,
+);
+
+$font-mono-zeta: (
+  size:         +modular-scale(-2, $font-root, $font-scale),
+  family:       $font-stack-mono,
+);
+
+$font-mono: (
+  alpha:        $font-mono-alpha,
+  beta:         $font-mono-beta,
+  gamma:        $font-mono-gamma,
+  delta:        $font-mono-delta,
+  epsilon:      $font-mono-epsilon,
+  zeta:         $font-mono-zeta,
+);
+
+
+
+// -- Caption Fonts --
+
+$font-caption-alpha: (
+  size:         +modular-scale(0, $font-root, $font-scale),
+  family:       $font-stack-caption,
+);
+
+$font-caption-beta: (
+  size:         +modular-scale(0, $font-root, $font-scale),
+  family:       $font-stack-caption,
+  weight:       300,
+);
+
+$font-caption-gamma: (
+  size:         +modular-scale(-1, $font-root, $font-scale),
+  family:       $font-stack-caption,
+  weight:       700,
+);
+
+$font-caption-delta: (
+  size:         +modular-scale(-1, $font-root, $font-scale),
+  family:       $font-stack-caption,
+);
+
+$font-caption-epsilon: (
+  size:         +modular-scale(-1, $font-root, $font-scale),
+  family:       $font-stack-caption,
+  weight:       300,
+);
+
+$font-caption-zeta: (
+  size:         +modular-scale(-2, $font-root, $font-scale),
+  family:       $font-stack-caption,
+);
+
+$font-caption: (
+  alpha:        $font-caption-alpha,
+  beta:         $font-caption-beta,
+  gamma:        $font-caption-gamma,
+  delta:        $font-caption-delta,
+  epsilon:      $font-caption-epsilon,
+  zeta:         $font-caption-zeta,
+);
+
+
+
+// -- Control Fonts --
+
+$font-control-alpha: (
+  size:         +modular-scale(3, $font-root, $font-scale),
+  family:       $font-stack-control,
+  weight:       500,
+  top:          -2,
+);
+
+$font-control-beta: (
+  size:         +modular-scale(2, $font-root, $font-scale),
+  family:       $font-stack-control,
+  weight:       500,
+  top:          -1,
+);
+
+$font-control-gamma: (
+  size:         +modular-scale(1, $font-root, $font-scale),
+  family:       $font-stack-control,
+  weight:       500,
+  top:          -1,
+);
+
+$font-control-delta: (
+  size:         +modular-scale(0, $font-root, $font-scale),
+  family:       $font-stack-control,
+  weight:       500,
+);
+
+$font-control-epsilon: (
+  size:         +modular-scale(-1, $font-root, $font-scale),
+  family:       $font-stack-control,
+  weight:       500,
+);
+
+$font-control-zeta: (
+  size:         +modular-scale(-2, $font-root, $font-scale),
+  family:       $font-stack-control,
+  weight:       500,
+);
+
+$font-control: (
+  alpha:        $font-control-alpha,
+  beta:         $font-control-beta,
+  gamma:        $font-control-gamma,
+  delta:        $font-control-delta,
+  epsilon:      $font-control-epsilon,
+  zeta:         $font-control-zeta,
+);

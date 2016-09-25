@@ -1,0 +1,8 @@
+label
+  span(class="#{contentsContainerClass}")
+  div(class="#{prefix}input-container")
+    input(tabIndex="0")
+  - if (maxlength < Infinity)
+    span(class="#{prefix}length-indicator")
+      | #[span(class="#{prefix}current-length", bind="length")]/#[span(class="#{prefix}max-length", bind="maxlength")]
+  ul(class="#{viewClasses.validationMessageList}")

@@ -1,3 +1,5 @@
 # Ignore all JavaScript files in the test directory.
 selenium/**/*.js
+selenium/**/*.js.map
 unit/**/*.js
+unit/**/*.js.map

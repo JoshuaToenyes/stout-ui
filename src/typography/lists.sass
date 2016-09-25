@@ -1,0 +1,42 @@
+@import "bourbon/bourbon"
+@import "vars/component"
+@import "./fonts"
+@import "util/exports"
+
+
+
++exports("typography/lists")
+
+
+  // Standard list elements.
+  //
+  // .{prefix}list--collapsed - Collapses vertical spacing around list.
+  //
+  // No styleguide reference.
+  ul, ol
+    +font-body(gamma, 0, 0)
+    +hyphens(auto)
+
+  .#{$prefix}list--collapsed
+    +font-body(gamma, 0, -1)
+
+  ul
+    list-style: disc
+
+  ol
+    counter-reset: list
+    position: relative
+
+    & > li::before
+      +transform(translateX(-100%))
+      content: counters(list,'.') '.'
+      counter-increment: list
+      font-weight: bold
+      text-align: right
+      position: absolute
+      padding-right: 0.7rem
+
+  li ol,
+  li ul
+    margin: 0
+    padding: 0 0 0 3rem

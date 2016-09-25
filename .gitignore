@@ -1,23 +1,42 @@
 # Ignore transpiled source at project root.
+/accordion
 /button
+/card
+/checkbox
 /colors
 /common
+/component
 /console
 /container
+/content
+/drawer
 /dropdown
 /fill
 /group
+/icons
 /indicator
 /ink
+/interactive
 /input
+/mask
 /modal
+/pane
 /placeholder
+/popup
 /progress
+/radio-button
+/radio-group
+/select
 /times
+/toc
+/toggle
 /traits
+/tree
 /typography
 /util
+/validator
 /vars
+/whiteframe
 
 # Ignore annoying OS X files.
 .DS_Store
@@ -39,4 +58,4 @@ node_modules
 lib
 
 # Ignore generated documentation, but keep the Groc template.
-doc
+/docs

@@ -1,0 +1,60 @@
+select-selected-class:          selected !default
+
+select-box-class:               select-box !default
+select-box-fill-bounds:         radio-fill-bounds !default
+select-box-indicator-class:     indicator !default
+select-box-label-class:         label !default
+
+select-box-bg-color:            darken($color-bg, 2%) !default
+select-box-selected-color:      $color-6 !default
+
+select-box-border:              1px solid lighten($color-fg, 58%) !default
+select-box-selected-border:     1px solid $select-box-selected-color !default
+
+select-box-ink-size:            110%
+select-box-ink-color:           rgba($select-box-selected-color, 0.4)
+
+select-box-padding:             1px
+
+select-box-tiny-size:           8px
+select-box-small-size:          10px
+select-box-normal-size:         14px
+select-box-large-size:          18px
+select-box-huge-size:           22px
+select-box-massive-size:        26px
+
+select-box-default-fg:          $color-fg !default
+select-box-default-bg:          darken($color-bg, 2%) !default
+select-box-default-ink:         rgba($color-fg, 0.2)
+select-box-default-border:      1px solid lighten($color-fg, 58%) !default
+select-box-default-sel-border:  1px solid lighten($color-fg, 40%) !default
+
+select-box-inverse-fg:          $color-ifg !default
+select-box-inverse-bg:          darken($color-ibg, 1.5%) !default
+select-box-inverse-ink:         rgba($color-ibg, 0.4)
+select-box-inverse-border:      1px solid lighten($color-fg, 58%) !default
+select-box-inverse-sel-border:  1px solid darken($color-ibg, 1.5%) !default
+
+select-box-primary-fg:          $color-ifg !default
+select-box-primary-bg:          $color-6 !default
+select-box-primary-ink:         rgba($color-6, 0.4)
+select-box-primary-border:      1px solid lighten($color-6, 20%) !default
+select-box-primary-sel-border:  1px solid $color-6 !default
+
+select-box-danger-fg:           $color-ifg !default
+select-box-danger-bg:           darken($color-danger, 6%) !default
+select-box-danger-ink:          rgba($color-danger, 0.4)
+select-box-danger-border:       1px solid lighten($color-danger, 24%) !default
+select-box-danger-sel-border:   1px solid darken($color-danger, 6%) !default
+
+select-box-warn-fg:             $color-ifg !default
+select-box-warn-bg:             darken($color-warn, 6%) !default
+select-box-warn-ink:            rgba($color-warn, 0.4) !default
+select-box-warn-border:         1px solid lighten($color-warn, 10%) !default
+select-box-warn-sel-border:     1px solid darken($color-warn, 6%) !default
+
+select-box-disabled-fg:         $color-ifg !default
+select-box-disabled-bg:         $color-6 !default
+select-box-disabled-ink:        rgba($color-6, 0.4)
+select-box-disabled-border:     1px solid lighten($color-ibg, 24%) !default
+select-box-disabled-sel-border: 1px solid darken($color-ibg, 2%) !default

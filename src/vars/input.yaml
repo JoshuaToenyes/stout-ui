@@ -1,0 +1,20 @@
+input-tag:                     input
+input-class:                   input !default
+input-empty-class:             empty
+input-bump-color:              $color-danger
+
+input-focus-border-color:      $color-4
+input-focus-label-color:       $color-8
+
+input-warning-border-color:    $color-warn
+input-warning-label-color:     darken($color-warn, 12%)
+
+input-error-border-color:      $color-danger
+input-error-label-color:       darken($color-danger, 10%)
+
+input-border-color:            lighten($color-fg, 60%)
+input-border-transition-time:  300ms
+
+input-length-indicator-class:  length-indicator
+
+input-hint-class:              hint

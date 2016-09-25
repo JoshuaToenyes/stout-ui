@@ -1,0 +1,3 @@
+# Classname postfix which indicates that the element is filled.
+fill-container-class: fill-container
+filled-class:         filled

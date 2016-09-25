@@ -1,0 +1,5 @@
+# Custom tag name (prefix added at run time).
+content-tag:      content
+
+# Class name added to the content component.
+content-class:    content

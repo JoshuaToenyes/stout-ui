@@ -1,0 +1,60 @@
+@import "vars/component"
+@import "util/exports"
+@import "./typeset"
+
+
+
++exports("typography/blockquotes")
+
+  // An indented blockquote with large, faint open and close quotation marks.
+  //
+  // .{prefix}blockquote--bar      - Shows a bar and background color instead of
+  //                                 quotation marks.
+  //
+  // No styleguide reference.
+  blockquote
+    padding-left: rythm(1)
+    position: relative
+    font-style: italic
+
+    &, cite
+      +font-body(gamma, 0, 0)
+
+    p, cite
+      +typeset-block
+      position: relative
+
+    p::before, p:last-of-type::after
+      position: absolute
+      font-style: normal
+      font-size: rythm(6)
+      color: lighten(black, 94%)
+      z-index: -1
+
+    p::before
+      content: '\0201C'
+      left: rythm(-1.4)
+      top: rythm(1.35)
+
+    p:last-of-type::after
+      content: '\0201D'
+      right: rythm(-1.5)
+      bottom: rythm(-1.5)
+
+    cite
+      text-align: right
+      font-style: normal
+      &::before
+        content: '\02014\000A0'
+
+  .#{$prefix}blockquote--bar
+    font-style: normal
+    background-color: lighten(black, 98%)
+    border-left: 8px solid lighten(black, 90%)
+    padding-right: rythm(1)
+
+    p::before, p:last-of-type::after
+      content: none
+
+    cite
+      font-style: italic

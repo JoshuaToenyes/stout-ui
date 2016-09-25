@@ -1,0 +1,35 @@
+@import "bourbon/bourbon"
+@import "placeholder/viewport"
+@import "util/exports"
+@import "util/component"
+@import "vars/component"
+@import "vars/scrollable"
+
+
++exports("traits/scrollable")
+
+  $scrollable:    ".#{$prefix}#{$scrollable-class}"
+  $viewport:      ".#{$prefix}#{$scrollable-viewport-class}"
+  $contents:      "#{$viewport} > .#{$prefix}contents"
+
+  #{$contents}
+    +filter(blur(0))
+    backface-visibility: hidden
+    position: absolute
+    left: 0
+    top: 0
+    height: auto
+    min-height: 100%
+    min-width: 100%
+    width: auto
+
+
+  #{$scrollable}
+
+    &#{$viewport},
+    #{$viewport}
+      @extend %viewport
+
+    #{$viewport}
+      overflow: hidden
+      position: absolute

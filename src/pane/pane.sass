@@ -1,0 +1,88 @@
+@import "bourbon/bourbon"
+@import "util/exports"
+@import "util/transitioning"
+@import "util/visibility"
+@import "vars/component"
+@import "vars/container"
+@import "vars/pane"
+
++exports("pane/pane")
+
+  $contents:  #{$prefix}#{$container-contents-class}
+  $overlay:   #{$prefix}overlay
+  $pane:      #{$prefix}#{$pane-class}
+  $pane-contents: ".#{$prefix}#{$pane-content-class}"
+  $zoom:      #{$prefix}zoom
+  $fade:      #{$prefix}fade
+
+  $start-opacity:   0.1
+  $display-opacity: 1
+  $end-opacity:     0.1
+
+  #{$prefix}#{$pane-tag}
+    display: none
+    &[rendered]
+      display: block
+
+  // Default setting for pane contents. When non-ComponentView content is
+  // added to a pane, a ComponentView is automatically created for the content.
+  // The contentent view is then given this class which helps calculate its
+  // size.
+  //#{$pane-contents}
+  //  width: 62%
+
+  .#{$pane}
+    -webkit-backface-visibility: hidden
+    overflow: scroll
+    max-width: 100%
+    background-color: white
+    position: fixed
+    left: 0
+    top: 0
+    box-shadow: 0 0 20px rgba(black, 0.25)
+    box-sizing: border-box
+    +transform(translate3d(0, 0, 0))
+    +transform-origin(top left 0)
+    +filter(blur(0))
+
+    &, .#{$contents}
+      opacity: $start-opacity
+
+    +hidden
+      display: none
+
+    +visible
+      z-index: $pane-z-index
+      &, .#{$contents}
+        opacity: $display-opacity
+
+    +transitioning
+      z-index: $pane-z-index
+      &, .#{$contents}
+        +transition-property(opacity, transform) // good
+        +transition-timing-function($ease-in-out-cubic)
+
+    +transitioning-out
+      &, .#{$contents}
+        +transition-duration($pane-trans-out-time)
+        opacity: $end-opacity
+
+    +transitioning-in
+      &, .#{$contents}
+        +transition-duration($pane-trans-in-time)
+        opacity: $display-opacity
+
+
+  .#{$pane}.#{$overlay}
+    opacity: 0.5
+    +visible
+      opacity: $display-opacity
+    +transitioning-out
+      opacity: 0.5
+
+  .#{$pane}.#{$fade}
+    opacity: 0
+    +visible
+      opacity: $display-opacity
+    +transitioning-out
+      opacity: 0

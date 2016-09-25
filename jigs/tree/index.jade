@@ -1,0 +1,63 @@
+extends ../_blueprint/master.jade
+
+block content
+
+  h1.ex-title Tree
+  
+  .ex-heading Tree
+  
+  .ex
+    .ex-label tree
+    ui-tree
+      
+      ui-tree-item
+        a(href="#a") Item A
+        
+        ui-tree
+          - var i = 0
+          while i++ < 10
+            ui-tree-item: a(href="#a1") Item A.#{i}
+          
+          ui-tree-item
+            a(href="#a3") Item A.3
+            
+            ui-tree
+              ui-tree-item: a(href="#a31") Item A.3.1
+              ui-tree-item: a(href="#a32") Item A.3.2
+              ui-tree-item: a(href="#a33") Item A.3.3
+              
+      ui-tree-item(collapsed="false")
+        a(href="#b") Item B
+      
+        ui-tree
+          ui-tree-item: img(src="https://placeholdit.imgix.net/~text?txtsize=33&txt=350%C3%97150&w=350&h=150")
+          ui-tree-item: a(href="#a2") Item B.2
+          ui-tree-item
+            a(href="#a3") Item B.3
+            
+            ui-tree
+              ui-tree-item: a(href="#a31") Item B.3.1
+              ui-tree-item: a(href="#a32") Item B.3.2
+              ui-tree-item
+                a(href="#a33") Item B.3.3
+                
+                ui-tree
+                  ui-tree-item: a(href="#a31") Item B.3.3.1
+                  ui-tree-item: a(href="#a32") Item B.3.3.2
+                  ui-tree-item: a(href="#a33") Item B.3.3.3
+      
+      ui-tree-item: a(href="#c") Item C
+      
+      ui-tree-item(collapsible="false")
+        a(href="#a") Non-collapsible Item D
+        
+        ui-tree
+          ui-tree-item: a(href="#a1") Item D.1
+          ui-tree-item: a(href="#a2") Item D.2
+          ui-tree-item(collapsible="false")
+            a(href="#a3") Item D.3
+            
+            ui-tree
+              ui-tree-item: a(href="#a31") Item D.3.1
+              ui-tree-item: a(href="#a32") Item D.3.2
+              ui-tree-item: a(href="#a33") Item D.3.3

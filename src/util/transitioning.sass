@@ -1,0 +1,13 @@
+@import "vars/component"
+
+=transitioning
+  &.#{$prefix}#{$transitioning}
+    @content
+
+=transitioning-in
+  &.#{$prefix}#{$transitioning}.#{$prefix}#{$transitioning-in}
+    @content
+
+=transitioning-out
+  &.#{$prefix}#{$transitioning}.#{$prefix}#{$transitioning-out}
+    @content

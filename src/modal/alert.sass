@@ -1,0 +1,29 @@
+@import "bourbon/bourbon"
+@import "util/exports"
+@import "util/transitioning"
+@import "util/visibility"
+@import "vars/component"
+@import "vars/modal"
+
++exports("modal/alert")
+
+  $title: #{$prefix}#{$alert-title-class}
+  $body: #{$prefix}#{$alert-body-class}
+  $controls: #{$prefix}#{$alert-controls-class}
+
+  .#{$prefix}#{$transitioning-in}.#{$prefix}#{$modal-class}.#{$prefix}#{$alert-class} .#{$prefix}#{$container-contents-class}
+    +transition-delay($alert-content-t-in-time)
+
+  .#{$prefix}#{$alert-contents-class}
+    min-width: 350px
+    max-width: 500px
+    padding: 1em 1em 0.8em 1em
+
+  .#{$title}
+    margin-top: 0.3em
+    padding-right: 1rem
+
+  .#{$controls}
+    text-align: right
+    height: 3em
+    margin-top: 1.6em

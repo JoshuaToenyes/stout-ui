@@ -1,0 +1,44 @@
+@import "../_blueprint/master.sass"
+@import "typography/fonts"
+
+
+
+// Generate classes to illustrate all fonts using the below loops.
+
+$lvls: (alpha, beta, gamma, delta, epsilon, zeta)
+
+
+// Display Fonts 
+@each $lvl in $lvls
+  .font-display-#{$lvl}
+    +font-display($lvl)
+
+
+// Body Fonts
+@each $lvl in $lvls
+  .font-body-#{$lvl}
+    +font-body($lvl)
+
+
+// Emphasis Fonts
+@each $lvl in $lvls
+  .font-emphasis-#{$lvl}
+    +font-emphasis($lvl)
+
+
+// Monospaced Paragraph Fonts
+@each $lvl in $lvls
+  .font-mono-#{$lvl}
+    +font-mono($lvl)
+
+
+// Caption Fonts
+@each $lvl in $lvls
+  .font-caption-#{$lvl}
+    +font-caption($lvl)
+
+
+// Control Fonts
+@each $lvl in $lvls
+  .font-control-#{$lvl}
+    +font-control($lvl)

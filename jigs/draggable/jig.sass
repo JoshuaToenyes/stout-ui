@@ -1,0 +1,12 @@
+@import "../_blueprint/master.sass"
+@import "../../whiteframe/whiteframe"
+@import "../../traits/draggable"
+
+.draggable-example
+  +whiteframe(2)
+  width: 100px
+  height: 100px
+  background-color: steelblue
+
+  &.ui-dragging
+    +whiteframe(8)

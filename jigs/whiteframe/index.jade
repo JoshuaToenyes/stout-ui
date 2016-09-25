@@ -1,0 +1,17 @@
+extends ../_blueprint/master.jade
+
+block content
+
+  h1.ex-title Whiteframe
+  
+  .ex-heading Whiteframes
+  p Whiteframes define layout structure and layering (vertical height).
+  
+  - var i = 0
+  
+  .ex
+    .ex-label whiteframe
+    while i <= 23
+      div(class="whiteframe-#{i}") +whiteframe(#{i})
+      - i++
+    

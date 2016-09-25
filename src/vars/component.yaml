@@ -1,0 +1,10 @@
+prefix:            ui-
+bump:              bump
+bump-time:         500ms
+visible:           visible !default
+hidden:            hidden !default
+transitioning:     transitioning !default
+transitioning-in:  transitioning-in !default
+transitioning-out: transitioning-out !default
+
+label-class:       label !default

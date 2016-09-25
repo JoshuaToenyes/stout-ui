@@ -1,0 +1,79 @@
+@import "bourbon/bourbon"
+@import "util/exports"
+@import "vars/tree"
+@import "vars/collapsible"
+@import "vars/component"
+@import "traits/collapsible"
+@import "util/transitioning"
+@import "util/visibility"
+
++exports("tree/tree")
+
+  $tree:        ".#{$prefix}#{$tree-class}"
+  $item:        ".#{$prefix}#{$tree-item-class}"
+  $caret:       "#{$item} svg"
+  $collapsible: "#{$item}.#{$prefix}#{$collapsible-class}"
+  $expanded:    "#{$item}.#{$prefix}#{$collapsible-expanded-class}"
+  $collapsed:   "#{$item}.#{$prefix}#{$collapsible-collapsed-class}"
+  $collapsing:  "#{$item}.#{$prefix}#{$collapsible-collapsing-class}"
+  $expanding:   "#{$item}.#{$prefix}#{$collapsible-expanding-class}"
+
+
+  #{$prefix}#{$tree-tag},
+  #{$prefix}#{$tree-item-tag}
+    display: none
+    &[rendered]
+      display: block
+
+
+  #{$tree},
+  #{$item}
+    position: relative
+    display: none
+
+    +visible
+      display: block
+
+
+  #{$item}
+    padding-left: 1em
+    +transform(translate(0, 0.4em))
+    opacity: 0
+
+    +visible
+      +transform(translate(0, 0))
+      opacity: 1
+
+    +transitioning-out
+      +transition(all $collapsible-child-trans-out-time)
+
+    +transitioning-in
+      +transition(all $collapsible-child-trans-in-time)
+      +transform(translate(0, 0))
+      opacity: 1
+
+
+  #{$caret}
+    height: +modular-scale(-2)
+    position: relative
+    bottom: 0.06em
+    display: none
+
+
+  #{$collapsible} > svg
+    +transition(all $collapsible-expand-time)
+    display: inline-block
+    position: absolute
+    left: 0
+    top: 0.62em
+
+
+  #{$expanded} > svg,
+  #{$expanding} > svg
+    +transform(rotate(90deg) translate3d(0,0,0))
+
+
+  #{$collapsed} > svg,
+  #{$collapsing} > svg
+    +transition(all $collapsible-collapse-time $collapsible-child-trans-out-time)
+    +transform(rotate(0deg))

@@ -1,0 +1,16 @@
+@import "typography/typography"
+@import "placeholder/container"
+@import "typography/typeset"
+
+.group,
+.ex
+  +typeset-block
+
+.wrapper
+  @extend %container
+  margin: 0 auto 0
+  max-width: 62em
+  min-height: 100vh
+  padding: 0 10em
+  text-align: left
+  overflow: hidden

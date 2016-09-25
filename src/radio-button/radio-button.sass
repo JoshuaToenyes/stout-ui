@@ -1,0 +1,28 @@
+@import "bourbon/bourbon"
+@import "util/exports"
+@import "select/select-box"
+@import "vars/radio-button"
+
++exports("radio/radio-button")
+
+  $ri: #{$prefix}#{$select-box-indicator-class}
+  $selected: #{$prefix}#{$select-selected-class}
+  $fill: #{$prefix}#{$fill-container-class}
+  $ink: #{$prefix}#{$ink-container-class}
+
+  .#{$prefix}#{$radio-button-class}
+
+    &, &.#{$prefix}default
+
+      .#{$ri}
+        border: $select-box-inverse-border
+        background: $select-box-default-bg
+
+      &.#{$selected} .#{$ri}
+        border: $select-box-inverse-sel-border
+
+      .#{$fill}
+        +set-ink-color($select-box-inverse-bg)
+
+      .#{$ink}
+        +set-ink-color($select-box-inverse-ink)

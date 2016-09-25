@@ -22,7 +22,7 @@ module.exports = (config, options) ->
         config.path.test.unit + '/**/*.coffee'
       ], [name]
     options =
-      configFile: __dirname + '../config/karma.conf.coffee'
+      configFile: __dirname + '/../config/karma.conf.coffee'
       singleRun: true
     cb = -> done()
     new karma.Server(options, cb).start()

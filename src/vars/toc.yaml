@@ -1,0 +1,4 @@
+toc-tag:            toc
+toc-item-tag:       toc-item
+toc-class:          toc !default
+toc-item-class:     toc-item !default

@@ -1,0 +1,15 @@
+@import "bourbon/bourbon"
+@import "util/exports"
+@import "vars/card"
+@import "vars/component"
+@import "whiteframe/whiteframe"
+
++exports("card/card")
+
+  #{$prefix}#{$card-tag}
+    display: none
+    &[rendered]
+      display: block
+
+  #{$prefix}#{$card-class}
+    +whiteframe(1)

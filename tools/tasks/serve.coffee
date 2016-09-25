@@ -12,15 +12,17 @@ gulp        = require('gulp-help')(require 'gulp')
 
 module.exports = (config) ->
 
-  gulp.task 'serve', 'Serve files located in target directory.', (done) ->
+  gulp.task 'serve', 'Serve jig files.', (done) ->
     browserSync
-      files: config.path.target.dist
+      files: config.path.jig
       logLevel: 'silent'
       notify: false
       open: 'local'
-      port: config.serve.port.target
-      codeSync: false
+      port: config.serve.port.jig
+      codeSync: true
       server:
-        baseDir: config.path.target.dist
+        baseDir: config.path.jig
       ui: false
+      reloadDelay: 1000
+      reloadDebounce: 1000
     , done

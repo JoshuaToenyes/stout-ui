@@ -1,0 +1,14 @@
+extends ../_blueprint/master.jade
+
+block content
+  
+  h1.ex-title Code Typography
+  
+  .ex-heading Inline Code
+  p.body-01 Simple inline code appears as below.
+
+  - var paragraph = "Lamarck was the first man <code>whose</code> conclusions on the <code>subject excited much</code> attention. This <code>justly celebrated naturalist first</code> published his views in 1801; he much enlarged them in 1809 in his \"Philosophie Zoologique\", and subsequently, 1815, in the Introduction to his \"Hist. Nat. des Animaux sans Vertebres\". In these works he up holds the doctrine that all species, including man, are descended from other species. He first did the eminent service of arousing attention to the probability of all change in the organic, as well as in the inorganic world, being the result of law, and not of miraculous interposition."
+
+  .ex
+    .ex-label inline-code
+    p !{paragraph}

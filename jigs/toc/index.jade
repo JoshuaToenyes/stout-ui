@@ -1,0 +1,22 @@
+extends ../_blueprint/master.jade
+
+block content
+
+  h1.ex-title Table of Contents
+  
+  .ex-heading Table of Contents
+  
+  .ex
+    .ex-label toc
+    ui-toc
+      ui-toc-item
+        a(href="#a") Item A
+        ui-toc-item: a(href="#a1") Item A.1
+        ui-toc-item: a(href="#a2") Item A.2
+        ui-toc-item
+          a(href="#a3") Item A.3
+          ui-toc-item: a(href="#a31") Item A.3.1
+          ui-toc-item: a(href="#a32") Item A.3.2
+          ui-toc-item: a(href="#a33") Item A.3.3
+      ui-toc-item: a(href="#b") Item B
+      ui-toc-item: a(href="#c") Item C

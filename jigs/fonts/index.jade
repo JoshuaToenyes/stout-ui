@@ -1,0 +1,99 @@
+extends ../_blueprint/master.jade
+
+block content
+  
+  - var lvls = ['alpha', 'beta', 'gamma', 'delta', 'epsilon', 'zeta']
+  - var shortHeading = "Grumpy wizards"
+  - var longHeading = "Grumpy wizards make toxic brew for the evil Queen and Jack."
+  - var lead = "I will here give a brief sketch of the progress of opinion on the Origin of Species. Until recently the great majority of naturalists believed that species were immutable productions, and had been separately created."
+  - var paragraph = "Lamarck was the first man whose conclusions on the subject excited much attention. This justly celebrated naturalist first published his views in 1801; he much enlarged them in 1809 in his \"Philosophie Zoologique\", and subsequently, 1815, in the Introduction to his \"Hist. Nat. des Animaux sans Vertebres\". In these works he up holds the doctrine that all species, including man, are descended from other species. He first did the eminent service of arousing attention to the probability of all change in the organic, as well as in the inorganic world, being the result of law, and not of miraculous interposition."
+  - var paragraphOrnamental = "One morning, when Gregor Samsa woke from troubled dreams, <b>he found himself transformed in his bed into a horrible vermin.</b> He lay on his armour-like back, and if he lifted his head a little he could see his brown belly, slightly domed and divided by arches into stiff sections. <em>The bedding was hardly able to cover it and seemed ready to slide off any moment.</em> His many legs, pitifully thin compared with the size of the rest of him, waved about helplessly as he looked."
+  - var caption = "This is a sample caption"
+  - var list = "Sample list item."
+  - var control = "Make reservation"
+  - var pre = "algorithm quicksort(A, lo, hi) is\n  if lo < hi then\n    p := partition(A, lo, hi)\n    quicksort(A, lo, p - 1)\n    quicksort(A, p + 1, hi)"
+  
+  
+  h1.ex-title Fonts
+  
+  
+  .group
+    .ex-heading Display Headings
+    p.body-01 Display typography is for large and important headings, like 
+      | content heading tags or marketing messages. The examples below
+      | illustrate these styles on a single line, how they appear when the 
+      | text wraps to multiple lines, and when followed immediately by body 
+      | text. The typographic style is completely separate from the semantic 
+      | markup and meaning.
+
+    each lvl in lvls
+      .ex
+        .ex-label +font-display(#{lvl})
+        div(class="font-display-#{lvl}") #{longHeading}
+
+
+
+  .group
+    .ex-heading Body
+    p.body-01 Body type style examples are below. These are the styles that 
+      | may be used in large blocks of text, such as articles, blog posts, 
+      | essays, etc. The first paragraph exhibits an unornamented block of text
+      | while the second contains <code>&lt;strong&gt;</code> tags (or 
+      | <code>&lt;b&gt;</code> tags) and <code>&lt;em&gt;</code> tags.
+
+    each lvl in lvls
+      .ex
+        .ex-label +font-body(#{lvl})
+        div(class="font-body-#{lvl}") #{paragraph}
+  
+
+
+  .group
+    .ex-heading Emphasis
+    p.body-01 Emphasis styles can be used for large blocks of text that should 
+      | have extra emphasis or are blockquotes. They provide a noticeable 
+      | contrast in aesthetic to pull out content.
+
+    each lvl in lvls
+      .ex
+        .ex-label +font-emphasis(#{lvl})
+        div(class="font-emphasis-#{lvl}") #{paragraph}
+  
+  
+  
+  .group
+    .ex-heading Monospaced
+    p.body-01 Code blocks, or other preformatted text can appear in the styles
+      | below.
+
+    each lvl in lvls
+      .ex
+        .ex-label +font-mono(#{lvl})
+        div(class="font-mono-#{lvl}") #{pre}
+
+
+
+  .group
+    .ex-heading Captions
+    p.body-01 Caption styles can be used for descriptive text near controls or
+      | other elements, or as input labels. They're not meant to stand alone, 
+      | but instead augment of complement something else by describing it in
+      | greater detail. Notice the captions to the left of all styles on this 
+      | page, which describe the SASS placeholder selectors.
+
+    each lvl in lvls
+      .ex
+        .ex-label +font-caption(#{lvl})
+        div(class="font-caption-#{lvl}") #{caption}
+
+
+
+  .group
+    .ex-heading Controls
+    p.body-01 These are the various styles for controls with text labels 
+      | (i.e. buttons).
+
+    each lvl in lvls
+      .ex
+        .ex-label +font-control(#{lvl})
+        div(class="font-control-#{lvl}") #{control}

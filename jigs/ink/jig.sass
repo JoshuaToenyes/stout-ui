@@ -1,0 +1,17 @@
+@import "bourbon/bourbon"
+@import "colors/default"
+
+#demo
+  position: absolute
+  width: 50vw
+  height: 50vh
+  left: 25vw
+  top: 25vh
+  overflow: hidden
+  cursor: pointer
+  background-color: $color-5
+  +transition(all 300ms)
+  box-shadow: 1px 1px 8px rgba(black, 0)
+
+  &.down
+    box-shadow:  1px 1px 8px rgba(black, 0.2)

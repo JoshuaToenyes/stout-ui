@@ -1,0 +1,4 @@
+ink-container-class:    ink-container
+ink-class:              ink
+ink-color-default:      $color-3
+ink-default-fade-time:  800ms

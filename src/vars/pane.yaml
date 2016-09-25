@@ -1,0 +1,7 @@
+pane-tag:             pane !default
+pane-class:           pane !default
+pane-content-class:   pane-content
+
+pane-trans-in-time:   500ms !default
+pane-trans-out-time:  500ms !default
+pane-z-index:         15000

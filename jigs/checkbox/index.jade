@@ -1,0 +1,62 @@
+extends ../_blueprint/master.jade
+
+block content
+
+  h1.ex-title Stout Checkboxes
+  
+  .ex-heading Simple Checkbox  
+  .ex.simple.spaced.last
+    .ex-label simple
+    
+    
+    
+  .ex-heading Checkbox Sizes
+  p Checkboxes are available in a variety of sizes:
+    
+  .ex.size-tiny
+    .ex-label tiny
+    
+  .ex.size-small
+    .ex-label small
+
+  .ex.size-normal
+    .ex-label normal
+    
+  .ex.size-large
+    .ex-label large
+    
+  .ex.size-huge
+    .ex-label huge
+    
+  .ex.size-massive.last
+    .ex-label massive
+
+
+
+  .ex-heading Checkbox Styles
+  p Checkboxes are available in a variety of different styles.
+    
+  .ex.style-default
+    .ex-label default
+    
+  .ex.style-inverse
+    .ex-label inverse
+
+  .ex.style-primary
+    .ex-label primary
+    
+  .ex.style-warn
+    .ex-label warn
+    
+  .ex.style-danger
+    .ex-label danger
+
+
+  .ex-heading Checkbox Tag
+  p These checkboxes were rendered using the custom 
+    | <code>&lt;ui-checkbox&gt;</code> tag.
+    
+  .ex.spaced.last
+    .ex-label html tag
+    ui-checkbox(type="primary", size="large") Tagged Large-Primary Checkbox
+    ui-checkbox(size="large") Tagged Large-Default Checkbox

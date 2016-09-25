@@ -1,13 +1,25 @@
-@import "~./default.sass"
+@import "bourbon/bourbon"
+@import "vars/component"
+@import "./fonts"
+@import "util/exports"
 
-p
-  @extend %sui-typography-body-1
 
-  em
-    @extend %sui-typography-body-em
 
-  strong, b
-    @extend %sui-typography-body-1-b
++exports("typography/paragraphs")
 
-  code
-    @extend %sui-typography-pre-1
+
+  // Standard paragraph element.
+  //
+  // .{prefix}p--collapsed            - Collapses vertical spacing around heading.
+  // .{prefix}p--hanging-punctuation  - Collapses vertical spacing around heading.
+  //
+  // No styleguide reference.
+  p
+    +font-body(gamma, 0, 0)
+    +hyphens(auto)
+
+    &.#{$prefix}p--collapsed
+      +font-body(gamma, 0, -1)
+
+    &.#{$prefix}p--hanging-punctuation
+      text-indent: -0.4em

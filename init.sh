@@ -8,7 +8,6 @@ npm install
 # Install and update Bourbon and SASS.
 mkdir -p $LIB_DIR
 cd $LIB_DIR
-sudo gem install bourbon
 bourbon install
 
 exit 0

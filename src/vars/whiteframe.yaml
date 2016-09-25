@@ -1,0 +1,2 @@
+whiteframe-color:           rgba($color-fg, 0.5) !default
+whiteframe-transition-time: 300ms

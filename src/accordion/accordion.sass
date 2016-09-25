@@ -1,0 +1,100 @@
+@import "bourbon/bourbon"
+@import "util/exports"
+@import "vars/accordion"
+@import "vars/collapsible"
+@import "vars/component"
+@import "traits/collapsible"
+@import "util/component"
+@import "util/transitioning"
+@import "util/visibility"
+@import "typography/fonts"
+
++exports("accordion/accordion")
+
+  $accordion:   ".#{$prefix}#{$accordion-class}"
+  $item:        ".#{$prefix}#{$accordion-item-class}"
+  $content:     ".#{$prefix}#{$accordion-content-class}"
+
+  $trigger:     ".#{$prefix}#{$accordion-trigger-class}"
+
+  $caret:       "#{$trigger} svg"
+
+  $collapsible: "#{$trigger}.#{$prefix}#{$collapsible-class}"
+  $expanded:    "#{$trigger}.#{$prefix}#{$collapsible-expanded-class}"
+  $collapsed:   "#{$trigger}.#{$prefix}#{$collapsible-collapsed-class}"
+  $collapsing:  "#{$trigger}.#{$prefix}#{$collapsible-collapsing-class}"
+  $expanding:   "#{$trigger}.#{$prefix}#{$collapsible-expanding-class}"
+
+  +component($accordion-tag)
+  +component($accordion-item-tag)
+  +component($accordion-trigger-tag)
+  +component($accordion-content-tag)
+
+  #{$accordion},
+  #{$item}
+    position: relative
+    display: none
+
+    +visible
+      display: block
+
+
+  #{$trigger}
+    +font-display(epsilon, 0, 0)
+    margin: 0
+    padding: 0
+
+
+  #{$content}
+    padding-left: rythm(0.5)
+    padding-right: rythm(0.5)
+
+  #{$item}
+    +transition(all 500ms)
+    border-left: 1px solid transparent
+    border-right: 1px solid transparent
+    &.#{$prefix}expanded,
+    &.#{$prefix}expanding
+      background-color: darken($color-bg, 2%)
+      border-left: 1px solid $color-rule
+      border-right: 1px solid $color-rule
+
+
+  #{$item}
+    border-bottom: 1px solid $color-rule
+    cursor: pointer
+
+    &:first-child
+      border-top: 1px solid $color-rule
+
+
+  #{$content}
+    +transitioning-out
+      +transition(all $collapsible-child-trans-out-time $ease-out-cubic)
+      //+transition(all 50ms $ease-out-expo)
+
+    +transitioning-in
+      +transition(all $collapsible-child-trans-in-time $ease-in-cubic)
+
+
+  #{$caret}
+    height: +modular-scale(1)
+    position: relative
+    display: none
+
+  #{$collapsible} > svg
+    +transition(all $collapsible-expand-time)
+    display: inline-block
+    position: relative
+    vertical-align: middle
+    top: -0.13em
+    opacity: 0.4
+
+  #{$expanded} > svg,
+  #{$expanding} > svg
+    +transform(rotate(-45deg) translate3d(0,0,0))
+
+  #{$collapsed} > svg,
+  #{$collapsing} > svg
+    +transition(all $collapsible-collapse-time $collapsible-child-trans-out-time)
+    +transform(rotate(0deg))

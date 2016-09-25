@@ -1,0 +1,16 @@
+@import "../_blueprint/master.sass"
+@import "../../whiteframe/whiteframe"
+
+@for $i from 0 through 30
+  .whiteframe-#{$i}
+    +whiteframe($i)
+    height: 140px
+    width: 140px
+    text-align: center
+    line-height: 140px
+    float: left
+    margin: 0 3em 3em 0
+    border-radius: 2px
+
+.ex
+  +clearfix()

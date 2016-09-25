@@ -1,0 +1,18 @@
+# Component Classes
+collapsible-class:                  collapsible
+collapsible-trigger-class:          collapsible-trigger
+
+# Collapsible State Classes
+collapsible-collapsed-class:        collapsed
+collapsible-expanded-class:         expanded
+collapsible-collapsing-class:       collapsing
+collapsible-expanding-class:        expanding
+
+# Default Collapsible Times and Durations
+collapsible-collapse-time:          200ms
+collapsible-expand-time:            400ms
+
+# Collapsible Child Transition Times and Durations
+collapsible-child-trans-in-time:    200ms
+collapsible-child-trans-out-time:   200ms
+collapsible-child-offset-time:      15ms

@@ -1,0 +1,11 @@
+# Accordion and Accordion Item Tags
+accordion-tag:                accordion
+accordion-item-tag:           accordion-item
+accordion-trigger-tag:        accordion-trigger
+accordion-content-tag:        accordion-content
+
+# Accordion and Accordion Classes
+accordion-class:              accordion
+accordion-item-class:         accordion-item
+accordion-trigger-class:      accordion-trigger
+accordion-content-class:      accordion-content

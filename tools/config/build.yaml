@@ -3,7 +3,7 @@ serve:
   port:
 
     # The localhost port that target files should be served on.
-    target:      9000
+    jig:         9000
 
     # The localhost port to serve documentation on.
     docs:        9090
@@ -28,6 +28,7 @@ path:
   # Generated documentation glob.
   doc:          docs
 
+  jig:          jigs
 
 
 # Environment build options.

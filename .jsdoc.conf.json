@@ -1,0 +1,54 @@
+{
+  "tags": {
+    "allowUnknownTags": true
+  },
+  "source": {
+    "include": [
+      "button",
+      "common",
+      "console",
+      "container",
+      "dropdown",
+      "fill",
+      "group",
+      "ink",
+      "input",
+      "modal",
+      "pane",
+      "progress",
+      "vars",
+
+      "node_modules/stout-client/animation",
+      "node_modules/stout-client/easing",
+      "node_modules/stout-client/keys",
+      "node_modules/stout-client/view",
+
+      "node_modules/stout-core/base",
+      "node_modules/stout-core/event",
+      "node_modules/stout-core/view"
+    ]
+  },
+  "plugins": ["plugins/markdown"],
+  "templates": {
+    "logoFile": "",
+    "cleverLinks": false,
+    "monospaceLinks": false,
+    "dateFormat": "ddd MMM Do YYYY",
+    "outputSourceFiles": true,
+    "outputSourcePath": true,
+    "systemName": "Stout UI",
+    "footer": "",
+    "copyright": "DocStrap Copyright © 2012-2015 The contributors to the JSDoc3 and DocStrap projects.",
+    "navType": "inline",
+    "theme": "lumen",
+    "linenums": true,
+    "collapseSymbols": false,
+    "inverseNav": false,
+    "protocol": "html://",
+    "methodHeadingReturns": true
+  },
+  "markdown": {
+    "parser": "gfm",
+    "hardwrap": false
+  }
+}

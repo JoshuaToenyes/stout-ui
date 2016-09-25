@@ -1,0 +1,33 @@
+# Custom tag name (prefix added at run time).
+drawer-tag:                     drawer
+
+# Class name added to the drawer component.
+drawer-class:                   drawer
+
+# Locked-open drawers push-over the contents of it's target so the drawer
+# appears to be a part of the content. Non-locked drawers appear to "slide-over"
+# or "push-over" the target content.
+drawer-locked-class:            drawer-locked
+
+# Added to the target and drawer when the drawer opens with "push" behavior.
+drawer-push-class:              drawer-push
+
+# Added to the target and drawer when the drawer opens with "overlay" behavior.
+drawer-overlay-class:           drawer-overlay
+
+# The class applied to a drawer's target element. This class allows the drawer
+# to dynamically apply transitions to it's target container.
+drawer-target-class:            drawer-target
+
+# The class applied to a drawer's container element.
+drawer-container-class:         drawer-container
+
+# The viewport contains the drawer and target element. It also prevents the
+# contents from sliding off-screen if using the "push" behavior.
+drawer-viewport-class:          drawer-viewport
+
+# State classes for the drawer target.
+drawer-target-open-class:       drawer-open
+drawer-target-closed-class:     drawer-closed
+drawer-target-opening-class:    drawer-opening
+drawer-target-closing-class:    drawer-closing

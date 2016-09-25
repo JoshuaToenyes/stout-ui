@@ -1,0 +1,79 @@
+@import "bourbon/bourbon"
+@import "placeholder/viewport"
+@import "util/exports"
+@import "util/component"
+@import "util/transitioning"
+@import "vars/drawer"
+@import "vars/component"
+@import "vars/pane"
+@import "whiteframe/whiteframe"
+@import "pane/pane"
+
++exports("drawer/drawer")
+
+  $drawer:                 ".#{$prefix}#{$drawer-class}"
+  $locked:                 "#{$drawer}.#{$prefix}#{$drawer-locked-class}"
+
+  $drawer-target:          ".#{$prefix}#{$drawer-target-class}"
+  $drawer-container:       ".#{$prefix}#{$drawer-container-class}"
+  $drawer-viewport:        ".#{$prefix}#{$drawer-viewport-class}"
+
+  $open-target:            "#{$drawer-target}.#{$prefix}#{$drawer-target-open-class}"
+  $closed-target:          "#{$drawer-target}.#{$prefix}#{$drawer-target-closed-class}"
+  $opening-target:         "#{$drawer-target}.#{$prefix}#{$drawer-target-opening-class}"
+  $closing-target:         "#{$drawer-target}.#{$prefix}#{$drawer-target-closing-class}"
+
+  $open-container:         "#{$drawer-container}.#{$prefix}#{$drawer-target-open-class}"
+  $closed-container:       "#{$drawer-container}.#{$prefix}#{$drawer-target-closed-class}"
+  $opening-container:      "#{$drawer-container}.#{$prefix}#{$drawer-target-opening-class}"
+  $closing-container:      "#{$drawer-container}.#{$prefix}#{$drawer-target-closing-class}"
+
+  $push-behavior:   "#{$drawer}.#{$prefix}behavior-push"
+
+
+  +component($drawer-tag)
+
+  #{$drawer}
+    position: absolute
+
+
+  #{$drawer}:not(.#{$prefix}#{$transitioning})
+    +transition(box-shadow $pane-trans-in-time)
+
+
+  #{$locked},
+  #{$push-behavior}
+    box-shadow: none
+
+
+  #{$drawer-target},
+  #{$drawer-container}
+    @extend %viewport
+
+
+  #{$drawer-target}
+    +transition-property(padding-top, padding-right, padding-bottom, padding-left)
+
+
+  #{$drawer-container}
+    +transition-property(top, right, bottom, left, transform, -webkit-transform, -o-transform, -ms-transform, -moz-transform)
+    overflow: visible
+
+
+  #{$drawer-viewport}
+    overflow-x: hidden
+    max-width: 100%
+
+
+  #{$open-container},
+  #{$opening-container},
+  #{$open-target},
+  #{$opening-target}
+    +transition-duration($pane-trans-in-time)
+    +transition-timing-function($ease-in-out-cubic)
+
+
+  #{$closing-container},
+  #{$closing-target}
+    +transition-duration($pane-trans-out-time)
+    +transition-timing-function($ease-in-out-cubic)

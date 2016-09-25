@@ -1,0 +1,35 @@
+extends ../_blueprint/master.jade
+
+block content
+
+  h1.ex-title Input
+  
+  .ex-heading Basic Text Input
+  p Here's a basic input.
+  
+  .ex.basic
+    .ex-label basic
+    ui-input(required) First Name
+    ui-input( 
+      maxlength="15", 
+      maxlength-warning="10",
+      hint="Let us get to know you!", 
+      validator-name="last name",
+      validators="required") Last Name
+    ui-input(
+      mask="#### #### #### ####", 
+      required
+      minlength=5
+      validator-name="credit card number",
+      hint="Visa, MasterCard or American Express") Credit Card Number
+    ui-input(
+      mask="+1 (###) ###-####", 
+      value="4065551212", 
+      required,
+      validator-name="phone number",
+      hint="+1 (###) ###-####") US Phone Number
+    ui-input(
+      mask="(##?#?) ####-####",
+      validator-name="phone number",
+      required) UK Phone Number
+  

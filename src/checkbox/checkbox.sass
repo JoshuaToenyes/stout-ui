@@ -1,0 +1,56 @@
+@import "bourbon/bourbon"
+@import "util/exports"
+@import "select/select-box"
+@import "vars/select"
+@import "vars/checkbox"
+
++exports("checkbox/checkbox")
+
+  $cc: #{$prefix}#{$checkbox-class}
+
+  .#{$cc} svg
+    position: absolute
+    width: 124%
+    left: -12%
+    top: -12%
+    opacity: 0
+    z-index: 100
+    +transition(opacity 400ms $ease-in-out-expo)
+
+    path
+      fill: $select-box-inverse-fg
+
+  .#{$cc}.#{$prefix}default svg path
+    fill: $select-box-default-fg
+
+  .#{$cc} .#{$prefix}#{$select-box-indicator-class}
+    padding: 0
+    width: $select-box-normal-size + $select-box-padding
+    height: $select-box-normal-size + $select-box-padding
+
+  .#{$cc}.#{$prefix}#{$select-selected-class} svg
+    opacity: 1
+
+  // Size Adjustments
+
+  .#{$cc}
+
+    &.#{$prefix}tiny .#{$prefix}#{$select-box-indicator-class}
+      width: $select-box-tiny-size + $select-box-padding
+      height: $select-box-tiny-size + $select-box-padding
+
+    &.#{$prefix}small .#{$prefix}#{$select-box-indicator-class}
+      width: $select-box-small-size + $select-box-padding
+      height: $select-box-small-size + $select-box-padding
+
+    &.#{$prefix}large .#{$prefix}#{$select-box-indicator-class}
+      width: $select-box-large-size + $select-box-padding
+      height: $select-box-large-size + $select-box-padding
+
+    &.#{$prefix}huge .#{$prefix}#{$select-box-indicator-class}
+      width: $select-box-huge-size + $select-box-padding
+      height: $select-box-huge-size + $select-box-padding
+
+    &.#{$prefix}massive .#{$prefix}#{$select-box-indicator-class}
+      width: $select-box-massive-size + $select-box-padding
+      height: $select-box-massive-size + $select-box-padding

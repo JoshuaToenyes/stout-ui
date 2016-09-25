@@ -1,0 +1,8 @@
+/**/*.html
+/**/*.js
+/**/*.js.map
+/**/*.css
+/**/*.css.map
+
+# Keep
+!/_dummy/*.html

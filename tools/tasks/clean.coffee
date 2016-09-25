@@ -14,8 +14,9 @@ gulp        = require('gulp-help')(require 'gulp')
 
 module.exports = (config) ->
 
-  gulp.task 'clean', 'Cleans project paths.', ['clean:test', 'clean:target'], ->
+  gulp.task 'clean', 'Cleans project paths.', ['clean:test', 'clean:target', 'clean:jigs'], ->
     del [
       config.path.coverage
       config.path.doc
+      config.path.src + '/vars/**/*.sass'
     ]

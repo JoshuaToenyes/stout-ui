@@ -1,78 +1,42 @@
-##
-# Defines the Console component class, which is a simple console-like
-# text-output component.
-
-Container         = require 'ui/common/Container'
-FloatingContainer = require 'ui/container/FloatingContainer'
-template          = require 'modal/modal.jade'
-
-
-
-##
-# Modal window.
+###*
+# @overview Defines the Modal view-model class.
 #
-# @class Modal
+# @module stout-ui/modal/Modal
+###
+Pane = require '../pane/Pane'
+Promise = require 'stout-core/promise/Promise'
 
-module.exports = class Modal extends Container
 
-  ##
-  # Set to `true` if the close "x" should be shown on the modal.
-  #
-  # @property showClose
-  # @type boolean
-  # @default true
-  # @public
 
-  @property 'showClose',
+###*
+# The Modal class is the view-model of a generic modal component.
+#
+# @exports stout-ui/modal/Modal
+# @extends stout-ui/pane/Pane
+# @constructor
+###
+module.exports = class Modal extends Pane
+
+  constructor: (init, events = []) ->
+    super init, events.concat ['open', 'close']
+
+
+  ###*
+  # Defines if the modal is closeable by clicking outside the modal on the
+  # backdrop. If `true`, then the modal can only be closed programmatically, if
+  # `false`, then the modal can be closed by clicking on the backdrop.
+  ###
+  @property 'static',
     default: true
 
 
-  ##
-  # The modal header's title.
-  #
-  # @property title
-  # @type string
-  # @default null
-  # @public
-
-  @property 'title'
+  open: (e) =>
+    promise = new Promise
+    @fire 'open', {promise, activator: e?.source.root}
+    promise
 
 
-  ##
-  # MaskedTextInput constructor.
-  #
-  # @constructor
-
-  constructor: (init = {}) ->
-    super template, null, {renderOnChange: false}, init
-    @_fc = new FloatingContainer
-    @_fc.classes.push 'sc-modal'
-    @classes.push 'sc-hidden'
-    #@classes.push 'sc-modal'
-
-
-  ##
-  # Opens the modal window. Optionally, a title and modal contents may be
-  # passed to this method which will override the existing title and modal.
-  # This method is essentially equivalent to calling `#render()` followed by
-  # `#show()`.
-  #
-  # @param {string} [title] - The modal title.
-  #
-  # @param {string|HTMLElement|ClientView} [contents] - The modal contents.
-  #
-  # @todo This should return a composed promise.
-  #
-  # @method open
-  # @public
-
-  open: (title, contents) ->
-    if @visible then return
-    if title then @title = title
-    if contents then @contents = contents
-    @render()
-    setTimeout @show, 0
-
-
-  render: ->
-    @_fc.render(super())
+  close: (e) =>
+    promise = new Promise
+    @fire 'close', {promise, activator: e?.source.root}
+    promise

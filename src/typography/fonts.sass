@@ -1,0 +1,134 @@
+@import "bourbon/bourbon"
+@import "vars/fonts"
+@import "./typeset"
+
+
+
+/// Generates a font for output given its map, level, and bottom margin.
+///
+/// @param {Map} $font-map - The font map.
+///
+/// @param {String} $lvl - The font level, i.e. alpha, beta, etc.
+///
+/// @group font
+/// @access public
+=font-generate-font($font-map, $lvl, $top: null, $bottom: null, $mono: null, $typeset: true)
+  $font: map-get($font-map, $lvl)
+  $family: map-get($font, family)
+  $weight: map-get($font, weight)
+  $variant: map-get($font, variant)
+  $style: map-get($font, style)
+  $font-size: map-get($font, size)
+  $baseline-shift: map-get($font, baseline-shift)
+  $line-height: map-get($font, line-height)
+
+  @if $top == null
+    $top: map-get($font, top)
+
+  @if $bottom == null
+    $bottom: map-get($font, bottom)
+
+  +fontset($family, $weight, $variant, $style)
+
+  @if $typeset == true
+    +typeset($font-size, $line-height, $baseline-shift, $top, $bottom)
+  @else
+    font-size: $font-size
+
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+
+  @if $mono != null
+    +hyphens(auto)
+    +font-feature-settings("pnum", "kern", "liga")
+
+
+
+
+=fontset($family, $weight: null, $variant: null, $style: null)
+  font-family: $family
+  font-weight: $weight
+  font-variant: $variant
+  font-style: $style
+
+
+
+
+/// Outputs the display font of the specified level.
+///
+/// @param {String} $lvl - The font level, i.e. alpha, beta, etc.
+///
+/// @group font
+/// @access public
+=font-display($lvl, $top: null, $bottom: null)
+  $map: $font-display
+  +font-generate-font($map, $lvl, $top, $bottom)
+
+
+/// Outputs the lead paragraph font of the specified level.
+///
+/// @param {String} $lvl - The font level, i.e. alpha, beta, etc.
+///
+/// @group font
+/// @access public
+=font-lead($lvl)
+  $map: $font-lead
+  +font-generate-font($map, $lvl)
+
+
+/// Outputs the body-copy font of the specified level.
+///
+/// @param {String} $lvl - The font level, i.e. alpha, beta, etc.
+///
+/// @group font
+/// @access public
+=font-body($lvl, $top: null, $bottom: null, $typeset: true)
+  $map: $font-body
+  +font-generate-font($map, $lvl, $top, $bottom, null, $typeset)
+
+
+/// Outputs the emphasis font of the specified level.
+///
+/// @param {String} $lvl - The font level, i.e. alpha, beta, etc.
+///
+/// @group font
+/// @access public
+=font-emphasis($lvl, $top: null, $bottom: null)
+  $map: $font-emphasis
+  +font-generate-font($map, $lvl, $top, $bottom)
+
+
+/// Outputs the monospaced font of the specified level.
+///
+/// @param {String} $lvl - The font level, i.e. alpha, beta, etc.
+///
+/// @group font
+/// @access public
+=font-mono($lvl, $top: null, $bottom: null)
+  $map: $font-mono
+  +font-generate-font($map, $lvl, $top, $bottom, true)
+  white-space: pre
+
+
+/// Outputs the caption font of the specified level.
+///
+/// @param {String} $lvl - The font level, i.e. alpha, beta, etc.
+///
+/// @group font
+/// @access public
+=font-caption($lvl, $top: null, $bottom: null, $typeset: true)
+  $map: $font-caption
+  +font-generate-font($map, $lvl, $top, $bottom, null, $typeset)
+
+
+/// Outputs the control font of the specified level.
+///
+/// @param {String} $lvl - The font level, i.e. alpha, beta, etc.
+///
+/// @group font
+/// @access public
+=font-control($lvl)
+  $map: $font-control
+  +font-generate-font($map, $lvl, null, null, null, false)
+  text-transform: uppercase
+  letter-spacing: 1px

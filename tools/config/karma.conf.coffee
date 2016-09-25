@@ -1,11 +1,11 @@
 module.exports = (config) ->
 
   config.set
-    browsers: ['Chrome'] #, 'Safari', 'PhantomJS', 'Firefox']
+    browsers: ['Chrome']#, 'Safari', 'PhantomJS', 'Firefox']
 
-    frameworks: ['browserify', 'mocha']
+    frameworks: ['browserify', 'mocha', 'chai-sinon']
 
-    reporters: ['progress']
+    reporters: ['mocha']
 
     files: [
       '../../test/unit/**/*.test.js'
