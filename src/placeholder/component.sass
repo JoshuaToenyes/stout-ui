@@ -1,7 +1,11 @@
-// Default component display styling.
-%component
+@import "util/exports"
 
-  // Hide the component until rendering is complete.
-  display: none
-  &[rendered]
-    display: block
++exports("placeholder/component")
+
+  // Default component display styling.
+  %component
+
+    // Hide the component until rendering is complete.
+    display: none
+    &[rendered]
+      display: block
