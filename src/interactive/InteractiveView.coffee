@@ -68,9 +68,22 @@ module.exports = class InteractiveView extends ComponentView
       set: (handler) ->
         switch typeof handler
           when 'string'
-            nextTick => @on eventName, @context[handler]
+            nextTick =>
+              fn = null
+              ancestor = @
+              target = null
+              while not fn and ancestor
+                ancestor = ancestor.parent
+                if ancestor.context[handler]
+                  fn = ancestor.context[handler]
+                  target = ancestor.context
+                else
+                  fn = ancestor[handler]
+                  target = ancestor
+              @on eventName, fn.bind(target)
           when 'function'
-            nextTick => @on eventName, handler
+            nextTick =>
+              @on eventName, handler
 
 
   ###*
