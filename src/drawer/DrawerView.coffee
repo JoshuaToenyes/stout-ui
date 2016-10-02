@@ -351,7 +351,7 @@ module.exports = class DrawerView extends PaneView
     # Set the pane transition type.
     if @behavior is 'push'
       @transition = 'fade'
-      @getRenderedDimensions().then (d) =>
+      p = @getRenderedDimensions().then (d) =>
         @root.style.left = -d.width + 'px'
     else
       @transition = 'overlay'
@@ -365,6 +365,8 @@ module.exports = class DrawerView extends PaneView
     else
       @container.classList.remove DRAWER_CONTAINER_CLS
       @viewport.classList.remove DRAWER_VIEWPORT_CLS
+
+    return p
 
 
   ###*
@@ -390,7 +392,8 @@ module.exports = class DrawerView extends PaneView
   open: =>
     if @canTransitionIn()
       @_setElementClasses 'opening'
-      @transitionIn().then => @_setElementClasses 'open'
+      @_setupDrawer().then =>
+        @transitionIn().then => @_setElementClasses 'open'
     else
       Promise.rejected()
 
