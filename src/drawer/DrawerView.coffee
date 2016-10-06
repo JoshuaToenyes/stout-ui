@@ -295,9 +295,11 @@ module.exports = class DrawerView extends PaneView
         size = -size
 
     if @side in ['top', 'bottom']
-      translateFunc = 'translateY'
+      #translateFunc = 'translateY'
+      translateFunc = 'top'
     else
-      translateFunc = 'translateX'
+      #translateFunc = 'translateX'
+      translateFunc = 'left'
 
     switch @side
       when 'top' then oppositeSide = 'bottom'
@@ -307,8 +309,10 @@ module.exports = class DrawerView extends PaneView
 
     # Handle moving the appropriate containers.
     if @behavior is 'push'
-      t = if @transitioningOut then 'none' else "#{translateFunc}(#{size}px)"
-      prefix @container, 'transform', t
+      # t = if @transitioningOut then 'none' else "#{translateFunc}(#{size}px)"
+      # prefix @container, 'transform', t
+      t = if @transitioningOut then '0' else "#{size}px"
+      @container.style[translateFunc] = t
 
       if @locked
         @target.style["padding-#{oppositeSide}"] = size + 'px'
@@ -343,7 +347,11 @@ module.exports = class DrawerView extends PaneView
       @root.style.left = '0'
 
     # Stick the drawer to the specified side.
-    @root.style[@side] = '0'
+    #@root.style[@side] = '0'
+
+    # Initially position off-screen.
+    @root.style[@side] = '-1000px'
+    @container.style[@side] = '0'
 
     # The drawer should slide in and out from the side it's attached to.
     @start = @end = @side
@@ -351,8 +359,8 @@ module.exports = class DrawerView extends PaneView
     # Set the pane transition type.
     if @behavior is 'push'
       @transition = 'fade'
-      p = @getRenderedDimensions().then (d) =>
-        @root.style.left = -d.width + 'px'
+      @getRenderedDimensions().then (d) =>
+        @root.style.left = "-#{width}px"
     else
       @transition = 'overlay'
 
@@ -366,7 +374,12 @@ module.exports = class DrawerView extends PaneView
       @container.classList.remove DRAWER_CONTAINER_CLS
       @viewport.classList.remove DRAWER_VIEWPORT_CLS
 
-    return p
+    return
+
+
+  setDisplaySize: ->
+    super().then ({width, height}) =>
+      @root.style.left = '0'
 
 
   ###*
@@ -378,7 +391,9 @@ module.exports = class DrawerView extends PaneView
   close: =>
     if @canTransitionOut()
       @_setElementClasses 'closing'
-      @transitionOut().then => @_setElementClasses 'closed'
+      @contents.getRenderedDimensions().then ({width, height}) =>
+        @root.style.left = "-#{width}px"
+        @transitionOut().then => @_setElementClasses 'closed'
     else
       Promise.rejected()
 
@@ -392,8 +407,8 @@ module.exports = class DrawerView extends PaneView
   open: =>
     if @canTransitionIn()
       @_setElementClasses 'opening'
-      @_setupDrawer().then =>
-        @transitionIn().then => @_setElementClasses 'open'
+      #@_setupDrawer().then =>
+      @transitionIn().then => @_setElementClasses 'open'
     else
       Promise.rejected()
 
@@ -409,6 +424,9 @@ module.exports = class DrawerView extends PaneView
     super().then =>
       @_setupDrawer()
       @_lockDrawer()
+      @contents.getRenderedDimensions().then ({width, height}) =>
+        @root.style.left = "-#{width}px"
+        @prefixedClasses.add 'ready'
 
 
   ###*

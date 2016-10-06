@@ -3,6 +3,7 @@
 @import "util/exports"
 @import "util/component"
 @import "util/transitioning"
+@import "util/visibility"
 @import "vars/drawer"
 @import "vars/component"
 @import "vars/pane"
@@ -11,7 +12,8 @@
 
 +exports("drawer/drawer")
 
-  $drawer:                 ".#{$prefix}#{$drawer-class}"
+  $pane:                   ".#{$prefix}#{$pane-class}"
+  $drawer:                 "#{$pane}.#{$prefix}#{$drawer-class}"
   $locked:                 "#{$drawer}.#{$prefix}#{$drawer-locked-class}"
 
   $drawer-target:          ".#{$prefix}#{$drawer-target-class}"
@@ -34,12 +36,30 @@
   +component($drawer-tag)
 
   #{$drawer}
-    position: absolute
+    position: fixed
     max-height: 100%
+    +transform(none)
+    +transform-origin(unset)
+    // +transition-duration($pane-trans-out-time)
+    // +transition-timing-function($ease-in-out-cubic)
+    // +transition-property(none)
+
+    // Initially position off-screen
+    left: -1000px
+
+    // +transitioning
+    &.ui-ready
+      +transition-property(top, right, bottom, left, opacity, box-shadow)
+      +transition-duration($pane-trans-out-time)
+      +transition-timing-function($ease-in-out-cubic)
 
 
-  #{$drawer}:not(.#{$prefix}#{$transitioning})
-    +transition(box-shadow $pane-trans-in-time)
+    +transitioning-in
+      opacity: 1
+
+
+    +hidden
+      display: block
 
 
   #{$locked},
