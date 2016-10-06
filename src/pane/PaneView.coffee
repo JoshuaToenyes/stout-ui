@@ -170,6 +170,8 @@ module.exports = class PaneView extends ComponentView
 
       setWH w, h
 
+      {width: w, height: h}
+
 
   ###*
   # Sets pane transformation parameters.
