@@ -378,11 +378,6 @@ module.exports = class DrawerView extends PaneView
     return
 
 
-  setDisplaySize: ->
-    super().then ({width, height}) =>
-      @root.style.left = '0'
-
-
   ###*
   # Closes the drawer.
   #
@@ -391,10 +386,10 @@ module.exports = class DrawerView extends PaneView
   ###
   close: =>
     if @canTransitionOut()
-      @_setElementClasses 'closing'
-      @fire 'closing'
       @contents.getRenderedDimensions().then ({width, height}) =>
         @root.style.left = "-#{width}px"
+        @_setElementClasses 'closing'
+        @fire 'closing'
         @transitionOut().then =>
           @_setElementClasses 'closed'
           @fire 'close'
@@ -414,6 +409,8 @@ module.exports = class DrawerView extends PaneView
       @fire 'opening'
       @transitionIn().then =>
         @_setElementClasses 'open'
+        @root.style.left = '0'
+        @root.style.top = '0'
         @fire 'open'
     else
       Promise.rejected()
@@ -433,6 +430,16 @@ module.exports = class DrawerView extends PaneView
         @root.style.left = "-#{width}px"
         @_lockDrawer()
         @prefixedClasses.add 'ready'
+
+        scrollListener = =>
+          @root.style.top = "#{window.pageYOffset}px"
+
+        @on 'opening closing', ->
+          scrollListener()
+          window.addEventListener 'scroll', scrollListener
+
+        @on 'close open', ->
+          window.removeEventListener 'scroll', scrollListener
 
 
   ###*
