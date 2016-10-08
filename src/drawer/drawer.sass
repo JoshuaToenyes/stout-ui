@@ -35,28 +35,26 @@
 
   +component($drawer-tag)
 
+  // The drawer is initially positioned off-screen (-1000px), then the width
+  // is dynamically calculated and it is positioned correctly via JS.
   #{$drawer}
-    position: fixed
-    max-height: 100%
     +transform(none)
     +transform-origin(unset)
-
-    // Initially position off-screen
+    position: fixed
+    max-height: 100%
     left: -1000px
+
+    +transitioning-in
+      opacity: 1
+
+    +hidden
+      display: block
 
     // +transitioning
     &.ui-ready
       +transition-property(top, right, bottom, left, opacity, box-shadow)
       +transition-duration($pane-trans-out-time)
       +transition-timing-function($ease-in-out-cubic)
-
-
-    +transitioning-in
-      opacity: 1
-
-
-    +hidden
-      display: block
 
 
   #{$locked},

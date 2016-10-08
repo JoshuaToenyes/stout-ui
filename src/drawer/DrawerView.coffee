@@ -127,7 +127,7 @@ selectorHelper = (v) ->
 module.exports = class DrawerView extends PaneView
 
   constructor: (init, events = []) ->
-    events = events.concat ['open', 'close', 'toggle']
+    events = events.concat ['opening', 'open', 'closing', 'close', 'toggle']
     init = defaults init, {tagName: TAG_NAME}
     super init, events
 
@@ -392,10 +392,12 @@ module.exports = class DrawerView extends PaneView
   close: =>
     if @canTransitionOut()
       @_setElementClasses 'closing'
-      @fire 'close'
+      @fire 'closing'
       @contents.getRenderedDimensions().then ({width, height}) =>
         @root.style.left = "-#{width}px"
-        @transitionOut().then => @_setElementClasses 'closed'
+        @transitionOut().then =>
+          @_setElementClasses 'closed'
+          @fire 'close'
     else
       Promise.rejected()
 
@@ -409,8 +411,10 @@ module.exports = class DrawerView extends PaneView
   open: =>
     if @canTransitionIn()
       @_setElementClasses 'opening'
-      @fire 'open'
-      @transitionIn().then => @_setElementClasses 'open'
+      @fire 'opening'
+      @transitionIn().then =>
+        @_setElementClasses 'open'
+        @fire 'open'
     else
       Promise.rejected()
 
