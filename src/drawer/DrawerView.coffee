@@ -423,9 +423,9 @@ module.exports = class DrawerView extends PaneView
   render: ->
     super().then =>
       @_setupDrawer()
-      @_lockDrawer()
       @contents.getRenderedDimensions().then ({width, height}) =>
         @root.style.left = "-#{width}px"
+        @_lockDrawer()
         @prefixedClasses.add 'ready'
 
 
