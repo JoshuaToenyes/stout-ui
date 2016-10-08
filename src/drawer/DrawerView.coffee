@@ -126,9 +126,10 @@ selectorHelper = (v) ->
 ###
 module.exports = class DrawerView extends PaneView
 
-  constructor: (init, events) ->
-    defaults init, {tagName: TAG_NAME}
-    super arguments...
+  constructor: (init, events = []) ->
+    events = events.concat ['open', 'close', 'toggle']
+    init = defaults init, {tagName: TAG_NAME}
+    super init, events
 
     # Don't immediately show the view.
     @options.showOnRender = false
@@ -391,6 +392,7 @@ module.exports = class DrawerView extends PaneView
   close: =>
     if @canTransitionOut()
       @_setElementClasses 'closing'
+      @fire 'close'
       @contents.getRenderedDimensions().then ({width, height}) =>
         @root.style.left = "-#{width}px"
         @transitionOut().then => @_setElementClasses 'closed'
@@ -407,7 +409,7 @@ module.exports = class DrawerView extends PaneView
   open: =>
     if @canTransitionIn()
       @_setElementClasses 'opening'
-      #@_setupDrawer().then =>
+      @fire 'open'
       @transitionIn().then => @_setElementClasses 'open'
     else
       Promise.rejected()
@@ -436,4 +438,5 @@ module.exports = class DrawerView extends PaneView
   # @memberof stout-ui/drawer/DrawerView#
   ###
   toggle: =>
+    @fire 'toggle'
     if @visible then @close() else @open()
