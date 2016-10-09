@@ -92,15 +92,27 @@ module.exports = class PaneView extends ComponentView
     @prefixedClasses.add PANE_CLS
     @syncProperty @context, 'transition start end width height'
 
+    # Set of pane transitions.
+    @_transitions = transitions
+
     @on 'transition:in', ->
-      transitions[@transition].in?.call @
+      @_transitions[@transition].in?.call @
       #@setDisplaySize()
 
     @on 'transition:out', ->
-      transitions[@transition].out?.call @
+      @_transitions[@transition].out?.call @
 
   # Clone shared view-model properties.
   @cloneProperty Pane, 'transition start end width height center'
+
+
+  ###*
+  # Set of transition utilities for positioning and sizing the pane.
+  #
+  # @member _transitions
+  # @memberof stout-ui/pane/PaneView#
+  # @protected
+  ###
 
 
   ###*
@@ -204,7 +216,7 @@ module.exports = class PaneView extends ComponentView
       @setPaneTransitionClasses()
       @resetSizeAndPosition()
       @setDisplaySize()
-      transitions[@transition].setupIn.call(@).then =>
+      @_transitions[@transition].setupIn.call(@).then =>
         super(time).then =>
           @root.style.transform = ''
           window.addEventListener 'resize', @_resizeHandler
@@ -222,7 +234,7 @@ module.exports = class PaneView extends ComponentView
       because the pane is already hidden."
     else
       @setPaneTransitionClasses()
-      transitions[@transition].setupOut.call(@).then =>
+      @_transitions[@transition].setupOut.call(@).then =>
         super(time).then =>
           window.removeEventListener 'resize', @_resizeHandler
 
