@@ -28,6 +28,11 @@ setup = (dir) ->
       @root.style.top = '0'
       drawerDim = 'width'
 
+
+  @__drawerScrollListener = =>
+    @root.style.top = "#{window.pageYOffset}px"
+
+
   @getRenderedDimensions().then (d) =>
     if dir is 'in'
       @root.style[s] = 'auto' for s in ['top', 'right', 'bottom', 'left']
@@ -39,7 +44,8 @@ setup = (dir) ->
       @fire 'closing'
 
     if @side in ['left', 'right']
-      @root.style.top = "#{window.pageYOffset}px"
+      @__drawerScrollListener()
+      window.addEventListener 'scroll', @__drawerScrollListener
 
     @root.style[@side] = "-#{d[drawerDim]}px"
 
@@ -118,6 +124,7 @@ module.exports = push =
     if @side in ['left', 'right']
       @root.style.top = '0'
     @root.style[@side] = '0'
+    window.removeEventListener 'scroll', @__drawerScrollListener
 
 
   ###*
@@ -126,3 +133,4 @@ module.exports = push =
   # @function afterIn
   ###
   afterOut: ->
+    window.removeEventListener 'scroll', @__drawerScrollListener
