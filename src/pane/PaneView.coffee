@@ -90,7 +90,8 @@ module.exports = class PaneView extends ComponentView
         classes: PANE_CONTENT_CLS
     super init, events
     @prefixedClasses.add PANE_CLS
-    @syncProperty @context, 'transition start end width height'
+    @syncProperty @context, 'transition start end width height',
+      inherit: 'falsy'
 
     # Set of pane transitions.
     @_transitions = transitions
