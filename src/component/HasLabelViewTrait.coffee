@@ -39,9 +39,11 @@ module.exports = class HasLabelViewTrait extends Foundation
   ###
   @property 'label',
     default: ''
-    set: (l) ->
-      @contents = "<span class=#{LABEL_CLS}>#{l}</span>"
-      l
+
+
+  @property 'contents',
+    get: ->
+      "<span class=#{LABEL_CLS}>#{@label}</span>"
 
 
   ###*
