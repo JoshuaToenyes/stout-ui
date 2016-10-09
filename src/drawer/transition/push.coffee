@@ -50,6 +50,8 @@ setup = (dir) ->
       else
         @root.style.position = ''
 
+    return d
+
 
 
 ###*
@@ -93,6 +95,7 @@ module.exports = push =
           translateDim = width
       @container.style[@side] = "#{translateDim}px"
       @root.style[@side] = "-#{translateDim}px"
+      {width, height}
 
 
   ###*
