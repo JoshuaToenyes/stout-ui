@@ -2,7 +2,14 @@
 # @overview Defines the pane fade transition.
 # @module stout-ui/drawer/transition/fit
 ###
+push = require './push'
 Promise = require 'stout-core/promise/Promise'
+
+
+oppositeSide = (side) ->
+  switch side
+    when 'left' then 'right'
+    when 'right' then 'left'
 
 
 ###*
@@ -17,22 +24,28 @@ module.exports =
   ###*
   # Sets-up the transition-out. This method is essentially a no-op.
   ###
-  setupIn: -> Promise.fulfilled()
+  setupIn: ->
+    push.setupIn.call(@).then ({width, height}) =>
+      @container.style['padding-' + oppositeSide(@side)] = '0'
 
 
   ###*
   # Sets-up the transition-out. This method is essentially a no-op.
   ###
-  setupOut: -> Promise.fulfilled()
+  setupOut: push.setupOut
 
 
   in: ->
+    push.in.call(@).then ({width, height}) =>
+      @container.style['padding-' + oppositeSide(@side)] = "#{width}px"
 
 
   out: ->
+    push.out.call(@).then () =>
+      @container.style['padding-' + oppositeSide(@side)] = '0'
 
 
-  afterIn: ->
+  afterIn: push.afterIn
 
 
-  afterOut: ->
+  afterOut: push.afterOut
