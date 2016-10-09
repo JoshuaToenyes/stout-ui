@@ -90,7 +90,7 @@ module.exports = class Drawer extends Pane
     values: [
       'push'
       'overlay'
-      'resize'
+      'fit'
     ]
 
 
