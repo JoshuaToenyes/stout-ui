@@ -30,7 +30,7 @@
   $opening-container:      "#{$drawer-container}.#{$prefix}#{$drawer-target-opening-class}"
   $closing-container:      "#{$drawer-container}.#{$prefix}#{$drawer-target-closing-class}"
 
-  $push-behavior:   "#{$drawer}.#{$prefix}behavior-push"
+  $push-transition:   "#{$drawer}.#{$prefix}transition-push"
 
 
   +component($drawer-tag)
@@ -62,7 +62,7 @@
 
 
   #{$locked},
-  #{$push-behavior}
+  #{$push-transition}
     box-shadow: none
 
 

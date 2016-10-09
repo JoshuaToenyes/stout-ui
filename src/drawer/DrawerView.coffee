@@ -13,6 +13,8 @@ prefix   = require 'stout-client/util/prefix'
 Promise  = require 'stout-core/promise/Promise'
 vars     = require '../vars'
 
+transitions = require './transition'
+
 # Load drawer variables.
 require '../vars/drawer'
 
@@ -83,7 +85,7 @@ RESIZE_DEBOUNCE = 100
 # @const {string}
 # @private
 ###
-SYNCED_PROPS = 'maxHeight maxWidth minHeight minWidth behavior side locked'
+SYNCED_PROPS = 'maxHeight maxWidth minHeight minWidth side locked transition'
 
 
 ###*
@@ -131,13 +133,15 @@ module.exports = class DrawerView extends PaneView
     init = defaults init, {tagName: TAG_NAME}
     super init, events
 
+    @_transitions = transitions
+
     # Don't immediately show the view.
     @options.showOnRender = false
 
     @syncProperty @context, SYNCED_PROPS, inherit: 'falsy'
 
     @prefixedClasses.add DRAWER_CLS
-    @prefixedClasses.add 'behavior-' + @behavior
+    @prefixedClasses.add 'transition-' + @transition
 
     # Handle "side" changes
     for s in 'side container target viewport'.split /\s+/
@@ -160,7 +164,18 @@ module.exports = class DrawerView extends PaneView
 
 
   ###*
-  # The container element for "push" behavior.
+  # Set of transition utilities for positioning and sizing the drawer and
+  # drawer target.
+  #
+  # @member _transitions
+  # @memberof stout-ui/drawer/DrawerView#
+  # @protected
+  # @override
+  ###
+
+
+  ###*
+  # The container element for "push" transition.
   #
   # @member container
   # @memberof stout-ui/drawer/DrawerView#
@@ -182,7 +197,7 @@ module.exports = class DrawerView extends PaneView
 
 
   ###*
-  # The viewport container element for "push" behavior.
+  # The viewport container element for "push" transition.
   #
   # @member viewport
   # @memberof stout-ui/drawer/DrawerView#
@@ -228,11 +243,6 @@ module.exports = class DrawerView extends PaneView
       @prefixedClasses.remove DRAWER_LOCKED_CLS
       @locked = false
 
-    # if @locked
-    #   @transition = 'overlay'
-    # else if @behavior is 'push'
-    #   @transition = 'fade'
-
 
   _setElementClasses: (state) ->
     remove = [
@@ -264,7 +274,7 @@ module.exports = class DrawerView extends PaneView
 
   ###*
   # Offsets the drawer target (corresponding content container). Depending on
-  # the drawer behavior (overlay or push), the target's padding or transform
+  # the drawer transition (overlay or push), the target's padding or transform
   # is adjusted.
   #
   # @method _offsetTarget
@@ -292,7 +302,7 @@ module.exports = class DrawerView extends PaneView
         size = cs.height + cs.paddingTop + cs.paddingBottom
 
       # Invert size for negative translation.
-      if @behavior is 'push' and @side in ['right', 'bottom']
+      if @transition is 'push' and @side in ['right', 'bottom']
         size = -size
 
     if @side in ['top', 'bottom']
@@ -309,7 +319,7 @@ module.exports = class DrawerView extends PaneView
       when 'left' then oppositeSide = 'right'
 
     # Handle moving the appropriate containers.
-    if @behavior is 'push'
+    if @transition is 'push'
       # t = if @transitioningOut then 'none' else "#{translateFunc}(#{size}px)"
       # prefix @container, 'transform', t
       t = if @transitioningOut then '0' else "#{size}px"
@@ -358,17 +368,17 @@ module.exports = class DrawerView extends PaneView
     @start = @end = @side
 
     # Set the pane transition type.
-    if @behavior is 'push'
-      @transition = 'fade'
+    if @transition is 'push'
+      #@transition = 'fade'
       @getRenderedDimensions().then (d) =>
         @root.style.left = "-#{width}px"
-    else
-      @transition = 'overlay'
+    # else
+    #   @transition = 'overlay'
 
     # Set initial classes.
     @target.classList.add DRAWER_TARGET_CLS
 
-    if @behavior is 'push'
+    if @transition is 'push'
       @container.classList.add DRAWER_CONTAINER_CLS
       @viewport.classList.add DRAWER_VIEWPORT_CLS
     else

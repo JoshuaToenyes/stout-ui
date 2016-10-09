@@ -78,18 +78,19 @@ module.exports = class Drawer extends Pane
 
 
   ###*
-  # The drawer's opening-behavior when not "locked" open. The "overlay" behavior
-  # makes the drawer overlay the parent content, while the "push" behavior
-  # "pushes" over the parent's content.
+  # Transition type.
   #
-  # @member behavior
+  # @member transition
   # @memberof stout-ui/drawer/Drawer#
+  # @public
+  # @override
   ###
-  @property 'behavior',
+  @property 'transition',
     default: 'overlay'
     values: [
       'push'
       'overlay'
+      'resize'
     ]
 
 
