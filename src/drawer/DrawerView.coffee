@@ -143,22 +143,10 @@ module.exports = class DrawerView extends PaneView
     @prefixedClasses.add DRAWER_CLS
     @prefixedClasses.add 'transition-' + @transition
 
-    # Handle "side" changes
-    for s in 'side container target viewport'.split /\s+/
-      @stream s, @_setupDrawer, @
-
-    debouncedLock = debouce =>
-      @_lockDrawer()
-    , RESIZE_DEBOUNCE
-
-    @addEventListenerTo window, 'resize', debouncedLock
-
     # Attach to view-model event signals.
     @context.on 'open', @open, @
     @context.on 'close', @close, @
     @context.on 'toggle', @toggle, @
-
-    @on 'transition', @_offsetTarget, @
 
   @cloneProperty Drawer, SYNCED_PROPS
 
@@ -208,43 +196,13 @@ module.exports = class DrawerView extends PaneView
 
 
   ###*
-  # Checks if the window is of the minimum size for locking-open the drawer.
-  # This method will open or close the drawer as appropriate.
+  # Sets classes on drawer-related elements based on its state.
   #
-  # @method _lockDrawer
+  # @method _setDrawerStateClasses
   # @memberof stout-ui/drawer/DrawerView#
-  # @private
+  # @protected
   ###
-  _lockDrawer: ->
-    W = window.innerWidth
-    H = window.innerHeight
-
-    # If the window is of the minimum size, then lock open or close the drawer.
-    if (@minWidth >= 0 and W >= @minWidth) or
-    (@minHeight >= 0 and H >= @minHeight) or
-    (@maxWidth >= 0 and W < @maxWidth) or
-    (@maxHeight >= 0 and H < @maxHeight)
-      @prefixedClasses.add DRAWER_LOCKED_CLS
-      @locked = true
-      if @hidden
-        @open()
-      else
-        @_offsetTarget(false)
-
-    # If the drawer was previously locked open, and we've decresed the window
-    # size, or the size of the viewport has increased past the maximum width
-    # or height, then close the drawer.
-    else if @locked
-      @locked = false
-      @close().then =>
-        @prefixedClasses.remove DRAWER_LOCKED_CLS
-
-    else
-      @prefixedClasses.remove DRAWER_LOCKED_CLS
-      @locked = false
-
-
-  _setElementClasses: (state) ->
+  _setDrawerStateClasses: (state) ->
     remove = [
       DRAWER_P_OPEN_CLS
       DRAWER_P_CLOSED_CLS
@@ -273,122 +231,6 @@ module.exports = class DrawerView extends PaneView
 
 
   ###*
-  # Offsets the drawer target (corresponding content container). Depending on
-  # the drawer transition (overlay or push), the target's padding or transform
-  # is adjusted.
-  #
-  # @method _offsetTarget
-  # @memberof stout-ui/drawer/DrawerView#
-  # @private
-  ###
-  _offsetTarget: ->
-    if @transitioningOut
-      size = 0
-    else
-      computedStyle = getComputedStyle @root
-      cs = {}
-      cs[k] = parseInt(computedStyle[k]) for k in [
-        'width'
-        'height'
-        'paddingLeft'
-        'paddingRight'
-        'paddingTop'
-        'paddingBottom'
-      ]
-
-      if @side in ['left', 'right']
-        size = cs.width + cs.paddingLeft + cs.paddingRight
-      else
-        size = cs.height + cs.paddingTop + cs.paddingBottom
-
-      # Invert size for negative translation.
-      if @transition is 'push' and @side in ['right', 'bottom']
-        size = -size
-
-    if @side in ['top', 'bottom']
-      #translateFunc = 'translateY'
-      translateFunc = 'top'
-    else
-      #translateFunc = 'translateX'
-      translateFunc = 'left'
-
-    switch @side
-      when 'top' then oppositeSide = 'bottom'
-      when 'right' then oppositeSide = 'left'
-      when 'bottom' then oppositeSide = 'top'
-      when 'left' then oppositeSide = 'right'
-
-    # Handle moving the appropriate containers.
-    if @transition is 'push'
-      # t = if @transitioningOut then 'none' else "#{translateFunc}(#{size}px)"
-      # prefix @container, 'transform', t
-      t = if @transitioningOut then '0' else "#{size}px"
-      @container.style[translateFunc] = t
-
-      if @locked
-        @target.style["padding-#{oppositeSide}"] = size + 'px'
-      else
-        @target.style["padding-#{oppositeSide}"] = '0'
-
-    else
-      @target.style["padding-#{@side}"] = size + 'px'
-
-
-  ###*
-  # Updates the size and position of the drawer based on configured "size"
-  # property.
-  #
-  # @method _setupDrawer
-  # @memberof stout-ui/drawer/DrawerView#
-  # @private
-  ###
-  _setupDrawer: ->
-    # Reset all side positioning.
-    @root.style[s] = 'auto' for s in ['top', 'right', 'bottom', 'left']
-
-    # Set the width and height based on the configured "side" where the drawer
-    # should open. Drawer sizing should be adjusted by modifying the content.
-    if @side in ['left', 'right']
-      @height = 'full'
-      @width = 'auto'
-      @root.style.top = '0'
-    else
-      @height = 'auto'
-      @width = 'full'
-      @root.style.left = '0'
-
-    # Stick the drawer to the specified side.
-    #@root.style[@side] = '0'
-
-    # Initially position off-screen.
-    @root.style[@side] = '-1000px'
-    @container.style[@side] = '0'
-
-    # The drawer should slide in and out from the side it's attached to.
-    @start = @end = @side
-
-    # Set the pane transition type.
-    if @transition is 'push'
-      #@transition = 'fade'
-      @getRenderedDimensions().then (d) =>
-        @root.style.left = "-#{width}px"
-    # else
-    #   @transition = 'overlay'
-
-    # Set initial classes.
-    @target.classList.add DRAWER_TARGET_CLS
-
-    if @transition is 'push'
-      @container.classList.add DRAWER_CONTAINER_CLS
-      @viewport.classList.add DRAWER_VIEWPORT_CLS
-    else
-      @container.classList.remove DRAWER_CONTAINER_CLS
-      @viewport.classList.remove DRAWER_VIEWPORT_CLS
-
-    return
-
-
-  ###*
   # Closes the drawer.
   #
   # @method close
@@ -396,13 +238,10 @@ module.exports = class DrawerView extends PaneView
   ###
   close: =>
     if @canTransitionOut()
-      @contents.getRenderedDimensions().then ({width, height}) =>
-        @root.style.left = "-#{width}px"
-        @_setElementClasses 'closing'
-        @fire 'closing'
-        @transitionOut().then =>
-          @_setElementClasses 'closed'
-          @fire 'close'
+      @transitionOut().then =>
+        @_transitions[@transition].afterOut.call @
+        @_setDrawerStateClasses 'closed'
+        @fire 'close'
     else
       Promise.rejected()
 
@@ -415,12 +254,9 @@ module.exports = class DrawerView extends PaneView
   ###
   open: =>
     if @canTransitionIn()
-      @_setElementClasses 'opening'
-      @fire 'opening'
       @transitionIn().then =>
-        @_setElementClasses 'open'
-        @root.style.left = '0'
-        @root.style.top = '0'
+        @_transitions[@transition].afterIn.call @
+        @_setDrawerStateClasses 'open'
         @fire 'open'
     else
       Promise.rejected()
@@ -435,21 +271,9 @@ module.exports = class DrawerView extends PaneView
   ###
   render: ->
     super().then =>
-      @_setupDrawer()
-      @contents.getRenderedDimensions().then ({width, height}) =>
-        @root.style.left = "-#{width}px"
-        @_lockDrawer()
-        @prefixedClasses.add 'ready'
-
-        scrollListener = =>
-          @root.style.top = "#{window.pageYOffset}px"
-
-        @on 'opening closing', ->
-          scrollListener()
-          window.addEventListener 'scroll', scrollListener
-
-        @on 'close open', ->
-          window.removeEventListener 'scroll', scrollListener
+      @target.classList.add DRAWER_TARGET_CLS
+      @container.classList.add DRAWER_CONTAINER_CLS
+      @viewport.classList.add DRAWER_VIEWPORT_CLS
 
 
   ###*
