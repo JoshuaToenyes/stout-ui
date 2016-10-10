@@ -38,10 +38,8 @@ setup = (dir) ->
       @root.style[s] = 'auto' for s in ['top', 'right', 'bottom', 'left']
       @container.style[s] = 'auto' for s in ['top', 'right', 'bottom', 'left']
       @_setDrawerStateClasses 'opening'
-      @fire 'opening'
     else
       @_setDrawerStateClasses 'closing'
-      @fire 'closing'
 
     if @side in ['left', 'right']
       @__drawerScrollListener()
@@ -55,6 +53,9 @@ setup = (dir) ->
         @root.style.position = 'fixed'
       else
         @root.style.position = ''
+      @fire 'opening'
+    else
+      @fire 'closing'
 
     return d
 
