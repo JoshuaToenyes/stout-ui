@@ -73,7 +73,9 @@ module.exports = class ButtonView extends InteractiveView
 
     @on 'hide disable', => @unfill()
 
-    @on 'tap click', => @_blur()
+    @on 'tap click', =>
+      @_blur()
+      @_mouseleave()
 
     @on 'show enable ready', =>
       @emptyFill()
