@@ -1,0 +1,16 @@
+extends ../_blueprint/master.jade
+
+block content
+
+  h1.ex-title Dropdown
+  
+  .ex-heading 
+  
+  .ex.basic
+    .ex-label basic dropdown
+    
+    ui-button#btn-basic(size='tiny') Open Dropdown
+    
+    ui-dropdown#dropdown-basic(affix-to='#btn-basic')
+      p This is the drop-down content.
+    
