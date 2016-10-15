@@ -35,6 +35,19 @@ AFFIXABLE_CLASS = vars.readPrefixed 'affixable/affixable-class'
 module.exports = class Affixable extends Foundation
 
   ###*
+  # The axis to affix inside. By default, the affixable will be positioned
+  # outside the element it's affixed to.
+  #
+  # @member {string} affixInside
+  # @member stout-ui/trait/Affixable#
+  ###
+  @property 'affixInside',
+    default: ''
+    type: 'string'
+    values: ['x', 'y', 'both', '']
+
+
+  ###*
   # The position to render this Affixable, relative it it's `affixTo` target.
   # This should be a string of the form, "center center", "top center",
   # "top left", etc.
@@ -43,6 +56,7 @@ module.exports = class Affixable extends Foundation
   # @memberof stout-ui/traits/Affixable#
   ###
   @property 'affixPosition',
+    default: 'top left'
     type: 'string'
 
 
@@ -56,6 +70,7 @@ module.exports = class Affixable extends Foundation
   # @memberof stout-ui/traits/Affixable#
   ###
   @property 'affixTo',
+    default: 'body'
     set: (target) ->
       if isString target
         document.querySelector(target)
@@ -113,15 +128,30 @@ module.exports = class Affixable extends Foundation
     xmargin = mleft + mright
     ymargin = mtop + mbottom
 
-    switch posX
-      when 'left'   then left = targetR.left - r.width - (mleft + mright)
-      when 'right'  then left = targetR.right
-      when 'center' then left = targetCenterX - r.width / 2 - xmargin / 2
+    centerX = targetCenterX - r.width / 2 - xmargin / 2
+    centerY = targetCenterY - r.height / 2 - ymargin / 2
 
-    switch posY
-      when 'top'    then top = targetR.top - r.height - ymargin
-      when 'bottom' then top = targetR.bottom
-      when 'center' then top = targetCenterY - r.height / 2 - ymargin / 2
+    if @affixInside is 'x' or @affixInside is 'both'
+      switch posX
+        when 'left'   then left = targetR.left - mleft
+        when 'right'  then left = targetR.right - r.width - (mleft + mright)
+        when 'center' then left = centerX
+    else
+      switch posX
+        when 'left'   then left = targetR.left - r.width - (mleft + mright)
+        when 'right'  then left = targetR.right
+        when 'center' then left = centerX
+
+    if @affixInside is 'y' or @affixInside is 'both'
+      switch posY
+        when 'top'    then top = targetR.top
+        when 'bottom' then top = targetR.bottom - r.height - ymargin
+        when 'center' then top = centerY
+    else
+      switch posY
+        when 'top'    then top = targetR.top - r.height - ymargin
+        when 'bottom' then top = targetR.bottom
+        when 'center' then top = centerY
 
     # Calculate booleans flags to indicate if affixible would be off-screen.
     offScreenLeft   = left + mleft < 0
