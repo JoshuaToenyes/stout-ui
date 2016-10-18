@@ -475,7 +475,10 @@ module.exports = class ComponentView extends View
 
     calculateDimensions = =>
       @_show()
-      d = target.getBoundingClientRect()
+      try
+        d = target.getBoundingClientRect()
+      catch
+        d = width: 0, height: 0
       if not pv then @_hide()
       d
 
@@ -521,7 +524,10 @@ module.exports = class ComponentView extends View
       Promise.fulfill promise, {width, height}
 
     # Get the current bounding rect.
-    r = target.getBoundingClientRect()
+    try
+      r = target.getBoundingClientRect()
+    catch
+      r = width: 0, height: 0
 
     if r.width > 0 and r.height > 0
       Promise.fulfill promise, {width: r.width, height: r.height}

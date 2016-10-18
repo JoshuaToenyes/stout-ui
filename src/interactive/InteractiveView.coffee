@@ -73,13 +73,13 @@ module.exports = class InteractiveView extends ComponentView
               ancestor = @
               target = null
               while not fn and ancestor
-                ancestor = ancestor.parent
                 if ancestor.context[handler]
                   fn = ancestor.context[handler]
                   target = ancestor.context
                 else
                   fn = ancestor[handler]
                   target = ancestor
+                ancestor = ancestor.parent
               @on eventName, fn.bind(target)
           when 'function'
             nextTick =>

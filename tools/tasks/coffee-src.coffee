@@ -21,8 +21,8 @@ module.exports = (config, options) ->
     if options.watch
       gulp.watch src, ['coffee:src']
     gulp.src src
-    .pipe sourcemaps.init()
+    #.pipe sourcemaps.init()
     .pipe coffee()
-    .pipe sourcemaps.write()
+    #.pipe sourcemaps.write()
     .pipe gulp.dest config.path.target
     .on 'error', gutil.log

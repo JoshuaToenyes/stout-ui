@@ -65,13 +65,11 @@ module.exports = class Draggable extends Foundation
     @classes.add DRAGGABLE_CLASS
     @addEventListener 'mousedown', @__startDrag, @
     @addEventListener 'touchstart', @__startDrag, @
-    @addEventListenerTo document.body, 'mouseup', @__stopDrag, @
-    @addEventListenerTo document.body, 'touchend', @__stopDrag, @
-    @addEventListenerTo document.body, 'mouseleave', @__stopDrag, @
     @__dragStart = null
     @__dragStartPosition = null
     @__dragTouchListeners = null
     @__dragMouseListeners = null
+    @__setDragStartPosition()
 
 
   ###*
@@ -89,17 +87,30 @@ module.exports = class Draggable extends Foundation
     clientY = e.clientY or (e.touches and e.touches[0].clientY)
     if @__dragStart is null
       @__dragStart = [clientX, clientY]
-      @__dragStartPosition = [
-        parseInt(@root.style.left or 0)
-        parseInt(@root.style.top or 0)
-      ]
-      @fire 'dragstart'
     else
       deltaX = clientX - @__dragStart[0] + @__dragStartPosition[0]
       deltaY = clientY - @__dragStart[1] + @__dragStartPosition[1]
       if @axis isnt "y" then @root.style.left = deltaX + 'px'
       if @axis isnt "x" then @root.style.top = deltaY + 'px'
-      @fire 'drag', [clientX, clientY]
+      @fire 'drag', @__generateEventData()
+
+
+  __setDragStartPosition: ->
+    @__dragStartPosition = [
+      parseInt(@root.style.left or 0)
+      parseInt(@root.style.top or 0)
+    ]
+
+
+
+  __generateEventData: ->
+    x = parseInt(@root.style.left)
+    y = parseInt(@root.style.top)
+    startX = @__dragStartPosition[0]
+    startY = @__dragStartPosition[1]
+    deltaX = x - startX
+    deltaY = y - startY
+    {x, y, startX, startY, deltaX, deltaY}
 
 
   ###*
@@ -111,6 +122,11 @@ module.exports = class Draggable extends Foundation
   ###
   __startDrag: (e) ->
     if @__dragStart is null
+      @__setDragStartPosition()
+      @fire 'dragstart', @__generateEventData()
+      @__mul = @addEventListenerTo document.body, 'mouseup', @__stopDrag, @
+      @__tel = @addEventListenerTo document.body, 'touchend', @__stopDrag, @
+      @__sdl = @addEventListenerTo document.body, 'mouseleave', @__stopDrag, @
       @classes.add DRAGGING_CLASS
       @__dragMouseListeners = @addEventListenerTo(
         document.body, 'mousemove', @__onDrag, @)
@@ -126,8 +142,11 @@ module.exports = class Draggable extends Foundation
   # @private
   ###
   __stopDrag: ->
-    @__dragStart = null
     @classes.remove DRAGGING_CLASS
-    @fire 'dragstop'
+    @removeEventListenerFrom(document.body, 'mouseup', @__mul)
+    @removeEventListenerFrom(document.body, 'touchend', @__tel)
+    @removeEventListenerFrom(document.body, 'mouseleave', @__sdl)
     @removeEventListenerFrom(document.body, 'mousemove', @__dragMouseListeners)
     @removeEventListenerFrom(document.body, 'touchmove', @__dragTouchListeners)
+    @__dragStart = null
+    @fire 'dragstop', @__generateEventData()
