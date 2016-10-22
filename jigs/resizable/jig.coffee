@@ -14,6 +14,7 @@ window.onload = ->
     basic = new ResizableFixture
       context: new Interactive
       root: document.getElementById('basic-resizable')
+      contents: '<p>hello! This is a paragraph.</p>'
 
     basic.render().catch console.error
 

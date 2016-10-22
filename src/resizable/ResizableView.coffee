@@ -134,6 +134,19 @@ onResizeStart = (e) ->
 
 
 ###*
+# Handles when a touchstart event occurs within the resizable.
+#
+# @param {TouchEvent} e - The mouse or touch event.
+#
+# @this stout-ui/resizable/ResizableView#
+# @function onResizeEnd
+###
+onTouchStart = (e) ->
+  onTouchOrMouseMoveInside.call @, e
+  onResizeStart.call @, e
+
+
+###*
 # Handles when a resize ends (mouseup/touchend).
 #
 # @this stout-ui/resizable/ResizableView#
@@ -163,14 +176,10 @@ onResizeEnd = (e) ->
 ###
 onResizableEnter = ->
   b = document.body
-  mm = @addEventListenerTo b, 'mousemove', onMouseMoveInsideResizable, @
-  tm = @addEventListenerTo b, 'touchmove', onMouseMoveInsideResizable, @
+  mm = @addEventListenerTo b, 'mousemove', onTouchOrMouseMoveInside, @
   md = @addEventListener 'mousedown', onResizeStart, @
-  ts = @addEventListener 'touchstart', onResizeStart, @
   @__resizeableListeners.mm = mm
-  @__resizeableListeners.tm = tm
   @__resizeableListeners.mm = md
-  @__resizeableListeners.tm = ts
 
 
 ###*
@@ -182,9 +191,7 @@ onResizableEnter = ->
 onResizableLeave = ->
   b = document.body
   @removeEventListenerFrom b, 'mousemove', @__resizeableListeners.mm
-  @removeEventListenerFrom b, 'touchmove', @__resizeableListeners.tm
   @removeEventListener 'mousedown', @__resizeableListeners.md
-  @removeEventListener 'touchstart', @__resizeableListeners.md
 
 
 ###*
@@ -196,6 +203,7 @@ onResizableLeave = ->
 # @function onResize
 ###
 onResize = (e) ->
+  e.stopImmediatePropagation()
   e.stopPropagation()
   e.preventDefault()
 
@@ -270,9 +278,9 @@ onResize = (e) ->
 # @param {MouseEvent|TouchEvent} e - The mouse or touch event.
 #
 # @this stout-ui/resizable/ResizableView#
-# @function onMouseMoveInsideResizable
+# @function onTouchOrMouseMoveInside
 ###
-onMouseMoveInsideResizable = (e) ->
+onTouchOrMouseMoveInside = (e) ->
 
   # Don't change classes while a resize is in progress.
   if @classes.contains(RESIZING_CLASS) then return
@@ -283,6 +291,9 @@ onMouseMoveInsideResizable = (e) ->
   # Grab props to prevent multiple dereferences.
   offset = @resizableOffset
   area = @resizableArea
+
+  # Enlarge the resizable are for touch events.
+  if e.touches then area *= 3
 
   # Check if within the NE or SW corners.
   ne = inRec(x, y, offset, width - offset - area, area, area)
@@ -500,5 +511,15 @@ module.exports = Foundation.extend 'ResizableView',
     @classes.add RESIZABLE_CLASS
     @addEventListener 'mouseenter', onResizableEnter, @
     @addEventListener 'mouseleave', onResizableLeave, @
+
+    # When a touchstart event occurs inside the resizable, test if it is in
+    # a position which should trigger a resize. If so, prevent scrolling so
+    # the resize can occur.
+    @addEventListenerTo document.body, 'touchstart', (e) ->
+      if e.target is @root or @root.contains e.target
+        onTouchStart.call @, e
+        if @__resizeDir then e.preventDefault()
+    , @
+
     @__resizeableListeners = {}
     @__resizeStart = null
