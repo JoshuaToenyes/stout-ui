@@ -17,9 +17,11 @@ ui-grid-item
   position: absolute
   outline: 1px solid black
   font-size: 8px
+  +transition(left 300ms, top 300ms, height 300ms, width 300ms)
 
-  &:not(.ui-dragging)
-    +transition(left 300ms, top 300ms, height 300ms, width 300ms)
+  &.ui-dragging,
+  &.ui-resizing
+    +transition(none)
 
 .ui-shadow
   position: absolute

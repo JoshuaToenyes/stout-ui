@@ -10,7 +10,7 @@ window.onload = ->
 
     $stout.get('#btn-add').click = ->
       randomSize = -> Math.max 3, Math.ceil(Math.random() * 5)
-      i = 20
+      i = 2
       while i--
         height = randomSize()
         width = randomSize()
