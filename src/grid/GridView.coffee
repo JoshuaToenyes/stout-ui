@@ -6,7 +6,7 @@
 debounce      = require 'lodash/debounce'
 defaults      = require 'lodash/defaults'
 ComponentView = require '../component/ComponentView'
-Packer        = require '../util/packer'
+Packer        = require '../packer/Packer'
 throttle      = require 'lodash/throttle'
 vars          = require '../vars'
 
