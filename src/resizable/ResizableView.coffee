@@ -3,6 +3,7 @@
 #
 # @module stout-ui/resizable/ResizableView
 ###
+Draggable  = require '../traits/Draggable'
 Foundation = require 'stout-core/base/Foundation'
 isString   = require 'lodash/isString'
 vars       = require '../vars'
@@ -342,6 +343,13 @@ onTouchOrMouseMoveInside = (e) ->
     @__resizeDir = 's'
   else
     @__resizeDir = null
+
+  # Disable dragging when inside resizable area.
+  if @usingTrait Draggable
+    if @__resizeDir
+      @draggable = false
+    else
+      @draggable = true
 
   # Add appropriate listeners and set cursor classes.
   if nesw
