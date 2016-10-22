@@ -53,6 +53,11 @@ module.exports = class Draggable extends Foundation
     set: (v) -> if isString(v) then v.toLowerCase() else v
 
 
+  @property 'draggable',
+    default: true
+    type: 'boolean'
+
+
   ###*
   # Initiates this trait by adding the necessary event listeners and classes.
   #
@@ -121,7 +126,7 @@ module.exports = class Draggable extends Foundation
   # @private
   ###
   __startDrag: (e) ->
-    if @__dragStart is null
+    if @draggable and @__dragStart is null
       @__setDragStartPosition()
       @fire 'dragstart', @__generateEventData()
       @__mul = @addEventListenerTo document.body, 'mouseup', @__stopDrag, @
