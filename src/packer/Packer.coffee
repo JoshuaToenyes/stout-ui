@@ -230,12 +230,16 @@ module.exports = class Packer
   #
   #
   ###
-  moveTo: (id, row, col) ->
+  moveTo: (id, row, col, height, width) ->
     shifted = {}
 
     [row, col] = @constrain id, row, col
 
     item = @remove id
+
+    if height then item.height = height
+
+    if width then item.width = width
 
     overlappingItemIds = @itemsWithin(item.height, item.width, row, col)
 
