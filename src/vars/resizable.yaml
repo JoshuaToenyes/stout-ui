@@ -1,0 +1,6 @@
+resizable-class:              resizable
+resizable-cursor-ns-class:    resizable-cursor-ns
+resizable-cursor-ew-class:    resizable-cursor-ew
+resizable-cursor-nesw-class:  resizable-cursor-nesw
+resizable-cursor-nwse-class:  resizable-cursor-nwse
+resizing-class:               resizing

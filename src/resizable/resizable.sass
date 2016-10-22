@@ -1,0 +1,24 @@
+@import "bourbon/bourbon"
+@import "util/exports"
+@import "vars/resizable"
+@import "vars/component"
+
++exports("resizable/resizable")
+
+  $resizable-ns:    ".#{$prefix}#{$resizable-cursor-ns-class}"
+  $resizable-ew:    ".#{$prefix}#{$resizable-cursor-ew-class}"
+  $resizable-nesw:  ".#{$prefix}#{$resizable-cursor-nesw-class}"
+  $resizable-nwse:  ".#{$prefix}#{$resizable-cursor-nwse-class}"
+
+
+  #{$resizable-ew}
+    cursor: ew-resize
+
+  #{$resizable-ns}
+    cursor: ns-resize
+
+  #{$resizable-nesw}
+    cursor: nesw-resize
+
+  #{$resizable-nwse}
+    cursor: nwse-resize
