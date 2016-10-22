@@ -9,7 +9,7 @@ reverse = require 'lodash/reverse'
 uniq    = require 'lodash/uniq'
 
 
-module.exports = packer =
+module.exports = class Packer
 
   ###*
   # Initiates a packer and returns a packer struct. The maximum width of a
@@ -25,10 +25,12 @@ module.exports = packer =
   #
   # @function init
   ###
-  init: (height, width) ->
+  constructor: (height, width) ->
     if width > 32
       throw new Error 'Packer supports a maximum of 32 columns.'
-    {m: new Uint32Array(height), w: width, i: {}}
+    @m = new Uint32Array(height)
+    @w = width
+    @i = {}
 
 
   ###*
@@ -45,41 +47,41 @@ module.exports = packer =
   # @returns {Array.<int, int>} Returns an array of form `[row, col]` with the
   # row and column at-which the item was inserted.
   ###
-  insert: (p, height, width, id) ->
-    [row, col] = packer._fit(p, height, width)
-    packer.insertAt p, height, width, row, col, id
+  insert: (height, width, id) ->
+    [row, col] = @_fit(height, width)
+    @insertAt height, width, row, col, id
     [row, col]
 
 
-  insertWithin: (p, itemRow, itemCol, height, width, startRow, endRow, startCol, endCol, id, shifted = {}) ->
+  insertWithin: (itemRow, itemCol, height, width, startRow, endRow, startCol, endCol, id, shifted = {}) ->
 
     prow = startRow + height #width
     pcol = startCol + width #height
 
 
     startRow = Math.max(0, startRow)
-    endRow = Math.min(endRow, p.m.length)
+    endRow = Math.min(endRow, @m.length)
     startCol = Math.max(0, startCol)
-    endCol = Math.min(endCol, p.w)
+    endCol = Math.min(endCol, @w)
 
 
-    [row, col] = packer._fit(p, height, width, startRow, endRow, startCol, endCol)
+    [row, col] = @_fit(height, width, startRow, endRow, startCol, endCol)
 
     if row is undefined
       q = 0
 
       while q < height
-        assign(shifted, packer.shiftDownNeighborsBelow p, height, width, prow + q, itemCol)
+        assign(shifted, @shiftDownNeighborsBelow height, width, prow + q, itemCol)
         q++
 
-      [row, col] = packer._fit(p, height, width, startRow, endRow, startCol, endCol)
-      shifted[id] = packer.insertAt(p, height, width, row, col, id)
+      [row, col] = @_fit(height, width, startRow, endRow, startCol, endCol)
+      shifted[id] = @insertAt(height, width, row, col, id)
       return shifted
 
       #[row, col] = packer._fit(p, height, width, startRow, endRow, startCol, endCol)
       #assign(shifted, packer.insertWithin.apply(@, arguments))
     else
-      shifted[id] = packer.insertAt(p, height, width, row, col, id)
+      shifted[id] = @insertAt(height, width, row, col, id)
       shifted
 
 
@@ -101,9 +103,9 @@ module.exports = packer =
   # @returns {object} An object which describes the position and size of the
   # inserted item in the form, `{height, width, row, col}`.
   ###
-  insertAt: (p, height, width, row, col, id) ->
-    packer._fill(p, height, width, row, col)
-    p.i[id] = {height, width, row, col}
+  insertAt: (height, width, row, col, id) ->
+    @_fill(height, width, row, col)
+    @i[id] = {height, width, row, col}
 
 
   ###*
@@ -117,11 +119,11 @@ module.exports = packer =
   # the item resided in the packer before it was removed, or `false` if an item
   # with the specified `id` does not exist.
   ###
-  remove: (p, id) ->
-    item = p.i[id]
+  remove: (id) ->
+    item = @i[id]
     if not item then return false
-    packer._unfill p, item.height, item.width, item.row, item.col
-    p.i[id] = null
+    @_unfill item.height, item.width, item.row, item.col
+    @i[id] = null
     item
 
 
@@ -132,11 +134,11 @@ module.exports = packer =
   #
   # @returns {int} The packer's current height.
   ###
-  height: (p) ->
+  height: ->
     h = -1
     row = 0
-    while row < p.m.length
-      if p.m[row] and row > h then h = row
+    while row < @m.length
+      if @m[row] and row > h then h = row
       row++
     return h + 1
 
@@ -148,13 +150,13 @@ module.exports = packer =
   #
   # @returns {int} The packer's current width.
   ###
-  width: (p) ->
+  width: ->
     w = -1
     row = 0
-    while row < p.m.length
+    while row < @m.length
       col = 0
-      while col < p.w
-        if packer._isset(p, row, col) and col > w then w = col
+      while col < @w
+        if @_isset(row, col) and col > w then w = col
         col++
       row++
     return w + 1
@@ -172,8 +174,8 @@ module.exports = packer =
   # @returns {string} The string `id` of the item at the specified `row` and
   # `col`, or `false` if not filled.
   ###
-  at: (p, pRow, pCol) ->
-    for id, item of p.i
+  at: (pRow, pCol) ->
+    for id, item of @i
       if not item then continue
       {height, width, row, col} = item
       if (col <= pCol) and (col + width > pCol) and
@@ -194,7 +196,7 @@ module.exports = packer =
   #
   # @param {int} col - The column where the gap is located.
   ###
-  shiftUp: (p, height, width, row, col) ->
+  shiftUp: (height, width, row, col) ->
 
 
   ###*
@@ -203,10 +205,10 @@ module.exports = packer =
   #
   #
   ###
-  constrain: (p, id, row, col) ->
-    item = p.i[id]
-    row = Math.min(p.m.length - item.height, Math.max(0, row))
-    col = Math.min(p.w - item.width, Math.max(0, col))
+  constrain: (id, row, col) ->
+    item = @i[id]
+    row = Math.min(@m.length - item.height, Math.max(0, row))
+    col = Math.min(@w - item.width, Math.max(0, col))
     [row, col]
 
 
@@ -216,9 +218,9 @@ module.exports = packer =
   #
   #
   ###
-  perimeter: (p, cid, id) ->
-    centerItem = p.i[cid]
-    item = p.i[id]
+  perimeter: (cid, id) ->
+    centerItem = @i[cid]
+    item = @i[id]
     # Left option.
     [centerItem.col - item.width, centerItem.row]
 
@@ -228,21 +230,21 @@ module.exports = packer =
   #
   #
   ###
-  moveTo: (p, id, row, col) ->
+  moveTo: (id, row, col) ->
     shifted = {}
 
-    [row, col] = packer.constrain p, id, row, col
+    [row, col] = @constrain id, row, col
 
-    item = packer.remove p, id
+    item = @remove id
 
-    overlappingItemIds = packer.itemsWithin(p, item.height, item.width, row, col)
+    overlappingItemIds = @itemsWithin(item.height, item.width, row, col)
 
     oItems = {}
     for oItemId in overlappingItemIds
-      oItem = packer.remove p, oItemId
+      oItem = @remove oItemId
       oItems[oItemId] = oItem
 
-    shifted[id] = packer.insertAt p, item.height, item.width, row, col, id
+    shifted[id] = @insertAt item.height, item.width, row, col, id
 
     for oItemId, oItem of oItems
       startRow = row - oItem.height
@@ -250,9 +252,27 @@ module.exports = packer =
       startCol = col - oItem.width
       endCol = col + item.width + oItem.width
 
-      assign(shifted, packer.insertWithin p, oItem.row, oItem.col, oItem.height, oItem.width, startRow, endRow, startCol, endCol, oItemId, shifted)
+      assign(shifted, @insertWithin oItem.row, oItem.col, oItem.height, oItem.width, startRow, endRow, startCol, endCol, oItemId, shifted)
 
     shifted
+
+
+  ###*
+  # Resizes and moves an item.
+  #
+  # @param {stout-ui/util/packer/PackerStruct} p - The packer struct.
+  #
+  # @param {string} id - The `id` of the item to shift right.
+  #
+  # @param {number} width - The new width in rows of the resized item.
+  #
+  # @param {number} height - The new height in rows of the resized item.
+  #
+  # @param {number} row - The new row position of the resized item.
+  #
+  # @param {number} col - The new col position of the resized item.
+  ###
+  resize: (id, width, height, row, col) ->
 
 
   ###*
@@ -262,12 +282,12 @@ module.exports = packer =
   #
   # @param {string} id - The `id` of the item to shift right.
   ###
-  shiftRight: (p, id, cols = 1) ->
-    shifted = packer.shiftNeighborsRightOrDown p, id, cols
+  shiftRight: (id, cols = 1) ->
+    shifted = @shiftNeighborsRightOrDown id, cols
 
     # Grow the target item.
-    item = packer.remove p, id
-    item = packer.insertAt p, item.height, item.width, item.row, item.col + cols, id
+    item = @remove id
+    item = @insertAt item.height, item.width, item.row, item.col + cols, id
 
     shifted[id] = item
 
@@ -279,10 +299,10 @@ module.exports = packer =
   #
   #
   ###
-  maxCol: (p, ids) ->
+  maxCol: (ids) ->
     max = 0
     for id in ids
-      item = p.i[id]
+      item = @i[id]
       m = item.col + item.width
       if m > max then max = m
     max
@@ -293,10 +313,10 @@ module.exports = packer =
   #
   #
   ###
-  minCol: (p, ids) ->
-    min = p.w
+  minCol: (ids) ->
+    min = @w
     for id in ids
-      item = p.i[id]
+      item = @i[id]
       if item.col < max then min = item.col
     min
 
@@ -316,41 +336,41 @@ module.exports = packer =
   # shifted item, with values which describe its new position in the form,
   # `{height, width, row, col}`.
   ###
-  shiftNeighborsRightOrDown: (p, id, cols = 1) ->
+  shiftNeighborsRightOrDown: (id, cols = 1) ->
     shifted = {}
-    item = p.i[id]
+    item = @i[id]
 
-    rightItems = packer.itemsRight(p, id)
-    rightCol = packer.maxCol p, rightItems
+    rightItems = @itemsRight(id)
+    rightCol = @maxCol rightItems
 
     # Shift the neighbor right, since there's room.
-    if rightCol < p.w
+    if rightCol < @w
       console.log 'shift right!'
-      immediatelyRightIds = packer.itemsImmediatelyRight(p, id)
+      immediatelyRightIds = @itemsImmediatelyRight(id)
       for rightId in immediatelyRightIds
-        shifted[rightId] = packer._shiftRight p, rightId
+        shifted[rightId] = @_shiftRight rightId
 
     # Shift the neighbor down, since there's not room.
     else
       console.log 'shift down!'
-      immediatelyRightIds = packer.itemsImmediatelyRight(p, id)
+      immediatelyRightIds = @itemsImmediatelyRight(id)
       firstRightItem = immediatelyRightIds[0]
 
       # Get items below first item immediately right.
-      belowIds = reverse(packer.itemsBelow(p, ))
+      belowIds = reverse(@itemsBelow()) # THIS WONT WORK PROBABLY
       rows = item.row + item.height
 
       for belowId in belowIds
 
 
         while rows-- > 0
-          belowIds = reverse(packer.itemsBelow(p, id))
+          belowIds = reverse(@itemsBelow(id))
           for belowId in belowIds
-            shifted[belowId] = packer._shiftDown p, belowId
-          shifted[id] = packer._shiftDown p, id
+            shifted[belowId] = @_shiftDown belowId
+          shifted[id] = @_shiftDown id
 
 
-        shifted[rightId] = packer._shiftDown p, rightId
+        shifted[rightId] = @_shiftDown rightId
 
     # # Shifts the immediately-right neighbors right, if doing so will not exceed
     # # the width of the grid. If it does, the neighbor (and its neighbors below)
@@ -388,25 +408,25 @@ module.exports = packer =
   # shifted item, with values which describe its new position in the form,
   # `{height, width, row, col}`.
   ###
-  growDown: (p, id, rows = 1) ->
+  growDown: (id, rows = 1) ->
     shifted = {}
 
     while rows-- > 0
-      belowIds = reverse(packer.itemsBelow(p, id))
+      belowIds = reverse(@itemsBelow(id))
       for belowId in belowIds
-        shifted[belowId] = packer._shiftDown p, belowId
-      item = packer.remove p, id
-      packer.insertAt p, item.height + 1, item.width, item.row, item.col, id
+        shifted[belowId] = @_shiftDown belowId
+      item = @remove id
+      @insertAt item.height + 1, item.width, item.row, item.col, id
 
     shifted
 
 
-  shiftDownNeighborsBelow: (p, height, width, row, col) ->
+  shiftDownNeighborsBelow: (height, width, row, col) ->
     shifted = {}
 
-    belowIds = reverse(packer._itemsBelow(p, height, width, row, col))
+    belowIds = reverse(@_itemsBelow(height, width, row, col))
     for belowId in belowIds
-      shifted[belowId] = packer._shiftDown p, belowId
+      shifted[belowId] = @_shiftDown belowId
 
     shifted
 
@@ -424,12 +444,12 @@ module.exports = packer =
   # shifted item, with values which describe its new position in the form,
   # `{height, width, row, col}`.
   ###
-  growRight: (p, id, cols = 1) ->
-    shifted = packer.shiftNeighborsRightOrDown p, id, cols
+  growRight: (id, cols = 1) ->
+    shifted = @shiftNeighborsRightOrDown id, cols
 
     # Grow the target item.
-    item = packer.remove p, id
-    packer.insertAt p, item.height, item.width + cols, item.row, item.col, id
+    item = @remove id
+    @insertAt item.height, item.width + cols, item.row, item.col, id
 
     shifted
 
@@ -451,17 +471,17 @@ module.exports = packer =
   # @returns {object} An object which describes the new position and size of the
   # shifted item in the form, `{height, width, row, col}`.
   ###
-  _shiftRightOrDown: (p, id, rows, shifted) ->
-    item = p.i[id]
-    if item.col + item.width + 1 <= p.w
-      shifted[id] = packer._shiftRight p, id
+  _shiftRightOrDown: (id, rows, shifted) ->
+    item = @i[id]
+    if item.col + item.width + 1 <= @w
+      shifted[id] = @_shiftRight id
     else
       while rows-- > 0
-        belowIds = reverse(packer.itemsBelow(p, id))
+        belowIds = reverse(@itemsBelow(id))
         for belowId in belowIds
-          shifted[belowId] = packer._shiftDown p, belowId
-        shifted[id] = packer._shiftDown p, id
-      return p.i[id]
+          shifted[belowId] = @_shiftDown belowId
+        shifted[id] = @_shiftDown id
+      return @i[id]
 
 
   ###*
@@ -474,9 +494,9 @@ module.exports = packer =
   # @returns {object} An object which describes the new position and size of the
   # shifted item in the form, `{height, width, row, col}`.
   ###
-  _shiftRight: (p, id) ->
-    item = packer.remove p, id
-    packer.insertAt p, item.height, item.width, item.row, item.col + 1, id
+  _shiftRight: (id) ->
+    item = @remove id
+    @insertAt item.height, item.width, item.row, item.col + 1, id
 
 
   ###*
@@ -489,9 +509,9 @@ module.exports = packer =
   # @returns {object} An object which describes the new position and size of the
   # shifted item in the form, `{height, width, row, col}`.
   ###
-  _shiftDown: (p, id) ->
-    item = packer.remove p, id
-    packer.insertAt p, item.height, item.width, item.row + 1, item.col, id
+  _shiftDown: (id) ->
+    item = @remove id
+    @insertAt item.height, item.width, item.row + 1, item.col, id
 
 
   ###*
@@ -510,13 +530,13 @@ module.exports = packer =
   #
   # @param {Array.<string>} The string `id`'s' of the item(s) below.
   ###
-  itemsWithin: (p, height, width, row, col) ->
+  itemsWithin: (height, width, row, col) ->
     ids = []
     c = col
     while c < col + width
       r = row
       while r < row + height
-        id = packer.at p, r, c
+        id = @at r, c
         if id then ids.push id
         r++
       c++
@@ -534,10 +554,10 @@ module.exports = packer =
   # of increasing distance, so the first ID in the array will be the item
   # closest to the item given by `id`, and the last will be the furthest down.
   ###
-  itemsBelow: (p, id) ->
-    item = p.i[id]
+  itemsBelow: (id) ->
+    item = @i[id]
     {height, width, row, col} = item
-    packer._itemsBelow p, height, width, row, col
+    @_itemsBelow height, width, row, col
 
 
   ###*
@@ -558,22 +578,22 @@ module.exports = packer =
   # of increasing distance, so the first ID in the array will be the item
   # closest to the `id`, and the last will be the furthest down.
   ###
-  _itemsBelow: (p, height, width, row, col) ->
+  _itemsBelow: (height, width, row, col) ->
     ids = []
 
     getItemsImmediatelyBelow = (height, width, row, col) ->
 
       # Get items immediately below.
-      itemIds = packer.itemsWithin p, 1, width, row + height, col
+      itemIds = @itemsWithin 1, width, row + height, col
 
       # Concat this new list of id's.
       ids = ids.concat itemIds
 
       for itemId in itemIds
-        item = p.i[itemId]
-        getItemsImmediatelyBelow item.height, item.width, item.row, item.col
+        item = @i[itemId]
+        getItemsImmediatelyBelow.call @, item.height, item.width, item.row, item.col
 
-    getItemsImmediatelyBelow(height, width, row, col)
+    getItemsImmediatelyBelow.call(@, height, width, row, col)
 
     uniq ids
 
@@ -589,10 +609,10 @@ module.exports = packer =
   # order of increasing distance, so the first ID in the array will be the item
   # closest to item given by `id`, and the last will be the furthest right.
   ###
-  itemsRight: (p, id) ->
-    item = p.i[id]
+  itemsRight: (id) ->
+    item = @i[id]
     {height, width, row, col} = item
-    packer._itemsRight p, height, width, row, col
+    @_itemsRight height, width, row, col
 
 
   ###*
@@ -613,22 +633,22 @@ module.exports = packer =
   # order of increasing distance, so the first ID in the array will be the item
   # closest to item given by `id`, and the last will be the furthest right.
   ###
-  _itemsRight: (p, height, width, row, col) ->
+  _itemsRight: (height, width, row, col) ->
     ids = []
 
     getItemsImmediatelyRight = (height, width, row, col) ->
 
       # Get items immediately below.
-      itemIds = packer._itemsImmediatelyRight(p, height, width, row, col)
+      itemIds = @_itemsImmediatelyRight(height, width, row, col)
 
       # Concat this new list of id's.
       ids = ids.concat itemIds
 
       for itemId in itemIds
-        item = p.i[itemId]
-        getItemsImmediatelyRight item.height, item.width, item.row, item.col
+        item = @i[itemId]
+        getItemsImmediatelyRight.call @ item.height, item.width, item.row, item.col
 
-    getItemsImmediatelyRight(height, width, row, col)
+    getItemsImmediatelyRight.call(@, height, width, row, col)
 
     uniq ids
 
@@ -645,10 +665,10 @@ module.exports = packer =
   # order of increasing distance, so the first ID in the array will be the item
   # closest to item given by `id`, and the last will be the furthest right.
   ###
-  itemsImmediatelyRight: (p, id) ->
-    item = p.i[id]
+  itemsImmediatelyRight: (id) ->
+    item = @i[id]
     {height, width, row, col} = item
-    packer._itemsImmediatelyRight p, height, width, row, col
+    @_itemsImmediatelyRight height, width, row, col
 
 
   ###*
@@ -668,8 +688,8 @@ module.exports = packer =
   # @param {Array.<string>} The string `id`'s' of the item(s) immediately to
   # the right.
   ###
-  _itemsImmediatelyRight: (p, height, width, row, col) ->
-    packer.itemsWithin p, height, 1, row, col + width
+  _itemsImmediatelyRight: (height, width, row, col) ->
+    @itemsWithin height, 1, row, col + width
 
 
   ###*
@@ -685,12 +705,12 @@ module.exports = packer =
   # @returns {Array.<int, int>} Returns an array of form `[row, col]` with the
   # row and column at-which the item fits.
   ###
-  _fit: (p, height, width, startRow, endRow, startCol, endCol) ->
+  _fit: (height, width, startRow, endRow, startCol, endCol) ->
     row = startRow or 0
-    while row < (endRow or p.m.length)
+    while row < (endRow or @m.length)
       col = startCol or 0
-      while col < (endCol or p.w)
-        if packer._fits(p, height, width, row, col)
+      while col < (endCol or @w)
+        if @_fits(height, width, row, col)
           return [row, col]
         col++
       row++
@@ -711,12 +731,12 @@ module.exports = packer =
   #
   # @param {int} col - The starting column.
   ###
-  _fill: (p, height, width, row, col) ->
+  _fill: (height, width, row, col) ->
     r = row
     while r < row + height
       c = col
       while c < col + width
-        packer._set p, r, c
+        @_set r, c
         c++
       r++
 
@@ -736,12 +756,12 @@ module.exports = packer =
   #
   # @param {int} col - The column at which to insert the item.
   ###
-  _unfill: (p, height, width, row, col) ->
+  _unfill: (height, width, row, col) ->
     r = row
     while r < row + height
       c = col
       while c < col + width
-        packer._unset p, r, c
+        @_unset r, c
         c++
       r++
 
@@ -763,18 +783,18 @@ module.exports = packer =
   #
   # @returns {boolean} `true` if it fits, otherwise `false`.
   ###
-  _fits: (p, height, width, row, col) ->
+  _fits: (height, width, row, col) ->
 
     # Inner function memoized to return fast results.
-    innerFits = (p, height, width, row, col) ->
+    innerFits = (height, width, row, col) ->
       # If this row exceeds the number of rows in the packer, return false.
-      if row >= p.m.length then return false
+      if row >= @m.length then return false
 
       # If this column exceeds the number of cols in the packer, return false.
-      if col >= p.w then return false
+      if col >= @w then return false
 
       # If this cell is already full then immediately return false.
-      if packer._isset(p, row, col) then return false
+      if @_isset(row, col) then return false
 
       # If checking a 1x1 sized item, and this cell is empty, return true.
       if height is 1 and width is 1 then return true
@@ -782,23 +802,23 @@ module.exports = packer =
       ret = true
 
       if width > 1
-        ret &= mFits(p, height, width - 1, row, col + 1)
+        ret &= mFits.call(@, height, width - 1, row, col + 1)
       if height > 1
-        ret &= mFits(p, height - 1, width, row + 1, col)
+        ret &= mFits.call(@, height - 1, width, row + 1, col)
       if height > 1 and width > 1
-        ret &= mFits(p, height - 1, width - 1, row + 1, col + 1)
+        ret &= mFits.call(@, height - 1, width - 1, row + 1, col + 1)
 
       return !!ret
 
     # Resolver used to hash arguments to memoized function.
-    resolver = (p, height, width, row, col) ->
+    resolver = (height, width, row, col) ->
       r = 'h' + height + 'w' + width + 'r' + row + 'c' + col
 
     # Create memoized function.
     mFits = memoize innerFits, resolver
 
     # Pass arguments to memoized function and return results.
-    return mFits arguments...
+    return mFits.call @, arguments...
 
 
   ###*
@@ -813,8 +833,8 @@ module.exports = packer =
   #
   # @returns {boolean} `true` if set, otherwise `false`.
   ###
-  _isset: (p, row, col) ->
-    !!(p.m[row] & 1 << col)
+  _isset: (row, col) ->
+    !!(@m[row] & 1 << col)
 
 
   ###*
@@ -827,8 +847,8 @@ module.exports = packer =
   #
   # @param {int} col - The column.
   ###
-  _set: (p, row, col) ->
-    p.m[row] = p.m[row] | 1 << col
+  _set: (row, col) ->
+    @m[row] = @m[row] | 1 << col
 
 
   ###*
@@ -841,8 +861,8 @@ module.exports = packer =
   #
   # @param {int} col - The column.
   ###
-  _unset: (p, row, col) ->
-    p.m[row] = p.m[row] ^ 1 << col
+  _unset: (row, col) ->
+    @m[row] = @m[row] ^ 1 << col
 
 
   ###*
@@ -852,11 +872,11 @@ module.exports = packer =
   ###
   _print: (p) ->
     row = 0
-    while row < p.m.length
+    while row < @m.length
       col = 0
       out = ''
-      while col < p.w
-        if !!(p.m[row] & 1 << col)
+      while col < @w
+        if !!(@m[row] & 1 << col)
           out += 'X'
         else
           out += '_'

@@ -6,7 +6,7 @@
 debounce      = require 'lodash/debounce'
 defaults      = require 'lodash/defaults'
 ComponentView = require '../component/ComponentView'
-packer        = require '../util/packer'
+Packer        = require '../util/packer'
 throttle      = require 'lodash/throttle'
 vars          = require '../vars'
 
@@ -51,7 +51,7 @@ module.exports = ComponentView.extend 'GridView',
 
     @context.items.on 'remove', (e) => @_removeItem e.data
 
-    @_packstruct = packer.init 100, 20
+    @_packer = new Packer 100, 20
 
 
   properties:
@@ -74,7 +74,7 @@ module.exports = ComponentView.extend 'GridView',
   _addItem: (itemView) ->
     SIZE = 50
     {height, width, id} = itemView
-    [row, col] = packer.insert @_packstruct, height, width, id
+    [row, col] = @_packer.insert height, width, id
 
     itemView.row = row
     itemView.column = col
@@ -94,8 +94,8 @@ module.exports = ComponentView.extend 'GridView',
     # itemView.axis = 'x'
 
     setGridSize = =>
-      ch = packer.height @_packstruct
-      cw = packer.width @_packstruct
+      ch = @_packer.height @_packer
+      cw = @_packer.width @_packer
       @root.style.width = "#{cw * SIZE}px"
       @root.style.height = "#{ch * SIZE}px"
 
@@ -115,7 +115,7 @@ module.exports = ComponentView.extend 'GridView',
       @parentEl.insertBefore shadow, @root
 
     positionShadow = (id, row, col) ->
-      [row, col] = packer.constrain @parent._packstruct, id, row, col
+      [row, col] = @parent._packer.constrain id, row, col
       shadow.style.top = "#{row * SIZE}px"
       shadow.style.left = "#{col * SIZE}px"
 
@@ -129,7 +129,7 @@ module.exports = ComponentView.extend 'GridView',
       {x, y} = e.data
       leftGridPos = Math.round(x / SIZE)
       topGridPos = Math.round(y / SIZE)
-      shifted = packer.moveTo @parent._packstruct, @id, topGridPos, leftGridPos
+      shifted = @parent._packer.moveTo @id, topGridPos, leftGridPos
       positionShadow.call(@, @id, topGridPos, leftGridPos)
       setGridSize.call @parent
 
@@ -160,9 +160,9 @@ module.exports = ComponentView.extend 'GridView',
 
 
     itemView.click = =>
-      #id = packer.at @_packstruct, row, col
-      #console.log packer.itemsBelow @_packstruct, id
-      # shifted = packer.growDown @_packstruct, id
+      #id = packer.at @_packer, row, col
+      #console.log packer.itemsBelow @_packer, id
+      # shifted = packer.growDown @_packer, id
       #
       # itemView.height += 1
       # itemView.root.style.height = "#{itemView.height * SIZE}px"
@@ -172,7 +172,7 @@ module.exports = ComponentView.extend 'GridView',
       #     pos = shifted[item.id]
       #     item.root.style.top = "#{pos.row * SIZE}px"
 
-      # shifted = packer.growRight @_packstruct, id
+      # shifted = packer.growRight @_packer, id
       #
       # itemView.width += 1
       # itemView.root.style.width = "#{itemView.width * SIZE}px"
@@ -195,5 +195,5 @@ module.exports = ComponentView.extend 'GridView',
   # @param {stout-ui/grid/GridItemView} itemView - The `GridItemView` to remove.
   ###
   _removeItem: (itemView) ->
-    packer.remove @_packstruct, itemView.id
+    @_packer.remove itemView.id
     itemView.unrender()

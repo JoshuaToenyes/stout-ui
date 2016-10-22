@@ -9,8 +9,8 @@ window.onload = ->
     grid = $stout.get('#basic-grid')
 
     $stout.get('#btn-add').click = ->
-      randomSize = -> Math.max 1, Math.ceil(Math.random() * 5)
-      i = 60
+      randomSize = -> Math.max 3, Math.ceil(Math.random() * 5)
+      i = 20
       while i--
         height = randomSize()
         width = randomSize()

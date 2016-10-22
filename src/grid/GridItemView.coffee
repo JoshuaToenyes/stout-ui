@@ -7,6 +7,7 @@
 defaults      = require 'lodash/defaults'
 Draggable       = require '../traits/Draggable'
 InteractiveView = require '../interactive/InteractiveView'
+ResizableView = require '../resizable/ResizableView'
 uuid          = require 'uuid'
 vars          = require '../vars'
 
@@ -42,7 +43,7 @@ GRID_ITEM_CLASS = vars.read 'grid/grid-item-class'
 ###
 module.exports = InteractiveView.extend 'GridItemView',
 
-  traits: Draggable
+  traits: [Draggable, ResizableView]
 
   constructor: (init, events) ->
     init = defaults init, tagName: TAG_NAME
