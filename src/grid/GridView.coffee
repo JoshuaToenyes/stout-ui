@@ -114,10 +114,12 @@ module.exports = ComponentView.extend 'GridView',
       shadow.style.left = @root.style.left
       @parentEl.insertBefore shadow, @root
 
-    positionShadow = (id, row, col) ->
+    positionShadow = (id, row, col, height, width) ->
       [row, col] = @parent._packer.constrain id, row, col
       shadow.style.top = "#{row * SIZE}px"
       shadow.style.left = "#{col * SIZE}px"
+      if height then shadow.style.height = "#{height * SIZE}px"
+      if width then shadow.style.width = "#{width * SIZE}px"
 
     # (Called with GridItemView as "this")
     deleteShadow = ->
@@ -155,7 +157,43 @@ module.exports = ComponentView.extend 'GridView',
           item.root.style.top = "#{pos.row * SIZE}px"
           item.root.style.left = "#{pos.col * SIZE}px"
 
+    onResize = (e) ->
+      {x, y, width, height} = e.data
 
+      width = Math.round(width / SIZE)
+      height = Math.round(height / SIZE)
+
+      left = parseInt(@root.style.left)
+      top = parseInt(@root.style.top)
+      leftGridPos = Math.round(left / SIZE)
+      topGridPos = Math.round(top / SIZE)
+
+      shifted = @parent._packer.moveTo @id, topGridPos, leftGridPos, height, width
+
+      if shadow
+        positionShadow.call(@, @id, topGridPos, leftGridPos, height, width)
+
+      setGridSize.call @parent
+
+      @parent.context.items.forEach (item) =>
+        if item.id is @id then return
+        if shifted.hasOwnProperty item.id
+          pos = shifted[item.id]
+          item.root.style.top = "#{pos.row * SIZE}px"
+          item.root.style.left = "#{pos.col * SIZE}px"
+
+      shifted
+
+    itemView.on 'resize', throttle(onResize, 100, trailing: false)
+    itemView.on 'resizeend', (e) ->
+      shifted = onResize.call @, e
+      @parent.context.items.forEach (item) ->
+        if shifted.hasOwnProperty item.id
+          pos = shifted[item.id]
+          item.root.style.top = "#{pos.row * SIZE}px"
+          item.root.style.left = "#{pos.col * SIZE}px"
+          item.root.style.width = "#{pos.width * SIZE}px"
+          item.root.style.height = "#{pos.height * SIZE}px"
 
 
 
