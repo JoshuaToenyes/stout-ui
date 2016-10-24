@@ -163,11 +163,9 @@ module.exports = ComponentView.extend 'GridView',
       topGridPos = Math.round(y / SIZE)
       shifted = @parent._packer.moveTo @id, topGridPos, leftGridPos
       positionShadow.call(@, @id, topGridPos, leftGridPos)
-      shifted = fillUpShiftedItems.call @, shifted
       setGridSize.call @parent
       positionItems.call @parent, shifted, [@id]
       shifted
-
 
 
     itemView.on 'drag', throttle(onDrag, 100, trailing: false)
@@ -221,33 +219,6 @@ module.exports = ComponentView.extend 'GridView',
           item.root.style.width = "#{pos.width * SIZE}px"
           item.root.style.height = "#{pos.height * SIZE}px"
 
-
-
-    itemView.click = =>
-      #id = packer.at @_packer, row, col
-      #console.log packer.itemsBelow @_packer, id
-      # shifted = packer.growDown @_packer, id
-      #
-      # itemView.height += 1
-      # itemView.root.style.height = "#{itemView.height * SIZE}px"
-      #
-      # @context.items.forEach (item) ->
-      #   if shifted.hasOwnProperty item.id
-      #     pos = shifted[item.id]
-      #     item.root.style.top = "#{pos.row * SIZE}px"
-
-      # shifted = packer.growRight @_packer, id
-      #
-      # itemView.width += 1
-      # itemView.root.style.width = "#{itemView.width * SIZE}px"
-      #
-      # @context.items.forEach (item) ->
-      #   if shifted.hasOwnProperty item.id
-      #     pos = shifted[item.id]
-      #     item.root.style.top = "#{pos.row * SIZE}px"
-      #     item.root.style.left = "#{pos.col * SIZE}px"
-      #
-      # setGridSize()
 
     itemView.render()
     setGridSize()

@@ -182,22 +182,6 @@ module.exports = class Packer
       (row <= pRow) and (row + height  > pRow)
         return id
 
-  ###*
-  # Shifts-up items to fill a gap of size `height` by `width` at `row` and
-  # `col`.
-  #
-  # @param {stout-ui/util/packer/PackerStruct} p - The packer struct.
-  #
-  # @param {int} height - The height of the gap (in rows).
-  #
-  # @param {int} width - The width of the gap (in columns).
-  #
-  # @param {int} row - The row where the gap is located.
-  #
-  # @param {int} col - The column where the gap is located.
-  ###
-  shiftUp: (height, width, row, col) ->
-
 
   ###*
   # Constrains the passed `row` and `col` to the size of the grid for the item
@@ -210,19 +194,6 @@ module.exports = class Packer
     row = Math.min(@m.length - item.height, Math.max(0, row))
     col = Math.min(@w - item.width, Math.max(0, col))
     [row, col]
-
-
-  ###*
-  # Returns array of coordinates of perimeter cells around the item specified
-  # by `id`.
-  #
-  #
-  ###
-  perimeter: (cid, id) ->
-    centerItem = @i[cid]
-    item = @i[id]
-    # Left option.
-    [centerItem.col - item.width, centerItem.row]
 
 
   ###*
@@ -261,63 +232,6 @@ module.exports = class Packer
     shifted
 
 
-  # fillIn: (items, row, col, height, width) ->
-  #   shifted = {}
-  #
-  #   for id of items
-  #     @remove id
-  #
-  #   for id, item of items
-  #     startRow = row - item.height
-  #     endRow = row + height + item.height
-  #     startCol = col - item.width
-  #     endCol = col + width + item.width
-  #
-  #     assign(shifted, @insertWithin item.row, item.col, item.height, item.width, startRow, endRow, startCol, endCol, id, shifted)
-  #
-  #   shifted
-
-
-
-
-
-  ###*
-  # Resizes and moves an item.
-  #
-  # @param {stout-ui/util/packer/PackerStruct} p - The packer struct.
-  #
-  # @param {string} id - The `id` of the item to shift right.
-  #
-  # @param {number} width - The new width in rows of the resized item.
-  #
-  # @param {number} height - The new height in rows of the resized item.
-  #
-  # @param {number} row - The new row position of the resized item.
-  #
-  # @param {number} col - The new col position of the resized item.
-  ###
-  resize: (id, width, height, row, col) ->
-
-
-  ###*
-  # Shifts-right the item specified by `id`.
-  #
-  # @param {stout-ui/util/packer/PackerStruct} p - The packer struct.
-  #
-  # @param {string} id - The `id` of the item to shift right.
-  ###
-  shiftRight: (id, cols = 1) ->
-    shifted = @shiftNeighborsRightOrDown id, cols
-
-    # Grow the target item.
-    item = @remove id
-    item = @insertAt item.height, item.width, item.row, item.col + cols, id
-
-    shifted[id] = item
-
-    shifted
-
-
   ###*
   # Finds the furthest right column filled by items with the passed `ids`.
   #
@@ -346,105 +260,10 @@ module.exports = class Packer
 
 
   ###*
-  # Shifts the neighbors of the items specified by `id`, `cols` to the right,
-  # or if doing so pushes it out of the grid, down.
+  # Shifts-down the neighbors below the specified area.
   #
-  # @param {stout-ui/util/packer/PackerStruct} p - The packer struct.
   #
-  # @param {string} id - The `id` of the item who's neighbors should be shifted
-  # right
-  #
-  # @param {int} cols - The number of columns to shift right.
-  #
-  # @returns {object} Set of items shifted right keyed with the `id` of the
-  # shifted item, with values which describe its new position in the form,
-  # `{height, width, row, col}`.
   ###
-  shiftNeighborsRightOrDown: (id, cols = 1) ->
-    shifted = {}
-    item = @i[id]
-
-    rightItems = @itemsRight(id)
-    rightCol = @maxCol rightItems
-
-    # Shift the neighbor right, since there's room.
-    if rightCol < @w
-      console.log 'shift right!'
-      immediatelyRightIds = @itemsImmediatelyRight(id)
-      for rightId in immediatelyRightIds
-        shifted[rightId] = @_shiftRight rightId
-
-    # Shift the neighbor down, since there's not room.
-    else
-      console.log 'shift down!'
-      immediatelyRightIds = @itemsImmediatelyRight(id)
-      firstRightItem = immediatelyRightIds[0]
-
-      # Get items below first item immediately right.
-      belowIds = reverse(@itemsBelow()) # THIS WONT WORK PROBABLY
-      rows = item.row + item.height
-
-      for belowId in belowIds
-
-
-        while rows-- > 0
-          belowIds = reverse(@itemsBelow(id))
-          for belowId in belowIds
-            shifted[belowId] = @_shiftDown belowId
-          shifted[id] = @_shiftDown id
-
-
-        shifted[rightId] = @_shiftDown rightId
-
-    # # Shifts the immediately-right neighbors right, if doing so will not exceed
-    # # the width of the grid. If it does, the neighbor (and its neighbors below)
-    # # are shifted down.
-    # innershift = (id, downShift, skip) ->
-    #   currentItem = p.i[id]
-    #   immediatelyRightIds = packer.itemsImmediatelyRight(p, id)
-    #
-    #   # Recurse to shift the furthest-right first.
-    #   for rightId in immediatelyRightIds
-    #     innershift(rightId, currentItem.row + currentItem.height)
-    #
-    #   # After recursing to the furthest right, shift this item, if not skipping.
-    #   if not skip
-    #     packer._shiftRightOrDown p, id, downShift - currentItem.row, shifted
-    #
-    # # We can only shift one column at a time, so call once for each shift.
-    # c = cols
-    # while c-- > 0
-    #   innershift(id, item.row + item.height, true)
-
-    shifted
-
-
-  ###*
-  # Grows the item with `id`, `rows` down.
-  #
-  # @param {stout-ui/util/packer/PackerStruct} p - The packer struct.
-  #
-  # @param {string} id - The `id` of the item to grow down.
-  #
-  # @param {int} rows - The number of rows to grow down.
-  #
-  # @returns {object} Set of items shifted down keyed with the `id` of the
-  # shifted item, with values which describe its new position in the form,
-  # `{height, width, row, col}`.
-  ###
-  growDown: (id, rows = 1) ->
-    shifted = {}
-
-    while rows-- > 0
-      belowIds = reverse(@itemsBelow(id))
-      for belowId in belowIds
-        shifted[belowId] = @_shiftDown belowId
-      item = @remove id
-      @insertAt item.height + 1, item.width, item.row, item.col, id
-
-    shifted
-
-
   shiftDownNeighborsBelow: (height, width, row, col) ->
     shifted = {}
 
@@ -456,77 +275,7 @@ module.exports = class Packer
 
 
   ###*
-  # Grows the item with `id`, `cols` right.
-  #
-  # @param {stout-ui/util/packer/PackerStruct} p - The packer struct.
-  #
-  # @param {string} id - The `id` of the item to grow right
-  #
-  # @param {int} cols - The number of columns to grow right.
-  #
-  # @returns {object} Set of items shifted right keyed with the `id` of the
-  # shifted item, with values which describe its new position in the form,
-  # `{height, width, row, col}`.
-  ###
-  growRight: (id, cols = 1) ->
-    shifted = @shiftNeighborsRightOrDown id, cols
-
-    # Grow the target item.
-    item = @remove id
-    @insertAt item.height, item.width + cols, item.row, item.col, id
-
-    shifted
-
-
-  ###*
-  # Shifts the item given by `id`, `cols` columns to the right, if it doesn't
-  # exceed the width of the grid. If shifting the item to the right `cols`
-  # columns, then it is shifted down `rows`.
-  #
-  # @param {stout-ui/util/packer/PackerStruct} p - The packer struct.
-  #
-  # @param {string} id - The `id` of the item to shift right
-  #
-  # @param {int} rows - The number of rows to shift down if shifting-right
-  # exceeds the width of the grid.
-  #
-  # @param {int} cols - The number of columns to shift right.
-  #
-  # @returns {object} An object which describes the new position and size of the
-  # shifted item in the form, `{height, width, row, col}`.
-  ###
-  _shiftRightOrDown: (id, rows, shifted) ->
-    item = @i[id]
-    if item.col + item.width + 1 <= @w
-      shifted[id] = @_shiftRight id
-    else
-      while rows-- > 0
-        belowIds = reverse(@itemsBelow(id))
-        for belowId in belowIds
-          shifted[belowId] = @_shiftDown belowId
-        shifted[id] = @_shiftDown id
-      return @i[id]
-
-
-  ###*
-  # Shifts the item given by `id`, `cols` columns to the right.
-  #
-  # @param {stout-ui/util/packer/PackerStruct} p - The packer struct.
-  #
-  # @param {string} id - The `id` of the item to shift right
-  #
-  # @returns {object} An object which describes the new position and size of the
-  # shifted item in the form, `{height, width, row, col}`.
-  ###
-  _shiftRight: (id) ->
-    item = @remove id
-    @insertAt item.height, item.width, item.row, item.col + 1, id
-
-
-  ###*
   # Shifts the passed item down.
-  #
-  # @param {stout-ui/util/packer/PackerStruct} p - The packer struct.
   #
   # @param {string} id - The `id` of the item to shift down.
   #
@@ -536,7 +285,6 @@ module.exports = class Packer
   _shiftDown: (id) ->
     item = @remove id
     @insertAt item.height, item.width, item.row + 1, item.col, id
-
 
 
   ###*
@@ -586,23 +334,6 @@ module.exports = class Packer
 
 
   ###*
-  # Returns set of id's of all items below the item with id `id`.
-  #
-  # @param {stout-ui/util/packer/PackerStruct} p - The packer struct.
-  #
-  # @param {string} id - The `id` of the item for-which to find items below.
-  #
-  # @param {Array.<string>} The string `id`'s' of the item(s) below in order
-  # of increasing distance, so the first ID in the array will be the item
-  # closest to the item given by `id`, and the last will be the furthest down.
-  ###
-  itemsBelow: (id) ->
-    item = @i[id]
-    {height, width, row, col} = item
-    @_itemsBelow height, width, row, col
-
-
-  ###*
   # Returns a set of `id`'s of the item(s) below a gap of size `height` by
   # `width` at `row` and `col`.
   #
@@ -638,100 +369,6 @@ module.exports = class Packer
     getItemsImmediatelyBelow.call(@, height, width, row, col)
 
     uniq ids
-
-
-  ###*
-  # Returns set of id's of all items to the right of the item given by `id`.
-  #
-  # @param {stout-ui/util/packer/PackerStruct} p - The packer struct.
-  #
-  # @param {string} id - The `id` of the item for-which to find items right.
-  #
-  # @param {Array.<string>} The string `id`'s' of the item(s) to the right in
-  # order of increasing distance, so the first ID in the array will be the item
-  # closest to item given by `id`, and the last will be the furthest right.
-  ###
-  itemsRight: (id) ->
-    item = @i[id]
-    {height, width, row, col} = item
-    @_itemsRight height, width, row, col
-
-
-  ###*
-  # Returns a set of `id`'s of the item(s) to the right of a gap of size
-  # `height` by `width` at `row` and `col`.
-  #
-  # @param {stout-ui/util/packer/PackerStruct} p - The packer struct.
-  #
-  # @param {int} height - The height of the gap (in rows).
-  #
-  # @param {int} width - The width of the gap (in columns).
-  #
-  # @param {int} row - The row where the gap is located.
-  #
-  # @param {int} col - The column where the gap is located.
-  #
-  # @param {Array.<string>} The string `id`'s' of the item(s) to the right in
-  # order of increasing distance, so the first ID in the array will be the item
-  # closest to item given by `id`, and the last will be the furthest right.
-  ###
-  _itemsRight: (height, width, row, col) ->
-    ids = []
-
-    getItemsImmediatelyRight = (height, width, row, col) ->
-
-      # Get items immediately below.
-      itemIds = @_itemsImmediatelyRight(height, width, row, col)
-
-      # Concat this new list of id's.
-      ids = ids.concat itemIds
-
-      for itemId in itemIds
-        item = @i[itemId]
-        getItemsImmediatelyRight.call @ item.height, item.width, item.row, item.col
-
-    getItemsImmediatelyRight.call(@, height, width, row, col)
-
-    uniq ids
-
-
-  ###*
-  # Returns set of id's of all items immediately to the right of the item given
-  # by `id`.
-  #
-  # @param {stout-ui/util/packer/PackerStruct} p - The packer struct.
-  #
-  # @param {string} id - The `id` of the item for-which to find items right.
-  #
-  # @param {Array.<string>} The string `id`'s' of the item(s) to the right in
-  # order of increasing distance, so the first ID in the array will be the item
-  # closest to item given by `id`, and the last will be the furthest right.
-  ###
-  itemsImmediatelyRight: (id) ->
-    item = @i[id]
-    {height, width, row, col} = item
-    @_itemsImmediatelyRight height, width, row, col
-
-
-  ###*
-  # Gets items immediately to the right of the rectangle described of size
-  # `height` by `width` positioned at `row`, `col`.
-  #
-  # @param {stout-ui/util/packer/PackerStruct} p - The packer struct.
-  #
-  # @param {int} height - The height of the rectangle (in rows).
-  #
-  # @param {int} width - The width of the rectangle (in columns).
-  #
-  # @param {int} row - The row where the rectangle is located.
-  #
-  # @param {int} col - The column where the rectangle is located.
-  #
-  # @param {Array.<string>} The string `id`'s' of the item(s) immediately to
-  # the right.
-  ###
-  _itemsImmediatelyRight: (height, width, row, col) ->
-    @itemsWithin height, 1, row, col + width
 
 
   ###*
