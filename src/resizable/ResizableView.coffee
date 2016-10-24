@@ -180,7 +180,7 @@ onResizableEnter = ->
   mm = @addEventListenerTo b, 'mousemove', onTouchOrMouseMoveInside, @
   md = @addEventListener 'mousedown', onResizeStart, @
   @__resizeableListeners.mm = mm
-  @__resizeableListeners.mm = md
+  @__resizeableListeners.md = md
 
 
 ###*
