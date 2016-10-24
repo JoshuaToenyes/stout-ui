@@ -261,6 +261,26 @@ module.exports = class Packer
     shifted
 
 
+  # fillIn: (items, row, col, height, width) ->
+  #   shifted = {}
+  #
+  #   for id of items
+  #     @remove id
+  #
+  #   for id, item of items
+  #     startRow = row - item.height
+  #     endRow = row + height + item.height
+  #     startCol = col - item.width
+  #     endCol = col + width + item.width
+  #
+  #     assign(shifted, @insertWithin item.row, item.col, item.height, item.width, startRow, endRow, startCol, endCol, id, shifted)
+  #
+  #   shifted
+
+
+
+
+
   ###*
   # Resizes and moves an item.
   #
@@ -516,6 +536,24 @@ module.exports = class Packer
   _shiftDown: (id) ->
     item = @remove id
     @insertAt item.height, item.width, item.row + 1, item.col, id
+
+
+
+  ###*
+  # Shifts elements back-up to fill-in where they were previously shifted down.
+  #
+  # @param {Array.<string>} ids - Array of string ID's of elements to shift back
+  # up, in a top-to-bottom order.
+  ###
+  shiftUpToFill: (ids) ->
+    shifted = {}
+    for id in ids
+      item = @remove id
+      row = item.row
+      while @_fits(item.height, item.width, row - 1, item.col) and row - 1 >= 0
+        row--
+      shifted[id] = @insertAt item.height, item.width, row, item.col, id
+    shifted
 
 
   ###*

@@ -3,12 +3,19 @@
 #
 # @module stout-ui/grid/GridView
 ###
+assign        = require 'lodash/assign'
 debounce      = require 'lodash/debounce'
 defaults      = require 'lodash/defaults'
 ComponentView = require '../component/ComponentView'
+intersection  = require 'lodash/intersection'
+keys          = require 'lodash/keys'
 Packer        = require '../packer/Packer'
+omit          = require 'lodash/omit'
+reverse       = require 'lodash/reverse'
 throttle      = require 'lodash/throttle'
+uniq          = require 'lodash/uniq'
 vars          = require '../vars'
+without       = require 'lodash/without'
 
 # Require grid shared variables.
 require '../vars/grid'
@@ -126,6 +133,29 @@ module.exports = ComponentView.extend 'GridView',
       @parentEl.removeChild(shadow)
       shadow = null
 
+    dragShiftedIds = null
+
+    itemView.on 'dragstart', (e) ->
+      dragShiftedIds = []
+
+    # (Called with GridView as "this")
+    positionItems = (shifted, skip) ->
+      @context.items.forEach (item) =>
+        if item.id in skip then return
+        if shifted.hasOwnProperty(item.id)
+          pos = shifted[item.id]
+          item.root.style.top = "#{pos.row * SIZE}px"
+          item.root.style.left = "#{pos.col * SIZE}px"
+
+    # (Called with GridItemView as "this")
+    fillUpShiftedItems = (shifted) ->
+      shiftedIdsThisDrag = keys(shifted)
+      dragShiftedIds = uniq(dragShiftedIds.concat(shiftedIdsThisDrag))
+      itemsToFill = without(dragShiftedIds, @id)
+      shifted = assign shifted, @parent._packer.shiftUpToFill(itemsToFill)
+      positionItems.call @parent, shifted, [@id]
+      shifted
+
     # (Called with GridItemView as "this")
     onDrag = (e) ->
       {x, y} = e.data
@@ -133,16 +163,12 @@ module.exports = ComponentView.extend 'GridView',
       topGridPos = Math.round(y / SIZE)
       shifted = @parent._packer.moveTo @id, topGridPos, leftGridPos
       positionShadow.call(@, @id, topGridPos, leftGridPos)
+      shifted = fillUpShiftedItems.call @, shifted
       setGridSize.call @parent
-
-      @parent.context.items.forEach (item) =>
-        if item.id is @id then return
-        if shifted.hasOwnProperty item.id
-          pos = shifted[item.id]
-          item.root.style.top = "#{pos.row * SIZE}px"
-          item.root.style.left = "#{pos.col * SIZE}px"
-
+      positionItems.call @parent, shifted, [@id]
       shifted
+
+
 
     itemView.on 'drag', throttle(onDrag, 100, trailing: false)
 
