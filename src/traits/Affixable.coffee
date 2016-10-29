@@ -204,8 +204,7 @@ module.exports = class Affixable extends Foundation
 
     affix = => @__affix()
 
-    @on 'show', affix
-    @on 'change:affixPosition', affix
+    @on 'show change:affixPosition transition:in', affix
     @addEventListenerTo window, 'scroll', affix
     @addEventListenerTo window, 'resize', affix
 
