@@ -1,2 +1,4 @@
-dropdown-tag:    dropdown
-dropdown-class:  dropdown
+dropdown-tag:                 dropdown
+dropdown-class:               dropdown
+dropdown-transition-in-time:  200ms
+dropdown-transition-out-time: 200ms

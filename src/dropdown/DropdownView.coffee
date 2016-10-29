@@ -33,6 +33,26 @@ DROPDOWN_CLASS = vars.read 'dropdown/dropdown-class'
 
 
 ###*
+# Transition-in timing.
+#
+# @type string
+# @const
+# @private
+###
+DROPDOWN_TRANSITION_IN_T = vars.readTime 'dropdown/dropdown-transition-in-time'
+
+
+###*
+# Transition-out timing.
+#
+# @type string
+# @const
+# @private
+###
+DROPDOWN_TRANSITION_OUT_T = vars.readTime 'dropdown/dropdown-transition-out-time'
+
+
+###*
 #
 #
 #
@@ -57,12 +77,12 @@ module.exports = InteractiveView.extend 'DropdownView',
 
 
   open: ->
-    @transitionIn().then =>
+    @transitionIn(DROPDOWN_TRANSITION_IN_T).then =>
       document.body.addEventListener 'click', @__onBodyClick
 
 
   close: ->
-    @transitionOut().then =>
+    @transitionOut(DROPDOWN_TRANSITION_OUT_T).then =>
       document.body.removeEventListener 'click', @__onBodyClick
 
 

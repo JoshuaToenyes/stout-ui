@@ -14,7 +14,24 @@
   $dropdown: ".#{$prefix}#{$dropdown-class}"
 
   #{$dropdown}
+    +transition(opacity 2 * $dropdown-transition-in-time, transform $dropdown-transition-in-time)
+    +transform(scaleY(0.9) scaleX(0.9))
+    +transform-origin(top left)
+    opacity: 0
+
     +hidden
       display: none
+
     +visible
       display: block
+      opacity: 1
+      +transform(none)
+
+    +transitioning-in
+      opacity: 1
+      +transform(scaleY(1) scaleX(1))
+
+    +transitioning-out
+      opacity: 0
+      +transition(opacity $dropdown-transition-out-time, transform $dropdown-transition-out-time)
+      +transform(scaleY(0.9) scaleX(0.9))
