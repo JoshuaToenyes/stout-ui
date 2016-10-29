@@ -101,9 +101,16 @@ module.exports = class Draggable extends Foundation
 
 
   __setDragStartPosition: ->
+    left = @root.style.left
+    top = @root.style.top
+
+    if (left.indexOf and left.indexOf('%') isnt -1)
+      parentWidth = @parentEl.getBoundingClientRect().width
+      left = (parseFloat(left) / 100) * parentWidth
+
     @__dragStartPosition = [
-      parseInt(@root.style.left or 0)
-      parseInt(@root.style.top or 0)
+      parseInt(left or 0)
+      parseInt(top or 0)
     ]
 
 
