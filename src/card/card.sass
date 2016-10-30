@@ -16,12 +16,8 @@
   $flippable: ".#{$prefix}#{$card-flippable-class}"
 
   +keyframes(card-flip-shadow)
-    0%
-      +whiteframe($card-whiteframe)
     50%
       +whiteframe($card-flipping-whiteframe)
-    100%
-      +whiteframe($card-whiteframe)
 
   +component(#{$card-tag})
 
