@@ -144,7 +144,10 @@ module.exports = InteractiveView.extend 'GridItemView',
   traits: [Draggable, ResizableView]
 
   constructor: (init, events) ->
-    init = defaults init, tagName: TAG_NAME
+    init = defaults init,
+      tagName: TAG_NAME
+      resizeContain: ['n', 'w', 'e']
+      dragContain: ['n', 'w', 'e']
     InteractiveView.prototype.constructor.call @, init, events
     @prefixedClasses.add GRID_ITEM_CLASS
     @__shadow = null
@@ -203,3 +206,7 @@ module.exports = InteractiveView.extend 'GridItemView',
     ###
     column:
       type: 'undefined|number'
+
+
+  remove: ->
+    @parent.context.items.remove(@)
