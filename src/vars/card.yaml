@@ -9,4 +9,4 @@ card-flip-time:               500ms
 card-height:                  300px
 card-width:                   300px
 card-whiteframe:              1
-card-flipping-whiteframe:     8
+card-flipping-whiteframe:     12
