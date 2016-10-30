@@ -89,6 +89,17 @@ onDrag = (e) ->
 
 
 ###*
+# Handles the drag-end event of a GridItemView.
+#
+# @function onDragEnd
+# @this stout-ui/grid/GridItemView#
+###
+onDragEnd = (e) ->
+  shifted = onDrag.call @, e
+  positionItems.call @parent, shifted
+
+
+###*
 # Handles a resize event of a GridItemView.
 #
 # @param {stout-core/event/Event} e - Resize event.
@@ -98,8 +109,8 @@ onDrag = (e) ->
 ###
 onResize = (e) ->
   {width, height} = e.data
-  top  = parseInt(@root.style.top)
-  left = parseInt(@root.style.left)
+  top  = convertToPixels(@root.style.top, @parent.gridWidth)
+  left = convertToPixels(@root.style.left, @parent.gridWidth)
 
   [row, col] = @parent.toGridCoords(left, top)
   [height, width] = @parent.toGridCoords(width, height)
@@ -132,6 +143,25 @@ onResizeEnd = (e) ->
 ###
 isPercentage = (n) ->
   n.indexOf and n.indexOf('%') isnt -1
+
+
+###*
+# Converts the passed `v` param to pixels, if it is a percentage.
+#
+# @param {string|number} v - The value to convert to pixels.
+#
+# @param {number} max - The container size, or maximum value of-which the
+# percentage is a portion of.
+#
+# @returns {number} Pixel dimension.
+#
+# @function convertToPixels
+###
+convertToPixels = (v, max) ->
+  if isPercentage(v)
+    max * (parseFloat(v) / 100)
+  else
+    parseFloat(v)
 
 
 ###*
@@ -288,10 +318,14 @@ module.exports = ComponentView.extend 'GridView',
   ###
   _addItem: (itemView) ->
     {height, width, id} = itemView
-    [row, col] = @_packer.insert height, width, id
 
-    itemView.row = row
-    itemView.column = col
+    if not itemView.row or not itemView.column
+      [row, col] = @_packer.insert height, width, id
+      itemView.row = row
+      itemView.column = col
+    else
+      {row, column} = itemView
+      @_packer.insertAt height, width, row, column, id
 
     [top, left] = @fromGridCoords row, col
     [height, width] = @fromGridCoords height, width
@@ -299,12 +333,15 @@ module.exports = ComponentView.extend 'GridView',
     for prop, v of {top, left, height, width}
       itemView.root.style[prop] = v
 
+    itemView.resizeContainer = @root
+    itemView.dragContainer = @root
     itemView.parent = @
     itemView.parentEl = @root
 
     throttleOptions = {trailing: true, leading: false}
     itemView.on 'drag', throttle(onDrag, 300, throttleOptions)
     itemView.on 'resize', throttle(onResize, 100, throttleOptions)
+    itemView.on 'dragstop', onDragEnd
     itemView.on 'resizeend', onResizeEnd
 
     itemView.render()
@@ -322,4 +359,5 @@ module.exports = ComponentView.extend 'GridView',
   ###
   _removeItem: (itemView) ->
     @_packer.remove itemView.id
-    itemView.unrender()
+    if itemView.rendered then itemView.unrender()
+    setGridSize.call @
