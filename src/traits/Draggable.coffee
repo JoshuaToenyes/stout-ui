@@ -3,6 +3,7 @@
 #
 # @module stout-ui/traits/Draggable
 ###
+clamp      = require '../util/clamp'
 Foundation = require 'stout-core/base/Foundation'
 isString   = require 'lodash/isString'
 vars       = require '../vars'
@@ -58,6 +59,14 @@ module.exports = class Draggable extends Foundation
     type: 'boolean'
 
 
+  @property 'dragContainer'
+
+
+  @property 'dragContain',
+    default: -> ['n', 's', 'e', 'w']
+    set: (v) -> if isString(v) then [v] else v
+
+
   ###*
   # Initiates this trait by adding the necessary event listeners and classes.
   #
@@ -88,13 +97,27 @@ module.exports = class Draggable extends Foundation
   __onDrag: (e) ->
     e.stopPropagation()
     e.preventDefault()
+
+    dim = @root.getBoundingClientRect()
+
     clientX = e.clientX or (e.touches and e.touches[0].clientX)
     clientY = e.clientY or (e.touches and e.touches[0].clientY)
+
     if @__dragStart is null
       @__dragStart = [clientX, clientY]
     else
       deltaX = clientX - @__dragStart[0] + @__dragStartPosition[0]
       deltaY = clientY - @__dragStart[1] + @__dragStartPosition[1]
+
+      if @dragContainer
+        r = @dragContainer.getBoundingClientRect()
+        eclamp = if 'e' in @dragContain then r.width - dim.width else Infinity
+        wclamp = if 'w' in @dragContain then 0 else -Infinity
+        nclamp = if 'n' in @dragContain then 0 else -Infinity
+        sclamp = if 's' in @dragContain then r.height - dim.height else Infinity
+        deltaX = clamp(deltaX, wclamp, eclamp)
+        deltaY = clamp(deltaY, nclamp, sclamp)
+
       if @axis isnt "y" then @root.style.left = deltaX + 'px'
       if @axis isnt "x" then @root.style.top = deltaY + 'px'
       @fire 'drag', @__generateEventData()
@@ -116,8 +139,15 @@ module.exports = class Draggable extends Foundation
 
 
   __generateEventData: ->
-    x = parseInt(@root.style.left)
-    y = parseInt(@root.style.top)
+    left = @root.style.left
+    top = @root.style.top
+
+    if (left.indexOf and left.indexOf('%') isnt -1)
+      parentWidth = @parentEl.getBoundingClientRect().width
+      left = (parseFloat(left) / 100) * parentWidth
+
+    x = parseInt(left)
+    y = parseInt(top)
     startX = @__dragStartPosition[0]
     startY = @__dragStartPosition[1]
     deltaX = x - startX
