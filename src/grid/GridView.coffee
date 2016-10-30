@@ -3,19 +3,11 @@
 #
 # @module stout-ui/grid/GridView
 ###
-assign        = require 'lodash/assign'
-debounce      = require 'lodash/debounce'
 defaults      = require 'lodash/defaults'
 ComponentView = require '../component/ComponentView'
-intersection  = require 'lodash/intersection'
-keys          = require 'lodash/keys'
 Packer        = require '../packer/Packer'
-omit          = require 'lodash/omit'
-reverse       = require 'lodash/reverse'
 throttle      = require 'lodash/throttle'
-uniq          = require 'lodash/uniq'
 vars          = require '../vars'
-without       = require 'lodash/without'
 
 # Require grid shared variables.
 require '../vars/grid'
@@ -41,11 +33,113 @@ TAG_NAME = vars.readPrefixed 'grid/grid-tag'
 GRID_CLASS = vars.read 'grid/grid-class'
 
 
+###*
+# Positions shifted grid items in the browser to match the position indicated
+# by the packer instance.
+#
+# @param {Object} shifted - Shifted items.
+#
+# @param {Array.<string>} skip - List of IDs to skip positioning.
+#
+# @function positionItems
+# @this stout-ui/grid/GridView#
+###
+positionItems = (shifted, skip = []) ->
+  @context.items.forEach (item) =>
+    if shifted.hasOwnProperty(item.id)
+      pos = shifted[item.id]
+      item.row = pos.row
+      item.column = pos.col
+      if item.id not in skip
+        [top, left] = @fromGridCoords pos.row, pos.col
+        [height, width] = @fromGridCoords pos.height, pos.width
+        item.root.style.top = top
+        item.root.style.left = left
+        item.root.style.width = width
+        item.root.style.height = height
+
 
 ###*
+# Sets the height of the containing grid element to match the contained
+# grid items.
 #
+# @function setGridSize
+# @this stout-ui/grid/GridItemView#
+###
+setGridSize = ->
+  [height] = @fromGridCoords @_packer.height()
+  @root.style.height = height
+
+
+###*
+# Handles a drag event of a GridItemView.
 #
+# @param {stout-core/event/Event} e - Drag event.
 #
+# @function onDrag
+# @this stout-ui/grid/GridItemView#
+###
+onDrag = (e) ->
+  {x, y} = e.data
+  [row, col] = @parent.toGridCoords(x, y)
+  shifted = @parent._packer.moveTo @id, row, col
+  setGridSize.call @parent
+  positionItems.call @parent, shifted, [@id]
+  shifted
+
+
+###*
+# Handles a resize event of a GridItemView.
+#
+# @param {stout-core/event/Event} e - Resize event.
+#
+# @function onResize
+# @this stout-ui/grid/GridItemView#
+###
+onResize = (e) ->
+  {width, height} = e.data
+  top  = parseInt(@root.style.top)
+  left = parseInt(@root.style.left)
+
+  [row, col] = @parent.toGridCoords(left, top)
+  [height, width] = @parent.toGridCoords(width, height)
+
+  shifted = @parent._packer.moveTo @id, row, col, height, width
+  setGridSize.call @parent
+  positionItems.call @parent, shifted, [@id]
+  shifted
+
+
+###*
+# Handles the resize-end event of a GridItemView.
+#
+# @function onResizeEnd
+# @this stout-ui/grid/GridItemView#
+###
+onResizeEnd = (e) ->
+  shifted = onResize.call @, e
+  positionItems.call @parent, shifted
+
+
+###*
+# Tests if the passed value is a percentage.
+#
+# @param {string|number} n - The value to test.
+#
+# @returns {boolean} `true` if a percentage, otherwise `false`.
+#
+# @function isPercentage
+###
+isPercentage = (n) ->
+  n.indexOf and n.indexOf('%') isnt -1
+
+
+###*
+# The `GridView` class arranges items in a grid in the view.
+#
+# @exports stout-ui/grid/GridView
+# @extends stout-ui/component/ComponentView
+# @constructor
 ###
 module.exports = ComponentView.extend 'GridView',
 
@@ -58,7 +152,12 @@ module.exports = ComponentView.extend 'GridView',
 
     @context.items.on 'remove', (e) => @_removeItem e.data
 
-    @_packer = new Packer 100, 5
+    if isPercentage(@colWidth)
+      cols = 100 / parseFloat(@colWidth)
+    else
+      cols = @columnCount
+
+    @_packer = new Packer 100, cols
 
 
   properties:
@@ -80,8 +179,17 @@ module.exports = ComponentView.extend 'GridView',
     # @memberof stout-ui/grid/GridView#
     ###
     colWidth:
-      default: '20%'
+      default: '6.25%'
       type: 'number|string'
+
+    ###*
+    # The number of columns, if using a fixed-width (pixel-based) colWidth.
+    #
+    # @member {number|string} columnCount
+    # @memberof stout-ui/grid/GridView#
+    ###
+    columnCount:
+      type: 'number|undefined'
 
     ###*
     # The height of each row of this grid, in pixels.
@@ -93,6 +201,13 @@ module.exports = ComponentView.extend 'GridView',
       default: 100
       type: 'number'
 
+    ###*
+    # The grid width in pixels.
+    #
+    # @member {number} rowHeight
+    # @memberof stout-ui/grid/GridView#
+    # @readonly
+    ###
     gridWidth:
       get: ->
         @root.getBoundingClientRect().width
@@ -111,7 +226,7 @@ module.exports = ComponentView.extend 'GridView',
   # `'%'` as appropriate.
   ###
   fromGridCoords: (rows, cols) ->
-    if @colWidth.indexOf and @colWidth.indexOf('%') isnt -1
+    if isPercentage(@colWidth)
       x = cols * parseFloat(@colWidth) + '%'
     else
       x = cols * parseFloat(@colWidth) + 'px'
@@ -119,6 +234,17 @@ module.exports = ComponentView.extend 'GridView',
     [y, x]
 
 
+  ###*
+  # Converts passed `x` and `y` sizes (or positions) in pixels to grid
+  # coordinates (i.e., row and column).
+  #
+  # @param {number} x - The x-direction size in pixels.
+  #
+  # @param {number} y - The y-direction size in pixels.
+  #
+  # @method toGridCoords
+  # @memberof stout-ui/grid/GridView#
+  ###
   toGridCoords: (x, y) ->
     x = x / @gridWidth * 100
     rows = Math.round(y / parseFloat(@rowHeight))
@@ -127,9 +253,20 @@ module.exports = ComponentView.extend 'GridView',
 
 
   ###*
+  # Snaps the passed position and dimension to grid coordinates.
   #
+  # @param {number} x - Horizontal axis size in pixels.
+  #
+  # @param {number} y - Vertical axis size in pixels.
+  #
+  # @param {number} width - Width in pixels.
+  #
+  # @param {number} height - Height in pixels.
   #
   # @returns {Array.<string|number>} `[top, left, width, height]`
+  #
+  # @method snapToGrid
+  # @memberof stout-ui/grid/GridView#
   ###
   snapToGrid: (x, y, width, height) ->
     [row, col] = @toGridCoords(x, y)
@@ -150,116 +287,38 @@ module.exports = ComponentView.extend 'GridView',
   # @protected
   ###
   _addItem: (itemView) ->
-    colWidth  = @colWidth
-    rowHeight = @rowHeight
-
-    ###*
-    # Converts a passed number of columns and converts it to a pixel or
-    # percentage width.
-    #
-    # @param {number} cols - Width in columns.
-    #
-    # @returns {string} Width in pixels or percentage, suffixed with `'%'` or
-    # `'px'`, as appropriate.
-    #
-    # @function colSize
-    # @memberof stout-ui/grid/GridView#_addItem
-    # @inner
-    ###
-    colSize = (cols) =>
-      if colWidth.indexOf and colWidth.indexOf('%') isnt -1
-        cols * parseFloat(colWidth) + '%'
-      else
-        cols * parseFloat(colWidth) + 'px'
-
-    ###*
-    # Converts a passed number of rows and converts it to a pixel height.
-    #
-    # @param {number} rows - Height in rows.
-    #
-    # @returns {string} Height in pixels, suffixed with `'px'`.
-    #
-    # @function colSize
-    # @memberof stout-ui/grid/GridView#_addItem
-    # @inner
-    ###
-    rowSize = (rows) =>
-      rows * parseFloat(rowHeight) + 'px'
-
-
-    ###*
-    # Sets the height of the containing grid element to match the contained
-    # grid items.
-    #
-    # @function colSize
-    # @memberof stout-ui/grid/GridView#_addItem
-    # @inner
-    ###
-    setGridSize = =>
-      @root.style.height = rowSize(@_packer.height())
-
     {height, width, id} = itemView
     [row, col] = @_packer.insert height, width, id
 
     itemView.row = row
     itemView.column = col
 
-    itemView.root.style.left = colSize(col)
-    itemView.root.style.top = rowSize(row)
-    itemView.root.style.height = rowSize(itemView.height)
-    itemView.root.style.width = colSize(itemView.width)
+    [top, left] = @fromGridCoords row, col
+    [height, width] = @fromGridCoords height, width
+
+    for prop, v of {top, left, height, width}
+      itemView.root.style[prop] = v
+
     itemView.parent = @
     itemView.parentEl = @root
 
-    positionItems = (shifted, skip = []) ->
-      @context.items.forEach (item) =>
-        if shifted.hasOwnProperty(item.id)
-          pos = shifted[item.id]
-          item.row = pos.row
-          item.column = pos.col
-          if item.id not in skip
-            item.root.style.top = rowSize(pos.row)
-            item.root.style.left = colSize(pos.col)
-            item.root.style.width = colSize(pos.width)
-            item.root.style.height = rowSize(pos.height)
-
-    onDrag = (e) ->
-      {x, y} = e.data
-      [row, col] = @parent.toGridCoords(x, y)
-      shifted = @parent._packer.moveTo @id, row, col
-      setGridSize.call @parent
-      positionItems.call @parent, shifted, [@id]
-      shifted
-
-    onResize = (e) ->
-      {width, height} = e.data
-      top  = parseInt(@root.style.top)
-      left = parseInt(@root.style.left)
-
-      [row, col] = @parent.toGridCoords(left, top)
-      [height, width] = @parent.toGridCoords(width, height)
-
-      shifted = @parent._packer.moveTo @id, row, col, height, width
-      setGridSize.call @parent
-      positionItems.call @parent, shifted, [@id]
-      shifted
-
-    onResizeEnd = (e) ->
-      shifted = onResize.call @, e
-      positionItems.call @parent, shifted
-
-    itemView.on 'drag', throttle(onDrag, 300, {trailing: true, leading: false})
-    itemView.on 'resize', throttle(onResize, 100, {trailing: true, leading: false})
+    throttleOptions = {trailing: true, leading: false}
+    itemView.on 'drag', throttle(onDrag, 300, throttleOptions)
+    itemView.on 'resize', throttle(onResize, 100, throttleOptions)
     itemView.on 'resizeend', onResizeEnd
 
     itemView.render()
-    setGridSize()
+    setGridSize.call @
 
 
   ###*
   # Removes an item from the grid.
   #
   # @param {stout-ui/grid/GridItemView} itemView - The `GridItemView` to remove.
+  #
+  # @method _removeItem
+  # @memberof stout-ui/grid/GridView#
+  # @protected
   ###
   _removeItem: (itemView) ->
     @_packer.remove itemView.id

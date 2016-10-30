@@ -4,12 +4,12 @@
 #
 # @module stout-ui/grid/GridItemView
 ###
-defaults      = require 'lodash/defaults'
+defaults        = require 'lodash/defaults'
 Draggable       = require '../traits/Draggable'
 InteractiveView = require '../interactive/InteractiveView'
-ResizableView = require '../resizable/ResizableView'
-uuid          = require 'uuid'
-vars          = require '../vars'
+ResizableView   = require '../resizable/ResizableView'
+uuid            = require 'uuid'
+vars            = require '../vars'
 
 # Require grid shared variables.
 require '../vars/grid'
@@ -131,10 +131,13 @@ positionShadow = (desc) ->
     if desc[p] then @__shadow.style[p] = desc[p]
 
 
+
 ###*
+# The `GridItemView` class is a single item within a grid.
 #
-#
-#
+# @exports stout-ui/grid/GridItemView
+# @extends stout-ui/interactive/InteractiveView
+# @constructor
 ###
 module.exports = InteractiveView.extend 'GridItemView',
 
@@ -146,10 +149,10 @@ module.exports = InteractiveView.extend 'GridItemView',
     @prefixedClasses.add GRID_ITEM_CLASS
     @__shadow = null
     @on 'dragstart resizestart', createShadow, @
-    @on 'drag', onItemViewDrag, @
+    @on 'resizeend', onItemViewResizeEnd, @
     @on 'dragstop', onItemViewDragEnd, @
     @on 'resize', onItemViewResize, @
-    @on 'resizeend', onItemViewResizeEnd, @
+    @on 'drag', onItemViewDrag, @
 
 
   properties:
