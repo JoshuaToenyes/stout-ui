@@ -1,3 +1,9 @@
+###*
+# @overview The `Grid` class is the model-view for the grid component. The grid
+# component lays-out grid items in the browser in a sized-grid configuration.
+#
+# @module stout-ui/grid/Grid
+###
 Component    = require '../component/Component'
 defaults     = require 'lodash/defaults'
 GridItem     = require './GridItem'
@@ -5,6 +11,16 @@ GridItemView = require './GridItemView'
 OrderedList  = require 'stout-core/collection/OrderedList'
 
 
+
+###*
+# The `Grid` class is the view-model class for the grid component. The grid
+# component allows for rectangular, "masonry" style grid layouts. Each grid
+# item may be resizable, and as draggable within the grid.
+#
+# @exports stout-ui/grid/Grid
+# @extends stout-ui/component/Component
+# @constructor
+###
 module.exports = Component.extend 'Grid',
 
   properties:
