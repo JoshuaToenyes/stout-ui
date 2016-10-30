@@ -5,6 +5,7 @@
 ###
 defaults      = require 'lodash/defaults'
 ComponentView = require '../component/ComponentView'
+isUndefined   = require 'lodash/isUndefined'
 Packer        = require '../packer/Packer'
 throttle      = require 'lodash/throttle'
 vars          = require '../vars'
@@ -50,6 +51,8 @@ positionItems = (shifted, skip = []) ->
       pos = shifted[item.id]
       item.row = pos.row
       item.column = pos.col
+      item.height = pos.height
+      item.width = pos.width
       if item.id not in skip
         [top, left] = @fromGridCoords pos.row, pos.col
         [height, width] = @fromGridCoords pos.height, pos.width
@@ -319,12 +322,13 @@ module.exports = ComponentView.extend 'GridView',
   _addItem: (itemView) ->
     {height, width, id} = itemView
 
-    if not itemView.row or not itemView.column
+    if isUndefined(itemView.row) or isUndefined(itemView.column)
       [row, col] = @_packer.insert height, width, id
       itemView.row = row
       itemView.column = col
     else
       {row, column} = itemView
+      col = column
       @_packer.insertAt height, width, row, column, id
 
     [top, left] = @fromGridCoords row, col
