@@ -3,7 +3,19 @@
 
 ui-card
   +transition(background 350ms)
-  padding: 1em
+  margin-bottom: 1em
 
-  &.hover-example.ui-hover
+  .ui-card-front,
+  .ui-card-back
+    background-color: white
+    padding: 1em
+
+  &.hover-example.ui-hover .ui-card-front
     background: orange
+
+#flip-example
+  .ui-card-front
+    background-image: url('https://unsplash.it/600')
+    background-size: cover
+    background-position: center center
+    padding: 0

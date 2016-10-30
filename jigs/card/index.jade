@@ -11,7 +11,16 @@ block content
   .ex.basic
     .ex-label simple card
     
-    ui-card This is the card content!
+    ui-card 
+      .ui-card-front This is the card content!
     
-    ui-card.hover-example Cards are interactive!
+    ui-card.hover-example 
+      .ui-card-front Cards are interactive!
     
+    
+  .ex.flippable
+    .ex-label flippable card
+    
+    ui-card#flip-example
+      .ui-card-front Card front.
+      .ui-card-back Card back.
