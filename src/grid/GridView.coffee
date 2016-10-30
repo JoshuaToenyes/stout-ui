@@ -66,29 +66,78 @@ module.exports = ComponentView.extend 'GridView',
     ###*
     #
     #
-    #
+    # @todo Not yet implemented.
     ###
     layout:
       default: 'columns'
       values: ['columns', 'rows']
 
     ###*
+    # The width of each column of this grid. May be a number of pixels, or a
+    # string percentage.
     #
-    #
-    #
+    # @member {number|string} colWidth
+    # @memberof stout-ui/grid/GridView#
     ###
     colWidth:
       default: '20%'
       type: 'number|string'
 
     ###*
+    # The height of each row of this grid, in pixels.
     #
-    #
-    #
+    # @member {number} rowHeight
+    # @memberof stout-ui/grid/GridView#
     ###
     rowHeight:
       default: 100
-      type: 'number|string'
+      type: 'number'
+
+    gridWidth:
+      get: ->
+        @root.getBoundingClientRect().width
+      readonly: true
+
+
+  ###*
+  # Maps row and column coordinates to pixel or percentage size/dimension.
+  #
+  # @param {number} rows - Rows to map from.
+  #
+  # @param {number} cols - Cols to map from.
+  #
+  # @returns {Array.<string|number>} Size/dimension in the from `[y, x]`, (or
+  # equivalently, `[top, left]` or `[height, width]`), suffixed with `'px'` or
+  # `'%'` as appropriate.
+  ###
+  fromGridCoords: (rows, cols) ->
+    if @colWidth.indexOf and @colWidth.indexOf('%') isnt -1
+      x = cols * parseFloat(@colWidth) + '%'
+    else
+      x = cols * parseFloat(@colWidth) + 'px'
+    y = rows * parseFloat(@rowHeight) + 'px'
+    [y, x]
+
+
+  toGridCoords: (x, y) ->
+    x = x / @gridWidth * 100
+    rows = Math.round(y / parseFloat(@rowHeight))
+    cols = Math.round(x / parseFloat(@colWidth))
+    [rows, cols]
+
+
+  ###*
+  #
+  #
+  # @returns {Array.<string|number>} `[top, left, width, height]`
+  ###
+  snapToGrid: (x, y, width, height) ->
+    [row, col] = @toGridCoords(x, y)
+    ret = @fromGridCoords(row, col)
+    if width and height
+      [row, col] = @toGridCoords(width, height)
+      ret = ret.concat @fromGridCoords(row, col)
+    ret
 
 
   ###*
@@ -103,18 +152,6 @@ module.exports = ComponentView.extend 'GridView',
   _addItem: (itemView) ->
     colWidth  = @colWidth
     rowHeight = @rowHeight
-
-    ###*
-    # Calculates the width of the grid in pixels.
-    #
-    # @returns {number} Current width of the grid in pixels.
-    #
-    # @function calcGridWidth
-    # @memberof stout-ui/grid/GridView#_addItem
-    # @inner
-    ###
-    calcGridWidth = =>
-      @root.getBoundingClientRect().width
 
     ###*
     # Converts a passed number of columns and converts it to a pixel or
@@ -174,109 +211,45 @@ module.exports = ComponentView.extend 'GridView',
     itemView.parent = @
     itemView.parentEl = @root
 
-    itemView.contents = itemView.id # TEMPORARY
-
-    # Create a shadow element indicating where the dragged item will be dropped.
-    # (Called with GridItemView as "this")
-    shadow = null
-    createShadow = ->
-      shadow = document.createElement 'div'
-      shadow.classList.add @prefix + 'shadow' # TODO: define in constant
-      shadow.style.width = @root.style.width
-      shadow.style.height = @root.style.height
-      shadow.style.top = @root.style.top
-      shadow.style.left = @root.style.left
-      @parentEl.insertBefore shadow, @root
-
-
-    positionShadow = (id, row, col, height, width) ->
-      if not shadow then return
-      [row, col] = @parent._packer.constrain id, row, col
-      shadow.style.top = rowSize(row)
-      shadow.style.left = colSize(col)
-      if height then shadow.style.height = rowSize(height)
-      if width then shadow.style.width = colSize(width)
-
-
-    # (Called with GridItemView as "this")
-    deleteShadow = ->
-      @parentEl.removeChild(shadow)
-      shadow = null
-
-
-    # (Called with GridView as "this")
-    positionItems = (shifted, skip) ->
+    positionItems = (shifted, skip = []) ->
       @context.items.forEach (item) =>
         if shifted.hasOwnProperty(item.id)
           pos = shifted[item.id]
           item.row = pos.row
           item.column = pos.col
-
           if item.id not in skip
             item.root.style.top = rowSize(pos.row)
             item.root.style.left = colSize(pos.col)
+            item.root.style.width = colSize(pos.width)
+            item.root.style.height = rowSize(pos.height)
 
-
-    # Takes pixel-based x, y, height, width and converts them to grid
-    # coordinates.
-    convertToGridCoords = (x, y, height, width) ->
-      gridWidth = calcGridWidth()
-      x = x / gridWidth * 100
-      width = width / gridWidth * 100
-      top = Math.round(y / parseFloat(rowHeight))
-      left = Math.round(x / parseFloat(colWidth))
-      height = Math.round(height / parseFloat(rowHeight))
-      width = Math.round(width / parseFloat(colWidth))
-      {top, left, height, width}
-
-
-    # (Called with GridItemView as "this")
     onDrag = (e) ->
       {x, y} = e.data
-      {top, left} = convertToGridCoords(x, y)
-      shifted = @parent._packer.moveTo @id, top, left
-      positionShadow.call(@, @id, top, left)
+      [row, col] = @parent.toGridCoords(x, y)
+      shifted = @parent._packer.moveTo @id, row, col
       setGridSize.call @parent
       positionItems.call @parent, shifted, [@id]
       shifted
-
-
-    onDragStop = (e) ->
-      shifted = onDrag.call @, e
-      @parent.context.items.forEach (item) ->
-        if shifted.hasOwnProperty item.id
-          pos = shifted[item.id]
-          item.root.style.top = rowSize(pos.row)
-          item.root.style.left = colSize(pos.col)
-
 
     onResize = (e) ->
       {width, height} = e.data
-      left = parseInt(@root.style.left)
       top  = parseInt(@root.style.top)
-      {top, left, width, height} = convertToGridCoords(left, top, height, width)
-      shifted = @parent._packer.moveTo @id, top, left, height, width
-      positionShadow.call(@, @id, top, left, height, width)
+      left = parseInt(@root.style.left)
+
+      [row, col] = @parent.toGridCoords(left, top)
+      [height, width] = @parent.toGridCoords(width, height)
+
+      shifted = @parent._packer.moveTo @id, row, col, height, width
       setGridSize.call @parent
       positionItems.call @parent, shifted, [@id]
       shifted
 
-
     onResizeEnd = (e) ->
       shifted = onResize.call @, e
-      @parent.context.items.forEach (item) ->
-        if shifted.hasOwnProperty item.id
-          pos = shifted[item.id]
-          item.root.style.top = rowSize(pos.row)
-          item.root.style.left = colSize(pos.col)
-          item.root.style.width = colSize(pos.width)
-          item.root.style.height = rowSize(pos.height)
+      positionItems.call @parent, shifted
 
-    itemView.on 'drag', throttle(onDrag, 300, trailing: true)
-    itemView.on 'resize', throttle(onResize, 100, trailing: false)
-    itemView.on 'resizestart dragstart', createShadow
-    itemView.on 'dragstop resizeend', deleteShadow
-    itemView.on 'dragstop', onDragStop
+    itemView.on 'drag', throttle(onDrag, 300, {trailing: true, leading: false})
+    itemView.on 'resize', throttle(onResize, 100, {trailing: true, leading: false})
     itemView.on 'resizeend', onResizeEnd
 
     itemView.render()
