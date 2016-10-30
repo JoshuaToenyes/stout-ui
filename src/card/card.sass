@@ -1,4 +1,5 @@
 @import "bourbon/bourbon"
+@import "util/component"
 @import "util/exports"
 @import "vars/card"
 @import "vars/component"
@@ -6,10 +7,58 @@
 
 +exports("card/card")
 
-  #{$prefix}#{$card-tag}
-    display: none
-    &[rendered]
-      display: block
+  $card:      ".#{$prefix}#{$card-class}"
+  $contents:  ".#{$prefix}contents"
+  $front:     ".#{$prefix}#{$card-front-class}"
+  $back:      ".#{$prefix}#{$card-back-class}"
+  $flipping:  ".#{$prefix}#{$card-flipping-class}"
+  $flipped:   ".#{$prefix}#{$card-flipped-class}"
+  $flippable: ".#{$prefix}#{$card-flippable-class}"
 
-  #{$prefix}#{$card-class}
-    +whiteframe(1)
+  +keyframes(card-flip-shadow)
+    0%
+      +whiteframe($card-whiteframe)
+    50%
+      +whiteframe($card-flipping-whiteframe)
+    100%
+      +whiteframe($card-whiteframe)
+
+  +component(#{$card-tag})
+
+  #{$card}
+    perspective: 1000px
+
+    &,
+    #{$contents},
+    #{$front},
+    #{$back}
+      box-sizing: border-box
+      height: $card-height
+      width: $card-width
+
+    #{$contents}
+      +whiteframe($card-whiteframe)
+      transition: $card-flip-time
+      transform-origin: 40% center
+      transform-style: preserve-3d
+      position: relative
+
+    #{$front},
+    #{$back}
+      +backface-visibility(hidden)
+      position: absolute
+      top: 0
+      left: 0
+
+    #{$front}
+      z-index: 2
+      transform: rotateY(0deg)
+
+    #{$back}
+      transform: rotateY(180deg)
+
+    &#{$flipping} #{$contents}
+      +animation(card-flip-shadow $card-flip-time)
+
+    &#{$flipped} #{$contents}
+      transform: rotateY(180deg) translateX(-20%)

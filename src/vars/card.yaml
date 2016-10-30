@@ -1,2 +1,12 @@
 card-tag:                     card
 card-class:                   card !default
+card-front-class:             card-front
+card-back-class:              card-back
+card-flipped-class:           card-flipped
+card-flipping-class:          card-flipping
+card-flippable-class:         card-flippable
+card-flip-time:               500ms
+card-height:                  300px
+card-width:                   300px
+card-whiteframe:              1
+card-flipping-whiteframe:     8
