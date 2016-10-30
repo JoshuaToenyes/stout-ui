@@ -3,6 +3,7 @@
 #
 # @module stout-ui/resizable/ResizableView
 ###
+clamp      = require '../util/clamp'
 Draggable  = require '../traits/Draggable'
 Foundation = require 'stout-core/base/Foundation'
 isString   = require 'lodash/isString'
@@ -92,22 +93,6 @@ NWSE_CURSOR_CLASS = vars.readPrefixed 'resizable/resizable-cursor-nwse-class'
 ###
 inRec = (x, y, top, left, height, width) ->
   (x >= left) and (x <= left + width) and (y >= top) and (y <= top + height)
-
-
-###*
-# Clamps the passed value `v` to within `min` and `max` values.
-#
-# @param {number} v - The value to clamp.
-#
-# @param {number} min - The minimum value.
-#
-# @param {number} max - The maximum value.
-#
-# @returns {number} A number between `min` and `max`.
-#
-# @function clamp
-###
-clamp = (v, min, max) -> Math.max(min, Math.min(max, v))
 
 
 ###*
@@ -244,7 +229,6 @@ onResize = (e) ->
 
   h = clamp(h, @minHeight, @maxHeight)
   w = clamp(w, @minWidth, @maxWidth)
-
 
   ut = initialTop + initialHeight - h
   ul = initialLeft + initialWidth - w
@@ -391,6 +375,16 @@ generateResizeEventData = (e) ->
   # If currently resizing, add movement data.
   if @classes.contains(RESIZING_CLASS)
     [clientX, clientY] = getClientResizeAndSizePosition.call @, e
+
+    if @resizeContainer
+      r = @resizeContainer.getBoundingClientRect()
+      eclamp = if 'e' in @resizeContain then r.left + r.width else Infinity
+      wclamp = if 'w' in @resizeContain then r.left else -Infinity
+      nclamp = if 'n' in @resizeContain then r.top else -Infinity
+      sclamp = if 's' in @resizeContain then r.top + r.height else Infinity
+      clientX = clamp(clientX, wclamp, eclamp)
+      clientY = clamp(clientY, nclamp, sclamp)
+
     startX = @__resizeStart[0]
     startY = @__resizeStart[1]
     data.deltaX = clientX - startX
@@ -434,6 +428,19 @@ getClientResizeAndSizePosition = (e) ->
 module.exports = Foundation.extend 'ResizableView',
 
   properties:
+
+    ###*
+    #
+    #
+    #
+    ###
+    resizeContainer: {}
+
+
+    resizeContain:
+      default: -> ['n', 's', 'e', 'w']
+      set: (v) -> if isString(v) then [v] else v
+
 
     ###*
     # Constrains resizing to the "x" or "y" axis. If not defined, the component
