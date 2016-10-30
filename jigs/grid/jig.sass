@@ -17,11 +17,17 @@ ui-grid-item
   position: absolute
   outline: 1px solid black
   font-size: 8px
+  opacity: 1
   +transition(left 300ms, top 300ms, height 300ms, width 300ms)
+  background-size: cover
+  background-position: center center
+  z-index: 1
 
   &.ui-dragging,
   &.ui-resizing
-    +transition(none)
+    +transition(opacity 300ms)
+    opacity: 0.3
+    z-index: 2
 
 .ui-shadow
   position: absolute
