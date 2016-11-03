@@ -30,6 +30,23 @@ FLIPPING_CLASS = vars.read 'card/card-flipping-class'
 FLIP_TIME = vars.readTime 'card/card-flip-time'
 
 
+onCardReady = ->
+  if @select('.ui-card-back')
+    @context.flippable = true
+    @prefixedClasses.add FLIPPABLE_CLASS
+
+
+onFlipping = (e) ->
+  fn = if e.data.value then 'add' else 'remove'
+  @prefixedClasses[fn] FLIPPING_CLASS
+
+
+
+onFlip = (e) ->
+  fn = if e.data.value then 'add' else 'remove'
+  @prefixedClasses[fn] FLIPPED_CLASS
+
+
 ###*
 # The `CardView` class represents the view of a single content card with
 # generic content.
@@ -45,50 +62,11 @@ module.exports = class CardView extends InteractiveView
     super init, events
     @prefixedClasses.add CARD_CLASS
 
-    @on 'ready', =>
-      if @select('.ui-card-back')
-        @flippable = true
-        @prefixedClasses.add FLIPPABLE_CLASS
+    @on 'ready', onCardReady
+
+    @context.on 'change:flipping', onFlipping, @
+    @context.on 'change:flipped', onFlip, @
 
 
-  @property 'flippable',
-    default: false
-
-
-  @property 'flipping',
-    default: false
-
-
-  @property 'flipped',
-    default: false
-
-
-  @property 'sideVisible',
-    default: 'front'
-    values: ['front', 'back']
-
-
-  ###*
-  # Flips the card, if it's flippable.
-  #
-  # @method flip
-  # @memberof stout-ui/card/CardView
-  ###
   flip: ->
-    new Promise (fulfill, reject) =>
-      if not @flippable then reject(
-        new TransitionCanceledExc "Card not flippable.")
-      if @flipping then reject(
-        new TransitionCanceledExc "Card currently flipping.")
-      @flipping = true
-      @prefixedClasses.add FLIPPING_CLASS
-      if @flipped
-        @prefixedClasses.remove FLIPPED_CLASS
-      else
-        @prefixedClasses.add FLIPPED_CLASS
-      setTimeout =>
-        @prefixedClasses.remove FLIPPING_CLASS
-        @flipping = false
-        @flipped = not @flipped
-        fulfill()
-      , FLIP_TIME
+    @context.flip()
