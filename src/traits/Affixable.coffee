@@ -25,6 +25,15 @@ AFFIXABLE_CLASS = vars.readPrefixed 'affixable/affixable-class'
 
 
 
+setPositionClasses = (y, x) ->
+  for t in ['top', 'center', 'bottom']
+    for s in ['left', 'right', 'center']
+      @prefixedClasses.remove "#{t}-#{s}"
+  @prefixedClasses.add "#{y}-#{x}"
+
+
+
+
 ###*
 # The Affixable trait allows a component to be "fixed" to some other element,
 # positioning it relative to the element to-which it's "affixed" to.
@@ -117,6 +126,8 @@ module.exports = class Affixable extends Foundation
 
     [posX, posY] = positionString(force or @affixPosition)
     cs = getComputedStyle @root
+
+    setPositionClasses.call @, posY, posX
 
     targetCenterX = (targetR.left + targetR.right) / 2
     targetCenterY = (targetR.top + targetR.bottom) / 2
