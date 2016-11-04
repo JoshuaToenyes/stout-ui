@@ -1,0 +1,21 @@
+extends ../_blueprint/master.jade
+
+block content
+
+  h1.ex-title Tabs
+  
+  .ex-heading Basic Tabs
+  p Tabs come in tab group...
+  
+  .ex.basic
+    .ex-label basic tabs
+    
+    ui-tabs
+      ui-tab(tab-title="Tab A")
+        p Tab A
+        
+      ui-tab(tab-title="Tab B")
+        p Tab B
+        
+      ui-tab(tab-title="Tab C")
+        p Tab C

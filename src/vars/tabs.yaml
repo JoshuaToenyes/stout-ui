@@ -1,0 +1,11 @@
+# Tab group variables.
+tabs-tag:               tabs
+tabs-class:             tabs
+tabs-list-class:        tabs-list
+tabs-container-class:   tabs-container
+tab-highlight-class:    tab-highlight
+
+# Individual tab variables.
+tab-tag:                tab
+tab-class:              tab
+tab-selected-class:     tab--selected

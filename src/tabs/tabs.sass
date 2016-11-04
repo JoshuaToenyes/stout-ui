@@ -1,0 +1,86 @@
+@import "bourbon/bourbon"
+@import "util/component"
+@import "util/exports"
+@import "vars/tabs"
+@import "vars/component"
+@import "whiteframe/whiteframe"
+
++exports("tabs/tabs")
+
+  $tabs:          ".#{$prefix}#{$tabs-class}"
+
+  $tab:           ".#{$prefix}#{$tab-class}"
+  $tab-selected:  ".#{$prefix}#{$tab-selected-class}"
+
+  $highlighter:   ".#{$prefix}#{$tab-highlight-class}"
+
+  $tabs-list:     ".#{$prefix}#{$tabs-list-class}"
+
+  $contents:      ".#{$prefix}contents"
+
+
+  // Set basic component styles on `tabs` and `tab` tags.
+  +component(#{$tabs-tag})
+  +component(#{$tab-tag})
+
+
+  // Styles for tabs group component.
+  #{$tabs}
+    overflow: hidden
+
+
+  // Styles for individual tab content component.
+  #{$tab}
+    +flex(1)
+
+
+  // The contents of the tabs group.
+  #{$tabs} #{$contents}
+    +display(flex)
+    +flex-direction(row)
+    +transition(all 300ms)
+    position: relative
+
+
+  // The <ol> element which holds the tabs.
+  #{$tabs-list}
+    +display(flex)
+    +flex-direction(row)
+    border-bottom: 1px solid rgba(black, 0.1)
+    color: rgba(black, 0.78)
+    font-size: 0.75em
+    font-weight: 500
+    list-style: none
+    margin: 0
+    padding: 0
+    text-transform: uppercase
+    text-shadow: 1px 1px 1px rgba(white, 0.3)
+
+    // An individual tab.
+    li
+      +flex(1)
+      +transition(all 300ms)
+      display: inline-block
+      text-align: center
+      line-height: 0.75em
+      opacity: 0.8
+      padding: 0.6em
+      z-index: 1
+
+      // Span element holds the tab text.
+      span
+        cursor: pointer
+        display: inline-block
+        padding: 0.65em
+
+      &#{$tab-selected}
+        opacity: 1
+
+
+  // Sliding highlighter element styling.
+  #{$highlighter}
+    +transition(all 300ms)
+    background: rgba(black, 0.1)
+    border-radius: 2px
+    position: absolute
+    z-index: 0
